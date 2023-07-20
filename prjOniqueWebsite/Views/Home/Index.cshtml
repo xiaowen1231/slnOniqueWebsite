@@ -71,11 +71,12 @@
         async function load() {
             const response = await fetch('@Url.Content("~/ProductApi/ProductCard")');
             const data = await response.json();
-            console.log(data.productName, data.price)
+            console.log(data)
+            console.log(data.productName, data.price, data.photoPath)
 
             let str = `<div class="productCard">
                 <div class="productPhoto">
-                                        <img src="@Url.Content("~/images/uploads/products/")${ data.productName }.jpg" />
+                                                <img src="@Url.Content("~/images/uploads/products/")${data.photoPath}" />
                 </div>
                 <p class="productName" id="Name">
                         ${data.productName}
