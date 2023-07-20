@@ -12,11 +12,26 @@ namespace prjOniqueWebsite.Controllers
         {
             _context = context;
         }
-        public IActionResult GetProductCard()
+
+        public IActionResult ProductCard()
         {
-            ProductRepository repo = new ProductRepository(_context);
-            ProductCardDto prodCard = repo.Get();
-            return Json(prodCard);
+            ProductCardDto product = (_context.Products
+                .Where(p => p.ProductId == 24)
+                .Select(p => new ProductCardDto
+                {
+                    ProductName = p.ProductName,
+                    Price = p.Price,
+                    PhotoPath = p.PhotoPath
+                })).FirstOrDefault();
+            if(product == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Json(product);
+            }
+            
         }
     }
 }

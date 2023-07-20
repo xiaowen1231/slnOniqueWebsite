@@ -29,26 +29,23 @@
         </p>
     </div>
     <div class="ProductWall" id="newProd">
-
-@*        <div class="productCard">
-            <div class="productPhoto">
-            </div>
-            <p class="productName" id="Name">
-
-            </p>
-            <p class="productPrice">
-                <span id="price"></span>
-            </p>
-            <div class="productIcon">
-                <div class="cardIcon">
-                    <img src="~/images/icon/shopping_black.png" />
-                </div>
-                <div class="cardIcon">
-                    <img src="~/images/icon/love.png" />
-                </div>
-            </div>
+        @*        <div class="productCard">
+        <div class="productPhoto">
+        </div>
+        <p class="productName" id="Name">
+        </p>
+        <p class="productPrice">
+        <span id="price"></span>
+        </p>
+        <div class="productIcon">
+        <div class="cardIcon">
+        <img src="~/images/icon/shopping_black.png" />
+        </div>
+        <div class="cardIcon">
+        <img src="~/images/icon/love.png" />
+        </div>
+        </div>
         </div>*@
-
     </div>
     <div class="myTitle">
         <div class="TitleIcon">
@@ -59,7 +56,6 @@
         </p>
     </div>
     <div class="ProductWall">
-        
     </div>
 </div>
 @section Styles{
@@ -69,19 +65,36 @@
 @section Scripts{
     <script src="~/js/homepage.js"></script>
     <script>
-        $(document).ready(function(){
-            load();
-        })
-        async function load(){
-            const response = await fetch(`@Url.Content("~/productapi/GetProductCard")`)
+        const newProd = document.querySelector('#newProd');
+
+        load()
+        async function load() {
+            const response = await fetch('@Url.Content("~/ProductApi/ProductCard")');
             const data = await response.json();
+            console.log(data.productName, data.price)
 
+            let str = `<div class="productCard">
+                <div class="productPhoto">
+                                        <img src="@Url.Content("~/images/uploads/products/")${ data.productName }.jpg" />
+                </div>
+                <p class="productName" id="Name">
+                        ${data.productName}
+                </p>
+                <p class="productPrice">
+                <span id="price">${data.price}</span>
+                </p>
+                <div class="productIcon">
+                <div class="cardIcon">
+                <img src="@Url.Content("/images/icon/shopping_black.png")" />
+                </div>
+                <div class="cardIcon">
+                <img src="@Url.Content("~/images/icon/love.png")" />
+                </div>
+                </div>
+                </div>`
 
-            console.log(data)
-
- 
-
-            $("#newProd").append()
+            console.log(str)
+            newProd.innerHTML = str;
         }
     </script>
 }
