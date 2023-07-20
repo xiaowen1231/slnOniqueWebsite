@@ -3,11 +3,11 @@ using prjOniqueWebsite.Models.EFModels;
 
 namespace prjOniqueWebsite.Models.Repositories
 {
-    public class ProductRepository
+    public class ProductDao
     {
         private readonly OniqueContext _context;
 
-        public ProductRepository(OniqueContext context)
+        public ProductDao(OniqueContext context)
         {
             _context = context;
         }
@@ -23,6 +23,7 @@ namespace prjOniqueWebsite.Models.Repositories
                     Price = p.Price,
                     PhotoPath = p.PhotoPath
                 });
+
             return query.ToList();
         }
     }
