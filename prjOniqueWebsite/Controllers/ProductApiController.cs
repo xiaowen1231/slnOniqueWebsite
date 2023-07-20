@@ -7,10 +7,17 @@ namespace prjOniqueWebsite.Controllers
 {
     public class ProductApiController : Controller
     {
+        private readonly ProductDao _productDao = null;
         private readonly OniqueContext _context;
-        public ProductApiController(OniqueContext context)
+        public ProductApiController(OniqueContext context, ProductDao productDao)
         {
             _context = context;
+            _productDao = new ProductDao(_context);
+        }
+
+        public IActionResult NewArrivalsTop4()
+        {
+            
         }
 
         public IActionResult ProductCard()
