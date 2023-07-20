@@ -1,0 +1,179 @@
+*, p {
+    margin: 0;
+    padding: 0;
+}
+
+.myCarousel {
+    width: 60%;
+    margin: 20px auto;
+    overflow: hidden;
+    position: relative;
+}
+
+    .myCarousel .myContainer {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        left: 0;
+        display: flex;
+        transition: all 1s;
+    }
+
+        .myCarousel .myContainer img {
+            width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            object-fit: cover;
+        }
+
+    .myCarousel .shift .btn {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto 0;
+        background-color: transparent;
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        font-size: 40px;
+        font-weight: bold;
+        line-height: 30px;
+        text-align: center;
+        user-select: none;
+        opacity: 0.2;
+    }
+
+    .myCarousel .shift .left {
+        left: 20px;
+    }
+
+        .myCarousel .shift .left img {
+            width: 100%;
+        }
+
+    .myCarousel .shift .right img {
+        width: 100%;
+    }
+
+    .myCarousel .shift .right {
+        right: 20px;
+    }
+
+    .myCarousel .bottom {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: max-content;
+        display: flex;
+        gap: 10px;
+    }
+
+        .myCarousel .bottom .indicator {
+            width: 15px;
+            height: 15px;
+            background-color: white;
+            border-radius: 100%;
+            opacity: 0.3;
+            cursor: pointer;
+        }
+
+    .myCarousel:hover .shift .btn {
+        opacity: 1;
+    }
+
+    .myCarousel:hover .bottom .indicator {
+        opacity: 1;
+    }
+
+.myTitle {
+    width: 60%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+}
+
+    .myTitle p {
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .myTitle .TitleIcon {
+        width: 26px;
+        margin: 0 20px;
+    }
+
+        .myTitle .TitleIcon img {
+            width: 100%;
+        }
+
+.ProductWall {
+    text-align: center;
+    width: 65%;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.productCard {
+    margin: 0 10px;
+    display: inline-block;
+    border: 0.5px #F0F0F0 solid;
+    width: 260px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #ADADAD;
+    box-sizing: border-box;
+    padding: 9px;
+}
+
+.productPhoto {
+    border-radius: 10px;
+    width: 240px;
+    height: 240px;
+    overflow: hidden;
+}
+
+.ProductWall .productCard .productPhoto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ProductWall .productCard .productName {
+    margin: 5px;
+    padding: 5px;
+    background-color: #272727;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.ProductWall .productCard .productPrice {
+    display: inline-block;
+    padding: 5px;
+    text-align: center;
+}
+
+.ProductWall .productCard .productIcon {
+    display: flex;
+    gap: 12px;
+    justify-content:end;
+}
+
+    .ProductWall .productCard .productIcon .cardIcon {
+        width: 24px;
+        height: 24px;
+    }
+
+        .ProductWall .productCard .productIcon .cardIcon img {
+            width: 100%;
+        }
+
+#price:before {
+    content: "$";
+}

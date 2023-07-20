@@ -21,6 +21,7 @@ namespace prjOniqueWebsite.Models.EFModels
         public DateTime AddedTime { get; set; }
         public DateTime ShelfTime { get; set; }
         public int SupplierId { get; set; }
+        public string PhotoPath { get; set; }
 
         public virtual Categories ProductCategory { get; set; }
         public virtual Supplier Supplier { get; set; }

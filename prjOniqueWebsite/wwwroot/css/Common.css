@@ -55,16 +55,27 @@
 .width-30px {
     width: 30px;
 }
+
 .width-40px {
     width: 40px;
 }
+
 .width-50px {
     width: 50px;
+}
+
+.width-60px{
+    width:60px;
+}
+
+.width-80px{
+    width:80px;
 }
 
 .width-90px {
     width: 90px;
 }
+
 .width-120px {
     width: 120px;
 }
@@ -84,6 +95,7 @@
 .cover {
     object-fit: cover;
 }
-.fs-12px{
-    font-size:12px;
+
+.fs-12px {
+    font-size: 12px;
 }

@@ -12,9 +12,11 @@ namespace prjOniqueWebsite.Models.EFModels
             Orders = new HashSet<Orders>();
         }
 
-        public int DiscountId { get; set; }
-        public string DiscountName { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public decimal DiscountMethod { get; set; }
+        public string PhotoPath { get; set; }
 
         public virtual ICollection<Orders> Orders { get; set; }
     }

@@ -84,11 +84,15 @@ namespace prjOniqueWebsite.Models.EFModels
 
             modelBuilder.Entity<Discounts>(entity =>
             {
-                entity.HasKey(e => e.DiscountId);
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(250);
 
                 entity.Property(e => e.DiscountMethod).HasColumnType("money");
 
-                entity.Property(e => e.DiscountName)
+                entity.Property(e => e.PhotoPath).HasMaxLength(50);
+
+                entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -366,6 +370,8 @@ namespace prjOniqueWebsite.Models.EFModels
                 entity.Property(e => e.AddedTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description).HasMaxLength(250);
+
+                entity.Property(e => e.PhotoPath).HasMaxLength(50);
 
                 entity.Property(e => e.Price).HasColumnType("money");
 

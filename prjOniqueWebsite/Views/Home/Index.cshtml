@@ -1,8 +1,87 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "首頁";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <div class="myCarousel">
+        <div class="myContainer">
+            <img src="/Images/Carousel/Carousel_1.jpg">
+            <img src="/Images/Carousel/Carousel_2.jpg">
+            <img src="/Images/Carousel/Carousel_3.jpg">
+        </div>
+        <div class="shift">
+            <div class="btn left" onclick="leftShift()">
+                <img src="/Images/Carousel/left.png">
+            </div>
+            <div class="btn right" onclick="rightShift()">
+                <img src="/Images/Carousel/right.png">
+            </div>
+        </div>
+        <div class="bottom">
+        </div>
+    </div>
+    <div class="myTitle">
+        <div class="TitleIcon">
+            <img src="~/images/icon/price-sticker.png" />
+        </div>
+        <p>
+            新商品
+        </p>
+    </div>
+    <div class="ProductWall" id="newProd">
+
+@*        <div class="productCard">
+            <div class="productPhoto">
+            </div>
+            <p class="productName" id="Name">
+
+            </p>
+            <p class="productPrice">
+                <span id="price"></span>
+            </p>
+            <div class="productIcon">
+                <div class="cardIcon">
+                    <img src="~/images/icon/shopping_black.png" />
+                </div>
+                <div class="cardIcon">
+                    <img src="~/images/icon/love.png" />
+                </div>
+            </div>
+        </div>*@
+
+    </div>
+    <div class="myTitle">
+        <div class="TitleIcon">
+            <img src="~/images/icon/fire.png" />
+        </div>
+        <p>
+            熱銷商品
+        </p>
+    </div>
+    <div class="ProductWall">
+        
+    </div>
 </div>
+@section Styles{
+    <link href="~/css/homepage.css" rel="stylesheet" />
+}
+
+@section Scripts{
+    <script src="~/js/homepage.js"></script>
+    <script>
+        $(document).ready(function(){
+            load();
+        })
+        async function load(){
+            const response = await fetch(`@Url.Content("~/productapi/GetProductCard")`)
+            const data = await response.json();
+
+
+            console.log(data)
+
+ 
+
+            $("#newProd").append()
+        }
+    </script>
+}
