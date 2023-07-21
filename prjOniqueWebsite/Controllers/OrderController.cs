@@ -10,7 +10,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Details()
         {
-            return View();
+            return PartialView();
         }
     }
 }
