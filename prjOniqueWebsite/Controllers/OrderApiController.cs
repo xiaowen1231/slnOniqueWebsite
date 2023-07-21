@@ -35,6 +35,14 @@ namespace prjOniqueWebsite.Controllers
                             PaymentMethodName = pm.PaymentMethodName,
                             PhotoPath = m.PhotoPath
                         };
+//      select os.StatusName,OrderId,m.Name,ShippingDate,pm.PaymentMethodName,PhotoPath
+//            from Orders o
+//            join OrderStatus os
+//on o.OrderStatusId = os.StatusId
+//join Members m
+//on o.MemberId = m.MemberId
+//join PaymentMethods pm
+//on o.PaymentMethodId = pm.PaymentMethodId
             List<OrderListDto> dto = query.ToList();
             return Json(dto);
         }
