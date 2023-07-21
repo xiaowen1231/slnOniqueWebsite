@@ -33,5 +33,10 @@ namespace prjOniqueWebsite.Controllers
             }
             
         }
+        public IActionResult NewArrivalsTop4()
+        {
+            List<ProductCardDto> dto = new ProductDao(_context).NewArrivalsTop4();
+            return Json(dto);
+        }
     }
 }
