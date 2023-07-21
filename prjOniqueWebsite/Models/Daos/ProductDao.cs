@@ -26,5 +26,22 @@ namespace prjOniqueWebsite.Models.Repositories
 
             return query.ToList();
         }
+
+        public List<ProductCardDto> HotTop4()
+        {
+            var query = (from p in _context.Products
+                         join od in _context.OrderDetails
+                         on p.ProductId equals od.ProductId
+                         group od by new { p.Price, p.ProductName, p.PhotoPath } into grouped
+                         orderby grouped.Sum(od => od.OrderQuantity) descending
+                         select new ProductCardDto
+                         {
+                             ProductName = grouped.Key.ProductName,
+                             Price = grouped.Key.Price,
+                             PhotoPath = grouped.Key.PhotoPath
+                         }).Take(4);
+
+            return query.ToList();
+        }
     }
 }
