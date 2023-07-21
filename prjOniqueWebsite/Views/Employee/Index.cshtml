@@ -46,8 +46,8 @@
                     <th>刪除</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
+            <tbody id="employeetable">
+                @*<tr>
                     <td>1</td>
                     <td>
                         <div class="d-flex gap-2 imgbox">
@@ -72,85 +72,8 @@
                             <a href=""><img src="../Images/EmployeePhoto/delete.png" alt=""></a>
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>
-                        <div class="d-flex gap-2 imgbox">
-                            <img src="../Images/EmployeePhoto/peter.png" alt="Peter" />
-                        </div>
-                    </td>
-                    <td>
-                        <span>Petererererer</span>
-                    </td>
-                    <td>2000/02/02</td>
-                    <td>男</td>
-                    <td>0988888888</td>
-                    <td>peter@gmail.com</td>
-                    <td>經理</td>
-                    <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/edit.png" alt=""></a>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/delete.png" alt=""></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>
-                        <div class="d-flex gap-2 imgbox">
-                            <img src="../Images/EmployeePhoto/peter.png" alt="Peter" />
-                        </div>
-                    </td>
-                    <td>
-                        <span>Peter</span>
-                    </td>
-                    <td>2000/02/02</td>
-                    <td>男</td>
-                    <td>0988888888</td>
-                    <td>peter@gmail.com</td>
-                    <td>經理</td>
-                    <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/edit.png" alt=""></a>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/delete.png" alt=""></a>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>
-                        <div class="d-flex gap-2 imgbox">
-                            <img src="../Images/EmployeePhoto/peter.png" alt="Peter" />
-                        </div>
-                    </td>
-                    <td>
-                        <span>Peter</span>
-                    </td>
-                    <td>2000/02/02</td>
-                    <td>男</td>
-                    <td>0988888888</td>
-                    <td>peter@gmail.com</td>
-                    <td>經理</td>
-                    <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/edit.png" alt=""></a>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/delete.png" alt=""></a>
-                        </div>
-                    </td>
-                </tr>
+                </tr>*@
+                
 
             </tbody>
         </table>
@@ -181,7 +104,51 @@
         crossorigin="anonymous"></script>
 
 @section Scripts{
+    <script>
+        const employeetable = document.querySelector("#employeetable")
+        load()
 
+        async function load(){
+            const response = await fetch(`@Url.Content("~/EmployeeApi/showEmployeeList")`)
+            const data = await response.json();
+
+            const tableEmployeeList = data.map(item => {
+                const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item
+
+                return (`
+                    <tr>
+                    <td>${employeeId}</td>
+                    <td>
+                        <div class="d-flex gap-2 imgbox">
+                             <img src="@Url.Content("~/images/employeePhoto")${photoPath}" alt="" />
+                        </div>
+                    </td>
+                    <td>
+                        <span>${employeeName}</span>
+                    </td>
+                        <td>${dateOfBirth}</td>
+                        <td>${gender}</td>
+                        <td>${phone}</td>
+                        <td>${email}</td>
+                        <td>${employeeLevelName}</td>
+                    <td>
+                        <div class="circle-size-25">
+                             <a href=""><img src="@Url.Content("~/images/employeePhoto/edit.png")" alt=""></a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="circle-size-25">
+                             <a href=""><img src="@Url.Content("~/images/employeePhoto/delete.png")" alt=""></a>
+                        </div>
+                    </td>
+                    </tr>
+                `)
+            })
+        employeetable.innerHTML = tableEmployeeList.join("");
+
+        }
+
+    </script>
 }
 
 @section Styles{
