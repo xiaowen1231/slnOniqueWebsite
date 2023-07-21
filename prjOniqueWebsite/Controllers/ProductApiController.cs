@@ -15,30 +15,30 @@ namespace prjOniqueWebsite.Controllers
             _productDao = new ProductDao(_context);
         }
 
-    //    public IActionResult NewArrivalsTop4()
-    //    {
-            
-    //    }
+        public IActionResult NewArrivalsTop4()
+        {
 
-    //    public IActionResult ProductCard()
-    //    {
-    //        ProductCardDto product = (_context.Products
-    //            .Where(p => p.ProductId == 24)
-    //            .Select(p => new ProductCardDto
-    //            {
-    //                ProductName = p.ProductName,
-    //                Price = p.Price,
-    //                PhotoPath = p.PhotoPath
-    //            })).FirstOrDefault();
-    //        if(product == null)
-    //        {
-    //            return null;
-    //        }
-    //        else
-    //        {
-    //            return Json(product);
-    //        }
-            
-    //    }
-    //}
-//}
+        }
+
+        public IActionResult ProductCard()
+        {
+            ProductCardDto product = (_context.Products
+                .Where(p => p.ProductId == 24)
+                .Select(p => new ProductCardDto
+                {
+                    ProductName = p.ProductName,
+                    Price = p.Price,
+                    PhotoPath = p.PhotoPath
+                })).FirstOrDefault();
+            if (product == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Json(product);
+            }
+
+        }
+    }
+}
