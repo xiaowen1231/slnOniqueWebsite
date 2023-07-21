@@ -30,8 +30,10 @@ namespace prjOniqueWebsite.Models.Repositories
         public List<ProductCardDto> HotTop4()
         {
             var query = (from p in _context.Products
+                         join psd in _context.ProductStockDetails
+                         on p.ProductId equals psd.ProductId
                          join od in _context.OrderDetails
-                         on p.ProductId equals od.ProductId
+                         on psd.StockId equals od.StockId
                          group od by new { p.Price, p.ProductName, p.PhotoPath } into grouped
                          orderby grouped.Sum(od => od.OrderQuantity) descending
                          select new ProductCardDto
