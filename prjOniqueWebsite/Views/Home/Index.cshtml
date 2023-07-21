@@ -60,7 +60,7 @@
             const cards = datas.map(theCard=>{
                 const { productName, price, photoPath } = theCard
 
-                return (`<div class="productCard">
+                return (`<div class="productCard" data-aos="fade-up">
                                 <div class="productPhoto">
                                 <img src="@Url.Content("~/images/uploads/products/")${photoPath}" />
                                 </div>
@@ -93,7 +93,7 @@
             const cards = datas.map(theCard => {
                 const { productName, price, photoPath }=theCard
 
-                return (`<div class="productCard">
+                return (`<div class="productCard" data-aos="fade-up">
                         <div class="productPhoto">
                         <img src="@Url.Content("~/images/uploads/products/")${photoPath}" />
                         </div>
