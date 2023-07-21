@@ -22,6 +22,8 @@ namespace prjOniqueWebsite.Models.EFModels
         public int Areas { get; set; }
         public string Address { get; set; }
         public DateTime? DateOfBirth { get; set; }
+        public bool? Verification { get; set; }
+        public string VerificationCode { get; set; }
         public int MemberLevel { get; set; }
         public string PhotoPath { get; set; }
         public DateTime RegisterDate { get; set; }

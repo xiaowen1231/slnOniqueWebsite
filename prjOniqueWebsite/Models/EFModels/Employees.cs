@@ -18,6 +18,8 @@ namespace prjOniqueWebsite.Models.EFModels
         public string Address { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public int Position { get; set; }
+        public string VerificationCode { get; set; }
+        public bool? Verification { get; set; }
         public string PhotoPath { get; set; }
         public DateTime RegisterDate { get; set; }
 

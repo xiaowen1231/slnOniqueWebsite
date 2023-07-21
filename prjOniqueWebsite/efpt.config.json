@@ -68,10 +68,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[ProductPhotos]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Products]",
          "ObjectType": 0
       },
@@ -85,6 +81,10 @@
       },
       {
          "Name": "[dbo].[ShippingMethods]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShoppingCart]",
          "ObjectType": 0
       },
       {

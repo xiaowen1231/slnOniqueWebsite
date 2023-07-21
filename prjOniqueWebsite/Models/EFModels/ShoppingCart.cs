@@ -5,15 +5,13 @@ using System.Collections.Generic;
 
 namespace prjOniqueWebsite.Models.EFModels
 {
-    public partial class OrderDetails
+    public partial class ShoppingCart
     {
-        public int OrderDetailId { get; set; }
-        public int OrderId { get; set; }
+        public int Id { get; set; }
+        public int MemberId { get; set; }
         public int StockId { get; set; }
         public int OrderQuantity { get; set; }
-        public decimal Price { get; set; }
 
-        public virtual Orders Order { get; set; }
         public virtual ProductStockDetails Stock { get; set; }
     }
 }

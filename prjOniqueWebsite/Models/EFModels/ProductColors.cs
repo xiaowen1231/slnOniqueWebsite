@@ -9,14 +9,12 @@ namespace prjOniqueWebsite.Models.EFModels
     {
         public ProductColors()
         {
-            OrderDetails = new HashSet<OrderDetails>();
             ProductStockDetails = new HashSet<ProductStockDetails>();
         }
 
         public int ColorId { get; set; }
         public string ColorName { get; set; }
 
-        public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<ProductStockDetails> ProductStockDetails { get; set; }
     }
 }

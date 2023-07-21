@@ -31,11 +31,11 @@ namespace prjOniqueWebsite.Models.EFModels
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<PaymentMethods> PaymentMethods { get; set; }
         public virtual DbSet<ProductColors> ProductColors { get; set; }
-        public virtual DbSet<ProductPhotos> ProductPhotos { get; set; }
         public virtual DbSet<ProductSizes> ProductSizes { get; set; }
         public virtual DbSet<ProductStockDetails> ProductStockDetails { get; set; }
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<ShippingMethods> ShippingMethods { get; set; }
+        public virtual DbSet<ShoppingCart> ShoppingCart { get; set; }
         public virtual DbSet<Supplier> Supplier { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -84,11 +84,15 @@ namespace prjOniqueWebsite.Models.EFModels
 
             modelBuilder.Entity<Discounts>(entity =>
             {
+                entity.Property(e => e.BeginDate).HasColumnType("datetime");
+
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(250);
 
                 entity.Property(e => e.DiscountMethod).HasColumnType("money");
+
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.PhotoPath).HasMaxLength(50);
 
@@ -133,6 +137,8 @@ namespace prjOniqueWebsite.Models.EFModels
                 entity.Property(e => e.PhotoPath).HasMaxLength(250);
 
                 entity.Property(e => e.RegisterDate).HasColumnType("datetime");
+
+                entity.Property(e => e.VerificationCode).HasMaxLength(50);
 
                 entity.HasOne(d => d.AreasNavigation)
                     .WithMany(p => p.Employees)
@@ -189,6 +195,8 @@ namespace prjOniqueWebsite.Models.EFModels
 
                 entity.Property(e => e.RegisterDate).HasColumnType("datetime");
 
+                entity.Property(e => e.VerificationCode).HasMaxLength(50);
+
                 entity.HasOne(d => d.AreasNavigation)
                     .WithMany(p => p.Members)
                     .HasForeignKey(d => d.Areas)
@@ -212,11 +220,7 @@ namespace prjOniqueWebsite.Models.EFModels
             {
                 entity.HasKey(e => e.OrderDetailId);
 
-                entity.HasOne(d => d.Color)
-                    .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.ColorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_ProductColors");
+                entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
@@ -224,17 +228,11 @@ namespace prjOniqueWebsite.Models.EFModels
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Orders");
 
-                entity.HasOne(d => d.Product)
+                entity.HasOne(d => d.Stock)
                     .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.ProductId)
+                    .HasForeignKey(d => d.StockId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_Products");
-
-                entity.HasOne(d => d.Size)
-                    .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.SizeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_ProductSizes");
+                    .HasConstraintName("FK_OrderDetails_ProductStockDetails");
             });
 
             modelBuilder.Entity<OrderStatus>(entity =>
@@ -260,11 +258,6 @@ namespace prjOniqueWebsite.Models.EFModels
                     .HasMaxLength(250);
 
                 entity.Property(e => e.ShippingDate).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Discount)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.DiscountId)
-                    .HasConstraintName("FK_Orders_Discounts");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
@@ -311,20 +304,6 @@ namespace prjOniqueWebsite.Models.EFModels
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<ProductPhotos>(entity =>
-            {
-                entity.HasKey(e => e.ProductPhotoId)
-                    .HasName("PK_ProductPhoto");
-
-                entity.Property(e => e.ProductPhotoName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.ProductPhotoPath)
-                    .IsRequired()
-                    .HasMaxLength(250);
-            });
-
             modelBuilder.Entity<ProductSizes>(entity =>
             {
                 entity.HasKey(e => e.SizeId);
@@ -338,6 +317,10 @@ namespace prjOniqueWebsite.Models.EFModels
             {
                 entity.HasKey(e => e.StockId);
 
+                entity.Property(e => e.PhotoPath)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.HasOne(d => d.Color)
                     .WithMany(p => p.ProductStockDetails)
                     .HasForeignKey(d => d.ColorId)
@@ -349,11 +332,6 @@ namespace prjOniqueWebsite.Models.EFModels
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductStockDetails_Products");
-
-                entity.HasOne(d => d.ProductPhoto)
-                    .WithMany(p => p.ProductStockDetails)
-                    .HasForeignKey(d => d.ProductPhotoId)
-                    .HasConstraintName("FK_ProductStockDetails_ProductPhotos");
 
                 entity.HasOne(d => d.Size)
                     .WithMany(p => p.ProductStockDetails)
@@ -381,6 +359,11 @@ namespace prjOniqueWebsite.Models.EFModels
 
                 entity.Property(e => e.ShelfTime).HasColumnType("datetime");
 
+                entity.HasOne(d => d.Discount)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.DiscountId)
+                    .HasConstraintName("FK_Products_Discounts");
+
                 entity.HasOne(d => d.ProductCategory)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.ProductCategoryId)
@@ -402,6 +385,15 @@ namespace prjOniqueWebsite.Models.EFModels
                 entity.Property(e => e.MethodName)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ShoppingCart>(entity =>
+            {
+                entity.HasOne(d => d.Stock)
+                    .WithMany(p => p.ShoppingCart)
+                    .HasForeignKey(d => d.StockId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ShoppingCart_ProductStockDetails");
             });
 
             modelBuilder.Entity<Supplier>(entity =>

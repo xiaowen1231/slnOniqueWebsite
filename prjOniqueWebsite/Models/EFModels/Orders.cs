@@ -21,9 +21,7 @@ namespace prjOniqueWebsite.Models.EFModels
         public DateTime? ShippingDate { get; set; }
         public DateTime? CompletionDate { get; set; }
         public int PaymentMethodId { get; set; }
-        public int? DiscountId { get; set; }
 
-        public virtual Discounts Discount { get; set; }
         public virtual Members Member { get; set; }
         public virtual ShippingMethods Method { get; set; }
         public virtual OrderStatus OrderStatus { get; set; }
