@@ -23,7 +23,7 @@ namespace prjOniqueWebsite.Controllers
                     Price = p.Price,
                     PhotoPath = p.PhotoPath
                 })).FirstOrDefault();
-            if(product == null)
+            if (product == null)
             {
                 return null;
             }
@@ -31,7 +31,7 @@ namespace prjOniqueWebsite.Controllers
             {
                 return Json(product);
             }
-            
+
         }
         public IActionResult NewArrivalsTop4()
         {
