@@ -9,15 +9,17 @@ namespace prjOniqueWebsite.Models.EFModels
     {
         public Discounts()
         {
-            Orders = new HashSet<Orders>();
+            Products = new HashSet<Products>();
         }
 
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal DiscountMethod { get; set; }
+        public DateTime BeginDate { get; set; }
+        public DateTime EndDate { get; set; }
         public string PhotoPath { get; set; }
 
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<Products> Products { get; set; }
     }
 }
