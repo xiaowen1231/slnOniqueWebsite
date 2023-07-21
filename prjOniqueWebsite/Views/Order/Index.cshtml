@@ -66,12 +66,11 @@
                         <th>訂購會員</th>
                         <th>訂單日期</th>
                         <th>付款方式</th>
-                        <th>訂單金額</th>
                         <th>詳情</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
+                <tbody id="orderTable">
+                    @*<tr>
                         <td>
                             <div class="d-flex gap-2">
                                 <div class="circle-size-25 color-95CACA border rounded-circle"></div>
@@ -130,7 +129,7 @@
                                 </div>
                             </a>
                         </td>
-                    </tr>
+                    </tr>*@
                 </tbody>
             </table>
         </div>
@@ -159,7 +158,53 @@
 
 
 @section Scripts{
+    <script>
+        const orderTable = document.querySelector("#orderTable")
+        load()
 
+        async function load(){
+            const response = await fetch(`@Url.Content("~/OrderApi/showOrderList")`)
+            const data = await response.json();
+            
+            const tableOrdersList = data.map(item=>{
+
+                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
+                console.log(statusName, orderId, name, shippingDate, paymentMethodName, photoPath)
+
+                return (`
+                        <tr>
+                        <td>
+                        <div class="d-flex gap-2">
+                        <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                        <div>${statusName}</div>
+                        </div>
+                        </td>
+                        <td>
+                        <span>${orderId}</span>
+                        </td>
+                        <td>
+                        <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
+                        <span>${name}</span>
+                        </td>
+                        <td>2023/07/16</td>
+                        <td>${statusName}</td>
+                        <td>
+                        <a href="" class="link-underline-light link-secondary">
+                        <div class="d-flex align-items-center gap-2">
+                        <div class="circle-size-25">
+                        <img src="@Url.Content("~/images/employeePhoto/edit.png")" alt="">
+                        </div>
+                        <span>檢視訂單詳情</span>
+                        </div>
+                        </a>
+                        </td>
+                        </tr>`)
+            })
+        orderTable.innerHTML = tableOrdersList.join("");
+
+        }
+
+    </script>
 }
 @section Styles{
     <style>

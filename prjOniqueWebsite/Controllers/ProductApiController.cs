@@ -13,26 +13,6 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
         }
 
-        public IActionResult ProductCard()
-        {
-            ProductCardDto product = (_context.Products
-                .Where(p => p.ProductId == 24)
-                .Select(p => new ProductCardDto
-                {
-                    ProductName = p.ProductName,
-                    Price = p.Price,
-                    PhotoPath = p.PhotoPath
-                })).FirstOrDefault();
-            if (product == null)
-            {
-                return null;
-            }
-            else
-            {
-                return Json(product);
-            }
-
-        }
         public IActionResult NewArrivalsTop4()
         {
             List<ProductCardDto> dto = new ProductDao(_context).NewArrivalsTop4();
