@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div class="container">
+    <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">訂單管理</div>
+    <div class="m-3 d-flex gap-3 justify-content-center">
+        <div class="d-flex gap-2">
+            <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+            <div>待出貨</div>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
+            <div>已出貨</div>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
+            <div>已完成</div>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
+            <div>已取消</div>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
+            <div>退款中</div>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
+            <div>已退款</div>
+        </div>
+        <div class="d-flex gap-2">
+            <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
+            <div>未取貨</div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between px-4">
+        <div class="d-flex align-items-center gap-2">
+            <div class="width-90px  ">每頁顯示 : </div>
+            <div>
+                <select class="form-select d-inline" aria-label="資料筆數">
+                    <option value="">10</option>
+                    <option value="">20</option>
+                    <option value="">30</option>
+                </select>
+            </div>
+            <div class="width-50px ">筆資料</div>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="mx-3"><span>關鍵字搜尋</span></div>
+
+            <div>
+                <input type="text" name="" id="" placeholder="請輸入訂單關鍵字" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="p-2 my-4 border border-dark-subtle rounded-4 ">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>訂單狀態</th>
+                        <th>訂單編號</th>
+                        <th>訂購會員</th>
+                        <th>訂單日期</th>
+                        <th>付款方式</th>
+                        <th>訂單金額</th>
+                        <th>詳情</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                                <div>待出貨</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span>OrderNum001</span>
+                        </td>
+                        <td>
+                            <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
+                            <span>OOO</span>
+                        </td>
+                        <td>2023/07/16</td>
+                        <td>貨到付款</td>
+                        <td>
+                            <div class="text-danger">2000</div>
+                        </td>
+                        <td>
+                            <a href="" class="link-underline-light link-secondary">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="circle-size-25">
+                                        <img src="../Images/EmployeePhoto/edit.png" alt="">
+                                    </div>
+                                    <span>檢視訂單詳情</span>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                                <div>待出貨</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span>OrderNum001</span>
+                        </td>
+                        <td>
+                            <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
+                            <span>OOO</span>
+                        </td>
+                        <td>2023/07/16</td>
+                        <td>貨到付款</td>
+                        <td>
+                            <div class="text-danger">2000</div>
+                        </td>
+                        <td>
+                            <a href="" class="link-underline-light link-secondary">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="circle-size-25">
+                                        <img src="../Images/EmployeePhoto/edit.png" alt="">
+                                    </div>
+                                    <span>檢視訂單詳情</span>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container">
+        <nav class="d-flex justify-content-center" aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+}
+@section Styles{
+
+}

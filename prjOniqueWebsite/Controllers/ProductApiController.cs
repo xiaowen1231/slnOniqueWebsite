@@ -7,17 +7,10 @@ namespace prjOniqueWebsite.Controllers
 {
     public class ProductApiController : Controller
     {
-        private readonly ProductDao _productDao = null;
         private readonly OniqueContext _context;
-        public ProductApiController(OniqueContext context, ProductDao productDao)
+        public ProductApiController(OniqueContext context)
         {
             _context = context;
-            _productDao = new ProductDao(_context);
-        }
-
-        public IActionResult NewArrivalsTop4()
-        {
-
         }
 
         public IActionResult ProductCard()
@@ -39,6 +32,11 @@ namespace prjOniqueWebsite.Controllers
                 return Json(product);
             }
 
+        }
+        public IActionResult NewArrivalsTop4()
+        {
+            List<ProductCardDto> dto = new ProductDao(_context).NewArrivalsTop4();
+            return Json(dto);
         }
     }
 }

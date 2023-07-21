@@ -118,7 +118,9 @@
     margin: 10px auto;
     padding: 10px;
 }
-
+#divNewArrivals{
+    transition:all 1s;
+}
 .productCard {
     margin: 0 10px;
     display: inline-block;
