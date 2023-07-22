@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+<div class="container">
+    <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">會員管理</div>
+    <div class="row d-flex align-items-center">
+        <div class="col-9 d-flex align-items-center gap-2">
+            <div class="width-90px  ">每頁顯示 : </div>
+            <div>
+                <select class="form-select d-inline" aria-label="資料筆數">
+                    <option value="">10</option>
+                    <option value="">20</option>
+                    <option value="">30</option>
+                </select>
+            </div>
+            <div class="width-50px ">筆資料</div>
+        </div>
+        <div class="col-3 d-flex align-items-center">
+            <span>關鍵字搜尋 : </span>
+            <div>
+                <input type="text" name="" id="" placeholder="請輸入關鍵字" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="border border-secondary p-2 mb-2 border-opacity-75 rounded">
+            <table class="table table-striped align-middle text-center">
+                <thead>
+                    <tr>
+                        <th>編號</th>
+                        <th>頭像</th>
+                        <th>姓名</th>
+                        <th>電話號碼</th>
+                        <th>信箱</th>
+                        <th>生日</th>
+                        <th>性別</th>
+                        <th>編輯</th>
+                        <th>刪除</th>
+                        <th>寄信</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><div class="imgBox"><img src="../Images/Memberphoto/MemberId_2_Allen.jpg"></div></td>
+                        <td>Allen</td>
+                        <td>0932458777</td>
+                        <td>Allen@gmail.com</td>
+                        <td>1998/5/7</td>
+                        <td>男</td>
+                        <td><img src="../Images/options/edit.png" class="square-32"></td>
+                        <td><img src="../Images/options/trash.png" class="square-32"></td>
+                        <td><img src="../Images/Button/mail.png"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><div class="imgBox"><img src="../Images/MemberPhoto/MemberId_4_Wendy.jpg"></div></td>
+                        <td>Wendy</td>
+                        <td>0987854568</td>
+                        <td>Wendy@gmail.com</td>
+                        <td>2000/11/5</td>
+                        <td>女</td>
+                        <td><img src="../Images/options/edit.png" class="square-32"></td>
+                        <td><img src="../Images/options/trash.png" class="square-32"></td>
+                        <td><img src="../Images/Button/mail.png"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+@section Styles{}
+@section Scripts{}
