@@ -69,7 +69,59 @@
     </header>
 
     <div>
-        @RenderBody()
+        <div class="width-1320px mx-auto d-flex gap-4 justify-content-around">
+            <div class="width-265px">
+                <div class="border rounded shadow-sm mb-4" data-aos="fade-right">
+                    <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">精選分類</div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">New Arrvial</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">熱銷商品</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">活動專區</a>
+                    </div>
+                </div>
+                <div class="border rounded shadow-sm" data-aos="fade-right">
+                    <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">商品分類</div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">
+                            T恤
+                        </a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">襯衫</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">毛衣</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">外套</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">背心</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">牛仔褲</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">
+                            休閒褲
+                        </a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">短褲</a>
+                    </div>
+                    <div class="p-1 my-1 mx-3">
+                        <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">飾品</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border rounded shadow-sm width-1000px" data-aos="fade-left">
+                @RenderBody()
+            </div>
+        </div>
     </div>
 
     <footer class="footer fs-6 bg-dark mt-3">

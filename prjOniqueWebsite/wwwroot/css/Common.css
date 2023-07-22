@@ -87,15 +87,29 @@
 .width-170px {
     width: 170px;
 }
-
+.width-265px {
+    width: 265px;
+}
 .width-300px {
     width: 300px;
 }
-
+.width-1000px{
+    width:1000px;
+}
+.width-1320px {
+    width: 1320px;
+}
+.w-500-h-500 {
+    width: 500px;
+    height: 500px;
+}
 .cover {
     object-fit: cover;
 }
 
 .fs-12px {
     font-size: 12px;
+}
+.fs-14px {
+    font-size: 14px;
 }

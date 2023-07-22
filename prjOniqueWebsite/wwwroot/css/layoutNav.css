@@ -1,0 +1,43 @@
+﻿.nav-logo {
+    width: 60px;
+    height: 60px;
+    transition: all 0.5s;
+}
+
+.nav-logo-en {
+    width: 120px;
+    height: 35px;
+    transition: all 0.5s;
+}
+
+.nav-logo:hover {
+    width: 65px;
+}
+
+.nav-logo-en:hover {
+    width: 125px;
+}
+
+.nav-text {
+    transition: all 0.5s;
+}
+
+    .nav-text:hover {
+        font-size: 18px;
+        font-weight: bold;
+        color: #FFD306;
+    }
+
+    .nav-text:not(:hover) {
+        transition: all 0.5s;
+    }
+
+.nav-icon{
+    width:30px;
+    height:30px;
+    transition:all 0.5s;
+}
+.nav-icon:hover {
+    width: 35px;
+
+}

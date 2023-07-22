@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "商品明細";
+    Layout = "~/Views/Shared/_Layout_Product.cshtml";
+}
+
+@*<div class="width-1320px mx-auto d-flex gap-4 justify-content-around">
+    <div class="width-265px">
+        <div class="border rounded shadow-sm mb-4" data-aos="fade-right">
+            <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">精選分類</div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">New Arrvial</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">熱銷商品</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">活動專區</a>
+            </div>
+        </div>
+        <div class="border rounded shadow-sm" data-aos="fade-right">
+            <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">商品分類</div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">
+                    T恤
+                </a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">襯衫</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">毛衣</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">外套</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">背心</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">牛仔褲</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">
+                    休閒褲
+                </a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">短褲</a>
+            </div>
+            <div class="p-1 my-1 mx-3">
+                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">飾品</a>
+            </div>
+        </div>
+    </div>
+    <div class="border rounded shadow-sm width-1000px" data-aos="fade-left">*@
+        <div class="d-flex">
+            <div class="w-500-h-500 overflow-hidden rounded">
+                <img src="~/images/uploads/products/TopBasics 日系背帶口袋T恤.jpg" />
+            </div>
+            <div class="flex-fill">
+                <div class="fw-bold fs-4 border-bottom border-secondary p-2">TopBasics 日系背帶口袋T恤</div>
+                <div class="d-flex gap-2 mt-2">
+                    <div class="fw-bold p-2 width-90px text-end">商品價格:</div>
+                    <div class="fw-bold p-2 text-danger" id="price">980</div>
+                </div>
+                <div class="d-flex mt-2 gap-2 align-items-center">
+                    <div class="fw-bold p-2 width-90px text-end">顏色:</div>
+                    <div class="fw-bold p-2 d-flex width-80px ">
+                        <select class="form-select form-select-sm ">
+                            <option>黑</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex mt-2 gap-2 align-items-center">
+                    <div class="fw-bold p-2 width-90px text-end">尺寸:</div>
+                    <div class="fw-bold p-2 d-flex width-80px">
+                        <select class="form-select form-select-sm ">
+                            <option>L</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex mt-2 gap-2 align-items-center">
+                    <div class="fw-bold p-2 width-90px text-end">數量:</div>
+                    <div class="fw-bold p-2 d-flex ">
+                        <div class="border border-dark-subtle text-center" style="width: 25px;">-</div>
+                        <div class="border border-dark-subtle text-center" style="width: 50px;">1</div>
+                        <div class="border border-dark-subtle text-center" style="width: 25px;">+</div>
+                    </div>
+                </div>
+                <div class="d-flex mt-2 gap-2 align-items-center">
+                    <div class="fw-bold p-2 width-90px text-end">收藏:</div>
+                    <div class="fw-bold p-2 d-flex ">
+                        <div class="fw-bold p-2 d-flex width-40px">
+                            <img src="~/images/icon/love.png" />
+                        </div>
+                    </div>
+                    <div class="fw-bold p-2 width-90px text-end">分享:</div>
+                    <div class="fw-bold p-2 d-flex ">
+                        <div class="fw-bold p-2 d-flex width-40px">
+                            <img src="~/images/icon/share.png" />
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-center gap-3 mt-4">
+                    <input type="button" value="立即購買" class="width-120px btn btn-outline-dark" />
+                    <input type="button" value="加入購物車" class="btn btn-dark width-120px" />
+                </div>
+            </div>
+        </div>
+@*    </div>
+</div>*@
+@section Styles{
+    <style>
+        #price::before {
+            content: "$";
+        }
+    </style>
+}
+@section Scripts{
+}
