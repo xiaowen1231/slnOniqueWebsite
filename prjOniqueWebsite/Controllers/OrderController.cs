@@ -16,6 +16,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Details(int orderId)
         {
+            
             return View();
         }
     }
