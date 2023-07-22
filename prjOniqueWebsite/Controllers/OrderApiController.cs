@@ -62,7 +62,37 @@ namespace prjOniqueWebsite.Controllers
             List<OrderProductsList> dto= query.ToList(); 
             return Json(dto);
         }
-        
+        public IActionResult orderShippingDetail(int orderId)
+        {
+            var query = from o in _context.Orders
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        join sm in _context.ShippingMethods
+                        on o.MethodId equals sm.MethodId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        join m in _context.Members
+                        on o.MemberId equals m.MemberId
+                        select new orderShippingDetail
+                        {
+                            Name = m.Name,
+                            PhotoPath= m.PhotoPath,
+                            Phone = m.Phone,
+                            OrderId = o.OrderId,
+                            ShippingAddress = o.ShippingAddress,
+                            StatusName = os.StatusName,
+                            MethodName = sm.MethodName,
+                            PaymentMethodName = pm.PaymentMethodName,
+                            OrderDate = o.OrderDate,
+                            ShippingDate = o.ShippingDate,
+                            CompletionDate = o.CompletionDate,
+                        };
+
+            orderShippingDetail dto = query.FirstOrDefault();
+            return Json(dto);
+
+
+        }
 
 
     }
