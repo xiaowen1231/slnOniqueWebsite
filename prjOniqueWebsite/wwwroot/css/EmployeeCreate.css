@@ -1,0 +1,66 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+
+.EmployeeCreateContent {
+    height: 800px;
+    width: 1280px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+.ButtonRegion{
+    margin: 100px;
+    height: 80px;
+    text-align: center;
+}
+
+.CreateAddButton{
+  border:1;
+  background-color:black;
+  color:white;
+  border-radius:10px;
+  cursor:pointer; /*改變滑鼠游標形狀 */
+  font-size: 17px;
+}
+
+.CreateAddButton:hover{
+  color:white;
+    background-color:#5B5B5B;
+}
+
+.AddButton{
+  border:1;
+  background-color:white;
+  color:black;
+  border-radius:10px;
+  cursor:pointer; /*改變滑鼠游標形狀 */
+  font-size: 17px;
+}
+
+.AddButton:hover{
+    color:white;
+    background-color:black;
+    
+  }
+
+.EmployeeHalf{
+  display: inline-block;
+  
+}
+
+.EmployeeRight{
+  
+  
+  
+}
+
+.EmployeeLeft{
+  
+  
+ 
+}
+
