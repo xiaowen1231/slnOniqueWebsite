@@ -54,6 +54,7 @@
             <div>
                 <input type="text" name="" id="" placeholder="請輸入訂單關鍵字" class="form-control">
             </div>
+            <div><button type="button" class="btn btn-dark mx-2" id="btnSearch">搜尋</button></div>
         </div>
     </div>
     <div class="container">
@@ -189,12 +190,8 @@
                         <td>2023/07/16</td>
                         <td>${statusName}</td>
                         <td>
-                        <a href="" class="link-underline-light link-secondary">
-                        <div class="d-flex align-items-center gap-2">
-                        <div class="circle-size-25">
-                        <img src="@Url.Content("~/images/employeePhoto/edit.png")" alt="">
-                        </div>
-                        <span>檢視訂單詳情</span>
+        @Html.ActionLink("檢視訂單詳情", "Details","Order", "",new {@class= "btn btn-outline-dark" })
+                        
                         </div>
                         </a>
                         </td>
