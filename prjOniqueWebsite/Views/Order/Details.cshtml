@@ -76,7 +76,7 @@
         <div class="shadow-sm p-3 m-3 bg-body-tertiary rounded border">
             <span class="fw-bold fs-5">訂單商品明細</span>
             <div class="my-2">
-                <table class="table align-middle">
+                <table class="table align-middle" >
                     <thead>
                         <tr>
                             <th>商品照片</th>
@@ -88,8 +88,10 @@
                             <th>小計</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+
+
+                <tbody id="orderProductList">
+                        @*<tr>
                             <td>
                                 <img src="../Images/Product/丹寧亨利領襯衫.jpg" alt="" class="width-120px cover">
                             </td>
@@ -116,8 +118,11 @@
                                 <span>$</span>
                                 <span class="text-danger">2100</span>
                             </td>
-                        </tr>
+                        </tr>*@
                     </tbody>
+
+
+
                 </table>
             </div>
             <div class="border rounded my-4 border-dark-subtle p-2 ">
@@ -164,7 +169,36 @@
         </div>
     </div>
     @section Scripts{
-
+        <script>
+        const productListTable = document.querySelector("#orderProductList")
+            async function loadOrderProductList(){
+            const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=1")`)
+            const data=await response.json();
+            console.log(data)
+            const productList=data.map(prod=>{
+                const { productName, sizeName, colorName, orderQuantity,price,photoPath}=prod
+                let subtotal = orderQuantity * price;
+                //console.log(productName, sizeName, colorName, orderQuantity, price, photoPath)
+                return (`<tr>
+                                     <td>
+                                        <img src="${photoPath}" alt="" class="width-120px cover">
+                                    </td>
+                                     <td>${productName}</td>
+                                     <td>${price}</td>
+                                     <td>${orderQuantity}</td>
+                                     <td>${sizeName}</td>
+                                     <td>${colorName}</td>
+                                     <td>
+                                        <span class="dollar text-danger">${subtotal}</span>      
+                                     </td>
+                                </tr>
+                               `
+                               )
+            })
+            productListTable.innerHTML = productList.join("");
+            }
+        loadOrderProductList();
+        </script>
     }
     @section Styles{
         <style>

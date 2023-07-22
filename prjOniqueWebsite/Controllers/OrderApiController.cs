@@ -29,22 +29,41 @@ namespace prjOniqueWebsite.Controllers
                         select new OrderListDto
                         {
                             StatusName = os.StatusName,
-                            OrderId = o.OrderId,
+                            OrderId =o.OrderId,
                             Name = m.Name,
                             ShippingDate = (DateTime)o.ShippingDate,
                             PaymentMethodName = pm.PaymentMethodName,
                             PhotoPath = m.PhotoPath
                         };
-//      select os.StatusName,OrderId,m.Name,ShippingDate,pm.PaymentMethodName,PhotoPath
-//            from Orders o
-//            join OrderStatus os
-//on o.OrderStatusId = os.StatusId
-//join Members m
-//on o.MemberId = m.MemberId
-//join PaymentMethods pm
-//on o.PaymentMethodId = pm.PaymentMethodId
+
             List<OrderListDto> dto = query.ToList();
             return Json(dto);
         }
+        public IActionResult orderProductDetail(int orderId)
+        {
+            var query = from od in _context.OrderDetails
+                        join psd in _context.ProductStockDetails
+                        on od.StockId equals psd.StockId
+                        join pc in _context.ProductColors
+                        on psd.ColorId equals pc.ColorId
+                        join ps in _context.ProductSizes
+                        on psd.SizeId equals ps.SizeId
+                        join p in _context.Products
+                        on psd.ProductId equals p.ProductId
+                        select new OrderProductsList
+                        {
+                            ProductName = p.ProductName,
+                            SizeName = ps.SizeName,
+                            ColorName = pc.ColorName,
+                            OrderQuantity = od.OrderQuantity,
+                            Price = od.Price,
+                            PhotoPath = p.PhotoPath
+                        };
+            List<OrderProductsList> dto= query.ToList(); 
+            return Json(dto);
+        }
+        
+
+
     }
 }
