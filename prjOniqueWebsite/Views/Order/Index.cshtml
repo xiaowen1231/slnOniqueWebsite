@@ -171,7 +171,7 @@
 
                 const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
                 console.log(statusName, orderId, name, shippingDate, paymentMethodName, photoPath)
-
+                // @Html.ActionLink("檢視訂單詳情", "Details","Order", new {  orderId="${orderId}"},new {@class= "btn btn-outline-dark" })
                 return (`
                         <tr>
                         <td>
@@ -190,8 +190,7 @@
                         <td>2023/07/16</td>
                         <td>${statusName}</td>
                         <td>
-        @Html.ActionLink("檢視訂單詳情", "Details","Order", "",new {@class= "btn btn-outline-dark" })
-                        
+                            <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
                         </div>
                         </a>
                         </td>
@@ -201,6 +200,10 @@
 
         }
 
+        function openOrderDetails(orderId) {
+            const url = '@Url.Action("Details", "Order")' + '?orderId=' + orderId; // 構造URL
+            window.location.href = url; // 導航到詳細頁面
+        }
     </script>
 }
 @section Styles{
