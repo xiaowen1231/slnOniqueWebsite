@@ -8,6 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<OniqueContext>(
     options=>options.UseSqlServer(builder.Configuration.GetConnectionString("OniqueConnection"))
     );
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -23,6 +24,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
