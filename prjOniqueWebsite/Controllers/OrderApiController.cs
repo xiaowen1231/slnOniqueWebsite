@@ -50,6 +50,7 @@ namespace prjOniqueWebsite.Controllers
                         on psd.SizeId equals ps.SizeId
                         join p in _context.Products
                         on psd.ProductId equals p.ProductId
+                        where od.OrderId== orderId
                         select new OrderProductsList
                         {
                             ProductName = p.ProductName,
@@ -64,6 +65,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult orderShippingDetail(int orderId)
         {
+           
             var query = from o in _context.Orders
                         join os in _context.OrderStatus
                         on o.OrderStatusId equals os.StatusId
@@ -73,7 +75,8 @@ namespace prjOniqueWebsite.Controllers
                         on o.PaymentMethodId equals pm.PaymentMethodId
                         join m in _context.Members
                         on o.MemberId equals m.MemberId
-                        select new orderShippingDetail
+                        where o.OrderId== orderId
+                        select new OrderShippingDetailDto
                         {
                             Name = m.Name,
                             PhotoPath= m.PhotoPath,
@@ -83,13 +86,21 @@ namespace prjOniqueWebsite.Controllers
                             StatusName = os.StatusName,
                             MethodName = sm.MethodName,
                             PaymentMethodName = pm.PaymentMethodName,
-                            OrderDate = o.OrderDate,
+                            OrderDate =o.OrderDate ,
                             ShippingDate = o.ShippingDate,
                             CompletionDate = o.CompletionDate,
                         };
+            
 
-            orderShippingDetail dto = query.FirstOrDefault();
-            return Json(dto);
+           OrderShippingDetailDto dto = query.FirstOrDefault();
+            if (dto != null)
+            {
+                return Json(dto);
+            }
+            else
+            {
+                return Content("無訂單資料"); // 如果找不到指定OrderId的資料，回傳NotFound
+            }
 
 
         }

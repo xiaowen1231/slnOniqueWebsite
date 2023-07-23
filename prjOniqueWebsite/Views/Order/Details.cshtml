@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
+    
+    
 }
 
 
@@ -170,15 +172,21 @@
         </div>
     </div>
 </div>
+
+
+
 @section Scripts{
     <script>
         const productListTable = document.querySelector("#orderProductList")
         const shippingDetailTable = document.querySelector("#shippingDetail")
+            const orderId = @ViewBag.orderId;
+        
 
-        async function loadOrderProductList() {
-            const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=1")`)
+       
+            
+         async function loadOrderProductList(orderId) {
+            const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=")${orderId}`)
             const data = await response.json();
-            console.log(data)
             const productList = data.map(prod => {
                 const { productName, sizeName, colorName, orderQuantity, price, photoPath } = prod
                 let subtotal = orderQuantity * price;
@@ -201,8 +209,11 @@
             })
             productListTable.innerHTML = productList.join("");
         }
-        async function loadShippingDetail(int orderId) {
-            const response = await fetch(`@Url.Content("~/OrderApi/orderShippingDetail")`)
+        
+
+        
+        async function loadShippingDetail(OrderId) {
+            const response = await fetch(`@Url.Content("~/OrderApi/orderShippingDetail?OrderId=")${OrderId}`)
             const data = await response.json()
             let { statusName, methodName, paymentMethodName, name, phone, photoPath, shippingAddress, orderId
                 , orderDate, shippingDate, completionDate } = data
@@ -285,9 +296,9 @@
             shippingDetailTable.innerHTML = shippingDetail;
         }
 
-        loadOrderProductList();
-        loadShippingDetail();
-
+            loadOrderProductList(OrderId);
+            loadShippingDetail(OrderId);
+       
     </script>
     }
 @section Styles{
