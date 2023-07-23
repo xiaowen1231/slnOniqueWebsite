@@ -8,21 +8,25 @@ namespace prjOniqueWebsite.Controllers
     public class ProductApiController : Controller
     {
         private readonly OniqueContext _context;
+        ProductDao dao = null;
+
         public ProductApiController(OniqueContext context)
         {
             _context = context;
+            dao = new ProductDao(_context);
         }
 
         public IActionResult NewArrivalsTop4()
         {
-            List<ProductCardDto> dto = new ProductDao(_context).NewArrivalsTop4();
+            List<ProductCardDto> dto = dao.NewArrivalsTop4();
             return Json(dto);
         }
 
         public IActionResult HotTop4()
         {
-            List<ProductCardDto> dto = new ProductDao(_context).HotTop4();
+            List<ProductCardDto> dto = dao.HotTop4();
             return Json(dto);
         }
+
     }
 }

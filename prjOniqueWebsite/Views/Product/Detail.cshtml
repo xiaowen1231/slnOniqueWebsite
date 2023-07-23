@@ -54,7 +54,7 @@
         </div>
     </div>
     <div class="border rounded shadow-sm width-1000px" data-aos="fade-left">*@
-<div class="d-flex">
+<div class="d-flex" id="divContent">
     <div class="w-500-h-500 overflow-hidden rounded">
         <img src="~/images/uploads/products/TopBasics 日系背帶口袋T恤.jpg" />
     </div>
@@ -69,7 +69,7 @@
             <div class="fw-bold p-2 d-flex width-120px ">
                 <select class="form-select form-select-sm ">
                     @{
-                        foreach(var items in Model.Color)
+                        foreach (var items in Model.Color)
                         {
                             <option value="@items.ColorName">@items.ColorName</option>
                         }
@@ -94,7 +94,7 @@
             <div class="fw-bold p-2 width-90px text-end">數量:</div>
             <div class="fw-bold p-2 d-flex ">
                 <div class="border border-dark-subtle text-center cursor-pointer" style="width: 25px;" id="btnReduce">-</div>
-                <input type="text" value="1" id="orderQty" class="width-50px text-center"/>
+                <input type="text" value="1" id="orderQty" class="width-50px text-center" />
                 <div class="border border-dark-subtle text-center cursor-pointer" style="width: 25px;" id="btnIncrease">+</div>
             </div>
             <div class="fw-bold p-2 width-90px text-end">庫存數量:</div>
@@ -116,7 +116,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-center gap-3 mt-4">
             <input type="button" value="立即購買" class="width-120px btn btn-outline-dark" />
-            <input type="button" value="加入購物車" class="btn btn-dark width-120px" />
+            <input type="button" value="加入購物車" class="btn btn-dark width-120px" id="btnAddToCart" />
         </div>
     </div>
 </div>
@@ -128,7 +128,27 @@
             content: "$";
         }
     </style>
+    <link href="~/css/productDetail.css" rel="stylesheet" />
 }
 @section Scripts{
-    <script></script>
+    <script>
+
+        $("#btnReduce").click(function () {
+            let orderQty = Number($("#orderQty").val())
+            if (orderQty <= 0) {
+                orderQty = 0
+                $("#orderQty").val(orderQty.toString());
+            }
+            else {
+                orderQty--
+                $("#orderQty").val(orderQty.toString());
+            }
+        })
+
+        $("#btnIncrease").click(function () {
+            let orderQty = Number($("#orderQty").val())
+            orderQty++
+            $("#orderQty").val(orderQty)
+        })
+    </script>
 }

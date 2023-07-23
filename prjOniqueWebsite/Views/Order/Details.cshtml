@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
+    
+    
 }
 
 
@@ -164,21 +166,27 @@
                 </div>
             </div>
             <div class="m-3 text-center">
-                <input type="button" value="返回訂單管理" class="btn btn-outline-dark">
+                @Html.ActionLink("返回訂單管理", "index","order", "",new {@class="btn btn-outline-dark" })
                 <input type="submit" value="確認修改訂單" class="btn btn-dark">
             </div>
         </div>
     </div>
 </div>
+
+
+
 @section Scripts{
     <script>
         const productListTable = document.querySelector("#orderProductList")
         const shippingDetailTable = document.querySelector("#shippingDetail")
+            const orderId = @ViewBag.orderId;
+        
 
-        async function loadOrderProductList() {
-            const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=1")`)
+       
+            
+         async function loadOrderProductList(orderId) {
+            const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=")${orderId}`)
             const data = await response.json();
-            console.log(data)
             const productList = data.map(prod => {
                 const { productName, sizeName, colorName, orderQuantity, price, photoPath } = prod
                 let subtotal = orderQuantity * price;
@@ -201,8 +209,11 @@
             })
             productListTable.innerHTML = productList.join("");
         }
-        async function loadShippingDetail(int orderId) {
-            const response = await fetch(`@Url.Content("~/OrderApi/orderShippingDetail")`)
+        
+
+        
+        async function loadShippingDetail(OrderId) {
+            const response = await fetch(`@Url.Content("~/OrderApi/orderShippingDetail?OrderId=")${OrderId}`)
             const data = await response.json()
             let { statusName, methodName, paymentMethodName, name, phone, photoPath, shippingAddress, orderId
                 , orderDate, shippingDate, completionDate } = data
@@ -285,9 +296,9 @@
             shippingDetailTable.innerHTML = shippingDetail;
         }
 
-        loadOrderProductList();
-        loadShippingDetail();
-
+            loadOrderProductList(OrderId);
+            loadShippingDetail(OrderId);
+       
     </script>
     }
 @section Styles{

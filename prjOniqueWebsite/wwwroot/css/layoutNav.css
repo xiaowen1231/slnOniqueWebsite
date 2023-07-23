@@ -5,8 +5,7 @@
 }
 
 .nav-logo-en {
-    width: 120px;
-    height: 35px;
+    width: 130px;
     transition: all 0.5s;
 }
 
@@ -15,7 +14,7 @@
 }
 
 .nav-logo-en:hover {
-    width: 125px;
+    width: 135px;
 }
 
 .nav-text {
