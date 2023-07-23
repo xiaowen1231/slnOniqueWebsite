@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.DTOs;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -16,7 +17,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Details(int orderId)
         {
-            
+            ViewBag.OrderId = orderId;
             return View();
         }
     }
