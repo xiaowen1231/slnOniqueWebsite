@@ -122,7 +122,6 @@
     width: 268px;
     transition:all 0.7s;
     cursor:pointer;
-    border:1px solid grey;
 }
 .productCard {
     margin: 0 10px;

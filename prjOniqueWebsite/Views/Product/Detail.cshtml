@@ -128,7 +128,27 @@
             content: "$";
         }
     </style>
+    <link href="~/css/productDetail.css" rel="stylesheet" />
 }
 @section Scripts{
-    <script></script>
+    <script>
+        
+        $("#btnReduce").click(function(){
+            let orderQty = Number($("#orderQty").val())
+            if(orderQty<=0){
+                orderQty = 0
+                $("#orderQty").val(orderQty.toString());
+            }
+            else
+            {
+                orderQty--
+                $("#orderQty").val(orderQty.toString());
+            }
+        })
+        $("#btnIncrease").click(function () {
+            let orderQty = Number($("#orderQty").val())
+            orderQty++
+            $("#orderQty").val(orderQty)
+        })
+    </script>
 }

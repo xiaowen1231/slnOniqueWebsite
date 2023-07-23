@@ -62,7 +62,7 @@
                 const { id, productName, price, photoPath } = theCard
                 console.log(id)
                 return (
-                    `<a href="product/detail/${id}" class="productCard link-underline-light link-dark" data-aos="fade-up">
+                    `<a href="product/detail/${id}" class="productCard link-dark" data-aos="fade-up">
                         <div class="productPhoto">
                             <img src="@Url.Content("/images/uploads/products/")${photoPath}" />
                         </div>
@@ -73,12 +73,12 @@
                             <span id="price">${price}</span>
                         </p>
                         <div class="productIcon">
-                            <div class="cardIcon">
+                            <a class="cardIcon">
                                 <img src="@Url.Content("/images/icon/shopping_black.png")" />
-                            </div>
-                            <div class="cardIcon">
+                            </a>
+                            <a class="cardIcon">
                                 <img src="@Url.Content("~/images/icon/love.png")" />
-                            </div>
+                            </a>
                         </div>
                     </a>
                 `
@@ -98,7 +98,7 @@
                 const { id,productName, price, photoPath } = theCard
                 console.log(id);
                 return (`
-                                        <a href="@Url.Content("~/product/detail/")${id}" class="productCard link-underline-light link-dark" data-aos="fade-up">
+                         <a href="@Url.Content("~/product/detail/")${id}" class="productCard link-dark" data-aos="fade-up">
                                 <div class="productPhoto">
                                     <img src="@Url.Content("/images/uploads/products/")${photoPath}" />
                                 </div>
