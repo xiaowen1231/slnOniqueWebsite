@@ -150,26 +150,5 @@
             orderQty++
             $("#orderQty").val(orderQty)
         })
-        async function checkLogin() {
-
-        }
-        $("#btnAddToCart").click(async function () {
-            const response = await fetch('@Url.Content("~/ProductApi/isLogin")')
-            const islogin = await response.json();
-             
-            
-            console.log(islogin)
-            if (islogin==false) {
-                return $.ajax({
-                    url: '@Url.Action("login","product")',
-                    type:'GET',
-                    dataType:'html',
-                    success:function(data){
-                        $("#divContent").html(data)
-                    }
-                })
-            }
-            
-        })
     </script>
 }
