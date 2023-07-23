@@ -75,9 +75,5 @@ namespace prjOniqueWebsite.Models.Repositories
             return dto;
         }
 
-        public void AddToCart()
-        {
-            
-        }
     }
 }

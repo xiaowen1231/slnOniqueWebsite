@@ -28,16 +28,5 @@ namespace prjOniqueWebsite.Controllers
             return Json(dto);
         }
 
-        public bool isLogin()
-        {
-            if (HttpContext.Session.Keys.Contains("test"))
-                return true;
-            return false;
-        }
-
-        //public IActionResult AddToCart()
-        //{
-        //    ;
-        //}
     }
 }

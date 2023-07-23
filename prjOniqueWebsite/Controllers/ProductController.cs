@@ -25,9 +25,5 @@ namespace prjOniqueWebsite.Controllers
                 return Content(ex.Message);
             }
         }
-        public IActionResult Login()
-        {
-            return PartialView();
-        }
     }
 }
