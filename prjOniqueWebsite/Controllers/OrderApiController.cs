@@ -105,6 +105,20 @@ namespace prjOniqueWebsite.Controllers
 
         }
 
-
+        /// <summary>
+        /// 根據orderId內的orderstatusNow，傳回可選擇的orderstatusName
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public IActionResult getOrderStatus(int orderId)
+        {
+            var statusNow = _context.Orders.Where(c => c.OrderId == orderId).Select(c => c.OrderStatusId).FirstOrDefault();
+            if (statusNow == 1)
+            {
+                var statusChoice=_context.ord
+            }
+            //var status = _context.OrderStatus.Select(s=>s.StatusName).ToList();
+            return Json(statusNow);
+        }
     }
 }

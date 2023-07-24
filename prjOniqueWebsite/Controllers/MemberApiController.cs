@@ -28,7 +28,7 @@ namespace prjOniqueWebsite.Controllers
                             Phone = m.Phone,
                             Email = m.Email,
                             DateOfBirth = m.DateOfBirth,
-                            Gender = m.Gender,
+                            Gender = m.Gender? "女":"男",
                             MemberLevelName = ml.MemberLevelName,
                         };
             List<MemberListDto> dto = query.ToList();  

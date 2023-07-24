@@ -10,7 +10,6 @@
     <Folder Include="Models\EFModels\" />
     <Folder Include="Models\Interfaces\" />
     <Folder Include="Models\Services\" />
-    <Folder Include="wwwroot\images\uploads\members\" />
   </ItemGroup>
 
   <ItemGroup>

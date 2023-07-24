@@ -14,7 +14,7 @@ namespace prjOniqueWebsite.Models.DTOs
 
         public decimal Price { get; set; }
         public string Category { get; set; }
-        public int Discont { get; set; } 
-
+        public int Discont { get; set; }
+      
     }
 }
