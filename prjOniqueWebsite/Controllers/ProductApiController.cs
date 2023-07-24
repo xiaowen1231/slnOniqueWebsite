@@ -42,7 +42,7 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult changeProductPhoto(int productId, int colorId,int sizeId)
         {
-            string photopath = dao.changeProductPhoto(productId, colorId, sizeId);
+            ProductStockDetails photopath = dao.changeProductPhoto(productId, colorId, sizeId);
             return Json(photopath);
         }
     }

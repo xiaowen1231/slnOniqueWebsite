@@ -4,21 +4,46 @@
     ViewData["Title"] = "會員登入";
 }
 
-<div class="fill-vh border">
-    <form class="border divLogin">
-
-    </form>
-</div>
-
+<form method="post" class="myBackground">
+    <div class="myContainer container border border-radius bg-opacity-50 bg-dark my-5">
+        <div class=" row row-cols-1 text-center mt-4 ">
+            <div class="col mb-4">
+                <div class="fs-2 fw-bold text-white">會員登入</div>
+            </div>
+            <div class="container col-8 p-2">
+                <div class="my-2 d-flex align-items-center justify-content-center">
+                    <div class="text-end mx-2 fw-bold text-white width-120px">會員帳號 :</div>
+                    <div>
+                        <input type="text" class="form-control" name="Email" value="Allen@gmail.com">
+                    </div>
+                </div>
+                <div class="my-2 d-flex align-items-center justify-content-center">
+                    <div class="text-end mx-2 fw-bold text-white width-120px">會員密碼 :</div>
+                    <div>
+                        <input type="text" class="form-control" name="Password">
+                    </div>
+                </div>
+                <div class="col mb-4 mt-3">
+                    <input type="submit" value="登入" class="btn btn-dark fw-bold">
+                </div>
+                <div class="text-center">
+                    <input type="button" value="註冊新會員" class="btn btn-outline-dark fw-bold mx-3">
+                    <input type="button" value="忘記密碼" class="btn btn-outline-dark fw-bold mx-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section Styles{
     <style>
-        .fill-vh{
-            height:calc(100vh - 287px);
+        .myBackground{
+            height:calc(100vh - 319px)
         }
-        .divLogin{
-            width:800px;
-            margin:auto;
+        .myContainer {
+            width: 500px;
+            height: 600px;
+            border-radius: 15px;
         }
     </style>
 }
