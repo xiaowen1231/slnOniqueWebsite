@@ -2,7 +2,7 @@
 
 namespace prjOniqueWebsite.Models.DTOs
 {
-    public class EmployeeDto
+    public class EmployeeCreateDto
     {
         public string EmployeeName { get; set; }
         public DateTime? DateOfBirth { get; set; }
@@ -11,12 +11,12 @@ namespace prjOniqueWebsite.Models.DTOs
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public int Position { get; set; }
-        public string EmployeeLevelName { get; set; }
+        public string Position { get; set; }
+        
         public DateTime RegisterDate { get; set; }
 
-        public int Citys { get; set; }
-        public int Areas { get; set; }
+        public string Citys { get; set; }
+        public string Areas { get; set; }
 
         public string Address { get; set; }
     }
