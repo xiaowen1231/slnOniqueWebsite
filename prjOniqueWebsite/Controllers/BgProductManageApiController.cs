@@ -17,7 +17,6 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult ShowBgProductManageList()
         {
-
             var query = from p in _context.Products
                         join c in _context.Categories
                         on p.ProductCategoryId equals c.CategoryId
