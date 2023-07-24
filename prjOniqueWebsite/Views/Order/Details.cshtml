@@ -1,8 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
-    
-    
+    int orderId = @ViewBag.orderId;
+
 }
 
 
@@ -10,7 +10,7 @@
     <div class="fs-3 fw-bold text-center border-bottom border-dark-subtle p-3">訂單明細</div>
     <div id="shippingDetail">
 
-
+        <input type="hidden" id="orderId" value="@orderId"/>
         @*<div class="shadow-sm p-3 m-3 rounded d-flex gap-2 justify-content-between bg-body-tertiary border">
         <div class="d-flex gap-3 p-1">
         <div class="d-flex gap-2 align-items-center">
@@ -132,18 +132,18 @@
         <div class="border rounded my-4 border-dark-subtle p-2 ">
             <div class=" p-2 my-2 d-flex">
                 <div class=" fw-bold" style="width: 95px;"><span class="dollar">商品總額</span></div>
-                <div class=" text-end" style="width: 95px;">4060</div>
+                <div class=" text-end" style="width: 95px;"><span id="productTotal"></span></div>
             </div>
             <div class="p-2 my-2">
                 <div class="d-flex ">
                     <div class="fw-bold" style="width: 95px;"><span class="dollar">運送費用</span></div>
-                    <div class="text-end " style="width: 95px;">60</div>
+                    <div class="text-end " style="width: 95px;"><span id="shippingfee">60</span></div>
                 </div>
             </div>
             <div class="p-2 my-2">
                 <div class="d-flex ">
                     <div class="fw-bold lh-lg" style="width: 95px;"><span class="dollar">應付總額</span></div>
-                    <div class="text-end text-danger fw-bold fs-5 " style="width: 95px;">4120</div>
+                    <div class="text-end text-danger fw-bold fs-5 "style="width: 95px;"><span id="total"></span></div>
                 </div>
             </div>
         </div>
@@ -179,21 +179,26 @@
     <script>
         const productListTable = document.querySelector("#orderProductList")
         const shippingDetailTable = document.querySelector("#shippingDetail")
-            const orderId = @ViewBag.orderId;
-        
+        const productPrice = document.querySelector("#productTotal")
+        const totalprice = document.querySelector("#total")
+
+        let total = 0;
 
        
             
-         async function loadOrderProductList(orderId) {
+         async function loadOrderProductList() {
+            const orderId = $("#orderId").val()
             const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=")${orderId}`)
             const data = await response.json();
             const productList = data.map(prod => {
                 const { productName, sizeName, colorName, orderQuantity, price, photoPath } = prod
                 let subtotal = orderQuantity * price;
+                total += subtotal
+                //photoPath = photoPath == null ? default : photoPath
                 //console.log(productName, sizeName, colorName, orderQuantity, price, photoPath)
                 return (`<tr>
                            <td>
-                            <img src="${photoPath}" alt="" class="width-120px cover">
+                            <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="" class="width-120px cover">
                             </td>
                               <td>${productName}</td>
                               <td>${price}</td>
@@ -208,29 +213,36 @@
                 )
             })
             productListTable.innerHTML = productList.join("");
+            productPrice.innerHTML=total;
+            totalprice.innerHTML=total+60;
         }
         
 
         
-        async function loadShippingDetail(OrderId) {
-            const response = await fetch(`@Url.Content("~/OrderApi/orderShippingDetail?OrderId=")${OrderId}`)
+        async function loadShippingDetail() {
+            const orderId = $("#orderId").val()
+            const response = await fetch(`@Url.Content("~/OrderApi/orderShippingDetail?OrderId=")${orderId}`)
             const data = await response.json()
-            let { statusName, methodName, paymentMethodName, name, phone, photoPath, shippingAddress, orderId
-                , orderDate, shippingDate, completionDate } = data
+            let { statusName, methodName, paymentMethodName, name, phone, photoPath, shippingAddress, 
+                 orderDate, shippingDate, completionDate } = data
+           
+            orderDate = orderDate.substring(0, 10) +" "+ orderDate.substring(11, 19)
+            shippingDate = shippingDate.substring(0, 10) + " " + shippingDate.substring(11, 19)
+            completionDate = completionDate == null ? "訂單尚未完成" : completionDate;
+            completionDate = completionDate.substring(0, 10) + " " + completionDate.substring(11, 19)
+            
 
-
-            let completeStatus = "";
-            if (completionDate == null) {
-                completeStatus = "未完成"
-            }
-            completeStatus = completionDate;
+            //if(completionDate==null){
+            //    completionDate = "訂單尚未完成"
+            //}
+            
             shippingDetail =
                 `
                             <div class="shadow-sm p-3 m-3 rounded d-flex gap-2 justify-content-between bg-body-tertiary border">
                                         <div class="d-flex gap-3 p-1">
                                             <div class="d-flex gap-2 align-items-center">
-                                                        <img src="${photoPath}" alt="" class="circle-size-60 cover">
-                                                        <div class="fw-bold fs-5">${name}</div>
+                                                    <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="circle-size-60 cover">
+                                                    <div class="fw-bold fs-5">${name}</div>
                                             </div>
                                         <div class="d-flex gap-2 align-items-center">
                                             <div class="fw-bold">訂單編號</div>
@@ -240,7 +252,7 @@
                                     <div>
                                         <div class="d-flex gap-2">
                                             <div class="fw-bold">下單日期 : </div>
-                                            <div>${orderDate}</div>
+                                                    <div>${orderDate}</div>
                                         </div>
                                         <div class="d-flex gap-2">
                                             <div class="fw-bold">出貨日期 : </div>
@@ -248,7 +260,7 @@
                                         </div>
                                         <div class="d-flex gap-2">
                                             <div class="fw-bold">完成日期 : </div>
-                                            <div class="text-secondary">${completeStatus}</div>
+                                                    <div class="text-secondary">${completionDate}</div>
                                         </div>
                                     </div>
                                     </div>
@@ -296,8 +308,8 @@
             shippingDetailTable.innerHTML = shippingDetail;
         }
 
-            loadOrderProductList(OrderId);
-            loadShippingDetail(OrderId);
+            loadOrderProductList();
+            loadShippingDetail();
        
     </script>
     }

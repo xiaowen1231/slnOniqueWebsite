@@ -167,36 +167,67 @@
             const response = await fetch(`@Url.Content("~/OrderApi/showOrderList")`)
             const data = await response.json();
             
-            const tableOrdersList = data.map(item=>{
+            let tableOrdersList = "";
+            data.map(item=>{
 
                 const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
                 console.log(statusName, orderId, name, shippingDate, paymentMethodName, photoPath)
-                // @Html.ActionLink("檢視訂單詳情", "Details","Order", new {  orderId="${orderId}"},new {@class= "btn btn-outline-dark" })
-                return (`
+
+                tableOrdersList += `
                         <tr>
                         <td>
-                        <div class="d-flex gap-2">
-                        <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                        <div>${statusName}</div>
-                        </div>
-                        </td>
-                        <td>
-                        <span>${orderId}</span>
-                        </td>
-                        <td>
-                        <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
-                        <span>${name}</span>
-                        </td>
-                        <td>2023/07/16</td>
-                        <td>${statusName}</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                        </div>
-                        </a>
-                        </td>
-                        </tr>`)
+                        <div class="d-flex gap-2">`;
+                if (statusName == "待出貨")
+                {
+                    tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                    <div>${statusName}</div>`
+                }
+                else if (statusName == "已出貨"){
+                    tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
+                    <div>${statusName}</div>`
+                }
+                else if(statusName=="已完成"){
+                    tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
+                    <div>${statusName}</div>`
+                }
+                else if (statusName == "已取消"){
+                    tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
+                    <div>${statusName}</div>`
+                }
+                else if (statusName == "退款中"){
+                    tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
+                    <div>${statusName}</div>`
+                }
+                else if (statusName == "已退款"){
+                    tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
+                    <div>${statusName}</div>`
+                }
+                else{
+                    tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
+                            <div>${statusName}</div>`
+                }
+                    tableOrdersList += ` 
+                                </div>
+                                </td>
+                                <td>
+                                <span>${orderId}</span>
+                                </td>
+                                <td>
+                                <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
+                                <span>${name}</span>
+                                </td>
+                                <td>2023/07/16</td>
+                                <td>${statusName}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                </div>
+                                </a>
+                                </td>
+                                </tr>`
             })
-        orderTable.innerHTML = tableOrdersList.join("");
+            console.log()
+            //orderTable.innerHTML = tableOrdersList.join("");
+            $("#orderTable").append(tableOrdersList)
 
         }
 
