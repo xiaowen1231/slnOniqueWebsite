@@ -28,5 +28,22 @@ namespace prjOniqueWebsite.Controllers
             return Json(dto);
         }
 
+        public IActionResult GetStockSize(int id,int colorId)
+        {
+            List<ProductSizes> sizes = dao.GetStockSize(id, colorId);
+            return Json(sizes);
+        }
+
+        public IActionResult GetStockColor(int id)
+        {
+            List<ProductColors> colors = dao.GetStockColor(id);
+            return Json(colors);
+        }
+
+        public IActionResult changeProductPhoto(int productId, int colorId,int sizeId)
+        {
+            string photopath = dao.changeProductPhoto(productId, colorId, sizeId);
+            return Json(photopath);
+        }
     }
 }
