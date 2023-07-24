@@ -1,4 +1,4 @@
-﻿@model prjOniqueWebsite.Models.DTOs.EmployeeDto;
+﻿@model prjOniqueWebsite.Models.DTOs.EmployeeCreateDto;
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
@@ -43,7 +43,10 @@
                                 <label asp-for="Gender" class="control-label">性別</label>
                             </div>
                             <div class="mx-3">
-                                <input asp-for="Gender" type="text" class="form-control" placeholder="請輸入性別" />
+                                <input asp-for="Gender" type="radio" id="option1" name="option" value="option1" />
+                                <label for="option1">男</label>
+                                <input asp-for="Gender" type="radio" id="option2" name="option" value="option2" />
+                                <label for="option2">女</label>
                             </div>
                         </div>
                         <div class="pt-2 d-flex col-6 align-items-center">
@@ -79,7 +82,11 @@
                                 <label asp-for="Position" class="control-label">身分</label>
                             </div>
                             <div class="mx-3">
-                                <input asp-for="Position" type="text" class="form-control" placeholder="請輸入身分">
+                                <select asp-for="Gender" class="form-select ">
+                                    <option selected>-請選擇身分-</option>
+                                    <option value="1">一般員工</option>
+                                    <option value="2">經理</option>
+                                </select>
                             </div>
                         </div>
                         <div class="pt-2 d-flex col-6 align-items-center form-group">
@@ -125,8 +132,6 @@
                     </div>
                 </div>
             </div>
-        
-    
         </div>
     </form>
 </div>
