@@ -17,16 +17,16 @@ namespace prjOniqueWebsite.Controllers
         {
             return View();
         }
-        public IActionResult ProductEdit()
+        public IActionResult ProductEdit(int productId)
         {
             var query = from p in _context.Products
                         join c in _context.Categories
                         on p.ProductCategoryId equals c.CategoryId
                         join s in _context.Supplier
                         on p.SupplierId equals s.SupplierId
-                        where p.ProductId == 9
+                        where p.ProductId==productId
                         select new BgEditProductDto
-                        {
+                        {                            
                             ProductName = p.ProductName,
                             Price = p.Price,
                             PhotoPath = p.PhotoPath,
@@ -37,7 +37,9 @@ namespace prjOniqueWebsite.Controllers
                             Description = p.Description,
                         };
             BgEditProductDto dto = query.FirstOrDefault();
-            return View(dto);
+            
+                return View(dto);
+            
         }
     }
 }
