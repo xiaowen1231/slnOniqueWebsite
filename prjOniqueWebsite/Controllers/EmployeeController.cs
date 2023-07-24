@@ -25,7 +25,7 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeName,DateOfBirth,Gender,Phone,Email," +
-            "Password,EmployeeLevelName,RegisterDate,AreasNavigation,CitysNavigation,Address")] EmployeeDto employee)
+            "Password,EmployeeLevelName,RegisterDate,Areas,Citys,Address")] EmployeeDto employee)
         {
             if (ModelState.IsValid)
             {
