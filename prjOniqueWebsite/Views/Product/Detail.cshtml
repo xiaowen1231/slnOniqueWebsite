@@ -7,6 +7,7 @@
 <div class="d-flex" id="divContent">
     <div class="w-500-h-500 overflow-hidden rounded " >
         <img src="@Url.Content("~/images/uploads/products/")@Model.products.PhotoPath"  id="productPhoto" />
+        <input type="hidden" id="stockId" />
     </div>
     <div class="flex-fill">
         <input type="hidden" value="@Model.products.ProductId" id="productId" />
@@ -126,6 +127,7 @@
         selectColor.addEventListener('change',function(){
             loadSize()
         })
+
         selectSize.addEventListener('change',function(){
             loadProductPhoto()
         })
@@ -135,10 +137,18 @@
             const sizeId = $("#selectSize").val()
             console.log(productId,colorId,sizeId,)
             const response = await fetch(`@Url.Content("~/ProductApi/changeProductPhoto?")productId=${productId}&colorId=${colorId}&sizeId=${sizeId}`)
-            const productPhoto = await response.json()
+            const psd = await response.json()
+            const { photoPath, stockId }=psd
+            $("#productPhoto").attr("src", `@Url.Content("~/images/uploads/products/")${photoPath}`)
 
-            $("#productPhoto").attr("src", `@Url.Content("~/images/uploads/products/")${productPhoto}`)
-            
+            $("#stockId").val(`${stockId}`)
         }
+
+        $('#btnAddToCart').click(function(){
+            const stockId = $("#stockId").val()
+            const qty = $("#orderQty").val()
+
+
+        })
     </script>
 }

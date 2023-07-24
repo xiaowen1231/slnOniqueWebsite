@@ -112,15 +112,16 @@ namespace prjOniqueWebsite.Models.Repositories
             return color.ToList();
         }
 
-        public string changeProductPhoto(int productId, int colorId, int sizeId)
+        public ProductStockDetails changeProductPhoto(int productId, int colorId, int sizeId)
         {
-            var photoPath = _context.ProductStockDetails.Where(psd => psd.ProductId == productId &&
-            psd.ColorId == colorId &&
-            psd.SizeId == sizeId)
-                .Select(psd => psd.PhotoPath)
+            ProductStockDetails psd = _context.ProductStockDetails.Where(psd=>psd.ProductId==productId
+            &&psd.ColorId==colorId
+            &&psd.SizeId==sizeId)
                 .FirstOrDefault();
 
-            return photoPath;
+            return psd;
         }
+
+
     }
 }
