@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+
+<div class="container my-2 p-2 border border-secondary rounded-4 shadow justify-content-center">
+    <div class="row text-center border-bottom mx-2 p-2">
+        <div class="fs-3 fw-bold">商品清單</div>
+    </div>
+    <div class="p-2">
+        <div class="d-flex p-2 align-items-center">
+            <div class="col-1" style="margin-left: 2%;">
+                <button class="btn btn-dark">新增商品</button>
+            </div>
+            <div class="col-4 d-flex align-items-center">
+                <div class="fw-bold mx-2">商品名稱:</div>
+                <div>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-2 d-flex align-items-center">
+                <div class="fw-bold mx-2">商品分類:</div>
+                <div>
+                    <select class="form-select">
+                        <option>請選擇</option>
+                        <option>T恤</option>
+                        <option>襯衫</option>
+                        <option>毛衣</option>
+                        <option>外套</option>
+                        <option>背心</option>
+                        <option>牛仔褲</option>
+                        <option>休閒褲</option>
+                        <option>短褲</option>
+                        <option>飾品</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-2 d-flex align-items-center">
+                <div class="fw-bold mx-2">優惠活動:</div>
+                <div>
+                    <select class="form-select">
+                        <option>請選擇</option>
+                        <option>夏日特賣</option>
+                        <option>熱銷優惠</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-end">
+                <button class="btn btn-dark fw-bold">查詢</button>
+                <button class="btn btn-outline-dark fw-bold mx-3">取消查詢</button>
+            </div>
+        </div>
+    </div>
+    <div class="container justify-content-center d-flex my-2">
+        <table class="table align-middle text-center table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th width="200">商品圖片</th>
+                    <th width="200">商品名稱</th>
+                    <th width="200">商品價格</th>
+                    <th width="180">商品分類</th>
+                    <th width="150">優惠活動</th>
+                    <th width="120">編輯</th>
+                    <th width="120">刪除</th>
+                </tr>
+            </thead>
+            <tbody id="BgProdcutTable">
+            @*<tr>
+                <td>
+                    <img src="../Images/Product/不規則條紋上衣.jpg" class="rounded" alt="不規則條紋上衣" width="120">
+                </td>
+                <td>
+                    不規則條紋上衣
+                </td>
+                <td class="dollar">
+                    1180
+                </td>
+                <td>
+                    上衣
+                </td>
+                <td>
+                    <div></div>
+                </td>
+                <td>
+                    <img src="../Images/BgProductManage/edit.png" class="square-32" alt="">
+                </td>
+                <td>
+                    <img src="../Images/BgProductManage/trash.png" class="square-32" alt="">
+                </td>
+            </tr>*@
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" style="color: black;" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" style="color: black;" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" style="color: black;" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" style="color: black;" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" style="color: black;" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+@section Styles{
+    <style>
+        #price::before {
+            content: "$";
+        }
+
+        #productImg{
+            width:120px;
+            height:120px; 
+            margin:auto;
+        }
+        img{
+            height:100%;
+            width:100%;
+            object-fit:cover;
+        }
+    </style>
+}
+
+@section Scripts{
+    <script>
+        const BgProdcutTable = document.querySelector("#BgProdcutTable")
+        load()
+
+        async function load(){
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowBgProductManageList")`)
+            const data = await response.json();
+            console.log(data)
+
+            const TableBgProdcutList = data.map(item=>{
+                const { photoPath, productName, price, category, discount } = item
+                return(`
+                <tr>
+                <td>
+                     <div id="productImg">
+                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="" />
+                    </div>
+                </td>
+                        <td>${productName}</td>
+                        <td id="price">${price}</td>
+                                <td>${category}</td>
+                        <td>${discount}</td>
+                <td>
+                    <div class="circle-size-25" style="margin:auto">
+                        <a href=""><img src="@Url.Content("~/images/BgProductManage/edit.png")" alt=""></a>
+                    </div>
+                </td>
+                <td>
+                    <a href=""><img class="circle-size-25" src="@Url.Content("~/images/BgProductManage/trash.png")" alt=""></a>   
+                </td>
+                `)
+            })
+            BgProdcutTable.innerHTML = TableBgProdcutList.join("");
+        }
+    </script>
+}
