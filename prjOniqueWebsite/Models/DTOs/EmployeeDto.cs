@@ -10,11 +10,13 @@ namespace prjOniqueWebsite.Models.DTOs
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        public int Position { get; set; }
         public string EmployeeLevelName { get; set; }
         public DateTime RegisterDate { get; set; }
 
-        public virtual Areas AreasNavigation { get; set; }
-        public virtual Citys CitysNavigation { get; set; }
+        public int Citys { get; set; }
+        public int Areas { get; set; }
 
         public string Address { get; set; }
     }
