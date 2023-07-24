@@ -1,6 +1,7 @@
 ﻿using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using System.Drawing;
 
 namespace prjOniqueWebsite.Models.Repositories
 {
@@ -36,7 +37,7 @@ namespace prjOniqueWebsite.Models.Repositories
                          on p.ProductId equals psd.ProductId
                          join od in _context.OrderDetails
                          on psd.StockId equals od.StockId
-                         group od by new { p.Price, p.ProductName, p.PhotoPath ,p.ProductId} into grouped
+                         group od by new { p.Price, p.ProductName, p.PhotoPath, p.ProductId } into grouped
                          orderby grouped.Sum(od => od.OrderQuantity) descending
                          select new ProductCardDto
                          {
@@ -51,7 +52,7 @@ namespace prjOniqueWebsite.Models.Repositories
 
         public ProductDetailDto GetProductDetail(int id)
         {
-            
+
             ProductDetailDto dto = new ProductDetailDto();
 
             dto.products = _context.Products.FirstOrDefault(p => p.ProductId == id);
@@ -67,13 +68,59 @@ namespace prjOniqueWebsite.Models.Repositories
             foreach (var item in dto.PSD_List)
             {
                 var color = _context.ProductColors.FirstOrDefault(c => c.ColorId == item.ColorId);
-                if(!dto.Color.Any(c=>c.ColorId==item.ColorId))
-                dto.Color.Add(color);
+                if (!dto.Color.Any(c => c.ColorId == item.ColorId))
+                    dto.Color.Add(color);
                 var size = _context.ProductSizes.FirstOrDefault(s => s.SizeId == item.SizeId);
                 dto.Size.Add(size);
             }
             return dto;
         }
 
+        public List<ProductSizes> GetStockSize(int id, int colorId)
+        {
+            var sizes = (from p in _context.Products
+                         join psd in _context.ProductStockDetails
+                         on p.ProductId equals psd.ProductId
+                         join pc in _context.ProductColors
+                         on psd.ColorId equals pc.ColorId
+                         join ps in _context.ProductSizes
+                         on psd.SizeId equals ps.SizeId
+                         where p.ProductId == id && pc.ColorId == colorId
+                         select new ProductSizes
+                         {
+                             SizeId = ps.SizeId,
+                             SizeName = ps.SizeName
+                         });
+
+            return sizes.ToList();
+        }
+        public List<ProductColors> GetStockColor(int id)
+        {
+            var color = (from p in _context.Products
+                         join psd in _context.ProductStockDetails
+                         on p.ProductId equals psd.ProductId
+                         join pc in _context.ProductColors
+                         on psd.ColorId equals pc.ColorId
+                         where p.ProductId == id
+                         group pc by new { pc.ColorId, pc.ColorName } into grouped
+                         select new ProductColors
+                         {
+                             ColorId = grouped.Key.ColorId,
+                             ColorName = grouped.Key.ColorName
+                         });
+
+            return color.ToList();
+        }
+
+        public string changeProductPhoto(int productId, int colorId, int sizeId)
+        {
+            var photoPath = _context.ProductStockDetails.Where(psd => psd.ProductId == productId &&
+            psd.ColorId == colorId &&
+            psd.SizeId == sizeId)
+                .Select(psd => psd.PhotoPath)
+                .FirstOrDefault();
+
+            return photoPath;
+        }
     }
 }

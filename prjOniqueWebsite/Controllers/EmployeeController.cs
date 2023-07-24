@@ -22,19 +22,12 @@ namespace prjOniqueWebsite.Controllers
         {
             return View();
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeName,DateOfBirth,Gender,Phone,Email," +
-            "Password,EmployeeLevelName,RegisterDate,AreasNavigation,CitysNavigation,Address")] EmployeeDto employee)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(employee);
-        }
+
+        //public async IActionResult Create()
+        //{
+            
+        //    return View();
+        //}
 
 
 
