@@ -1,6 +1,5 @@
 ﻿.nav-logo {
     width: 60px;
-    height: 60px;
     transition: all 0.5s;
 }
 
@@ -33,8 +32,8 @@
 
 .nav-icon{
     width:30px;
-    height:30px;
     transition:all 0.5s;
+    cursor:pointer;
 }
 .nav-icon:hover {
     width: 35px;
