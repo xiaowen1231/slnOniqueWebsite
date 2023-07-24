@@ -148,26 +148,26 @@
             </div>
         </div>
         <div class="p-2 rounded color-fff border">
-            <div>
-                <span>修改訂單狀態 : </span>
+            <div class="p-2 fw-bold">
+                <span>修改訂單狀態</span>
             </div>
             <div class="p-2">
-                <div>
-                    <select class="form-select d-inline" aria-label="訂單狀態">
-                        <option value="" selected="selected">未選擇</option>
+                <div> 
+                    <select class="form-select d-inline w-25" id="statusSel" aria-label="訂單狀態">
+                        @*<option value="" selected="selected">未選擇</option>
                         <option value="">待出貨</option>
                         <option value="">已出貨</option>
                         <option value="">已完成</option>
                         <option value="">已取消</option>
                         <option value="">退款中</option>
                         <option value="">已退款</option>
-                        <option value="">未取貨</option>
+                        <option value="">未取貨</option>*@
                     </select>
                 </div>
             </div>
             <div class="m-3 text-center">
                 @Html.ActionLink("返回訂單管理", "index","order", "",new {@class="btn btn-outline-dark" })
-                <input type="submit" value="確認修改訂單" class="btn btn-dark">
+                <input type="submit" value="確認修改訂單" class="btn btn-outline-danger">
             </div>
         </div>
     </div>
@@ -181,12 +181,12 @@
         const shippingDetailTable = document.querySelector("#shippingDetail")
         const productPrice = document.querySelector("#productTotal")
         const totalprice = document.querySelector("#total")
-
+        const statusSel = document.querySelector("#statusSel")
         let total = 0;
 
        
             
-         async function loadOrderProductList() {
+        async function loadOrderProductList() {
             const orderId = $("#orderId").val()
             const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=")${orderId}`)
             const data = await response.json();
@@ -310,7 +310,16 @@
 
             loadOrderProductList();
             loadShippingDetail();
-       
+
+        async function loadStatusNow(){
+            const orderId = $("#orderId").val()
+            const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusNow?OrderId=")${orderId}`)
+            const data=await response.json()
+
+            console.log(data)
+            statusSel.innerHTML = `<option value="${data}">${data}</option>`
+        }
+        loadStatusNow();
     </script>
     }
 @section Styles{

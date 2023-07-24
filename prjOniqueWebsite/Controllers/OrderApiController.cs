@@ -110,13 +110,18 @@ namespace prjOniqueWebsite.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public IActionResult getOrderStatus(int orderId)
+        public IActionResult getOrderStatusNow(int orderId)
         {
-            var statusNow = _context.Orders.Where(c => c.OrderId == orderId).Select(c => c.OrderStatusId).FirstOrDefault();
-            if (statusNow == 1)
-            {
-                //var statusChoice=_context.ord
-            }
+            var query = from o in _context.Orders
+                            join os in _context.OrderStatus
+                            on o.OrderStatusId equals os.StatusId
+                            where o.OrderStatusId == orderId
+                            select os.StatusId;
+            var statusNow = query.FirstOrDefault();          
+            //if (statusNow == 1)
+            //{
+                
+            //}
             //var status = _context.OrderStatus.Select(s=>s.StatusName).ToList();
             return Json(statusNow);
         }
