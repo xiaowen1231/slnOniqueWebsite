@@ -157,7 +157,8 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#D0D0D0',
-                    confirmButtonText: '進行登入'
+                    confirmButtonText: '進行登入',
+                            cancelButtonText: '取消'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = `@Url.Content("~/Home/Login")`
