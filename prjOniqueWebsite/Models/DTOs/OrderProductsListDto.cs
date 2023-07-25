@@ -1,6 +1,6 @@
 ﻿namespace prjOniqueWebsite.Models.DTOs
 {
-    public class OrderProductsList
+    public class OrderProductsListDto
     {
         public string ProductName { get; set; }
         public int OrderQuantity { get; set; }
