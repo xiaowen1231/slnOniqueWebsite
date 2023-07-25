@@ -10,6 +10,11 @@
     border-radius: 50%;
 }
 
+.circle-size-55 {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+}
 .circle-size-60 {
     width: 60px;
     height: 60px;

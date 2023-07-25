@@ -40,10 +40,16 @@ namespace prjOniqueWebsite.Controllers
             return Json(colors);
         }
 
-        public IActionResult changeProductPhoto(int productId, int colorId,int sizeId)
+        public IActionResult GetStockDetail(int productId, int colorId,int sizeId)
         {
-            ProductStockDetails photopath = dao.changeProductPhoto(productId, colorId, sizeId);
+            ProductStockDetails photopath = dao.GetStockDetail(productId, colorId, sizeId);
             return Json(photopath);
+        }
+
+        public IActionResult IsLogin()
+        {
+            bool isLogin = HttpContext.Session.Keys.Contains("Login")?true:false;
+            return Json(isLogin);
         }
     }
 }

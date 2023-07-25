@@ -112,7 +112,7 @@ namespace prjOniqueWebsite.Models.Repositories
             return color.ToList();
         }
 
-        public ProductStockDetails changeProductPhoto(int productId, int colorId, int sizeId)
+        public ProductStockDetails GetStockDetail(int productId, int colorId, int sizeId)
         {
             ProductStockDetails psd = _context.ProductStockDetails.Where(psd=>psd.ProductId==productId
             &&psd.ColorId==colorId

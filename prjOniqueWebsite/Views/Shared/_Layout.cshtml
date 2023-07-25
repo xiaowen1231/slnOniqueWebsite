@@ -53,9 +53,27 @@
                                 </div>
                             </a>
                         </div>
-                        <a asp-action="Login" asp-controller="Home" class="nav-icon">
+@*                        <div asp-action="Login" asp-controller="Home" class="nav-icon">
                             <img src="~/images/header/user.png" />
-                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </div>*@
+                        <div class="circle-size-55 collapse navbar-collapse" id="navbarNavDarkDropdown">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="~/images/header/user.png" />
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item" asp-action="Login" asp-controller="Home">登入/註冊</a></li>
+                                        <li><a class="dropdown-item" href="#">幫助中心</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="nav-icon">
                             <img src="~/images/header/like.png" />
                         </div>
