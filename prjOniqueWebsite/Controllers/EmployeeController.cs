@@ -55,7 +55,7 @@ namespace prjOniqueWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,EmployeeName,Password,Phone,Email,Gender,Citys,Areas,Address,DateOfBirth,Position,VerificationCode,Verification,PhotoPath,RegisterDate")] Employees employees)
+        public async Task<IActionResult> Create( Employees employees)
         {
             if (ModelState.IsValid)
             {
