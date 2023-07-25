@@ -1,0 +1,99 @@
+﻿@model prjOniqueWebsite.Models.EFModels.Products
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+
+<div class="container d-flex justify-content-center border">
+    <div class="col-2" style="margin-left: 8%;">
+        <div class="text-center my-2">
+            <div class=" border p-3 rounded-4 ">
+                <div class="p-2 my-1 bg-dark text-white rounded">
+                    商品細部編輯
+                </div>
+                <div class="container">
+                    <input type="button" value="尺寸、顏色設定"
+                           class="btn btn-outline-dark form-control border my-2 fw-bold">
+                    <input type="button" value="新增尺寸" class="btn btn-outline-dark border form-control my-2 fw-bold">
+                    <input type="button" value="新增顏色" class="btn btn-outline-dark border form-control my-2 fw-bold">
+                    <input type="button" value="庫存量設定"
+                           class="btn btn-outline-dark border form-control my-2 fw-bold">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border shadow rounded-4 container my-2 mx-4">
+        <div class="text-center p-2">
+            <div class="align-items-center fs-3 fw-bold border-bottom p-2">編輯商品資訊</div>
+        </div>
+        <div class="d-flex my-2">
+            <div class="col-6 d-flex py-3 mx-4 border">                
+                <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ProductId" />
+                <div class="p-2 border">
+                    <div class="form-group">
+                        <label asp-for="ProductName" class="control-label">商品名稱 :</label>
+                        <input asp-for="ProductName" class="form-control" />
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label">商品價格 :</label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductCategoryId" class="control-label">商品分類 :</label>
+                        <select asp-for="ProductCategoryId" class="form-control" asp-items="ViewBag.ProductCategoryId"></select>
+                        <span asp-validation-for="ProductCategoryId" class="text-danger"></span>
+                    </div>            
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label">商品描述 :</label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AddedTime" class="control-label">上架時間 :</label>
+                        <input asp-for="AddedTime" class="form-control" />
+                        <span asp-validation-for="AddedTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ShelfTime" class="control-label">下架時間 :</label>
+                        <input asp-for="ShelfTime" class="form-control" />
+                        <span asp-validation-for="ShelfTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SupplierId" class="control-label">供應商 :</label>
+                        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                        <span asp-validation-for="SupplierId" class="text-danger"></span>
+                    </div>
+                </div>
+            <div class="col-8 container border" style="margin-left: 15%;">
+                <div class="form-group">
+                    <label asp-for="DiscountId" class="control-label">活動優惠 :</label>
+                    <select asp-for="DiscountId" class="form-control" asp-items="ViewBag.DiscountId"></select>
+                    <span asp-validation-for="DiscountId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhotoPath" class="control-label"></label>
+                    <input asp-for="PhotoPath" class="form-control" />
+                    <span asp-validation-for="PhotoPath" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
