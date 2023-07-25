@@ -22,14 +22,14 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">姓名</div>
                         <div class="mx-2">
-                            <input type="text" class="form-control " value="@Model.Name" name="Name" />
+                            <input type="text" class="form-control " value="@Model.Name" name="Name"/>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">生日</div>
                         <div class="mx-2">
-                            <input type="date" class="form-control" />
+                            <input type="date" class="form-control" value="@Model.DateOfBirth" name="DateOfBirth" />
                         </div>
                     </div>
                 </div>
@@ -37,13 +37,13 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">性別</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="男" />
+                            <input type="text" class="form-control" value="@Model.Gender" name="Gender" />
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">電話</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="0999999999">
+                            <input type="text" class="form-control" value="@Model.Phone" name="Phone"/>
                         </div>
                     </div>
                 </div>
@@ -51,27 +51,27 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">信箱</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="peter@gmail.com">
+                            <input type="text" class="form-control" value="@Model.Email" name="Email" />
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">密碼</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="1234">
+                            <input type="text" class="form-control" value="@Model.Password" name="Password" />
                         </div>
                     </div>
                 </div>
                 <div class="row justify-content-around p-3">
                     <div class="pt-2 d-flex col-6 align-items-center">
-                        <div class=" width-90px text-end fw-bold">身分</div>
+                        <div class=" width-90px text-end fw-bold">會員等級</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="經理">
+                            <input type="text" class="form-control" value="@Model.MemberLevel" name="MemberLevel"/>
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">註冊日期</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="2023/07/19">
+                            <input type="text" class="form-control" value="@Model.RegisterDate" name="RegisterDate"/>
                         </div>
                     </div>
 
@@ -80,23 +80,23 @@
                     <div class="col-12  mt-2 d-flex justify-content-start ">
                         <div class=" width-90px text-end fw-bold">地址</div>
                         <div class="mx-3">
-                            <select class="form-select ">
-                                <option selected>-請選擇縣市-</option>
-                                <option value="1">台北市</option>
+                            <select class="form-select" name="Citys">
+                                <option selected value="@Model.Citys">-請選擇縣市-</option>
+                               @* <option value="1">台北市</option>
                                 <option value="2">新北市</option>
-                                <option value="3">桃園市</option>
+                                <option value="3">桃園市</option>*@
                             </select>
                         </div>
                         <div class="mx-3">
-                            <select class="form-select ">
-                                <option selected>-請選擇地區-</option>
-                                <option value="1">大安區</option>
+                            <select class="form-select" name="Areas">
+                                <option selected value="@Model.Areas">-請選擇地區-</option>
+                                @*<option value="1">大安區</option>
                                 <option value="2">中山區</option>
-                                <option value="3">中正區</option>
+                                <option value="3">中正區</option>*@
                             </select>
                         </div>
                         <div class="mx-3 ">
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" value="@Model.Address" name="Address" />
                         </div>
                     </div>
                 </div>

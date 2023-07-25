@@ -42,8 +42,20 @@ namespace prjOniqueWebsite.Controllers
                                       RegisterDate = m.RegisterDate,
                                       MemberLevel = ml.MemberLevelName
                                   }).FirstOrDefault();
-
-                                   
+            EditMemberVM vM = new EditMemberVM()
+            {
+                Name=member.Name,
+                Password=member.Password,
+                Phone = member.Phone,
+                Email = member.Email,
+                Gender = member.Gender,
+                Citys = member.Citys,
+                Areas = member.Areas,
+                Address = member.Address,
+                DateOfBirth = member.DateOfBirth,
+                RegisterDate = member.RegisterDate,
+                MemberLevel = member.MemberLevel
+            };
                                    
             //EditMember member = (from m in _context.Members
             //                        join a in _context.Areas
@@ -65,6 +77,15 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult Edit(EditMemberDto dto)
         {
            string name = dto.Name;
+            string password = dto.Password;
+            string phone = dto.Phone;
+            string email = dto.Email;
+            string gender = dto.Gender;
+            string citys = dto.Citys;
+            string areas = dto.Areas;
+            string address = dto.Address;
+            string memberlevel = dto.MemberLevel;
+
             return View();
         }
     }
