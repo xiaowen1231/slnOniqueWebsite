@@ -171,7 +171,7 @@
             data.map(item=>{
 
                 const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
-                console.log(statusName, orderId, name, shippingDate, paymentMethodName, photoPath)
+                //console.log(statusName, orderId, name, shippingDate, paymentMethodName, photoPath)
 
                 tableOrdersList += `
                         <tr>
@@ -225,7 +225,7 @@
                                 </td>
                                 </tr>`
             })
-            console.log()
+            
             //orderTable.innerHTML = tableOrdersList.join("");
             $("#orderTable").append(tableOrdersList)
 

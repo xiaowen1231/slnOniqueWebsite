@@ -11,8 +11,12 @@ namespace prjOniqueWebsite.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public IActionResult Index()/*vm*/
         {
+            //if (@ModelState.IsValid){
+            //    "編輯商品名稱不能一樣"
+            //        retrun view(vm)
+            //}
             return View();
         }
         public IActionResult ShowBgProductManageList()

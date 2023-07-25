@@ -1,154 +1,95 @@
-﻿@model prjOniqueWebsite.Models.DTOs.EmployeeCreateDto;
+﻿@model prjOniqueWebsite.Models.EFModels.Employees
+
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
 
-<div class="container my-5 p-2 border border-secondary rounded-4 shadow">
-    <div class="m-2 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">新增員工</div>
-    <form asp-action="Create">
-        <div class=" p-2 my-3 justify-content-around row ">
-            <div class=" col-3 ">
-                <div class=" p-2 d-flex justify-content-center">
-                    <img src="../Images/ManagerPhoto/範例頭貼1.jpg"
-                         class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
-                </div>
-                <div>
-                    <input type="file" name="" id="" class="form-control my-5">
-                </div>
-            </div>
-            <div class=" col-8 border mx-2">
-                <div class="p-1 ">
-                    <div class="row justify-content-around  p-3 ">
-                        <div class="pt-2 d-flex col-6 align-items-center">
-                            <div class=" width-90px text-end fw-bold form-group">
-                                <label asp-for="EmployeeName" class="control-label">姓名</label>
-                            </div>
-                            <div class="mx-2">
-                                <input asp-for="EmployeeName" type="text" class="form-control " placeholder="請輸入員工姓名" />
-                            </div>
-                        </div>
-                        <div class="pt-2 d-flex col-6 align-items-center">
-                            <div class=" width-90px text-end fw-bold form-group">
-                                <label asp-for="DateOfBirth" class="control-label">生日</label>
-                            </div>
-                            <div class="mx-2">
-                                <input asp-for="DateOfBirth" type="date" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-around p-3">
-                        <div class="pt-2 d-flex col-6 align-items-center">
-                            <div class=" width-90px text-end fw-bold form-group">
-                                <label asp-for="Gender" class="control-label">性別</label>
-                            </div>
-                            <div class="mx-3">
-                                <input asp-for="Gender" type="radio" id="option1" name="option" value="option1" />
-                                <label for="option1">男</label>
-                                <input asp-for="Gender" type="radio" id="option2" name="option" value="option2" />
-                                <label for="option2">女</label>
-                            </div>
-                        </div>
-                        <div class="pt-2 d-flex col-6 align-items-center">
-                            <div class=" width-90px text-end fw-bold form-group">
-                                <label asp-for="Phone" class="control-label">電話</label>
-                            </div>
-                            <div class="mx-3">
-                                <input asp-for="Phone" type="text" class="form-control" placeholder="請輸入手機號碼">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-around p-3">
-                        <div class="pt-2 d-flex col-6 align-items-center">
-                            <div class=" width-90px text-end fw-bold form-group">
-                                <label asp-for="Email" class="control-label">信箱</label>
-                            </div>
-                            <div class="mx-3">
-                                <input asp-for="Email" type="text" class="form-control" placeholder="請輸入電子信箱">
-                            </div>
-                        </div>
-                        <div class="pt-2 d-flex col-6 align-items-center">
-                            <div class=" width-90px text-end fw-bold form-group">
-                                <label asp-for="Password" class="control-label">密碼</label>
-                            </div>
-                            <div class="mx-3">
-                                <input asp-for="Password" type="text" class="form-control" placeholder="請輸入密碼">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-around p-3">
-                        <div class="pt-2 d-flex col-6 align-items-center">
-                            <div class=" width-90px text-end fw-bold form-group">
-                                <label asp-for="Position" class="control-label">身分</label>
-                            </div>
-                            <div class="mx-3">
-                                <select asp-for="Gender" class="form-select ">
-                                    <option selected>-請選擇身分-</option>
-                                    <option value="1">一般員工</option>
-                                    <option value="2">經理</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="pt-2 d-flex col-6 align-items-center form-group">
-                            <div class=" width-90px text-end fw-bold">註冊日期</div>
-                            <div class="mx-3">
-                                <input type="text" class="form-control" value="2020/01/01" readonly>
-                            </div>
-                        </div>
+<h1>Create</h1>
 
-                    </div>
-                    <div class="row justify-content-around p-3">
-                        <div class="col-12  mt-2 d-flex justify-content-start form-group">
-                            <div class=" width-90px text-end fw-bold">
-                                <label asp-for="Citys" class="control-label">地址</label>
-                            </div>
-                            <div class="mx-3">
-                                <select asp-for="Citys" class="form-select ">
-                                    <option selected>-請選擇縣市-</option>
-                                    <option value="1">台北市</option>
-                                    <option value="2">新北市</option>
-                                    <option value="3">桃園市</option>
-                                </select>
-                            </div>
-                            <div class="mx-3">
-                                <select class="form-select ">
-                                    <option selected>-請選擇地區-</option>
-                                    <option value="1">大安區</option>
-                                    <option value="2">中山區</option>
-                                    <option value="3">中正區</option>
-                                </select>
-                            </div>
-                            <div class="mx-3 ">
-                                <input type="text" class="form-control" placeholder="通訊地址">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-around p-5 form-group">
-                        <div class="text-center ">
-                            <input type="submit" value="確定新增" class="CreateAddButton p-2 px-4">
-                            <a asp-action="Index"><input type="button" value="取消" class="AddButton p-2 px-4"></a>
-                        </div>
-                    </div>
-                </div>
+<h4>Employees</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EmployeeName" class="control-label"></label>
+                <input asp-for="EmployeeName" class="form-control" />
+                <span asp-validation-for="EmployeeName" class="text-danger"></span>
             </div>
-        </div>
-    </form>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Gender" /> @Html.DisplayNameFor(model => model.Gender)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Citys" class="control-label"></label>
+                <select asp-for="Citys" class ="form-control" asp-items="ViewBag.Citys"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Areas" class="control-label"></label>
+                <select asp-for="Areas" class ="form-control" asp-items="ViewBag.Areas"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Position" class="control-label"></label>
+                <select asp-for="Position" class ="form-control" asp-items="ViewBag.Position"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="VerificationCode" class="control-label"></label>
+                <input asp-for="VerificationCode" class="form-control" />
+                <span asp-validation-for="VerificationCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Verification" class="control-label"></label>
+                <input asp-for="Verification" class="form-control" />
+                <span asp-validation-for="Verification" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhotoPath" class="control-label"></label>
+                <input asp-for="PhotoPath" class="form-control" />
+                <span asp-validation-for="PhotoPath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegisterDate" class="control-label"></label>
+                <input asp-for="RegisterDate" class="form-control" />
+                <span asp-validation-for="RegisterDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
 </div>
 
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
-
-
-
-
-@section Scripts{
-
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-
-@section Styles{
-    <link href="~/css/EmployeeCreate.css" rel="stylesheet" />
-    <link href="~/css/Common.css" rel="stylesheet" />
-    <link href="~/css/Reset.css" rel="stylesheet" />
-}
-

@@ -1,0 +1,135 @@
+﻿@model IEnumerable<prjOniqueWebsite.Models.EFModels.Products>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+
+
+
+<div class="container my-2 p-2 border border-secondary rounded-4 shadow justify-content-center">
+    <div class="row text-center border-bottom mx-2 p-2">
+        <div class="fs-3 fw-bold">商品清單</div>
+    </div>
+    <div class="p-2">
+        <div class="d-flex p-2 align-items-center my-2">
+            <div class="col-1" style="margin-left: 2%;">
+                <a class="btn btn-dark" asp-action="Create">新增商品</a>
+            </div>
+            <div class="col-4 d-flex align-items-center">
+                <div class="fw-bold mx-2">商品名稱:</div>
+                <div>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-2 d-flex align-items-center">
+                <div class="fw-bold mx-2">商品分類:</div>
+                <div>
+                    <select class="form-select">
+                        <option>請選擇</option>
+                        <option>T恤</option>
+                        <option>襯衫</option>
+                        <option>毛衣</option>
+                        <option>外套</option>
+                        <option>背心</option>
+                        <option>牛仔褲</option>
+                        <option>休閒褲</option>
+                        <option>短褲</option>
+                        <option>飾品</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-2 d-flex align-items-center">
+                <div class="fw-bold mx-2">優惠活動:</div>
+                <div>
+                    <select class="form-select">
+                        <option>請選擇</option>
+                        <option>夏日特賣</option>
+                        <option>熱銷優惠</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-end col-2 mx-4">
+                <button class="btn btn-dark fw-bold">查詢</button>
+                <button class="btn btn-outline-dark fw-bold mx-2">取消查詢</button>
+            </div>
+        </div>
+        <table class="table align-middle text-center table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th width="200">
+                        商品圖片
+                    </th>
+                    <th width="200">
+                        商品名稱
+                    </th>
+                    <th width="200">
+                        商品價格
+                    </th>
+                    <th width="180">
+                        商品分類
+                    </th>
+                    <th width="150">
+                        活動優惠
+                    </th>
+                    <th width="120">
+                        編輯
+                    </th>
+                    <th width="120">
+                        刪除
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    string path = Url.Content("~/images/uploads/products/") + item.PhotoPath;
+                    <tr>
+                        <td>
+                            <img src="@path" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductName)
+                        </td>
+                        <td id="price">
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductCategory.CategoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Discount.Description)
+                        </td>
+                        <td>
+                            <a class="btn btn-dark" asp-action="Edit" asp-route-id="@item.ProductId">修改</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-dark" asp-action="Delete" asp-route-id="@item.ProductId">刪除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+@section Styles{
+    <style>
+        #price::before {
+            content: "$";
+        }
+
+        #productImg {
+            width: 120px;
+            height: 120px;
+            margin: auto;
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    </style>
+}

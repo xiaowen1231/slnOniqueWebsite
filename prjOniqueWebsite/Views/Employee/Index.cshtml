@@ -1,4 +1,6 @@
-﻿
+﻿@model IEnumerable<prjOniqueWebsite.Models.DTOs.EmployeeListDto>
+
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
@@ -32,54 +34,83 @@
 </div>
 <div class="container">
     <div class="p-2 my-4 border border-dark-subtle rounded-4 ">
-        <table class="table table-striped align-middle">
+        <table class="table table-striped align-middle table-hover">
             <thead>
-                <tr>
-                    <th>編號</th>
-                    <th>頭貼</th>
-                    <th>員工姓名</th>
-                    <th>生日</th>
-                    <th>性別</th>
-                    <th>電話</th>
-                    <th>信箱</th>
-                    <th>身分</th>
-                    <th>修改</th>
-                    <th>刪除</th>
+                <tr >
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PhotoPath)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateOfBirth)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gender)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeLevelName)
+                    </th>
+                    <th>
+                        修改
+                    </th>
+                    <th>
+                        刪除
+                    </th>
+
                 </tr>
             </thead>
             <tbody id="employeetable">
-                @*<tr>
-                    <td>1</td>
+        @foreach (var item in Model) {
+                <tr>
                     <td>
-                        <div class="d-flex gap-2 imgbox">
-                            <img src="../Images/EmployeePhoto/peter.png" alt="Peter" />
-                        </div>
+                        @Html.DisplayFor(modelItem => item.EmployeeId)
                     </td>
                     <td>
-                        <span>Peter</span>
-                    </td>
-                    <td>2000/02/02</td>
-                    <td>男</td>
-                    <td>0988888888</td>
-                    <td>peterpeterpeterpeterpeterpeter@gmail.com</td>
-                    <td>經理</td>
-                    <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/edit.png" alt=""></a>
-                        </div>
+                        @*@Html.DisplayFor(modelItem => item.PhotoPath)*@
+                        <img src="~/images/uploads/Employee/@item.PhotoPath" class="img-thumbnail" />
                     </td>
                     <td>
-                        <div class="circle-size-25">
-                            <a href=""><img src="../Images/EmployeePhoto/delete.png" alt=""></a>
-                        </div>
+                        @Html.DisplayFor(modelItem => item.EmployeeName)
                     </td>
-                </tr>*@
-                
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeLevelName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+                    </td>
+                </tr>
+        }
             </tbody>
         </table>
     </div>
 </div>
+
 <div class="container">
     <nav class="d-flex justify-content-center" aria-label="Page navigation example">
         <ul class="pagination">
@@ -99,17 +130,16 @@
         </ul>
     </nav>
 </div>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
 
-@section Scripts{
+@*@section Scripts{
     <script>
         const employeetable = document.querySelector("#employeetable")
         load()
 
-        async function load(){
+        async function load() {
             const response = await fetch(`@Url.Content("~/EmployeeApi/showEmployeeList")`)
             const data = await response.json();
 
@@ -117,44 +147,50 @@
                 const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item
 
                 return (`
-                    <tr>
-                        <td>${employeeId}</td>
-                        <td>
-                            <div class="d-flex gap-2 imgbox">
-                                 <img src="@Url.Content("~/images/uploads/Employee/")${photoPath}" alt="" />
-                            </div>
-                        </td>
-                        <td>
-                            <span>${employeeName}</span>
-                        </td>
-                            <td>${dateOfBirth}</td>
-                            <td>${gender}</td>
-                            <td>${phone}</td>
-                            <td>${email}</td>
-                            <td>${employeeLevelName}</td>
-                        <td>
-                            <div class="circle-size-25">
-                                 <a href=""><img src="@Url.Content("~/images/uploads/Employee/edit.png")" alt=""></a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="circle-size-25">
-                                         <a href=""><img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt=""></a>
-                            </div>
-                        </td>
-                    </tr>
-                `)
+                        
+                            <tr>
+                                <td>${employeeId}</td>
+                                <td>
+                                    <div class="d-flex gap-2 imgbox">
+                                         <img src="@Url.Content("~/images/uploads/Employee/")${photoPath}" alt="" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <span>${employeeName}</span>
+                                </td>
+                                    <td>${dateOfBirth}</td>
+                                    <td>${gender}</td>
+                                    <td>${phone}</td>
+                                    <td>${email}</td>
+                                    <td>${employeeLevelName}</td>
+                                <td>
+                                    <div class="circle-size-25">
+                                        <a href="javascript:void(0)" onclick="openEmployeeEdit(employeeId)"><img src="@Url.Content("~/images/uploads/Employee/edit.png")" alt=""></a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="circle-size-25">
+                                        <a href="" ><img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt=""></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        `)
             })
-        employeetable.innerHTML = tableEmployeeList.join("");
+            employeetable.innerHTML = tableEmployeeList.join("");
 
         }
 
+        function openEmployeeEdit(employeeId) {
+            const url = '@Url.Action("Edit", "Employee")' + '?employeeId=' + employeeId; // 構造URL
+            window.location.href = url; // 導航到詳細頁面
+            console.log(employeeId)
+        }
+
     </script>
-}
+}*@
 
 @section Styles{
     <link href="~/css/Employee.css" rel="stylesheet" />
     <link href="~/css/Common.css" rel="stylesheet" />
     <link href="~/css/Reset.css" rel="stylesheet" />
 }
-
