@@ -145,7 +145,7 @@
         }
 
         $('#btnAddToCart').click(async function () {
-            const response = await fetch(`@Url.Content("~/ProductApi/IsLogin")`)
+            const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
             const isLogin = await response.json();
 
             if (!isLogin) {

@@ -46,10 +46,6 @@ namespace prjOniqueWebsite.Controllers
             return Json(photopath);
         }
 
-        public IActionResult IsLogin()
-        {
-            bool isLogin = HttpContext.Session.Keys.Contains("Login")?true:false;
-            return Json(isLogin);
-        }
+
     }
 }
