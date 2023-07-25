@@ -2,7 +2,7 @@
 
 namespace prjOniqueWebsite.Models.ViewModels
 {
-    public class EditMemberVM
+    public class MemberVM
     {
         [Required]
         public int MemberId { get; set; }

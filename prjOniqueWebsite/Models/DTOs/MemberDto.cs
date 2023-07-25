@@ -2,7 +2,7 @@
 
 namespace prjOniqueWebsite.Models.DTOs
 {
-    public class EditMemberDto
+    public class MemberDto
     {
         public int MemberId { get; set; }
         [Required]
