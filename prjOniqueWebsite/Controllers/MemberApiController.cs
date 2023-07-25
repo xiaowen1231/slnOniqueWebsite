@@ -28,11 +28,18 @@ namespace prjOniqueWebsite.Controllers
                             Phone = m.Phone,
                             Email = m.Email,
                             DateOfBirth = m.DateOfBirth,
-                            Gender = m.Gender? "女":"男",
+                            Gender = m.Gender ? "女" : "男",
                             MemberLevelName = ml.MemberLevelName,
                         };
-            List<MemberListDto> dto = query.ToList();  
+            List<MemberListDto> dto = query.ToList();
             return Json(dto);
+        }
+
+        public IActionResult LoadCity()
+        {
+            var citys = from c in _context.Citys
+                        select c;
+            return Json(citys);
         }
     }
 }

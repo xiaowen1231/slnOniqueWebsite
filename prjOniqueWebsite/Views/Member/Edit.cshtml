@@ -1,7 +1,7 @@
 ﻿@model prjOniqueWebsite.Models.ViewModels.MemberVM
 @{
     ViewData["Title"] = "編輯會員資料";
-    Layout =@Url.Content("~/Views/Shared/_Layout_Background.cshtml");
+    Layout = @Url.Content("~/Views/Shared/_Layout_Background.cshtml");
 }
 
 <form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post">
@@ -9,7 +9,7 @@
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
-                <img src="../Images/ManagerPhoto/範例頭貼1.jpg"
+                <img src="" />
                      class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
             </div>
             <div>
@@ -22,7 +22,7 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">姓名</div>
                         <div class="mx-2">
-                            <input type="text" class="form-control " value="@Model.Name" name="Name"/>
+                            <input type="text" class="form-control " value="@Model.Name" name="Name" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">電話</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="@Model.Phone" name="Phone"/>
+                            <input type="text" class="form-control" value="@Model.Phone" name="Phone" />
                         </div>
                     </div>
                 </div>
@@ -65,13 +65,13 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">會員等級</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="@Model.MemberLevel" name="MemberLevel"/>
+                            <input type="text" class="form-control" value="@Model.MemberLevel" name="MemberLevel" />
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">註冊日期</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="@Model.RegisterDate" name="RegisterDate"/>
+                            <input type="text" class="form-control" value="@Model.RegisterDate" name="RegisterDate" />
                         </div>
                     </div>
 
@@ -80,11 +80,11 @@
                     <div class="col-12  mt-2 d-flex justify-content-start ">
                         <div class=" width-90px text-end fw-bold">地址</div>
                         <div class="mx-3">
-                            <select class="form-select" name="Citys">
-                                <option selected value="@Model.Citys">-請選擇縣市-</option>
-                               @* <option value="1">台北市</option>
+                            <input type="hidden" value="@Model.Citys" id="memberCity" />
+                            <select class="form-select" name="Citys" id="city">
+                                @* <option value="1">台北市</option>
                                 <option value="2">新北市</option>
-                                <option value="3">桃園市</option>*@
+                                <option value="3" >桃園市</option>*@
                             </select>
                         </div>
                         <div class="mx-3">
@@ -112,3 +112,32 @@
     </div>
 </form>
 
+@section Scripts{
+    <script>
+        loadCity()
+
+        async function loadCity() {
+            const response = await fetch(`@Url.Content("~/memberapi/LoadCity?cityId = ")`)
+            const datas = await response.json();
+            const memberCity = $("#memberCity").val()
+            let selectOptions = ""
+            console.log(datas,memberCity);
+
+            datas.map(item => {
+                const { cityId, cityName } = item
+                if (cityName == memberCity) {
+                    selectOptions += ` <option value="${cityId}" selected>${cityName}</option>`
+                }
+                selectOptions += ` <option value="${cityId}" >${cityName}</option>`
+            })
+            $("#city").append(selectOptions)
+            $("#city").val();
+        }
+        $("#city").change(function(){
+            loadArea()
+        })
+        async function loadCity(){
+            const cityId = $("#city").val()
+        }
+    </script>
+}
