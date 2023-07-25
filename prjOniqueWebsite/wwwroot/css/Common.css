@@ -8,6 +8,11 @@
     height: 25px;
     border-radius: 50%;
 }
+.circle-size-35 {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
 
 .circle-size-40 {
     width: 40px;
