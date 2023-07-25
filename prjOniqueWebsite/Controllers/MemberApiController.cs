@@ -41,5 +41,14 @@ namespace prjOniqueWebsite.Controllers
                         select c;
             return Json(citys);
         }
+        //public IActionResult LoadArea(int cityId)
+        //{
+        //    var areas = from a in _context.Areas
+        //                join c in _context.Citys
+        //                on a.CityId equals c.CityId
+        //                where a.CityId == cityId
+        //                seelect new
+        //    return Json(areas);
+        //}
     }
 }

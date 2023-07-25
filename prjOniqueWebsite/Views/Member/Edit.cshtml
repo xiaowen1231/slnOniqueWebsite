@@ -5,7 +5,7 @@
 }
 
 <form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post">
-    <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">編輯員工</div>
+    <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">編輯會員</div>
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
@@ -88,8 +88,8 @@
                             </select>
                         </div>
                         <div class="mx-3">
-                            <select class="form-select" name="Areas">
-                                <option selected value="@Model.Areas">-請選擇地區-</option>
+                            <input type="hidden" value="@Model.Areas" id="memberArea" />
+                            <select class="form-select" name="Areas" id="area">
                                 @*<option value="1">大安區</option>
                                 <option value="2">中山區</option>
                                 <option value="3">中正區</option>*@
@@ -115,13 +115,13 @@
 @section Scripts{
     <script>
         loadCity()
-
+        
         async function loadCity() {
-            const response = await fetch(`@Url.Content("~/memberapi/LoadCity?cityId = ")`)
+            const response = await fetch(`@Url.Content("~/memberapi/LoadCity")`)
             const datas = await response.json();
             const memberCity = $("#memberCity").val()
             let selectOptions = ""
-            console.log(datas,memberCity);
+            //console.log(datas,memberCity);
 
             datas.map(item => {
                 const { cityId, cityName } = item
@@ -132,12 +132,18 @@
             })
             $("#city").append(selectOptions)
             $("#city").val();
+            loadArea()
         }
         $("#city").change(function(){
             loadArea()
         })
-        async function loadCity(){
+        async function loadArea(){
             const cityId = $("#city").val()
+            const response = await fetch(`@Url.Content("~/memberapi/LoadArea?cityId = ")${cityId}`)
+            const datas = await response.json();
+            const memberArea = $("#memberArea").val()
+            let selectOptions = ""
+            console.log(datas)
         }
     </script>
 }
