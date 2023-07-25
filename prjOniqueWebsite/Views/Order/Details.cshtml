@@ -315,11 +315,27 @@
             const orderId = $("#orderId").val()
             const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusNow?OrderId=")${orderId}`)
             const data=await response.json()
+            let{statusName,statusId}=data
+            //console.log(data)
+            statusSel.innerHTML = `<option value="${statusId}">${statusName}</option>`
 
-            console.log(data)
-            statusSel.innerHTML = `<option value="${data}">${data}</option>`
         }
+
         loadStatusNow();
+
+            //const statusId = statusSel.options[statusSel.selectedIndex].value;
+        statusSel.addEventListener('click',()=>{
+            const orderId = $("#orderId").val()
+
+            async function loadStatusOptions(){
+
+                const resoponse = await fetch(`@Url.Content("~/OrderApi/getOrderStatusOptions=")${orderId}`)
+                const data =await resoponse.json()
+                let { OrderId,StatusName,StatusId,PaymentMethodId }=data
+                console.log(data)
+            }
+
+        })
     </script>
     }
 @section Styles{

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -106,24 +108,50 @@ namespace prjOniqueWebsite.Controllers
         }
 
         /// <summary>
-        /// 根據orderId內的orderstatusNow，傳回可選擇的orderstatusName
+        /// 根據orderId傳回orderstatusNow
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
         public IActionResult getOrderStatusNow(int orderId)
         {
             var query = from o in _context.Orders
-                            join os in _context.OrderStatus
-                            on o.OrderStatusId equals os.StatusId
-                            where o.OrderStatusId == orderId
-                            select os.StatusId;
-            var statusNow = query.FirstOrDefault();          
-            //if (statusNow == 1)
-            //{
-                
-            //}
-            //var status = _context.OrderStatus.Select(s=>s.StatusName).ToList();
-            return Json(statusNow);
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        where o.OrderId == orderId
+                        select new OrderStatusDto
+                        {
+                            StatusId = os.StatusId,
+                            StatusName = os.StatusName,
+                        };
+            OrderStatusDto dto = query.FirstOrDefault();
+
+
+            return Json(dto);
+        }
+
+        /// <summary>
+        /// 依據option's value=>statusId傳回可選擇的statusName
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult getOrderStatusOptions(int orderId)
+        {
+            var query = from o in _context.Orders
+                        join os in _context.OrderStatus
+                        on o.OrderId equals os.StatusId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        where o.OrderId == orderId
+                        select new getStatusNameVM
+                        {
+                            OrderId = o.OrderId,
+                            StatusName = os.StatusName,
+                            StatusId = os.StatusId,
+                            PaymentMethodId = pm.PaymentMethodId,
+
+                        };
+
+            List<getStatusNameVM> vm = query.ToList();
+            return Json(vm);
         }
     }
 }

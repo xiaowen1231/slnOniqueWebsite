@@ -1,3 +1,8 @@
+.circle-size-16 {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
 .circle-size-25 {
     width: 25px;
     height: 25px;
@@ -10,6 +15,11 @@
     border-radius: 50%;
 }
 
+.circle-size-55 {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+}
 .circle-size-60 {
     width: 60px;
     height: 60px;
@@ -51,7 +61,9 @@
 .color-fff {
     background-color: #fff;
 }
-
+.width-16px {
+    width: 16px
+}
 .width-30px {
     width: 30px;
 }

@@ -54,13 +54,13 @@
 
         NewArrivals();
         HotTop4();
+
         async function HotTop4() {
             const response = await fetch('@Url.Content("~/ProductApi/HotTop4")');
             const datas = await response.json();
 
             const cards = datas.map(theCard => {
                 const { id, productName, price, photoPath } = theCard
-                console.log(id)
                 return (`<a href="@Url.Content("~/product/detail/")${id}" class="productCard link-dark" data-aos="fade-up">
                             <div class="productPhoto">
                                 <img src="@Url.Content("/images/uploads/products/")${photoPath}" />
@@ -93,7 +93,6 @@
 
             const cards = datas.map(theCard => {
                 const { id, productName, price, photoPath } = theCard
-                console.log(id);
                 return (`<a href="@Url.Content("~/product/detail/")${id}" class="productCard link-dark" data-aos="fade-up">
                             <div class="productPhoto">
                                 <img src="@Url.Content("/images/uploads/products/")${photoPath}" />

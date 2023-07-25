@@ -20,14 +20,14 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Edit()
         {
-            EditMemberVM member = (from m in _context.Members
+            MemberVM member = (from m in _context.Members
                                   join c in _context.Citys
                                   on m.Citys equals c.CityId
                                   join a in _context.Areas
                                   on m.Areas equals a.AreaId
                                   join ml in _context.MemberLevel
                                   on m.MemberLevel equals ml.MemberLevelId
-                                  select new EditMemberVM
+                                  select new MemberVM
                                   {
                                       MemberId = m.MemberId,
                                       Name = m.Name,
@@ -42,8 +42,20 @@ namespace prjOniqueWebsite.Controllers
                                       RegisterDate = m.RegisterDate,
                                       MemberLevel = ml.MemberLevelName
                                   }).FirstOrDefault();
-
-                                   
+            MemberVM vM = new MemberVM()
+            {
+                Name=member.Name,
+                Password=member.Password,
+                Phone = member.Phone,
+                Email = member.Email,
+                Gender = member.Gender,
+                Citys = member.Citys,
+                Areas = member.Areas,
+                Address = member.Address,
+                DateOfBirth = member.DateOfBirth,
+                RegisterDate = member.RegisterDate,
+                MemberLevel = member.MemberLevel
+            };
                                    
             //EditMember member = (from m in _context.Members
             //                        join a in _context.Areas
@@ -62,10 +74,19 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Edit(EditMemberDto dto)
+        public IActionResult Edit(MemberDto dto)
         {
            string name = dto.Name;
-            return View();
+            string password = dto.Password;
+            string phone = dto.Phone;
+            string email = dto.Email;
+            string gender = dto.Gender;
+            string citys = dto.Citys;
+            string areas = dto.Areas;
+            string address = dto.Address;
+            string memberlevel = dto.MemberLevel;
+
+            return View(dto);
         }
     }
 }
