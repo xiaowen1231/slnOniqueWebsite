@@ -20,14 +20,14 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Edit()
         {
-            EditMemberVM member = (from m in _context.Members
+            MemberVM member = (from m in _context.Members
                                   join c in _context.Citys
                                   on m.Citys equals c.CityId
                                   join a in _context.Areas
                                   on m.Areas equals a.AreaId
                                   join ml in _context.MemberLevel
                                   on m.MemberLevel equals ml.MemberLevelId
-                                  select new EditMemberVM
+                                  select new MemberVM
                                   {
                                       MemberId = m.MemberId,
                                       Name = m.Name,
@@ -42,7 +42,7 @@ namespace prjOniqueWebsite.Controllers
                                       RegisterDate = m.RegisterDate,
                                       MemberLevel = ml.MemberLevelName
                                   }).FirstOrDefault();
-            EditMemberVM vM = new EditMemberVM()
+            MemberVM vM = new MemberVM()
             {
                 Name=member.Name,
                 Password=member.Password,
@@ -74,7 +74,7 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Edit(EditMemberDto dto)
+        public IActionResult Edit(MemberDto dto)
         {
            string name = dto.Name;
             string password = dto.Password;
@@ -86,7 +86,7 @@ namespace prjOniqueWebsite.Controllers
             string address = dto.Address;
             string memberlevel = dto.MemberLevel;
 
-            return View();
+            return View(dto);
         }
     }
 }
