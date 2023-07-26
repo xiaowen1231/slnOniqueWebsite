@@ -2,6 +2,7 @@
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
+using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -42,10 +43,31 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult GetStockDetail(int productId, int colorId,int sizeId)
         {
-            ProductStockDetails photopath = dao.GetStockDetail(productId, colorId, sizeId);
-            return Json(photopath);
+            ProductStockDetails stock = dao.GetStockDetail(productId, colorId, sizeId);
+            return Json(stock);
         }
 
+        public IActionResult AddToCart(int stockId,int qty)
+        {
+            string json = HttpContext.Session.GetString("Login");
 
+            Members member = JsonSerializer.Deserialize<Members>(json);
+
+            dao.AddToCart(stockId,qty,member);
+
+            var cart = dao.CartItems(member);
+            
+            return Json(cart.Count);
+        }
+        public IActionResult CartItems()
+        {
+            string json = HttpContext.Session.GetString("Login");
+
+            Members member = JsonSerializer.Deserialize<Members>(json);
+            
+            var cart = dao.CartItems(member);
+
+            return Json(cart.Count);
+        }
     }
 }
