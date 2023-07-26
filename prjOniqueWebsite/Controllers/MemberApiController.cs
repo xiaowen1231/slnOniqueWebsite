@@ -49,5 +49,11 @@ namespace prjOniqueWebsite.Controllers
                         select a;
             return Json(areas);
         }
+        public IActionResult LoadMemberLevel()
+        {
+            var memberLevel = from m in _context.MemberLevel
+                              select m;
+            return Json(memberLevel);
+        }
     }
 }
