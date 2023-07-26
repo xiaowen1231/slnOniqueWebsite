@@ -29,7 +29,7 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">生日</div>
                         <div class="mx-2">
-                            <input type="date" class="form-control" value="@Model.DateOfBirth" name="DateOfBirth" />
+                            <input type="date" class="form-control" value="@Model.DateOfBirth" name="DateOfBirth" id="memberDateOfBirth" />
                         </div>
                     </div>
                 </div>
@@ -164,6 +164,18 @@
             
             $("#area").append(selectOptions);
         }
+        //// 自定義函式：將日期格式轉換成 "yyyy-MM-dd"
+        //function formatDateToYYYYMMDD(dateString) {
+        //    const date = new Date(dateString);
+        //    const year = date.getFullYear();
+        //    const month = String(date.getMonth() + 1).padStart(2, '0'); // 補零至兩位數
+        //    const day = String(date.getDate()).padStart(2, '0'); // 補零至兩位數
+        //    return `${year}-${month}-${day}`;
+        //}
+
+        //// 將原本日期的格式轉換成 "yyyy-MM-dd"
+        //const memberDateOfBirth = $("#memberDateOfBirth").val();
+        //$("#memberDateOfBirth").val(formatDateToYYYYMMDD(memberDateOfBirth));
     </script>
 
 }
