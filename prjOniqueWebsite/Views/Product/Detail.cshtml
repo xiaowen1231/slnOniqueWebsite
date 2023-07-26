@@ -148,6 +148,9 @@
             const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
             const isLogin = await response.json();
 
+            const stockId = $("#stockId").val()
+            const qty = $("#orderQty").val()
+
             if (!isLogin) {
                 //alert("您尚未登入,請登入後進續進行購物")
                 Swal.fire({
@@ -165,9 +168,21 @@
                     }
                 })
             }
+            else
+            {
+                AddToCart()
+            }
 
+        })
+
+        async function AddToCart(){
             const stockId = $("#stockId").val()
             const qty = $("#orderQty").val()
-        })
+
+            const response = await fetch(`@Url.Content("~/ProductApi/AddToCart?")stockId=${stockId}&qty=${qty}`)
+            const totalItems = await response.json()
+
+
+        }
     </script>
 }

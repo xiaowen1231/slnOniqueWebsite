@@ -1,6 +1,7 @@
 ﻿using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 
 namespace prjOniqueWebsite.Models.Repositories
@@ -122,6 +123,21 @@ namespace prjOniqueWebsite.Models.Repositories
             return psd;
         }
 
+        public void AddToCart(int stockId,int qty,Members member)
+        {
+            var shoppingCart = new ShoppingCart();
+            shoppingCart.StockId = stockId;
+            shoppingCart.MemberId = member.MemberId;
+            shoppingCart.OrderQuantity = qty;
 
+            _context.ShoppingCart.Add(shoppingCart);
+            _context.SaveChanges();
+        }
+
+        public List<ShoppingCart> CartItems(Members member)
+        {
+            var carts = _context.ShoppingCart.Where(s => s.MemberId == member.MemberId).ToList();
+            return carts;
+        }
     }
 }
