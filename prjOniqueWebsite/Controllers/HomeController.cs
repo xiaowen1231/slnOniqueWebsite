@@ -39,8 +39,8 @@ namespace prjOniqueWebsite.Controllers
                 return View();
             string json = JsonSerializer.Serialize(member);
             HttpContext.Session.SetString("Login", json);
+            TempData["AlertLogin"]=member.Name;
             return RedirectToAction("index");
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
