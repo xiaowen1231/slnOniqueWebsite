@@ -41,5 +41,19 @@ namespace prjOniqueWebsite.Controllers
                         select c;
             return Json(citys);
         }
+        public IActionResult LoadArea(int cityId)
+        {
+            var areas = from a in _context.Areas
+
+                        where a.CityId == cityId
+                        select a;
+            return Json(areas);
+        }
+        public IActionResult LoadMemberLevel()
+        {
+            var memberLevel = from m in _context.MemberLevel
+                              select m;
+            return Json(memberLevel);
+        }
     }
 }

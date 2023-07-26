@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/layoutNav.css" />
+    <link href="~/css/sweetalert2.min.css" rel="stylesheet" />
+
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -76,8 +78,9 @@
                         <div class="nav-icon mx-3">
                             <img src="~/images/header/like.png" />
                         </div>
-                        <div class="nav-icon mx-3">
+                        <div class="nav-icon mx-3 position-relative" id="cartItems">
                             <img src="~/images/header/shopping-cart.png" />
+                            
                         </div>
                     </div>
                 </div>
@@ -160,7 +163,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+
     <script>
+
         AOS.init();
 
         CheckLogin()
@@ -212,9 +218,36 @@
 
                 
                 $("#memberIcon").html(str)
+                GetCartItems()
             }
         }
-    </script>
+        async function GetCartItems(){
+            const response = await fetch(`@Url.Content("~/ProductApi/CartItems")`)
+            const data = await response.json()
+            let totalItems = data.toString()
+            let str = `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
+                            ${totalItems}
+                            <span class="visually-hidden">unread messages</span>
+                        </span>`
+            $("#cartItems").append(str)
+        }
+    
+
+    
+    </script> 
+    @if (TempData["AlertLogin"] != null)
+    {
+        <script>
+            Swal.fire(
+                '歡迎登入',
+                '您好!@TempData["AlertLogin"]',
+                'success'
+            )
+        </script>
+    }
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
+
+

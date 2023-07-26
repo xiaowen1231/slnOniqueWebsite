@@ -1,5 +1,6 @@
 ﻿using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Models.Daos
 {
@@ -90,16 +91,51 @@ namespace prjOniqueWebsite.Models.Daos
 
         public OrderStatusDto GetOrderStatus(int orderId)
         {
-            var status = from o in _context.Orders
+            var query = from o in _context.Orders
                          join os in _context.OrderStatus
                          on o.OrderStatusId equals os.StatusId
+                         join pm in _context.PaymentMethods
+                         on o.PaymentMethodId equals pm.PaymentMethodId
                          where o.OrderId == orderId
                          select new OrderStatusDto
                          {
-                             StatusId = os.StatusId,
+                             OrderId = o.OrderId,
                              StatusName = os.StatusName,
+                             StatusId = os.StatusId,
+                             PaymentMethodId = pm.PaymentMethodId,
+
                          };
-            return status.FirstOrDefault();
+
+            return query.FirstOrDefault();
+            
+        }
+            
+                
+                
+            
+
+            
+            
+            
+
+        public List<OrderStatusDto> GetAllOrderStatus()
+        {
+            var status = from o in _context.Orders
+                         join os in _context.OrderStatus
+                         on o.OrderStatusId equals os.StatusId
+                         join pm in _context.PaymentMethods
+                         on o.PaymentMethodId equals pm.PaymentMethodId
+
+                         select new OrderStatusDto
+                         {
+                             OrderId = o.OrderId,
+                             StatusName = os.StatusName,
+                             StatusId = os.StatusId,
+                             PaymentMethodId = pm.PaymentMethodId,
+
+                         };
+
+            return status.ToList();
 
         }
     }

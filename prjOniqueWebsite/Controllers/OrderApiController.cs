@@ -50,7 +50,7 @@ namespace prjOniqueWebsite.Controllers
         }
             
         /// <summary>
-        /// 根據orderId傳回orderstatusNow
+        /// 根據orderId傳回orderstatus
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
@@ -59,38 +59,16 @@ namespace prjOniqueWebsite.Controllers
             OrderStatusDto dto = dao.GetOrderStatus(orderId);
             return Json(dto);
         }
-            
 
 
-
-
-            
-
-
-
-        /// <summary>
-        /// 依據option's value=>statusId傳回可選擇的statusName
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult OrderStatusOptions(int orderId)
+        public IActionResult GetOrderStatusOptions()
         {
-            var query = from o in _context.Orders
-                        join os in _context.OrderStatus
-                        on o.OrderId equals os.StatusId
-                        join pm in _context.PaymentMethods
-                        on o.PaymentMethodId equals pm.PaymentMethodId
-                        where o.OrderId == orderId
-                        select new getStatusNameVM
-                        {
-                            OrderId = o.OrderId,
-                            StatusName = os.StatusName,
-                            StatusId = os.StatusId,
-                            PaymentMethodId = pm.PaymentMethodId,
+            List<OrderStatusDto> dto =dao.GetAllOrderStatus();
+            return Json(dto);
 
-                        };
 
-            List<getStatusNameVM> vm = query.ToList();
-            return Json(vm);
         }
+        //public IActionResult UpdateOrderStatus
+        
     }
 }

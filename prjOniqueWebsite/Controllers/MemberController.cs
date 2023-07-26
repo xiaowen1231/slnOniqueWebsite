@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
@@ -30,6 +31,7 @@ namespace prjOniqueWebsite.Controllers
                                   where m.MemberId == id
                                   select new MemberVM
                                   {
+                                      PhotoPath = m.PhotoPath,
                                       MemberId = m.MemberId,
                                       Name = m.Name,
                                       Password = m.Password,
@@ -39,8 +41,8 @@ namespace prjOniqueWebsite.Controllers
                                       Citys = c.CityName,
                                       Areas = a.AreaName,
                                       Address = m.Address,
-                                      DateOfBirth = m.DateOfBirth,
-                                      RegisterDate = m.RegisterDate,
+                                      DateOfBirth = Convert.ToDateTime( m.DateOfBirth).ToString("yyyy-MM-dd"),
+                                      RegisterDate =Convert.ToDateTime( m.RegisterDate).ToString("yyyy-MM-dd"),
                                       MemberLevel = ml.MemberLevelName
                                   }).FirstOrDefault();
             
