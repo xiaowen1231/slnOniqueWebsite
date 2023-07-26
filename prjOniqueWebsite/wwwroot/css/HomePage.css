@@ -4,7 +4,7 @@
 }
 
 .myCarousel {
-    width: 60%;
+    width: 75%;
     margin: 20px auto;
     overflow: hidden;
     position: relative;
@@ -88,7 +88,7 @@
     }
 
 .myTitle {
-    width: 60%;
+    width: 75%;
     margin: 10px auto;
     padding: 10px;
     border-radius: 10px;
@@ -114,7 +114,7 @@
 
 .ProductWall {
     text-align: center;
-    width: 65%;
+    width: 75%;
     margin: 10px auto;
     padding: 10px;
 }
