@@ -59,14 +59,16 @@ namespace prjOniqueWebsite.Controllers
             OrderStatusDto dto = dao.GetOrderStatus(orderId);
             return Json(dto);
         }
-            
-
-        //public IActionResult OrderStatusOptions(int orderId)
-        //{
 
 
+        public IActionResult GetOrderStatusOptions()
+        {
+            List<OrderStatusDto> dto =dao.GetAllOrderStatus();
+            return Json(dto);
 
-           
-        //}
+
+        }
+        //public IActionResult UpdateOrderStatus
+        
     }
 }
