@@ -81,7 +81,7 @@
                         <img src="~/images/uploads/Employee/@item.PhotoPath" class="img-thumbnail" />
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                        @Html.DisplayFor(modelItem => item.EmployeeName) 
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DateOfBirth)
@@ -99,10 +99,16 @@
                         @Html.DisplayFor(modelItem => item.EmployeeLevelName)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a>
+                        <div class="circle-size-25">
+                            <a asp-action="Edit" asp-route-id="@item.EmployeeId">
+                                <img src="../Images/uploads/Employee/edit.png" alt=""></a>
+                        </div>
                     </td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+                        <div class="circle-size-25">
+                                <a asp-action="Delete" asp-route-id="@item.EmployeeId">
+                                    <img src="../Images/uploads/Employee/delete.png" alt=""></a>
+                        </div>
                     </td>
                 </tr>
         }
