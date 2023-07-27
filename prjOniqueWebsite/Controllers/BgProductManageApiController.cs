@@ -77,7 +77,7 @@ namespace prjOniqueWebsite.Controllers
                             SizeId = psd.SizeId,
                         };
 
-            return Json(dto);
+            return Json(query);
         }
     }
 }

@@ -328,15 +328,20 @@
         loadStatusNow();
 
         //todo
+        //給予正確的選擇
+        
         async function loadStatusOptions() {
-            
-            const resoponse = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions")`)
+            const statusName=$("#orderStatusNow").val();
+            console.log(statusName)
+            const resoponse = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions")`)//todo 
             const data = await resoponse.json()
+            console.log(data)
             const options=data.map(option=>{
-            const { OrderId, StatusName, StatusId, PaymentMethodId } = option
-            console.log(OrderId)
-                return (`<option value="${statusId}">${statusName}</option>`)
+               
+                
+                return (`<option>${option}</option>`)
             })
+            
 
             statusSel.innerHTML=options.join("");
         }

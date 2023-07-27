@@ -54,7 +54,7 @@ namespace prjOniqueWebsite.Controllers
             }
             else
             {
-                data = query.Where(o => o.Name.Contains(keyWord)).ToList();
+                data = query.Where(o => o.Name.Contains(keyWord)||o.StatusName.Contains(keyWord)||o.OrderId.ToString().Contains(keyWord)).ToList();
 
             }
             return Json(data);
@@ -93,14 +93,37 @@ namespace prjOniqueWebsite.Controllers
         }
 
 
-        public IActionResult GetOrderStatusOptions()
+        public IActionResult GetOrderStatusOptions(string StatusName)
         {
-            List<OrderStatusDto> dto =dao.GetAllOrderStatus();
-            return Json(dto);
+            var query = _context.OrderStatus;
+
+            switch (StatusName)
+            {
+                case "待出貨":
+                     query.Where(s => s.StatusName == "已出貨" || s.StatusName == "已取消").ToList();
+                    break;
+                case "已出貨":
+                     query.Where(s => s.StatusName == "已完成" || s.StatusName == "未取貨").ToList();
+                    break;
+                case "已完成":
+                      //todo
+                case "已取消":
+                case "退款中":
+                case "已退款":
+                case "未取貨":
+                default:
+                    break;
+
+
+
+
+            }
+
+            return Json(data);
 
 
         }
         //public IActionResult UpdateOrderStatus
-        
+
     }
 }

@@ -8,31 +8,31 @@
     <div class="m-3 d-flex gap-3 justify-content-center">
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-            <div>待出貨</div>
+            <div class="statusName">待出貨</div>
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-            <div>已出貨</div>
+            <div class="statusName">已出貨</div>
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-            <div>已完成</div>
+            <div class="statusName">已完成</div>
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-            <div>已取消</div>
+            <div class="statusName">已取消</div>
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-            <div>退款中</div>
+            <div class="statusName">退款中</div>
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-            <div>已退款</div>
+            <div class="statusName">已退款</div>
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-            <div>未取貨</div>
+            <div class="statusName">未取貨</div>
         </div>
     </div>
     <div class="d-flex justify-content-between px-4">
@@ -240,12 +240,27 @@
 
 
         searchbtn.addEventListener('click', () => {
-            showSearchdata()
+            let keyWord = keywordtxt.value;
+            showSearchdata(keyWord)
         })
 
+        let SelectStatus = "";
 
-        async function showSearchdata() {
-            let keyWord = keywordtxt.value;
+        $('.statusName').click(function(){
+                const keyWord = $(this).text()
+            if(SelectStatus == keyWord){
+                SelectStatus = ""
+                showSearchdata("")
+            }
+            else{
+                showSearchdata(keyWord)
+                SelectStatus = keyWord
+
+            }
+            
+        })
+        async function showSearchdata(keyWord) {
+            
 
             const response = await fetch(`@Url.Content("~/OrderApi/search?keyWord=")${keyWord}`)
             const data = await response.json();
@@ -322,6 +337,10 @@
 }
 @section Styles{
     <style>
-
+        .statusName:hover{
+            color:crimson;
+            font-weight:bold;
+            cursor:pointer;
+        }
     </style>
 }
