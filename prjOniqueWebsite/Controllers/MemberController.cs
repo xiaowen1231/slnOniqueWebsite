@@ -88,12 +88,11 @@ namespace prjOniqueWebsite.Controllers
             mem.Email = member.Email;
             mem.DateOfBirth = Convert.ToDateTime(member.DateOfBirth);
             mem.RegisterDate = Convert.ToDateTime(member.RegisterDate);
-            mem.Gender = member.Gender == "男" ? false : true;
             mem.MemberLevel = _context.MemberLevel.Where(c => c.MemberLevelName == level.MemberLevelName).Select(c=>c.MemberLevelId).FirstOrDefault();
             mem.Citys = _context.Citys.Where(c => c.CityName == city.CityName).Select(c => c.CityId).FirstOrDefault();
             mem.Areas = _context.Areas.Where(c => c.AreaName == area.AreaName).Select(c=>c.AreaId).FirstOrDefault();
             mem.Address = member.Address;
-            return View(member);
+            return View(mem);
         }
     }
 }

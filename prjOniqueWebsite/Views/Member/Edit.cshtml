@@ -148,8 +148,8 @@
 
                 <div class="row justify-content-around p-5">
                     <div class="text-center ">
-                        <input type="submit" value="編輯資料" class="EditAddButton p-2 px-4">
-                        <input type="button" value="取消" class="AddButton p-2 px-4">
+                        @Html.ActionLink("編輯會員", "","", "",new {@class="btn btn-dark" })
+                        @Html.ActionLink("返回會員管理", "index","member", "",new {@class="btn btn-outline-dark" })
                     </div>
                 </div>
             </div>
