@@ -1,0 +1,53 @@
+
+
+.step {
+    background-color: #dadada;
+    color: #fff;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    line-height: 25px;
+    display: inline-block;
+    text-align: center;
+}
+
+.status {
+    color: #999;
+    font-size: 14px;
+}
+
+.status>.active span {
+    color: #1b1b1b;
+}
+
+.status>.active .step {
+    background-color: black;
+    color: #fff;
+}
+.dollarSign::after{
+content: "$";
+
+}
+.qty {
+    width: 40px;
+    height: 35px;
+    text-align: center;
+    border: 0;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+  }
+  
+  
+  input.qtyplus {
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
+  }
+  
+  input.qtyminus {
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
+  }

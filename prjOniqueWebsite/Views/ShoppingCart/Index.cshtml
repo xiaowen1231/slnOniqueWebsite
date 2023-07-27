@@ -1,7 +1,146 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "查看購物車";
 }
 
-<h1>Index</h1>
+<div class="container returnView">
+    <div>
+        <div class="status d-flex justify-content-center gap-5 mb-3 py-4 border-bottom border-secondary">
+            <div class="active">
+                <span class="step">1</span>
+                <span>查看購物車</span>
+            </div>
+            <div>&gt;</div>
+            <div>
+                <span class="step">2</span>
+                <span>訂單確認</span>
+            </div>
+            <div>&gt;</div>
+            <div>
+                <span class="step">3</span>
+                <span>訂單結算</span>
+            </div>
+        </div>
+    </div>
+    <div class="border border-dark-subtle shadow rounded-3 p-2">
+        <table class="table  align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th width="250">商品圖片</th>
+                    <th width="250">商品名稱</th>
+                    <th>尺寸</th>
+                    <th>顏色</th>
+                    <th width="150">數量</th>
+                    <th>小計</th>
 
+                    <th>刪除</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <img src="../Images/Product/日系連身吊帶褲.jpg" alt="日系連身吊帶褲"
+                             class="width-150px rounded-3 shadow-sm">
+                    </td>
+                    <td>
+                        日系連身吊帶褲
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm w-50">
+                            <option value="">S</option>
+                            <option value="" selected="selected">M</option>
+                            <option value="">L</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm w-50">
+                            <option value="">白色</option>
+                            <option value="" selected="selected">藍色</option>
+                            <option value="">褐色</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="d-flex">
+                            <div class="border border-dark-subtle text-center" style="width: 25px;">-</div>
+                            <div class="border border-dark-subtle text-center" style="width: 25px;">1</div>
+                            <div class="border border-dark-subtle text-center" style="width: 25px;">+</div>
+                        </div>
+                    </td>
+                    <td>???</td>
+
+                    <td>
+                        <a href="">
+                            <div class="circle-size-25">
+                                <img src="../Images/ShoppingCart/trash.png" alt="">
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../Images/Product/日系連身吊帶褲.jpg" alt="日系連身吊帶褲"
+                             class="width-150px rounded-3 shadow-sm">
+                    </td>
+                    <td>
+                        日系連身吊帶褲
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm w-50">
+                            <option value="">S</option>
+                            <option value="" selected="selected">M</option>
+                            <option value="">L</option>
+                        </select>
+
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm w-50">
+                            <option value="">白色</option>
+                            <option value="" selected="selected">藍色</option>
+                            <option value="">褐色</option>
+                        </select>
+                    </td>
+                    <td>
+                        <form id='myform' method='POST' action='#'>
+                            <label for=""></label><input type='button' value='-' class='qtyminus' field='quantity' />
+                            <input type='text' name='quantity' value='0' class='qty' />
+                            <input type='button' value='+' class='qtyplus' field='quantity' />
+                        </form>
+                    </td>
+                    <td>???</td>
+
+                    <td>
+                        <a href="">
+                            <div class="circle-size-25">
+                                <img src="../Images/ShoppingCart/trash.png" alt="">
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="container text-center">
+        <div class="py-4">
+            <span class="dollarSign">小計</span>
+            <span class="text-danger fw-bold fs-5">???</span>
+        </div>
+        <div class="p-2">
+            <input type="button" value="繼續購物" class="btn btn-outline-dark" style="width: 150px;">
+            <input type="submit" value="結帳" class="btn btn-danger" style="width: 150px;">
+        </div>
+    </div>
+</div>
+
+
+@section Styles{
+    <link href="~/css/shoppingcart.css" rel="stylesheet" />
+
+}
+@section Scripts{
+    <script>
+        $(document).ready(function(){
+            const viewHeight = parseInt($(".returnView").css("height"))
+            const screenHeight = $(window).height();
+            if(viewHeight)
+        })
+    </script>
+}
