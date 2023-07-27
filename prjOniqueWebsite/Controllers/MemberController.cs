@@ -81,7 +81,7 @@ namespace prjOniqueWebsite.Controllers
             var city = new Citys();
             var area = new Areas();
             var mem = _context.Members.Where(Members => Members.MemberId == id).FirstOrDefault();
-            mem.PhotoPath = mem.PhotoPath.ToString("MemberId_"+${ id}+".jpg");
+            mem.PhotoPath = $"MemberId_{id}.jpg";
             mem.Name = member.Name;
             mem.Password = member.Password;
             mem.Phone = member.Phone;
