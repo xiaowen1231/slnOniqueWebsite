@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.ViewModels;
+using System.Security.Cryptography;
 
 namespace prjOniqueWebsite.Controllers
 {
