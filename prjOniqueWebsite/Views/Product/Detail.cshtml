@@ -116,7 +116,6 @@
             const colorId = $("#selectColor").val()
             const response = await fetch(`@Url.Content("~/productapi/GetStockSize?")id=${productId}&colorId=${colorId}`)
             const datas = await response.json();
-
             const sizes = datas.map(size => {
                 const { sizeId, sizeName } = size
                 return `<option value="${sizeId}">${sizeName}</option>`

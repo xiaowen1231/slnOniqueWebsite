@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "訂單總覽";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
@@ -44,18 +43,23 @@
                     <option value="">10</option>
                     <option value="">20</option>
                     <option value="">30</option>
+                    
                 </select>
             </div>
             <div class="width-50px ">筆資料</div>
         </div>
-        <div class="d-flex align-items-center">
-            <div class="mx-3"><span>關鍵字搜尋</span></div>
 
-            <div>
-                <input type="text" name="" id="" placeholder="請輸入訂單關鍵字" class="form-control">
+
+        <div class="d-flex align-items-center">
+            <div class="mx-3">
+                <input type="text" id="txtKeyWord" placeholder="請輸入訂單關鍵字" class="form-control" />
             </div>
-            <div><button type="button" class="btn btn-dark mx-2" id="btnSearch">搜尋</button></div>
+            <div>
+                <input type="submit" value="查詢" class="btn btn-dark" id="Search" />
+            </div>
         </div>
+
+
     </div>
     <div class="container">
         <div class="p-2 my-4 border border-dark-subtle rounded-4 ">
@@ -72,64 +76,64 @@
                 </thead>
                 <tbody id="orderTable">
                     @*<tr>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                <div>待出貨</div>
-                            </div>
-                        </td>
-                        <td>
-                            <span>OrderNum001</span>
-                        </td>
-                        <td>
-                            <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
-                            <span>OOO</span>
-                        </td>
-                        <td>2023/07/16</td>
-                        <td>貨到付款</td>
-                        <td>
-                            <div class="text-danger">2000</div>
-                        </td>
-                        <td>
-                            <a href="" class="link-underline-light link-secondary">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="circle-size-25">
-                                        <img src="../Images/EmployeePhoto/edit.png" alt="">
-                                    </div>
-                                    <span>檢視訂單詳情</span>
-                                </div>
-                            </a>
-                        </td>
+                    <td>
+                    <div class="d-flex gap-2">
+                    <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                    <div>待出貨</div>
+                    </div>
+                    </td>
+                    <td>
+                    <span>OrderNum001</span>
+                    </td>
+                    <td>
+                    <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
+                    <span>OOO</span>
+                    </td>
+                    <td>2023/07/16</td>
+                    <td>貨到付款</td>
+                    <td>
+                    <div class="text-danger">2000</div>
+                    </td>
+                    <td>
+                    <a href="" class="link-underline-light link-secondary">
+                    <div class="d-flex align-items-center gap-2">
+                    <div class="circle-size-25">
+                    <img src="../Images/EmployeePhoto/edit.png" alt="">
+                    </div>
+                    <span>檢視訂單詳情</span>
+                    </div>
+                    </a>
+                    </td>
                     </tr>
                     <tr>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                <div>待出貨</div>
-                            </div>
-                        </td>
-                        <td>
-                            <span>OrderNum001</span>
-                        </td>
-                        <td>
-                            <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
-                            <span>OOO</span>
-                        </td>
-                        <td>2023/07/16</td>
-                        <td>貨到付款</td>
-                        <td>
-                            <div class="text-danger">2000</div>
-                        </td>
-                        <td>
-                            <a href="" class="link-underline-light link-secondary">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="circle-size-25">
-                                        <img src="../Images/EmployeePhoto/edit.png" alt="">
-                                    </div>
-                                    <span>檢視訂單詳情</span>
-                                </div>
-                            </a>
-                        </td>
+                    <td>
+                    <div class="d-flex gap-2">
+                    <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                    <div>待出貨</div>
+                    </div>
+                    </td>
+                    <td>
+                    <span>OrderNum001</span>
+                    </td>
+                    <td>
+                    <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
+                    <span>OOO</span>
+                    </td>
+                    <td>2023/07/16</td>
+                    <td>貨到付款</td>
+                    <td>
+                    <div class="text-danger">2000</div>
+                    </td>
+                    <td>
+                    <a href="" class="link-underline-light link-secondary">
+                    <div class="d-flex align-items-center gap-2">
+                    <div class="circle-size-25">
+                    <img src="../Images/EmployeePhoto/edit.png" alt="">
+                    </div>
+                    <span>檢視訂單詳情</span>
+                    </div>
+                    </a>
+                    </td>
                     </tr>*@
                 </tbody>
             </table>
@@ -161,74 +165,153 @@
 @section Scripts{
     <script>
         const orderTable = document.querySelector("#orderTable")
-        load()
+        const searchbtn = document.querySelector("#Search")
+        const keywordtxt = document.querySelector("#txtKeyWord")
+        const inputkeyWord = keywordtxt.textContent;
+        console.log(inputkeyWord)
 
-        async function load(){
+        load();
+        async function load() {
             const response = await fetch(`@Url.Content("~/OrderApi/showOrderList")`)
             const data = await response.json();
-            
+
             let tableOrdersList = "";
-            data.map(item=>{
+            data.map(item => {
 
                 const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
-                //console.log(statusName, orderId, name, shippingDate, paymentMethodName, photoPath)
 
                 tableOrdersList += `
-                        <tr>
-                        <td>
-                        <div class="d-flex gap-2">`;
-                if (statusName == "待出貨")
-                {
+                                                                                        <tr>
+                                                                                        <td>
+                                                                                        <div class="d-flex gap-2">`;
+                if (statusName == "待出貨") {
                     tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                    <div>${statusName}</div>`
+                                                                                    <div>${statusName}</div>`
                 }
-                else if (statusName == "已出貨"){
+                else if (statusName == "已出貨") {
                     tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                    <div>${statusName}</div>`
+                                                                                    <div>${statusName}</div>`
                 }
-                else if(statusName=="已完成"){
+                else if (statusName == "已完成") {
                     tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                    <div>${statusName}</div>`
+                                                                                    <div>${statusName}</div>`
                 }
-                else if (statusName == "已取消"){
+                else if (statusName == "已取消") {
                     tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                    <div>${statusName}</div>`
+                                                                                    <div>${statusName}</div>`
                 }
-                else if (statusName == "退款中"){
+                else if (statusName == "退款中") {
                     tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                    <div>${statusName}</div>`
+                                                                                    <div>${statusName}</div>`
                 }
-                else if (statusName == "已退款"){
+                else if (statusName == "已退款") {
                     tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                    <div>${statusName}</div>`
+                                                                                    <div>${statusName}</div>`
                 }
-                else{
+                else {
                     tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                            <div>${statusName}</div>`
+                                                                                            <div>${statusName}</div>`
                 }
-                    tableOrdersList += ` 
-                                </div>
-                                </td>
-                                <td>
-                                <span>${orderId}</span>
-                                </td>
-                                <td>
-                                <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
-                                <span>${name}</span>
-                                </td>
-                                <td>2023/07/16</td>
-                                <td>${paymentMethodName}</td>
-                                <td>
-                                    <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                </div>
-                                </a>
-                                </td>
-                                </tr>`
+                tableOrdersList += `
+                                            </div>
+                                            </td>
+                                            <td>
+                                            <span>${orderId}</span>
+                                            </td>
+                                            <td>
+                                            <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
+                                            <span>${name}</span>
+                                            </td>
+                                            <td>2023/07/16</td>
+                                            <td>${paymentMethodName}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                            </div>
+                                            </a>
+                                            </td>
+                                            </tr>`
             })
-            
-            //orderTable.innerHTML = tableOrdersList.join("");
+
             $("#orderTable").append(tableOrdersList)
 
+        }
+
+
+
+
+        searchbtn.addEventListener('click', () => {
+            showSearchdata()
+        })
+
+
+        async function showSearchdata() {
+            let keyWord = keywordtxt.value;
+
+            const response = await fetch(`@Url.Content("~/OrderApi/search?keyWord=")${keyWord}`)
+            const data = await response.json();
+
+            data.map(row => {
+                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = row
+
+                let tableOrdersList = "";
+                data.map(item => {
+
+                    const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
+
+                    tableOrdersList += `
+                                        <tr>
+                                        <td>
+                                        <div class="d-flex gap-2">`;
+                    if (statusName == "待出貨") {
+                        tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                                                                                            <div>${statusName}</div>`
+                    }
+                    else if (statusName == "已出貨") {
+                        tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
+                                                                                            <div>${statusName}</div>`
+                    }
+                    else if (statusName == "已完成") {
+                        tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
+                                                                                            <div>${statusName}</div>`
+                    }
+                    else if (statusName == "已取消") {
+                        tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
+                                                                                            <div>${statusName}</div>`
+                    }
+                    else if (statusName == "退款中") {
+                        tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
+                                                                                            <div>${statusName}</div>`
+                    }
+                    else if (statusName == "已退款") {
+                        tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
+                                                                                            <div>${statusName}</div>`
+                    }
+                    else {
+                        tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
+                                                                                                    <div>${statusName}</div>`
+                    }
+                    tableOrdersList += `
+                                        </div>
+                                        </td>
+                                        <td>
+                                        <span>${orderId}</span>
+                                        </td>
+                                        <td>
+                                        <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
+                                        <span>${name}</span>
+                                        </td>
+                                        <td>2023/07/16</td>
+                                        <td>${paymentMethodName}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                        </div>
+                                        </a>
+                                        </td>
+                                        </tr>`
+                })
+
+                $("#orderTable").html(tableOrdersList)
+            })
         }
 
         function openOrderDetails(orderId) {

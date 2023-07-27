@@ -26,7 +26,39 @@ namespace prjOniqueWebsite.Controllers
             List<OrderListDto> dto = dao.getOrderList();
             return Json(dto);
         }
+        public IActionResult search(string? keyWord)
+        {
+            IEnumerable<OrderListDto> data = null;
 
+            var query = from o in _context.Orders
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        join m in _context.Members
+                        on o.MemberId equals m.MemberId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        select new OrderListDto
+                        {
+                            StatusName = os.StatusName,
+                            OrderId = o.OrderId,
+                            Name = m.Name,
+                            ShippingDate = (DateTime)o.ShippingDate,
+                            PaymentMethodName = pm.PaymentMethodName,
+                            PhotoPath = m.PhotoPath
+                        };
+
+
+            if (string.IsNullOrEmpty(keyWord))
+            {
+                data = query.ToList();
+            }
+            else
+            {
+                data = query.Where(o => o.Name.Contains(keyWord)).ToList();
+
+            }
+            return Json(data);
+        }
            
 
         public IActionResult orderProductDetail(int orderId)
