@@ -36,5 +36,27 @@ namespace prjOniqueWebsite.Controllers
             List<EmployeeListDto> dto = query.ToList();
             return Json(dto);
         }
+
+        public IActionResult LoadCity()
+        {
+            var citys = from c in _context.Citys
+                        select c;
+            return Json(citys);
+        }
+        public IActionResult LoadArea(int cityId)
+        {
+            var areas = from a in _context.Areas
+
+                        where a.CityId == cityId
+                        select a;
+            return Json(areas);
+        }
+
+        public IActionResult LoadEmployeeLevel() 
+        {
+            var employeelevel = from e in _context.EmployeeLevel
+                                select e;
+            return Json(employeelevel);
+        }
     }
 }
