@@ -1,0 +1,119 @@
+﻿@model prjOniqueWebsite.Models.Dtos.ProductDetailDto
+@{
+    ViewData["Title"] = "BgColorSizeDetails";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+
+<div class="container d-flex justify-content-center">
+    <div class="col-2" style="margin-left: 8%;">
+        <div class="text-center my-2">
+            <div class=" border p-3 rounded-4 ">
+                <div class="p-2 my-1 bg-dark text-white rounded">
+                    商品細部編輯
+                </div>
+                <div class="container">
+                    <input type="button" value="尺寸、顏色設定"
+                           class="btn btn-outline-dark form-control border my-2 fw-bold">
+                    <input type="button" value="新增尺寸" class="btn btn-outline-dark border form-control my-2 fw-bold">
+                    <input type="button" value="新增顏色" class="btn btn-outline-dark border form-control my-2 fw-bold">
+                    <input type="button" value="庫存量設定"
+                           class="btn btn-outline-dark border form-control my-2 fw-bold">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container border shadow rounded-4 mx-4 my-2">
+        <div class="container text-center p-2">
+            <div class="align-items-center fs-3 fw-bold border-bottom p-2">庫存量設定</div>
+        </div>
+        <div class="container d-flex my-2">
+            <div class="p-4">
+                <div class="d-flex p-2 align-items-center">
+                    <div class="text-center fw-bold">商品名稱 :</div>
+                    <div class="mx-2">@Model.products.ProductName</div>
+                </div>                
+                <div class="d-flex p-2 align-items-center my-2">
+                    <div class="fw-bold text-center">商品顏色 :</div>
+                    <div class="mx-2">
+                        <select class="form-select" id="selectColor">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex p-2 align-items-center my-2">
+                    <div class="fw-bold text-center">商品尺寸 :</div>
+                    <div class="mx-2">
+                        <select class="form-select" id="selectSize">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex p-2 align-items-center  mx-3">
+                    <div class="text-center fw-bold">庫存數 :</div>
+                    <div>
+                        <input type="text" class="form-control mx-2" id="stockQty">
+                    </div>
+                </div>
+                <div class="text-center p-4">
+                    <div>
+                        <input type="button" class="btn btn-outline-dark fw-bold mx-4" value="取消">
+                        <input type="submit" class="btn btn-dark fw-bold" value="修改庫存數">
+                    </div>
+                </div>
+            </div>
+            <div class="col-5 container p-3">
+                <img src="@Url.Content("~/images/uploads/products/")@Model.products.PhotoPath" class="rounded img-thumbnail" id="productPhoto"/>
+                <input type="file" class="form-control my-4">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        const selectSize = document.querySelector("#selectSize")
+        const selectColor = document.querySelector("#selectColor")
+        const productId = $("#productId").val();
+
+        loadColor();
+
+        async function loadColor(){
+            const response = await fetch(`@Url.Content("~/porductapi/GetStockColor/")${productId}`)
+            const datas = await response.json();
+
+            const colors = datas.map(color=>{
+                const{colorId,colorName} = color;
+                return `<option value="${colorId}">${colorName}</option>`
+            })
+            SelectColor.innerHTML = colors.join("")
+            loadSize();
+        }
+
+        async function loadSize(){
+            const colorId = $("#selectColor").val()
+            const response = await fetch(`@Url.Content("~/productapi/GetStockSize?")id=${productId}&colorId=${colorId}`)
+            const datas = await response.json();
+            const sizes = datas.map(size=>{
+                const {sizeId,sizeName} = size
+                return `<option value="${sizeId}">${sizeName}</option>`
+            })
+            selectSize.innerHTML = sizes.join("")
+           loadProductPhoto()
+           }
+            selectColor.addEventListener('change',function(){
+                loadSize()
+            })
+            selectSize.addEventListener('change',function(){
+                loadProductPhoto()
+            })
+
+            async function loadProductPhoto(){
+                const colorId = $("#selectColor").val()
+                const sizeId = $("$selectSize").val()
+                console.log(prodcutId,colorId,sizeId)
+            }
+        }
+        }
+    </script>
+
+}

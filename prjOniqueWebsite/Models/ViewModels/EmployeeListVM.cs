@@ -4,7 +4,7 @@ namespace prjOniqueWebsite.Models.ViewModels
 {
     public class EmployeeListVM
     {
-        [Display(Name = "編號")]
+        
         public int EmployeeId { get; set; }
         public string PhotoPath { get; set; }
         public string EmployeeName { get; set; }

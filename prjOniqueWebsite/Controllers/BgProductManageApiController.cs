@@ -19,6 +19,28 @@ namespace prjOniqueWebsite.Controllers
             //}
             return View();
         }
+        public IActionResult ShowColorList()
+        {
+            var query = from c in _context.ProductColors
+                        select new ProductColors
+                        {
+                            ColorId= c.ColorId,
+                            ColorName = c.ColorName
+                        };
+            List<ProductColors> dto = query.ToList();
+            return Json(dto);
+        }
+        public IActionResult ShowSizeList()
+        {
+            var query = from s in _context.ProductSizes
+                        select new ProductSizes
+                        {
+                            SizeId = s.SizeId,
+                            SizeName = s.SizeName
+                        };
+            List<ProductSizes> dto = query.ToList();
+            return Json(dto);
+        }
         public IActionResult ShowBgProductManageList()
         {
             var query = from p in _context.Products
@@ -36,6 +58,26 @@ namespace prjOniqueWebsite.Controllers
 
 
             return Json(dto);
+        }
+        public IActionResult ShowBgColorSizeSetting(int id=1)
+        {
+            var query = from p in _context.Products
+                        join psd in _context.ProductStockDetails
+                        on p.ProductId equals psd.ProductId
+                        join c in _context.ProductColors
+                        on psd.ColorId equals c.ColorId
+                        join s in _context.ProductSizes
+                        on psd.SizeId equals s.SizeId
+                        where p.ProductId == id
+                        select new BgProductColorSizeSettingDto
+                        {
+                            ProductId = psd.ProductId,
+                            ProductName = p.ProductName,
+                            ColorId = psd.ColorId,
+                            SizeId = psd.SizeId,
+                        };
+
+            return Json(query);
         }
     }
 }

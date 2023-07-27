@@ -148,10 +148,15 @@
             </div>
         </div>
         <div class="p-2 rounded color-fff border">
-            <div class="p-2 fw-bold">
-                <span>修改訂單狀態</span>
+            <div class="d-flex p-3 fw-bold ">
+                <div>目前訂單狀態</div>
+                <div class="fs-6 mx-3 text-danger" id="orderStatusNow"></div>
             </div>
+            
             <div class="p-2">
+                <div class="p-2 fw-bold">
+                    <span>修改訂單狀態</span>
+                </div>
                 <div>
                     <select class="form-select d-inline w-25" id="statusSel" aria-label="訂單狀態">
                         @*<option value="" selected="selected">未選擇</option>
@@ -181,6 +186,7 @@
         const shippingDetailTable = document.querySelector("#shippingDetail")
         const productPrice = document.querySelector("#productTotal")
         const totalprice = document.querySelector("#total")
+        const orderStatusNow = document.querySelector("#orderStatusNow")
         const statusSel = document.querySelector("#statusSel")
         let total = 0;
 
@@ -231,79 +237,75 @@
             completionDate = completionDate == null ? "訂單尚未完成" : completionDate;
             completionDate = completionDate.substring(0, 10) + " " + completionDate.substring(11, 19)
 
-
-            //if(completionDate==null){
-            //    completionDate = "訂單尚未完成"
-            //}
-
+        
             shippingDetail =
                 `
-                                                                    <div class="shadow-sm p-3 m-3 rounded d-flex gap-2 justify-content-between bg-body-tertiary border">
-                                                                                <div class="d-flex gap-3 p-1">
-                                                                                    <div class="d-flex gap-2 align-items-center">
-                                                                                            <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="circle-size-60 cover">
-                                                                                            <div class="fw-bold fs-5">${name}</div>
-                                                                                    </div>
-                                                                                <div class="d-flex gap-2 align-items-center">
-                                                                                    <div class="fw-bold">訂單編號</div>
-                                                                                    <div class="text-danger">${orderId}</div>
-                                                                                </div>
-                                                                                </div>
-                                                                            <div>
-                                                                                <div class="d-flex gap-2">
-                                                                                    <div class="fw-bold">下單日期 : </div>
-                                                                                            <div>${orderDate}</div>
-                                                                                </div>
-                                                                                <div class="d-flex gap-2">
-                                                                                    <div class="fw-bold">出貨日期 : </div>
-                                                                                    <div class="text-secondary">${shippingDate}</div>
-                                                                                </div>
-                                                                                <div class="d-flex gap-2">
-                                                                                    <div class="fw-bold">完成日期 : </div>
-                                                                                            <div class="text-secondary">${completionDate}</div>
-                                                                                </div>
-                                                                            </div>
-                                                                            </div>
+                                    <div class="shadow-sm p-3 m-3 rounded d-flex gap-2 justify-content-between bg-body-tertiary border">
+                                                <div class="d-flex gap-3 p-1">
+                                                    <div class="d-flex gap-2 align-items-center">
+                                                            <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="circle-size-60 cover">
+                                                            <div class="fw-bold fs-5">${name}</div>
+                                                    </div>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="fw-bold">訂單編號</div>
+                                                    <div class="text-danger">${orderId}</div>
+                                                </div>
+                                                </div>
+                                            <div>
+                                                <div class="d-flex gap-2">
+                                                    <div class="fw-bold">下單日期 : </div>
+                                                            <div>${orderDate}</div>
+                                                </div>
+                                                <div class="d-flex gap-2">
+                                                    <div class="fw-bold">出貨日期 : </div>
+                                                    <div class="text-secondary">${shippingDate}</div>
+                                                </div>
+                                                <div class="d-flex gap-2">
+                                                    <div class="fw-bold">完成日期 : </div>
+                                                            <div class="text-secondary">${completionDate}</div>
+                                                </div>
+                                            </div>
+                                            </div>
 
-                                                                        <div class="shadow-sm p-3 m-3 bg-body-tertiary rounded border">
-                                                                            <div class="m-2">
-                                                                                <div class="d-flex gap-2 align-items-center">
-                                                                                    <div class="fw-bold width-90px text-end">訂單狀態 : </div>
-                                                                                            <div class="text-danger">${statusName}</div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="m-2">
-                                                                                <div class="d-flex gap-2 align-items-center">
-                                                                                    <div class="fw-bold width-90px text-end">運送方式 : </div>
-                                                                                            <div>${methodName}</div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="m-2">
-                                                                                <div class="d-flex gap-2 align-items-center">
-                                                                                    <div class="fw-bold width-90px text-end">付款方式 : </div>
-                                                                                            <div>${paymentMethodName}</div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="m-2">
-                                                                                <div class="d-flex gap-2 align-items-center">
-                                                                                    <div class="fw-bold width-90px text-end">收件人 : </div>
-                                                                                            <div>${name}</div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="m-2">
-                                                                                <div class="d-flex gap-2 align-items-center">
-                                                                                    <div class="fw-bold width-90px text-end">連絡電話 : </div>
-                                                                                            <div>${phone}</div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="m-2">
-                                                                                <div class="d-flex gap-2 align-items-center">
-                                                                                    <div class="fw-bold width-90px text-end">運送地址 : </div>
-                                                                                    <div>${shippingAddress}</div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                            `
+                                        <div class="shadow-sm p-3 m-3 bg-body-tertiary rounded border">
+                                            <div class="m-2">
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="fw-bold width-90px text-end">訂單狀態 : </div>
+                                                            <div class="text-danger">${statusName}</div>
+                                                </div>
+                                            </div>
+                                            <div class="m-2">
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="fw-bold width-90px text-end">運送方式 : </div>
+                                                            <div>${methodName}</div>
+                                                </div>
+                                            </div>
+                                            <div class="m-2">
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="fw-bold width-90px text-end">付款方式 : </div>
+                                                            <div>${paymentMethodName}</div>
+                                                </div>
+                                            </div>
+                                            <div class="m-2">
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="fw-bold width-90px text-end">收件人 : </div>
+                                                            <div>${name}</div>
+                                                </div>
+                                            </div>
+                                            <div class="m-2">
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="fw-bold width-90px text-end">連絡電話 : </div>
+                                                            <div>${phone}</div>
+                                                </div>
+                                            </div>
+                                            <div class="m-2">
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="fw-bold width-90px text-end">運送地址 : </div>
+                                                    <div>${shippingAddress}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            `
 
             shippingDetailTable.innerHTML = shippingDetail;
         }
@@ -318,22 +320,28 @@
             const data = await response.json()
             let { statusName, statusId } = data
             //console.log(data)
-            statusSel.innerHTML = `<option value="${statusId}">${statusName}</option>`
+            orderStatusNow.innerHTML = `${statusName}`;
+            //statusSel.innerHTML = `<option value="${statusId}">${statusName}</option>`
             //console.log(statusId)
             //const statusId = statusSel.options[statusSel.selectedIndex].value;
         }
         loadStatusNow();
 
-
+        //todo
+        //給予正確的選擇
+        
         async function loadStatusOptions() {
-            
-            const resoponse = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions")`)
+            const statusName=$("#orderStatusNow").val();
+            console.log(statusName)
+            const resoponse = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions")`)//todo 
             const data = await resoponse.json()
+            console.log(data)
             const options=data.map(option=>{
-            const { OrderId, StatusName, StatusId, PaymentMethodId } = option
-            console.log(OrderId)
-                return (`<option value="${statusId}">${statusName}</option>`)
+               
+                
+                return (`<option>${option}</option>`)
             })
+            
 
             statusSel.innerHTML=options.join("");
         }

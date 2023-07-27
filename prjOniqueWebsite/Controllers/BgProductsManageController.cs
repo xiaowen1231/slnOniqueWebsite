@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Repositories;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -152,6 +154,25 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult BgCreateColor()
         {
             return View();
+        }
+        public IActionResult BgCreateSize()
+        {
+            return View();
+        }
+        public IActionResult BgColorSizeSetting()
+        {
+            return View();
+        }public IActionResult BgColorSizeDetails(int id)
+        {
+            try
+            {
+                ProductDetailDto dto = new ProductDao(_context).GetProductDetail(id);
+                return View(dto);
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
         }
         private bool ProductsExists(int id)
         {

@@ -26,7 +26,39 @@ namespace prjOniqueWebsite.Controllers
             List<OrderListDto> dto = dao.getOrderList();
             return Json(dto);
         }
+        public IActionResult search(string? keyWord)
+        {
+            IEnumerable<OrderListDto> data = null;
 
+            var query = from o in _context.Orders
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        join m in _context.Members
+                        on o.MemberId equals m.MemberId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        select new OrderListDto
+                        {
+                            StatusName = os.StatusName,
+                            OrderId = o.OrderId,
+                            Name = m.Name,
+                            ShippingDate = (DateTime)o.ShippingDate,
+                            PaymentMethodName = pm.PaymentMethodName,
+                            PhotoPath = m.PhotoPath
+                        };
+
+
+            if (string.IsNullOrEmpty(keyWord))
+            {
+                data = query.ToList();
+            }
+            else
+            {
+                data = query.Where(o => o.Name.Contains(keyWord)||o.StatusName.Contains(keyWord)||o.OrderId.ToString().Contains(keyWord)).ToList();
+
+            }
+            return Json(data);
+        }
            
 
         public IActionResult orderProductDetail(int orderId)
@@ -61,14 +93,37 @@ namespace prjOniqueWebsite.Controllers
         }
 
 
-        public IActionResult GetOrderStatusOptions()
+        public IActionResult GetOrderStatusOptions(string StatusName)
         {
-            List<OrderStatusDto> dto =dao.GetAllOrderStatus();
-            return Json(dto);
+            var query = _context.OrderStatus;
+
+            switch (StatusName)
+            {
+                case "待出貨":
+                     query.Where(s => s.StatusName == "已出貨" || s.StatusName == "已取消").ToList();
+                    break;
+                case "已出貨":
+                     query.Where(s => s.StatusName == "已完成" || s.StatusName == "未取貨").ToList();
+                    break;
+                case "已完成":
+                      //todo
+                case "已取消":
+                case "退款中":
+                case "已退款":
+                case "未取貨":
+                default:
+                    break;
+
+
+
+
+            }
+
+            return Json(data);
 
 
         }
         //public IActionResult UpdateOrderStatus
-        
+
     }
 }
