@@ -59,7 +59,7 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(dto);
         }
-        public IActionResult ShowBgColorSizeSetting(int id=1)
+        public IActionResult ShowBgColorSizeSetting(int id = 1)
         {
             var query = from p in _context.Products
                         join psd in _context.ProductStockDetails
@@ -77,7 +77,7 @@ namespace prjOniqueWebsite.Controllers
                             SizeId = psd.SizeId,
                         };
 
-            return Json(dto);
+            return Json(null);
         }
     }
 }
