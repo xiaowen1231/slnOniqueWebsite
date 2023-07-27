@@ -68,6 +68,9 @@
         #price::before {
             content: "$";
         }
+        #divContent{
+            height:calc(100vh - 289px);
+        }
     </style>
 }
 
@@ -156,7 +159,7 @@
                     text: "要幫您導向登入頁面嗎?",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: '#3C3C3C',
                     cancelButtonColor: '#D0D0D0',
                     confirmButtonText: '進行登入',
                             cancelButtonText: '取消'
@@ -170,17 +173,37 @@
             {
                 AddToCart()
             }
-
         })
-
         async function AddToCart(){
+
             const stockId = $("#stockId").val()
             const qty = $("#orderQty").val()
+            try{
+                const response = await fetch(`@Url.Content("~/ProductApi/AddToCart?")stockId=${stockId}&qty=${qty}`)
+                const totalitems = await response.json()
+            }catch(error){
 
-            const response = await fetch(`@Url.Content("~/ProductApi/AddToCart?")stockId=${stockId}&qty=${qty}`)
-            const totalItems = await response.json()
+                Swal.fire({
+                    title: '加入購物車失敗!',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                    confirmButtonText: '稍後在試'
+                })
+            }finally{
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: '加入購物車成功!',
+                    confirmButtonColor: '#3C3C3C',
+                    confirmButtonText: '確認'
+                })
 
-
+            }
+            GetCartItems()
         }
     </script>
 }
