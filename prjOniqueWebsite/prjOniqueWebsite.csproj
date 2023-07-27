@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Models\EFModels\" />
     <Folder Include="Models\Interfaces\" />
+    <Folder Include="Models\Infra\" />
     <Folder Include="Models\Services\" />
   </ItemGroup>
 
