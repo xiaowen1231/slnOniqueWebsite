@@ -58,20 +58,7 @@ namespace prjOniqueWebsite.Controllers
             //mem.Citys = _context.Citys.Where(c => c.CityName == vm.cityname).select(c => c.cityid);
             //mem.Address = member.Address;
 
-            //EditMember member = (from m in _context.Members
-            //                        join a in _context.Areas
-            //                        on m.Areas equals a.AreaId
-            //                        select new EditMemberDto
-            //                        {
-            //                            Area = a.AreaName,
-            //                            MemberId = m.MemberId,
-            //                            Name = m.Name,
-            //                            Gender = m.Gender ? "女" : "男"
-            //                        }).FirstOrDefault();
-            //EditMemberVM vm = new EditMemberVM()
-            //{
-            //    Name=member.Name
-            //};
+           
             return View(member);
         }
         [HttpPost]
@@ -84,16 +71,24 @@ namespace prjOniqueWebsite.Controllers
             mem.PhotoPath = $"MemberId_{id}.jpg";
             mem.Name = member.Name;
             mem.Password = member.Password;
+            if(mem.Email == member.Email && mem.Phone == member.Phone)
+            {
+                
+            }
+            else
+            {
             mem.Phone = member.Phone;
             mem.Email = member.Email;
+            }
             mem.DateOfBirth = Convert.ToDateTime(member.DateOfBirth);
             mem.RegisterDate = Convert.ToDateTime(member.RegisterDate);
-            mem.Gender = member.Gender == "男" ? false : true;
             mem.MemberLevel = _context.MemberLevel.Where(c => c.MemberLevelName == level.MemberLevelName).Select(c=>c.MemberLevelId).FirstOrDefault();
             mem.Citys = _context.Citys.Where(c => c.CityName == city.CityName).Select(c => c.CityId).FirstOrDefault();
             mem.Areas = _context.Areas.Where(c => c.AreaName == area.AreaName).Select(c=>c.AreaId).FirstOrDefault();
             mem.Address = member.Address;
-            return View(member);
+            _context.Members.Add(mem);
+            _context.SaveChanges();
+            return View(mem);
         }
     }
 }
