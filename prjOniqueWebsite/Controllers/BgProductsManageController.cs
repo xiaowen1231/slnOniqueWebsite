@@ -9,44 +9,23 @@ using prjOniqueWebsite.Models.EFModels;
 
 namespace prjOniqueWebsite.Controllers
 {
-    public class TestBgProductsController : Controller
+    public class BgProductsManageController : Controller
     {
         private readonly OniqueContext _context;
 
-        public TestBgProductsController(OniqueContext context)
+        public BgProductsManageController(OniqueContext context)
         {
             _context = context;
         }
 
-        // GET: TestBgProducts
+        // GET: BgProductsManage
         public async Task<IActionResult> Index()
         {
             var oniqueContext = _context.Products.Include(p => p.Discount).Include(p => p.ProductCategory).Include(p => p.Supplier);
             return View(await oniqueContext.ToListAsync());
-        }
+        }       
 
-        // GET: TestBgProducts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-
-            var products = await _context.Products
-                .Include(p => p.Discount)
-                .Include(p => p.ProductCategory)
-                .Include(p => p.Supplier)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (products == null)
-            {
-                return NotFound();
-            }
-
-            return View(products);
-        }
-
-        // GET: TestBgProducts/Create
+        // GET: BgProductsManage/Create
         public IActionResult Create()
         {
             ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description");
@@ -55,7 +34,7 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
 
-        // POST: TestBgProducts/Create
+        // POST: BgProductsManage/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -74,7 +53,7 @@ namespace prjOniqueWebsite.Controllers
             return View(products);
         }
 
-        // GET: TestBgProducts/Edit/5
+        // GET: BgProductsManage/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Products == null)
@@ -93,7 +72,7 @@ namespace prjOniqueWebsite.Controllers
             return View(products);
         }
 
-        // POST: TestBgProducts/Edit/5
+        // POST: BgProductsManage/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -131,7 +110,7 @@ namespace prjOniqueWebsite.Controllers
             return View(products);
         }
 
-        // GET: TestBgProducts/Delete/5
+        // GET: BgProductsManage/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Products == null)
@@ -152,7 +131,7 @@ namespace prjOniqueWebsite.Controllers
             return View(products);
         }
 
-        // POST: TestBgProducts/Delete/5
+        // POST: BgProductsManage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -170,7 +149,18 @@ namespace prjOniqueWebsite.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        public IActionResult BgCreateColor()
+        {
+            return View();
+        }
+        public IActionResult BgCreateSize()
+        {
+            return View();
+        }
+        public IActionResult BgColorSizeSetting()
+        {
+            return View();
+        }
         private bool ProductsExists(int id)
         {
           return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
