@@ -28,8 +28,7 @@
         <div class="text-center p-2">
             <div class="align-items-center fs-3 fw-bold border-bottom p-2">新增商品資訊</div>
         </div>
-        <div class="container d-flex">
-            
+        <div class="container d-flex">            
                 <div class="p-2 col-5">                
                     <div class="d-flex align-items-center my-3">
                             <label asp-for="ProductName" class="width-120px">商品名稱:</label>
@@ -67,7 +66,7 @@
                 </div>
                 <div class="col-5 container">
                     <div class="my-3 d-flex">
-                     <img asp-for="PhotoPath" src="~/images/uploads/products/ class="rounded img-thumbnail" id="img" />
+                     <img asp-for="PhotoPath" src="~/images/uploads/products/" class="rounded img-thumbnail" id="img" />
                      <span asp-validation-for="PhotoPath" class="text-danger"></span>
                     </div>
                     <input type="file" class="form-control" />
@@ -76,8 +75,7 @@
                 <div class="container text-center mb-4">
                     <a class="btn btn-outline-dark" asp-action="Index">取消編輯</a>
                     <input type="submit" value="確認編輯" class="btn btn-dark" />
-                </div>               
-            
+                </div>
         </div>
     </div>
 </form>
