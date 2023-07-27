@@ -153,6 +153,14 @@ namespace prjOniqueWebsite.Controllers
         {
             return View();
         }
+        public IActionResult BgCreateSize()
+        {
+            return View();
+        }
+        public IActionResult BgColorSizeSetting()
+        {
+            return View();
+        }
         private bool ProductsExists(int id)
         {
           return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
