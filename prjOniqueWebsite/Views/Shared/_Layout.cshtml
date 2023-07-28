@@ -8,7 +8,7 @@
     <link href="~/css/common.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/layoutNav.css" />
+    <link href="~/css/layout.css" rel="stylesheet" />
     <link href="~/css/sweetalert2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.css" rel="stylesheet">
     @await RenderSectionAsync("Styles", required: false)
@@ -87,80 +87,79 @@
         </nav>
     </header>
 
-    <div>
-        @RenderBody()
-    </div>
-    <div class="footerSpace">
-
-    </div>
-    <footer class="footer fs-6 bg-dark mt-3">
-        <div class="container mx-auto text-white row">
-            <div class="col-3">
-                <div class="lh-1 fw-bold fs-4 my-3">
-                    關於Onique
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    品牌故事
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    店鋪資訊
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    聯絡我們
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="lh-1 fw-bold fs-4 my-3">
-                    購物相關
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    隱私權保護政策
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    退換貨說明
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    會員電子報
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="lh-1 fw-bold fs-4 my-3">
-                    官方社群
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    Facebook
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    Line
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    Instagram
-                </div>
-                <div class="lh-1 my-3 fs-12px">
-                    Youtube
-                </div>
-            </div>
-            <div class="col-3 mt-3">
-                <div>
-                    <img src="~/images/footer/logoen.png" />
-                </div>
-                <div class="row justify-content-center gap-3 mt-4">
-                    <div class="col-2">
-                        <img src="~/images/footer/fb_logo.png" />
-                    </div>
-                    <div class="col-2">
-                        <img src="~/images/footer/ig_logo.png" />
-                    </div>
-                    <div class="col-2">
-                        <img src="~/images/footer/line_logo.png" />
-                    </div>
-                    <div class="col-2">
-                        <img src="~/images/footer/youtube.png" />
-                    </div>
-                </div>
-            </div>
+    <div id="page-container">
+        <div id="content-wrap">
+            @RenderBody()
         </div>
-    </footer>
+        <footer id="footer" class="footer fs-6 bg-dark mt-3">
+            <div class="container mx-auto text-white row">
+                <div class="col-3">
+                    <div class="lh-1 fw-bold fs-4 my-3">
+                        關於Onique
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        品牌故事
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        店鋪資訊
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        聯絡我們
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="lh-1 fw-bold fs-4 my-3">
+                        購物相關
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        隱私權保護政策
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        退換貨說明
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        會員電子報
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="lh-1 fw-bold fs-4 my-3">
+                        官方社群
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        Facebook
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        Line
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        Instagram
+                    </div>
+                    <div class="lh-1 my-3 fs-12px">
+                        Youtube
+                    </div>
+                </div>
+                <div class="col-3 mt-3">
+                    <div>
+                        <img src="~/images/footer/logoen.png" />
+                    </div>
+                    <div class="row justify-content-center gap-3 mt-4">
+                        <div class="col-2">
+                            <img src="~/images/footer/fb_logo.png" />
+                        </div>
+                        <div class="col-2">
+                            <img src="~/images/footer/ig_logo.png" />
+                        </div>
+                        <div class="col-2">
+                            <img src="~/images/footer/line_logo.png" />
+                        </div>
+                        <div class="col-2">
+                            <img src="~/images/footer/youtube.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.js"></script>
@@ -184,37 +183,36 @@
 
                 let str = "";
                 str += `<ul class="navbar-nav">
-                                                <li class="nav-item dropdown" id="memberIcon">
-                                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">`;
+                                <li class="nav-item dropdown" id="memberIcon">
+                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">`;
                 if (datas.photoPath != null) {
                     str += `<img src="@Url.Content("~/images/uploads/members/")${datas.photoPath}" class="circle-size-35" />`
                 }
                 else {
-                    str += ` <img src="@Url.Content("~/images/header/user.png")" class="circle-size-35" />`
+                    str += `<img src="@Url.Content("~/images/header/user.png")" class="circle-size-35" />`
 
                 }
-                str += `
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li class="d-flex align-items-center mx-2">
-                                        <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
-                                        <a class="dropdown-item fs-12px" href="#">會員資料</a>
-                                    </li>
-                                    <li class="d-flex align-items-center mx-2">
-                                        <img src="@Url.Content("~/images/background/shopping-list.png")" class="width-16px" />
-                                        <a class="dropdown-item fs-12px" href="#">訂單查詢</a>
-                                    </li>
-                                    <li class="d-flex align-items-center mx-2">
-                                        <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
-                                        <a class="dropdown-item fs-12px" href="#">我的收藏</a>
-                                    </li>
-                                    <li class="d-flex align-items-center mx-2">
-                                                <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
-                                        <a class="dropdown-item fs-12px" asp-action="Logout" asp-controller="Home">會員登出</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>`;
+                str += `</button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li class="d-flex align-items-center mx-2">
+                                            <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" href="#">會員資料</a>
+                                        </li>
+                                        <li class="d-flex align-items-center mx-2">
+                                            <img src="@Url.Content("~/images/background/shopping-list.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" href="#">訂單查詢</a>
+                                        </li>
+                                        <li class="d-flex align-items-center mx-2">
+                                            <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" href="#">我的收藏</a>
+                                        </li>
+                                        <li class="d-flex align-items-center mx-2">
+                                                    <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" asp-action="Logout" asp-controller="Home">會員登出</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>`;
 
                 $("#memberIcon").html(str)
 
@@ -228,14 +226,14 @@
             const data = await response.json()
             let totalItems = data.toString()
             let str = `<img src="@Url.Content("~/images/header/shopping-cart.png")" />
-                               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
                                     ${totalItems}
                                     <span class="visually-hidden">unread messages</span>
                                 </span>`;
 
             $("#cartItems").append(str);
         }
-        
+
     </script>
     @if (TempData["AlertLogin"] != null)
     {
@@ -245,7 +243,7 @@
                 text: '您好!@TempData["AlertLogin"]',
                 icon: 'success',
                 confirmButtonColor: '#3C3C3C',
-                confirmButtonText:'確認'
+                confirmButtonText: '確認'
             })
         </script>
     }
