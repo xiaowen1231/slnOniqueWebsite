@@ -328,27 +328,27 @@
         loadStatusNow();
 
         //todo
-        //給予正確的選擇
+        //給予正確的選項
         
-        async function loadStatusOptions() {
-            const statusName=$("#orderStatusNow").val();
-            console.log(statusName)
-            const resoponse = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions")`)//todo 
-            const data = await resoponse.json()
-            console.log(data)
-            const options=data.map(option=>{
-               
-                
-                return (`<option>${option}</option>`)
-            })
+        //async function loadStatusOptions() {
+        //    const statusName=$("#orderStatusNow").val();
+        //    console.log(statusName)
+        //    const resoponse = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions?StatusName=")${statusName}`)//todo
+        //    const data = await resoponse.json()
+        //    console.log(data)
+        //    const options=data.map(option=>{
+        //       const{statusName,statusId}=option
+        //        console.log(option)
+        //        return (`<option value=${statusId}>${statusName}</option>`)
+        //    })
             
 
-            statusSel.innerHTML=options.join("");
-        }
+        //    statusSel.innerHTML=options.join("");
+        //}
 
-        statusSel.addEventListener('click',()=>{
-            loadStatusOptions();
-        })
+        //statusSel.addEventListener('click',()=>{
+        //    loadStatusOptions();
+        //})
 
 
 

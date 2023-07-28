@@ -15,7 +15,7 @@ namespace prjOniqueWebsite.Controllers
         public OrderApiController(OniqueContext context)
         {
             _context = context;
-            dao =new OrderDao(_context);
+            dao = new OrderDao(_context);
         }
         public IActionResult Index()
         {
@@ -54,12 +54,12 @@ namespace prjOniqueWebsite.Controllers
             }
             else
             {
-                data = query.Where(o => o.Name.Contains(keyWord)||o.StatusName.Contains(keyWord)||o.OrderId.ToString().Contains(keyWord)).ToList();
+                data = query.Where(o => o.Name.Contains(keyWord) || o.StatusName.Contains(keyWord) || o.OrderId.ToString().Contains(keyWord)).ToList();
 
             }
             return Json(data);
         }
-           
+
 
         public IActionResult orderProductDetail(int orderId)
         {
@@ -69,7 +69,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult orderShippingDetail(int orderId)
         {
-           OrderShippingDetailDto dto =dao.getShippingDetail(orderId);
+            OrderShippingDetailDto dto = dao.getShippingDetail(orderId);
             if (dto != null)
             {
                 return Json(dto);
@@ -78,9 +78,9 @@ namespace prjOniqueWebsite.Controllers
             {
                 return Content("無訂單資料"); // 如果找不到指定OrderId的資料，回傳NotFound
             }
-           
+
         }
-            
+
         /// <summary>
         /// 根據orderId傳回orderstatus
         /// </summary>
@@ -91,39 +91,24 @@ namespace prjOniqueWebsite.Controllers
             OrderStatusDto dto = dao.GetOrderStatus(orderId);
             return Json(dto);
         }
-
+        public IActionResult tags()
+        {
+            var tag = _context.Members.Select(c => c.Name).ToList();
+            return Json(tag);
+        }
 
         public IActionResult GetOrderStatusOptions(string StatusName)
         {
+
+            IEnumerable<OrderStatus> data = null;
+
             var query = _context.OrderStatus;
-
-            switch (StatusName)
+            if(StatusName== "待出貨")
             {
-                case "待出貨":
-                     query.Where(s => s.StatusName == "已出貨" || s.StatusName == "已取消").ToList();
-                    break;
-                case "已出貨":
-                     query.Where(s => s.StatusName == "已完成" || s.StatusName == "未取貨").ToList();
-                    break;
-                case "已完成":
-                      //todo
-                case "已取消":
-                case "退款中":
-                case "已退款":
-                case "未取貨":
-                default:
-                    break;
-
-
-
-
+                data=query.Where(c=>c.StatusName=="已出貨"||c.StatusName== "已取消").ToList();
             }
 
-            return Json(null);
-
-
+            return Json(data);
         }
-        //public IActionResult UpdateOrderStatus
-
     }
 }
