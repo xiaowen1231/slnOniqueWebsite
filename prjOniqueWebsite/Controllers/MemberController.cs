@@ -10,9 +10,11 @@ namespace prjOniqueWebsite.Controllers
     public class MemberController : Controller
     {
         private readonly OniqueContext _context;
-        public MemberController(OniqueContext context)
+        private readonly IWebHostEnvironment _environment;
+        public MemberController(OniqueContext context,IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public IActionResult Index()
@@ -70,34 +72,45 @@ namespace prjOniqueWebsite.Controllers
             return View(member);
         }
         [HttpPost]
-        public IActionResult Edit(MemberVM member ,int id)
+        public IActionResult Edit(MemberVM vm)
         {
-            var level = new MemberLevel();
-            var city = new Citys();
-            var area = new Areas();
-            var mem = _context.Members.Where(Members => Members.MemberId == id).FirstOrDefault();
+            var member = _context.Members.FirstOrDefault(m => m.MemberId == vm.MemberId);
 
-            mem.PhotoPath = $"MemberId_{id}.jpg";
-            mem.Name = member.Name;
-            mem.Password = member.Password;
-            if (mem.Email == member.Email && mem.Phone == member.Phone)
+            if (member != null)
             {
-
+                if (vm.Photo != null)
+                {
+                    string fileName = $"MemberId_{member.MemberId}.jpg";
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                    using(var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        vm.Photo.CopyTo(fileStream);
+                    }
+                }
+                member.Name = vm.Name;
             }
-            else
-            {
-                mem.Phone = member.Phone;
-                mem.Email = member.Email;
-            }
-            mem.DateOfBirth = Convert.ToDateTime(member.DateOfBirth);
-            mem.RegisterDate = Convert.ToDateTime(member.RegisterDate);
-            mem.MemberLevel = _context.MemberLevel.Where(c => c.MemberLevelName == level.MemberLevelName).Select(c => c.MemberLevelId).FirstOrDefault();
-            mem.Citys = _context.Citys.Where(c => c.CityName == city.CityName).Select(c => c.CityId).FirstOrDefault();
-            mem.Areas = _context.Areas.Where(c => c.AreaName == area.AreaName).Select(c => c.AreaId).FirstOrDefault();
-            mem.Address = member.Address;
-            _context.Members.Add(mem);
             _context.SaveChanges();
-            return View(mem);
+            //mem.PhotoPath = $"MemberId_{id}.jpg";
+            //mem.Name = member.Name;
+            //mem.Password = member.Password;
+            //if (mem.Email == member.Email && mem.Phone == member.Phone)
+            //{
+
+            //}
+            //else
+            //{
+            //    mem.Phone = member.Phone;
+            //    mem.Email = member.Email;
+            //}
+            //mem.DateOfBirth = Convert.ToDateTime(member.DateOfBirth);
+            //mem.RegisterDate = Convert.ToDateTime(member.RegisterDate);
+            //mem.MemberLevel = _context.MemberLevel.Where(c => c.MemberLevelName == level.MemberLevelName).Select(c => c.MemberLevelId).FirstOrDefault();
+            //mem.Citys = _context.Citys.Where(c => c.CityName == city.CityName).Select(c => c.CityId).FirstOrDefault();
+            //mem.Areas = _context.Areas.Where(c => c.AreaName == area.AreaName).Select(c => c.AreaId).FirstOrDefault();
+            //mem.Address = member.Address;
+            //_context.Members.Add(mem);
+            //_context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

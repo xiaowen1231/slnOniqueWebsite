@@ -18,5 +18,6 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string RegisterDate { get; set; }
         public string DateOfBirth { get; set; }
         public string PhotoPath { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }
