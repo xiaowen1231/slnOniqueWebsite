@@ -27,22 +27,17 @@ namespace prjOniqueWebsite.Controllers
             //                             on e.Areas equals a.AreaId
             //                             select new EmployeeCreateVM
             //                             {
-
-            //                                 //PhotoPath = e.PhotoPath,
-
-
             //                                 EmployeeLevel = el.EmployeeLevelName,
-
             //                                 Citys = c.CityName,
             //                                 Areas = a.AreaName,
-
-
             //                             }).FirstOrDefault();
+            //ViewBag.employeeLevel = employee.EmployeeLevel;
+            
 
             return View();
         }
         [HttpPost]
-        public IActionResult Create(EmployeeCreateVM vm)
+        public IActionResult Create(EmployeeVM vm)
         {
             //Employees employee = new Employees();
             //employee.EmployeeName = vm.EmployeeName;
@@ -51,15 +46,15 @@ namespace prjOniqueWebsite.Controllers
             //employee.Phone = vm.Phone;
             //employee.Email = vm.Email;
             //employee.Password = vm.Password;
-            //employee.Position = vm.Position ;
+            //employee.Position = vm.Position;
             //employee.RegisterDate = vm.RegisterDate;
             //employee.Citys = vm.Citys;
             //employee.Areas = vm.Areas;
             //employee.Address = vm.Address;
-            //_context.Add(db);
+            //_context.Add(employee);
             //_context.SaveChanges();
 
-            //return RedirectToAction("Index");
+            return RedirectToAction("Index");
             return null;
         }
 

@@ -2,7 +2,7 @@
 
 namespace prjOniqueWebsite.Models.ViewModels
 {
-    public class EmployeeCreateVM
+    public class EmployeeVM
     {
         [Required]
         public string EmployeeName { get; set; }

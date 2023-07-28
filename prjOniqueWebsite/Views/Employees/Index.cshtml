@@ -196,7 +196,7 @@
 
             const tableEmployeeList = data.map(item => {
                 const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item
-                const formattedDateOfBirth = formatDate(dateOfBirth);
+                const formattedDateOfBirth = formatDate(dateOfBirth);  //轉換型態
 
                 return (`
 
@@ -239,11 +239,7 @@
             return `${year}-${month}-${day}`;
         }
 
-        function openEmployeeEdit(employeeId) {
-            const url = '@Url.Action("Edit", "Employee")' + '?employeeId=' + employeeId; // 構造URL
-            window.location.href = url; // 導航到詳細頁面
-            console.log(employeeId)
-        }
+        
 
     </script>
 }
