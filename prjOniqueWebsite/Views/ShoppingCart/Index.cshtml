@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<prjOniqueWebsite.Models.Dtos.ShoppingCartDto>
+@{
     ViewData["Title"] = "查看購物車";
 }
 
@@ -36,85 +37,46 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <img src="../Images/Product/日系連身吊帶褲.jpg" alt="日系連身吊帶褲"
-                             class="width-150px rounded-3 shadow-sm">
-                    </td>
-                    <td>
-                        日系連身吊帶褲
-                    </td>
-                    <td>
-                        <select class="form-select form-select-sm w-50">
-                            <option value="">S</option>
-                            <option value="" selected="selected">M</option>
-                            <option value="">L</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select form-select-sm w-50">
-                            <option value="">白色</option>
-                            <option value="" selected="selected">藍色</option>
-                            <option value="">褐色</option>
-                        </select>
-                    </td>
-                    <td>
-                        <div class="d-flex">
-                            <div class="border border-dark-subtle text-center" style="width: 25px;">-</div>
-                            <div class="border border-dark-subtle text-center" style="width: 25px;">1</div>
-                            <div class="border border-dark-subtle text-center" style="width: 25px;">+</div>
-                        </div>
-                    </td>
-                    <td>???</td>
+                @{
+                    foreach(var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Content("~/images/uploads/products/")@item.ProductStock.PhotoPath" alt="@item.Product.ProductName"
+                                     class="w-120-h-120 rounded-3 shadow-sm">
+                            </td>
+                            <td>
+                                @item.Product.ProductName
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm w-50">
+                                    
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm w-50">
+                                    
+                                </select>
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <div class="border border-dark-subtle text-center cursor-pointer btnReduce" style="width: 25px;" >-</div>
+                                    <input type="text" value="@item.ShoppingCart.OrderQuantity" disabled id="orderQty" class="width-50px text-center" />
+                                    <div class="border border-dark-subtle text-center cursor-pointer btnIncrease" style="width: 25px;" >+</div>
+                                </div>
+                            </td>
+                            <td>???</td>
 
-                    <td>
-                        <a href="">
-                            <div class="circle-size-25">
-                                <img src="../Images/ShoppingCart/trash.png" alt="">
-                            </div>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <img src="../Images/Product/日系連身吊帶褲.jpg" alt="日系連身吊帶褲"
-                             class="width-150px rounded-3 shadow-sm">
-                    </td>
-                    <td>
-                        日系連身吊帶褲
-                    </td>
-                    <td>
-                        <select class="form-select form-select-sm w-50">
-                            <option value="">S</option>
-                            <option value="" selected="selected">M</option>
-                            <option value="">L</option>
-                        </select>
-
-                    </td>
-                    <td>
-                        <select class="form-select form-select-sm w-50">
-                            <option value="">白色</option>
-                            <option value="" selected="selected">藍色</option>
-                            <option value="">褐色</option>
-                        </select>
-                    </td>
-                    <td>
-                        <form id='myform' method='POST' action='#'>
-                            <label for=""></label><input type='button' value='-' class='qtyminus' field='quantity' />
-                            <input type='text' name='quantity' value='0' class='qty' />
-                            <input type='button' value='+' class='qtyplus' field='quantity' />
-                        </form>
-                    </td>
-                    <td>???</td>
-
-                    <td>
-                        <a href="">
-                            <div class="circle-size-25">
-                                <img src="../Images/ShoppingCart/trash.png" alt="">
-                            </div>
-                        </a>
-                    </td>
-                </tr>
+                            <td>
+                                <a href="">
+                                    <div class="circle-size-25">
+                                        <img src="@Url.Content("~/images/icon/delete.png")" />
+                                    </div>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
             </tbody>
         </table>
     </div>
@@ -137,10 +99,22 @@
 }
 @section Scripts{
     <script>
-        $(document).ready(function(){
-            const viewHeight = parseInt($(".returnView").css("height"))
-            const screenHeight = $(window).height();
-            if(viewHeight)
+        $(".btnReduce").click(function () {
+            let orderQty = Number($(this).nextAll('input').val())
+            if (orderQty <= 1) {
+                orderQty = 1
+                $(this).nextAll('input').val(orderQty.toString());
+            }
+            else {
+                orderQty--
+                $(this).nextAll('input').val(orderQty.toString());
+            }
+        })
+
+        $(".btnIncrease").click(function () {
+            let orderQty = Number($(this).prevAll('input').val())
+            orderQty++
+            $(this).prevAll('input').val(orderQty)
         })
     </script>
 }

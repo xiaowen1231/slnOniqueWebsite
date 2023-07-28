@@ -119,7 +119,7 @@ namespace prjOniqueWebsite.Controllers
 
             }
 
-            return Json(/*data*/null);
+            return Json(data);
 
 
         }
