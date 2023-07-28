@@ -152,6 +152,7 @@ namespace prjOniqueWebsite.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        //GET BgCreateColor
         public IActionResult BgCreateColor()
         {
             return View();
@@ -195,7 +196,6 @@ namespace prjOniqueWebsite.Controllers
             ViewBag.SizeName = query.SizeName;
             ViewBag.ColorName = query.ColorName;
             return View();
-
         }
         private bool ProductsExists(int id)
         {
