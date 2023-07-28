@@ -41,6 +41,18 @@ namespace prjOniqueWebsite.Controllers
             List<ProductSizes> dto = query.ToList();
             return Json(dto);
         }
+        public IActionResult LoadColor()
+        {
+            var Color = from c in _context.ProductColors
+                        select c;
+            return Json(Color);
+        }
+        public IActionResult LoadSize()
+        {
+            var Size = from s in _context.ProductSizes
+                       select s;
+            return Json(Size);
+        }
         public IActionResult ShowBgProductManageList()
         {
             var query = from p in _context.Products
@@ -59,24 +71,6 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(dto);
         }
-        public IActionResult ShowBgColorSizeSetting()
-        {
-            var query = from psd in _context.ProductStockDetails
-                        join p in _context.Products
-                        on psd.ProductId equals p.ProductId
-                        join c in _context.ProductColors
-                        on psd.ColorId equals c.ColorId
-                        join s in _context.ProductSizes
-                        on psd.SizeId equals s.SizeId
-                        select new BgProductColorSizeSettingDto
-                        {
-                            ProductId = p.ProductId,
-                            ProductName = p.ProductName,
-                            ColorName = c.ColorName,
-                            SizeName = s.SizeName
-                        };
-
-            return Json(query);
-        }
+        
     }
 }

@@ -69,5 +69,13 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(cart.Count);
         }
+        public IActionResult CartList()
+        {
+            string json = HttpContext.Session.GetString("Login");
+            Members member = JsonSerializer.Deserialize<Members>(json);
+            var cart = dao.CartItems(member);
+            
+            return Json(cart);
+        }
     }
 }

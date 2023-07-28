@@ -3,7 +3,7 @@
     ViewData["Title"] = "查看購物車";
 }
 
-<div class="container returnView">
+<div class="container">
     <div>
         <div class="status d-flex justify-content-center gap-5 mb-3 py-4 border-bottom border-secondary">
             <div class="active">
@@ -23,52 +23,60 @@
         </div>
     </div>
     <div class="border border-dark-subtle shadow rounded-3 p-2">
-        <table class="table  align-middle">
+        <table class="table table-borderless table-striped align-middle text-center" data-aos="fade-up">
             <thead class="table-dark">
                 <tr>
-                    <th width="250">商品圖片</th>
-                    <th width="250">商品名稱</th>
-                    <th>尺寸</th>
+                    <th>商品圖片</th>
+                    <th>商品名稱</th>
                     <th>顏色</th>
-                    <th width="150">數量</th>
+                    <th>尺寸</th>
+                    <th>數量</th>
                     <th>小計</th>
-
                     <th>刪除</th>
                 </tr>
             </thead>
             <tbody>
                 @{
-                    foreach(var item in Model)
+                    foreach (var item in Model)
                     {
+                        decimal subtotal = item.Product.Price * item.ShoppingCart.OrderQuantity;
                         <tr>
                             <td>
-                                <img src="@Url.Content("~/images/uploads/products/")@item.ProductStock.PhotoPath" alt="@item.Product.ProductName"
-                                     class="w-120-h-120 rounded-3 shadow-sm">
+                                <input type="hidden" value="@item.Product.ProductId" id="inputProductId">
+                                <a href="@Url.Content("~/product/detail/")@item.Product.ProductId">
+                                    <img src="@Url.Content("~/images/uploads/products/")@item.ProductStock.PhotoPath" alt="@item.Product.ProductName"
+                                         class="w-120-h-120 rounded-3 shadow-sm">
+                                </a>
                             </td>
                             <td>
-                                @item.Product.ProductName
+                                <a href="@Url.Content("~/product/detail/")@item.Product.ProductId" class="link-underline-light link-dark">
+                                    @item.Product.ProductName
+                                </a>
+
                             </td>
                             <td>
-                                <select class="form-select form-select-sm w-50">
-                                    
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-select form-select-sm w-50">
-                                    
-                                </select>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <div class="border border-dark-subtle text-center cursor-pointer btnReduce" style="width: 25px;" >-</div>
-                                    <input type="text" value="@item.ShoppingCart.OrderQuantity" disabled id="orderQty" class="width-50px text-center" />
-                                    <div class="border border-dark-subtle text-center cursor-pointer btnIncrease" style="width: 25px;" >+</div>
+                                <div>
                                 </div>
                             </td>
-                            <td>???</td>
+                            <td>
+                                <div>
+                                </div>
+                            </td>
+                            <td class="mx-auto">
+                                <div class="d-flex justify-content-center">
+                                    <div class="border border-dark-subtle text-center cursor-pointer btnReduce" style="width: 25px;">-</div>
+                                    <input type="text" value="@item.ShoppingCart.OrderQuantity" disabled id="orderQty" class="width-50px text-center" />
+                                    <div class="border border-dark-subtle text-center cursor-pointer btnIncrease" style="width: 25px;">+</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div id="price">
+                                    @subtotal.ToString("0")
+                                </div>
+                            </td>
 
                             <td>
-                                <a href="">
+                                <a href="" class="d-flex justify-content-center">
                                     <div class="circle-size-25">
                                         <img src="@Url.Content("~/images/icon/delete.png")" />
                                     </div>
@@ -80,14 +88,14 @@
             </tbody>
         </table>
     </div>
-    <div class="container text-center">
+    <div class="container text-center m-4">
         <div class="py-4">
             <span class="dollarSign">小計</span>
             <span class="text-danger fw-bold fs-5">???</span>
         </div>
-        <div class="p-2">
+        <div class="mt-5">
             <input type="button" value="繼續購物" class="btn btn-outline-dark" style="width: 150px;">
-            <input type="submit" value="結帳" class="btn btn-danger" style="width: 150px;">
+            <input type="submit" value="結帳" class="btn btn-dark" style="width: 150px;">
         </div>
     </div>
 </div>
@@ -99,22 +107,6 @@
 }
 @section Scripts{
     <script>
-        $(".btnReduce").click(function () {
-            let orderQty = Number($(this).nextAll('input').val())
-            if (orderQty <= 1) {
-                orderQty = 1
-                $(this).nextAll('input').val(orderQty.toString());
-            }
-            else {
-                orderQty--
-                $(this).nextAll('input').val(orderQty.toString());
-            }
-        })
 
-        $(".btnIncrease").click(function () {
-            let orderQty = Number($(this).prevAll('input').val())
-            orderQty++
-            $(this).prevAll('input').val(orderQty)
-        })
     </script>
 }

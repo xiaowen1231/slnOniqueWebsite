@@ -3,6 +3,7 @@ using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
+using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Models.Repositories
 {
@@ -134,10 +135,28 @@ namespace prjOniqueWebsite.Models.Repositories
             _context.SaveChanges();
         }
 
-        public List<ShoppingCart> CartItems(Members member)
+        public List<ShoppingCartDto> CartItems(Members member)
         {
-            var carts = _context.ShoppingCart.Where(s => s.MemberId == member.MemberId).ToList();
-            return carts;
+            var cart = from s in _context.ShoppingCart
+                       join psd in _context.ProductStockDetails
+                       on s.StockId equals psd.StockId
+                       join p in _context.Products
+                       on psd.ProductId equals p.ProductId
+                       join c in _context.ProductColors
+                       on psd.ColorId equals c.ColorId
+                       join ps in _context.ProductSizes
+                       on psd.SizeId equals ps.SizeId
+                       where s.MemberId == member.MemberId
+                       select new ShoppingCartDto
+                       {
+                           Product = p,
+                           ProductStock = psd,
+                           ShoppingCart = s,
+                           Sizes = ps,
+                           Colors = c
+                       };
+
+            return cart.ToList();
         }
     }
 }
