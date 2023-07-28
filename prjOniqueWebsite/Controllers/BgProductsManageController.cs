@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using prjOniqueWebsite.Models.Dtos;
+using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
 
@@ -173,6 +174,28 @@ namespace prjOniqueWebsite.Controllers
             {
                 return Content(ex.Message);
             }
+        }
+        public IActionResult BgColorSizeSettingCreate()
+        {
+            BgProductColorSizeSettingDto query = (from psd in _context.ProductStockDetails
+                                                  join p in _context.Products
+                                                  on psd.ProductId equals p.ProductId
+                                                  join c in _context.ProductColors
+                                                  on psd.ColorId equals c.ColorId
+                                                  join s in _context.ProductSizes
+                                                  on psd.SizeId equals s.SizeId
+                                                  select new BgProductColorSizeSettingDto
+                                                  {
+                                                      ProductId = p.ProductId,
+                                                      ProductName = p.ProductName,
+                                                      ColorName = c.ColorName,
+                                                      SizeName = s.SizeName
+                                                  }).FirstOrDefault();
+            ViewBag.ProductName = query.ProductName;
+            ViewBag.SizeName = query.SizeName;
+            ViewBag.ColorName = query.ColorName;
+            return View();
+
         }
         private bool ProductsExists(int id)
         {
