@@ -4,47 +4,46 @@
     ViewData["Title"] = "會員登入";
 }
 
-<form method="post" class="myBackground">
-    <div class="myContainer container border border-radius bg-opacity-50 bg-dark my-5">
-        <div class=" row row-cols-1 text-center mt-4 ">
-            <div class="col mb-4">
-                <div class="fs-2 fw-bold text-white">會員登入</div>
+<form method="post">
+    <div class="width-1000px mx-auto p-2 border rounded d-flex shadow" data-aos="zoom-in">
+        <div class="w-450-h-450">
+            <img src="@Url.Content("~/images/memberphoto/loginpage.jpg")" class="rounded" />
+        </div>
+        <div class="flex-fill p-2">
+            <div class="fs-5 fw-bold border-bottom p-2">
+                會員登入
             </div>
-            <div class="container col-8 p-2">
-                <div class="my-2 d-flex align-items-center justify-content-center">
-                    <div class="text-end mx-2 fw-bold text-white width-120px">會員帳號 :</div>
-                    <div>
-                        <input type="text" class="form-control" name="Email" value="Asa@gmail.com">
-                    </div>
+            <div class="fw-bold p-2 mt-2">
+                帳號:
+            </div>
+            <div class="p-2">
+                <input type="text" class="form-control" name="Email" value="Asa@gmail.com">
+            </div>            
+            <div class="fw-bold p-2 mt-2">
+                密碼:
+            </div>
+            <div class="p-2">
+                <input type="password" class="form-control" name="Password">
+            </div>
+            <div class="d-flex justify-content-between p-2">
+                <div class="p-2">
+                    <input type="button" value="忘記密碼" class="btn btn-outline-dark fw-bold">
                 </div>
-                <div class="my-2 d-flex align-items-center justify-content-center">
-                    <div class="text-end mx-2 fw-bold text-white width-120px">會員密碼 :</div>
-                    <div>
-                        <input type="text" class="form-control" name="Password">
-                    </div>
-                </div>
-                <div class="col mb-4 mt-3">
+                <div class="p-2">
+                    <input type="button" value="註冊" class="btn btn-outline-dark fw-bold">
                     <input type="submit" value="登入" id="Login" class="btn btn-dark fw-bold">
-                </div>
-                <div class="text-center">
-                    <input type="button" value="註冊新會員" class="btn btn-outline-dark fw-bold mx-3">
-                    <input type="button" value="忘記密碼" class="btn btn-outline-dark fw-bold mx-3">
                 </div>
             </div>
         </div>
     </div>
 </form>
-
 @section Styles{
     <style>
-        .myBackground {
-            height: calc(100vh - 319px)
-        }
-
-        .myContainer {
-            width: 500px;
-            height: 600px;
-            border-radius: 15px;
+        form{
+            position:fixed;
+            top:50%;
+            transform:translate(-50%,-59%);
+            left:50%;
         }
     </style>
 }
