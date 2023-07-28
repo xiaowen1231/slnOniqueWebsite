@@ -6,7 +6,7 @@
        
         public string StatusName { get; set; }
        
-        public int PaymentMethodId { get; set; }
+        public string PaymentMethodName { get; set; }
 
         public int OrderId { get; set; }
 

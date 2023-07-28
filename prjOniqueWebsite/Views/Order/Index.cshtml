@@ -293,9 +293,9 @@
                         const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
 
                         tableOrdersList += `
-                                                                        <tr>
-                                                                        <td>
-                                                                        <div class="d-flex gap-2">`;
+                                        <tr>
+                                        <td>
+                                        <div class="d-flex gap-2">`;
                         if (statusName == "待出貨") {
                             tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
                                                                                                                             <div>${statusName}</div>`
@@ -325,23 +325,23 @@
                                                                                                                                     <div>${statusName}</div>`
                         }
                         tableOrdersList += `
-                                                                        </div>
-                                                                        </td>
-                                                                        <td>
-                                                                        <span>${orderId}</span>
-                                                                        </td>
-                                                                        <td>
-                                                                        <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
-                                                                        <span>${name}</span>
-                                                                        </td>
-                                                                        <td>2023/07/16</td>
-                                                                        <td>${paymentMethodName}</td>
-                                                                        <td>
-                                                                            <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                                                        </div>
-                                                                        </a>
-                                                                        </td>
-                                                                        </tr>`
+                                            </div>
+                                            </td>
+                                            <td>
+                                            <span>${orderId}</span>
+                                            </td>
+                                            <td>
+                                            <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
+                                            <span>${name}</span>
+                                            </td>
+                                            <td>2023/07/16</td>
+                                            <td>${paymentMethodName}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                            </div>
+                                            </a>
+                                            </td>
+                                            </tr>`
                     })
 
                     $("#orderTable").html(tableOrdersList)

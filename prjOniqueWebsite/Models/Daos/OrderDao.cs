@@ -102,8 +102,7 @@ namespace prjOniqueWebsite.Models.Daos
                              OrderId = o.OrderId,
                              StatusName = os.StatusName,
                              StatusId = os.StatusId,
-                             PaymentMethodId = pm.PaymentMethodId,
-
+                             PaymentMethodName=pm.PaymentMethodName  
                          };
 
             return query.FirstOrDefault();
@@ -131,7 +130,7 @@ namespace prjOniqueWebsite.Models.Daos
                              OrderId = o.OrderId,
                              StatusName = os.StatusName,
                              StatusId = os.StatusId,
-                             PaymentMethodId = pm.PaymentMethodId,
+                              PaymentMethodName = pm.PaymentMethodName
 
                          };
 

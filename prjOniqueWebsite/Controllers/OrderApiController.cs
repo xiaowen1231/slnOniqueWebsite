@@ -96,17 +96,49 @@ namespace prjOniqueWebsite.Controllers
             var tag = _context.Members.Select(c => c.Name).ToList();
             return Json(tag);
         }
-
-        public IActionResult GetOrderStatusOptions(string StatusName)
+        /// <summary>
+        /// 依照orderId找出目前的statusName，再給予正確的statusName
+        /// </summary>
+        /// <param name="OrderId"></param>
+        /// <returns></returns>
+        public IActionResult GetOrderStatusOptions(int OrderId)
         {
 
-            IEnumerable<OrderStatus> data = null;
-
+            var statusNow = dao.GetOrderStatus(OrderId).StatusName;
             var query = _context.OrderStatus;
-            if(StatusName== "待出貨")
+            List<OrderStatus> data = null;
+
+            if (statusNow == "待出貨")
             {
-                data=query.Where(c=>c.StatusName=="已出貨"||c.StatusName== "已取消").ToList();
+                data = query.Where(c => c.StatusName == "已出貨" || c.StatusName == "已取消").ToList();
             }
+            if (statusNow == "已出貨")
+            {
+                data = query.Where(c => c.StatusName == "未取貨" || c.StatusName == "已完成").ToList();
+            }
+
+
+            if (statusNow == "已完成")
+            {
+                data = query.Where(c => c.StatusName == "退款中").ToList();
+            }
+            if (statusNow == "已取消")
+            {
+                data = query.Where(c => c.StatusName == "退款中").ToList();
+            }
+            if (statusNow == "退款中")
+            {
+                data = query.Where(c => c.StatusName == "已退款").ToList();
+            }
+            if (statusNow == "已退款")
+            {
+                data = query.Where(c => c.StatusName == "已完成").ToList();
+            }
+            if (statusNow == "未取貨")
+            {
+                data = null;
+            }
+
 
             return Json(data);
         }
