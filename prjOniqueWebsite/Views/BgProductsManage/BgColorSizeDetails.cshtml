@@ -28,6 +28,7 @@
         </div>
         <div class="container d-flex my-2">
             <div class="p-4">
+                <input type="hidden" value="@Model.products.ProductId" id="productId" />
                 <div class="d-flex p-2 align-items-center">
                     <div class="text-center fw-bold">商品名稱 :</div>
                     <div class="mx-2">@Model.products.ProductName</div>
@@ -43,17 +44,20 @@
                 <div class="d-flex p-2 align-items-center my-2">
                     <div class="fw-bold text-center">商品尺寸 :</div>
                     <div class="mx-2">
-                        <select class="form-select" id="selectSize">
-                            <option value=""></option>
+                        <select class="form-select" id="selectSize">                            
                         </select>
                     </div>
+                </div>
+                <div class="d-flex p-2 align-items-center mx-2">
+                    <div class="text-center fw-bold">庫存數量:</div>
+                    <div class="text-danger mx-4" id="stockQty"></div>
                 </div>
                 <div class="d-flex p-2 align-items-center  mx-3">
                     <div class="text-center fw-bold">庫存數 :</div>
                     <div>
-                        <input type="text" class="form-control mx-2" id="stockQty">
+                        <input type="text" class="form-control mx-2">
                     </div>
-                </div>
+                </div>                
                 <div class="text-center p-4">
                     <div>
                         <input type="button" class="btn btn-outline-dark fw-bold mx-4" value="取消">
@@ -63,6 +67,7 @@
             </div>
             <div class="col-5 container p-3">
                 <img src="@Url.Content("~/images/uploads/products/")@Model.products.PhotoPath" class="rounded img-thumbnail" id="productPhoto"/>
+                <input type="hidden" id="stockId" />
                 <input type="file" class="form-control my-4">
             </div>
         </div>
@@ -78,14 +83,14 @@
         loadColor();
 
         async function loadColor(){
-            const response = await fetch(`@Url.Content("~/porductapi/GetStockColor/")${productId}`)
+            const response = await fetch(`@Url.Content("~/productapi/GetStockColor/")${productId}`)
             const datas = await response.json();
 
             const colors = datas.map(color=>{
                 const{colorId,colorName} = color;
                 return `<option value="${colorId}">${colorName}</option>`
             })
-            SelectColor.innerHTML = colors.join("")
+            selectColor.innerHTML = colors.join("")
             loadSize();
         }
 
@@ -98,22 +103,26 @@
                 return `<option value="${sizeId}">${sizeName}</option>`
             })
             selectSize.innerHTML = sizes.join("")
-           loadProductPhoto()
+            loadDetails()
            }
             selectColor.addEventListener('change',function(){
                 loadSize()
             })
             selectSize.addEventListener('change',function(){
-                loadProductPhoto()
+                loadDetails()
             })
 
-            async function loadProductPhoto(){
+        async function loadDetails() {
                 const colorId = $("#selectColor").val()
-                const sizeId = $("$selectSize").val()
-                console.log(prodcutId,colorId,sizeId)
-            }
+                const sizeId = $("#selectSize").val()
+                console.log(productId,colorId,sizeId,)
+                const response = await fetch(`@Url.Content("~/ProductApi/GetStockDetail?")productId=${productId}&colorId=${colorId}&sizeId=${sizeId}`)
+                const psd = await response.json()
+                const {photoPath,stockId,quantity}=psd
+                $("#productPhoto").attr("src",`@Url.Content("~/images/uploads/products/")${photoPath}`)
+                $("#stockQty").text(`${quantity}`)
+                $("#stockId").val(`${stockId}`)            
         }
-        }
+        
     </script>
-
 }

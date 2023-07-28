@@ -118,7 +118,7 @@ namespace prjOniqueWebsite.Models.Daos
             
             
 
-        public List<OrderStatusDto> GetAllOrderStatus()
+        public IQueryable<OrderStatusDto> GetAllOrderStatus()
         {
             var status = from o in _context.Orders
                          join os in _context.OrderStatus
@@ -135,7 +135,7 @@ namespace prjOniqueWebsite.Models.Daos
 
                          };
 
-            return status.ToList();
+            return status;
 
         }
     }

@@ -1,10 +1,10 @@
-﻿
+﻿@model prjOniqueWebsite.Models.DTOs.BgProductColorSizeSettingDto
 @{
     ViewData["Title"] = "BgColorSizeSetting";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
-
 <div class="container d-flex p-3 justify-content-center">
+    <input type="hidden" id="productId" />
     <div class="col-2" style="margin-left: 8%;">
         <div class="text-center my-2">
             <div class=" border p-3 rounded-4 ">
@@ -26,36 +26,25 @@
         <div class="container justify-content-center text-center">
             <div class="align-items-center fs-3 fw-bold border-bottom p-2">尺寸、顏色設定</div>
         </div>
-        <div class="my-3">
+        <div class="my-3" id="colorsizeTable">
             <div class="d-flex p-2 align-items-center text-center my-2" style="font-size: 18px; margin-left: 30%;">
-                <div class="text-center fw-bold">商品名稱 :</div>
-                <div class="mx-2">不規則條紋上衣</div>
+                <div class="text-center fw-bold" id="productName">商品名稱 :</div>
+                <input type="text" value="@ViewBag.ProductName" />
             </div>
             <div class="d-flex p-2 align-items-center my-2" style="font-size: 18px; margin-left: 30%;">
                 <div class="fw-bold text-center">商品尺寸 :</div>
-                <div class="mx-2">
+                <div class="mx-2" id="selectSize">
                     <select class="form-select">
-                        <option>請選擇</option>
-                        <option>S</option>
-                        <option>M</option>
-                        <option>L</option>
-                        <option>XL</option>
+                        <option value="@Model.SizeName"></option>
                     </select>
                 </div>
             </div>
             <div class="d-flex p-2 align-items-center my-2" style="font-size: 18px; margin-left: 30%;">
                 <div class="fw-bold text-center">商品顏色 :</div>
                 <div class="mx-2">
-                    <select class="form-select">
-                        <option>請選擇</option>
-                        <option>黑色</option>
-                        <option>藍灰色</option>
-                        <option>綠色</option>
-                        <option>灰色</option>
-                        <option>黑色</option>
-                        <option>棕色</option>
-                        <option>米色</option>
-                    </select>
+                    <select class="form-select" id="selectColor">
+                        <option value="@Model.ColorName"></option>
+                        </select>
                 </div>
             </div>
         </div>
@@ -67,3 +56,35 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        const colorsizeTable = document.querySelector("#colorsizeTable")        
+        load()
+        async function load()
+        {
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowBgColorSizeSetting")`)
+            const datas = await response.json()
+            console.log(datas)
+
+            const setting = datas.map(item=>{
+                const {productName,colorName,sizeName} = item
+                return(`
+                <div id="productName">
+                    <div>${productName}</div>
+                </div>
+                <div id="selectSize">
+                    <select>
+                        <option>${sizeNmae}</option>
+                    </select>
+                </div>
+                <div id="selectColor">
+                    <select>
+                        <option>${colorName}</option>
+                    </select>
+                </div>
+                `)
+            })
+            colorsizeTable.innerHTML = setting.join("")
+        }
+    </script>
+}

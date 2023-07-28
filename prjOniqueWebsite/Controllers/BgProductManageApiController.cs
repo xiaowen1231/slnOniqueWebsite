@@ -59,22 +59,21 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(dto);
         }
-        public IActionResult ShowBgColorSizeSetting(int id=1)
+        public IActionResult ShowBgColorSizeSetting()
         {
-            var query = from p in _context.Products
-                        join psd in _context.ProductStockDetails
-                        on p.ProductId equals psd.ProductId
+            var query = from psd in _context.ProductStockDetails
+                        join p in _context.Products
+                        on psd.ProductId equals p.ProductId
                         join c in _context.ProductColors
                         on psd.ColorId equals c.ColorId
                         join s in _context.ProductSizes
                         on psd.SizeId equals s.SizeId
-                        where p.ProductId == id
                         select new BgProductColorSizeSettingDto
                         {
-                            ProductId = psd.ProductId,
+                            ProductId = p.ProductId,
                             ProductName = p.ProductName,
-                            ColorId = psd.ColorId,
-                            SizeId = psd.SizeId,
+                            ColorName = c.ColorName,
+                            SizeName = s.SizeName
                         };
 
             return Json(query);
