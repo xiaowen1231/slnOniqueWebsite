@@ -4,7 +4,8 @@
     Layout = @Url.Content("~/Views/Shared/_Layout_Background.cshtml");
 }
 
-<form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post">
+<form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="MemberId" value="@Model.MemberId" />
     <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">編輯會員</div>
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
@@ -12,7 +13,7 @@
                 <img src="~/images/uploads/members/@Model.PhotoPath"  /> 
             </div>
             <div>
-                <input type="file" name="" id="" class="form-control my-5" value="">
+                <input type="file" name="Photo" id="Photo" class="form-control my-5" />
             </div>
         </div>
         <div class=" col-8 border mx-2">
@@ -148,7 +149,7 @@
 
                 <div class="row justify-content-around p-5">
                     <div class="text-center ">
-                        @Html.ActionLink("編輯會員", "index","member", "",new {@class="btn btn-dark" })
+                        <input type="submit" value="編輯會員" class="btn btn-dark" />
                         @Html.ActionLink("返回會員管理", "index","member", "",new {@class="btn btn-outline-dark" })
                     </div>
                 </div>
