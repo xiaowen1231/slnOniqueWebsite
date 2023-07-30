@@ -19,7 +19,10 @@ namespace prjOniqueWebsite.Controllers
         [TypeFilter(typeof(MemberVerify))]
         public IActionResult Index()
         {
-            return View();
+            string json = HttpContext.Session.GetString("Login");
+            Members member = JsonSerializer.Deserialize<Members>(json);
+            List<ShoppingCartDto> cart = _dao.CartItems(member);
+            return View(cart);
         }
     }
 }
