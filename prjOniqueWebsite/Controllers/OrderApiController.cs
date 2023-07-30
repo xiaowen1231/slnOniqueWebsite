@@ -97,7 +97,8 @@ namespace prjOniqueWebsite.Controllers
             return Json(tag);
         }
         /// <summary>
-        /// 依照orderId找出目前的statusName，再給予正確的statusName
+        /// 依照orderId找出目前的statusName，再給予依照商業邏輯正確的statusName的選擇，傳回的是選項，不是order的資料
+        /// 要把pay的方式列入考慮
         /// </summary>
         /// <param name="OrderId"></param>
         /// <returns></returns>
@@ -105,8 +106,24 @@ namespace prjOniqueWebsite.Controllers
         {
 
             var statusNow = dao.GetOrderStatus(OrderId).StatusName;
+            var paymentMethodNow = dao.GetOrderStatus(OrderId).PaymentMethodName;
+            var orderStatus = from o in _context.Orders
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        where o.OrderId == OrderId
+                        select new OrderStatusDto
+                        {
+                            OrderId = o.OrderId,
+                            StatusName = os.StatusName,
+                            PaymentMethodName = pm.PaymentMethodName,
+                            StatusId = os.StatusId
+                        };
             var query = _context.OrderStatus;
-            List<OrderStatus> data = null;
+
+            List<OrderStatus> data=null;
+
 
             if (statusNow == "待出貨")
             {
@@ -122,9 +139,14 @@ namespace prjOniqueWebsite.Controllers
             {
                 data = query.Where(c => c.StatusName == "退款中").ToList();
             }
-            if (statusNow == "已取消")
+            if (statusNow == "已取消" && paymentMethodNow != "貨到付款")
             {
                 data = query.Where(c => c.StatusName == "退款中").ToList();
+            }
+            
+            if(statusNow == "已取消" && paymentMethodNow == "貨到付款")
+            {
+                data = null;
             }
             if (statusNow == "退款中")
             {
@@ -134,9 +156,13 @@ namespace prjOniqueWebsite.Controllers
             {
                 data = query.Where(c => c.StatusName == "已完成").ToList();
             }
-            if (statusNow == "未取貨")
+            if (statusNow == "未取貨" && paymentMethodNow == "貨到付款")
             {
-                data = null;
+                data = query.Where(c => c.StatusName == "已取消").ToList();
+            }
+            if (statusNow == "未取貨" && paymentMethodNow != "貨到付款")
+            {
+                data = query.Where(c => c.StatusName == "退款中").ToList();
             }
 
 

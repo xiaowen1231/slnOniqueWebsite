@@ -233,9 +233,14 @@
                 orderDate, shippingDate, completionDate } = data
 
             orderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19)
+            shippingDate = shippingDate == null ? "商品尚未出貨" : shippingDate
             shippingDate = shippingDate.substring(0, 10) + " " + shippingDate.substring(11, 19)
             completionDate = completionDate == null ? "訂單尚未完成" : completionDate;
             completionDate = completionDate.substring(0, 10) + " " + completionDate.substring(11, 19)
+            
+
+           
+            
 
 
             shippingDetail =
@@ -329,38 +334,31 @@
         })
 
         const OrderId = $("#orderId").val()
-        //statusSel.addEventListener('click', () => {
-        //    ;
-        //})
-
-           
-
-
+        
         async function loadStatusOptions(OrderId) {
 
             const response = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions?OrderId=")${OrderId}`)//todo
             const data = await response.json()
             let statusSelection = "";
             console.log(data)
+            if(data==null){
+                statusSelection = `<option>沒有可選擇的選項</option>`;
+            }
+            if(data!=null){
             data.map(option => {
-                const { statusId, statusName } = option
+               
+                const {orderId, statusId, statusName,paymentMethodName } = option
+                console.log(statusName)
+                
                 statusSelection += `<option value="${statusId}">${statusName}</option>`;
                 console.log(statusSelection)
                 //return (`<option value="${statusId}">${statusName}</option>`)
             })
+
+            }
             $("#statusSel").html(statusSelection);
 
         }
-
-
-
-
-
-
-
-
-
-
 
 
     </script>
