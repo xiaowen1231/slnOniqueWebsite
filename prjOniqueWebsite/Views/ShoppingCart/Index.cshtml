@@ -40,9 +40,11 @@
                     </thead>
                     <tbody>
                         @{
+                            decimal total = 0;
                             foreach (var item in Model)
                             {
                                 decimal subtotal = item.Product.Price * item.ShoppingCart.OrderQuantity;
+                                total += subtotal;
                                 <tr>
                                     <td>
                                         <input type="hidden" value="@item.Product.ProductId" id="inputProductId">
@@ -59,21 +61,25 @@
                                     </td>
                                     <td>
                                         <div>
+                                            @item.Colors.ColorName
                                         </div>
                                     </td>
                                     <td>
                                         <div>
+                                            @item.Sizes.SizeName
                                         </div>
                                     </td>
                                     <td class="mx-auto">
                                         <div class="d-flex justify-content-center">
                                             <div class="border border-dark-subtle text-center cursor-pointer btnReduce" style="width: 25px;">-</div>
+                                            <input type="hidden" name="stockId" value="@item.ProductStock.StockId" />
                                             <input type="text" value="@item.ShoppingCart.OrderQuantity" disabled id="orderQty" class="width-50px text-center" />
+                                            <input type="hidden" name="shoppingCartId" value="@item.ShoppingCart.Id" />
                                             <div class="border border-dark-subtle text-center cursor-pointer btnIncrease" style="width: 25px;">+</div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div id="price">
+                                        <div class="price">
                                             @subtotal.ToString("0")
                                         </div>
                                     </td>
@@ -92,9 +98,9 @@
                 </table>
             </div>
             <div class="container text-center m-4">
-                <div class="py-4">
-                    <span class="dollarSign">小計</span>
-                    <span class="text-danger fw-bold fs-5">???</span>
+                <div class="py-4 d-flex gap-3 justify-content-center align-items-center">
+                    <div>合計金額 : </div>
+                    <div class="price text-danger fw-bold fs-5">@total.ToString("0")</div>
                 </div>
                 <div class="mt-5">
                     <input type="button" value="繼續購物" class="btn btn-outline-dark" style="width: 150px;">
@@ -112,9 +118,9 @@
                     <div>
                         購物車內尚未加入任何商品
                     </div>
-                    <div class="btn btn-outline-dark my-3">
+                    <a href="@Url.Content("~/Home/Index")" class="btn btn-outline-dark my-3">
                         選購商品
-                    </div>
+                    </a>
                 </div>
             </div>
         }
@@ -131,11 +137,31 @@
             transform: translate(-50%,-59%);
             left: 50%;
         }
+
+        .price::before {
+            content: "$";
+        }
     </style>
 
 }
 @section Scripts{
     <script>
+        $(".btnIncrease").click(function () {
+            let stockId = Number($(this).parent().find('input').eq(0).val());
+            let orderQty = Number($(this).parent().find('input').eq(1).val());
+            let shoppingCartId = Number($(this).parent().find('input').eq(2).val());
 
+            orderQty++;
+
+            UpdateOrderQty(stockId, orderQty, shoppingCartId);
+
+        })
+
+        async function UpdateOrderQty(stockId, orderQty, shoppingCartId) {
+            const response = await fetch(`@Url.Content("~/ShoppingCartApi/UpdateOrderQty")?stockId=${stockId}&orderQty=${orderQty}&shoppingCartId=${shoppingCartId}`)
+            const data = await response.json()
+
+            console.log(data)
+        }
     </script>
 }

@@ -158,5 +158,20 @@ namespace prjOniqueWebsite.Models.Repositories
 
             return cart.ToList();
         }
+        public ShoppingCart UpdateOrderQty(int shoppingCartId, int orderQty)
+        {
+            ShoppingCart shoppingCart = _context.ShoppingCart.FirstOrDefault(psd => psd.Id == shoppingCartId);
+            shoppingCart.OrderQuantity = orderQty;
+            _context.SaveChanges();
+
+            var newCart = _context.ShoppingCart.FirstOrDefault(psd => psd.Id == shoppingCartId);
+            return newCart;
+        }
+        public ProductStockDetails GetProductStock(int stockId)
+        {
+            var productStockDetails = _context.ProductStockDetails.FirstOrDefault(psd => psd.StockId == stockId);
+
+            return productStockDetails;
+        }
     }
 }
