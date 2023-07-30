@@ -129,6 +129,10 @@
     width:120px;
     height:120px;
 }
+.w-150-h-150 {
+    width: 150px;
+    height: 150px;
+}
 .cover {
     object-fit: cover;
 }
