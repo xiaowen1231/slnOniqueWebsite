@@ -1,0 +1,59 @@
+﻿@model prjOniqueWebsite.Models.EFModels.Discounts
+
+@{
+    ViewData["Title"] = "BgDiscountCreate";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+<form asp-action="BgDiscountCreate">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="container my-2 p-2 border border-secondary rounded-4 shadow justify-content-center">
+        <div class="row text-center border-bottom mx-2 p-2">
+            <div class="fs-3 fw-bold">新增優惠活動</div>
+        </div>
+        <div class="p-2">
+            <div class="col-7 container text-center rounded-4">
+                <img asp-for="PhotoPath" src="~/images/DiscountPhoto" class="rounded img-thumbnail" id="img" />
+            </div>
+            <div class="container col-7 p-2 border rounded-4 bg-light my-3">
+                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
+                    <label asp-for="PhotoPath" class="width-120px">優惠照片:</label>
+                    <input type="file" asp-for="PhotoPath" class="form-control width-120px" />
+                    <span asp-validation-for="PhotoPath" class="text-danger"></span>
+                </div>
+                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
+                    <label asp-for="Title" class="width-120px">活動名稱:</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>                
+                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
+                    <label asp-for="DiscountMethod" class="width-120px">折扣方式:</label>
+                    <input asp-for="DiscountMethod" class="form-control" />
+                    <span asp-validation-for="DiscountMethod" class="text-danger"></span>
+                </div>
+                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
+                    <label asp-for="BeginDate" class="width-120px">生效日期:</label>
+                    <input asp-for="BeginDate" class="form-control" />
+                    <span asp-validation-for="BeginDate" class="text-danger"></span>
+                </div>
+                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
+                    <label asp-for="EndDate" class="width-120px">結束日期:</label>
+                    <input asp-for="EndDate" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
+                    <label asp-for="Description" class="width-120px">活動說明:</label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>                
+                <div class="container text-center my-4">
+                    <a class="btn btn-outline-dark" asp-action="Index">取消編輯</a>
+                    <input type="submit" value="新增優惠" class="btn btn-dark border fw-bold mx-2" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
