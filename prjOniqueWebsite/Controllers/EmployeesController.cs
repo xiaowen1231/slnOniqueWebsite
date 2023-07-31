@@ -54,7 +54,7 @@ namespace prjOniqueWebsite.Controllers
             //_context.Add(employee);
             //_context.SaveChanges();
 
-            return RedirectToAction("Index");
+            //return RedirectToAction("Index");
             return null;
         }
 
