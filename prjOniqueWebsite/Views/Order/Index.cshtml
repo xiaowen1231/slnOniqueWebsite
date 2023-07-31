@@ -178,12 +178,15 @@
             let tableOrdersList = "";
             data.map(item => {
 
+
                 const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
 
+                let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
+                console.log(displayPhotoPath)
                 tableOrdersList += `
-                                                                                                                        <tr>
-                                                                                                                        <td>
-                                                                                                                        <div class="d-flex gap-2">`;
+                                                <tr>
+                                                <td>
+                                                <div class="d-flex gap-2">`;
                 if (statusName == "待出貨") {
                     tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
                                                                                                                     <div>${statusName}</div>`
@@ -219,7 +222,7 @@
                                                                             <span>${orderId}</span>
                                                                             </td>
                                                                             <td>
-                                                                            <img src="@Url.Content("~/images/uploads/members/")${photoPath}" alt="" class="cover circle-size-40">
+                                                                                    <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
                                                                             <span>${name}</span>
                                                                             </td>
                                                                             <td>2023/07/16</td>
