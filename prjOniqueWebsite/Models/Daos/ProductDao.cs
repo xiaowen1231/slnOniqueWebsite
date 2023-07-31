@@ -158,20 +158,25 @@ namespace prjOniqueWebsite.Models.Repositories
 
             return cart.ToList();
         }
-        public ShoppingCart UpdateOrderQty(int shoppingCartId, int orderQty)
+        public void UpdateOrderQty(UpdateShoppingQtyVM vm)
         {
-            ShoppingCart shoppingCart = _context.ShoppingCart.FirstOrDefault(psd => psd.Id == shoppingCartId);
-            shoppingCart.OrderQuantity = orderQty;
+            ShoppingCart shoppingCart = _context.ShoppingCart.FirstOrDefault(psd => psd.Id == vm.ShoppingCartId);
+            shoppingCart.OrderQuantity = vm.UpdateQty;
             _context.SaveChanges();
 
-            var newCart = _context.ShoppingCart.FirstOrDefault(psd => psd.Id == shoppingCartId);
-            return newCart;
         }
         public ProductStockDetails GetProductStock(int stockId)
         {
             var productStockDetails = _context.ProductStockDetails.FirstOrDefault(psd => psd.StockId == stockId);
 
             return productStockDetails;
+        }
+
+        public void DeleteCartItem(int shoppingCartId)
+        {
+            var query = _context.ShoppingCart.FirstOrDefault(sc=>sc.Id == shoppingCartId);
+            _context.Remove(query);
+            _context.SaveChanges();
         }
     }
 }
