@@ -126,13 +126,12 @@
         })
 
         selectSize.addEventListener('change', function () {
-          loadProductPhoto()
+            loadProductPhoto()
         })
 
         async function loadProductPhoto() {
             const colorId = $("#selectColor").val()
             const sizeId = $("#selectSize").val()
-            console.log(productId, colorId, sizeId,)
             const response = await fetch(`@Url.Content("~/ProductApi/GetStockDetail?")productId=${productId}&colorId=${colorId}&sizeId=${sizeId}`)
             const psd = await response.json()
             const { photoPath, stockId, quantity } = psd
@@ -149,7 +148,6 @@
             const qty = $("#orderQty").val()
 
             if (!isLogin) {
-                //alert("您尚未登入,請登入後進續進行購物")
                 Swal.fire({
                     title: '尚未登入!',
                     text: "要幫您導向登入頁面嗎?",
@@ -158,47 +156,43 @@
                     confirmButtonColor: '#3C3C3C',
                     cancelButtonColor: '#D0D0D0',
                     confirmButtonText: '進行登入',
-                            cancelButtonText: '取消'
+                    cancelButtonText: '取消'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href = `@Url.Content("~/Home/Login")`
                     }
                 })
             }
-            else
-            {
+            else {
                 AddToCart()
             }
         })
-        async function AddToCart(){
+        async function AddToCart() {
 
             const stockId = $("#stockId").val()
             const qty = $("#orderQty").val()
-            try{
-                const response = await fetch(`@Url.Content("~/ProductApi/AddToCart?")stockId=${stockId}&qty=${qty}`)
-                const totalitems = await response.json()
-            }catch(error){
 
-                Swal.fire({
-                    title: '加入購物車失敗!',
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    },
-                    confirmButtonText: '稍後在試'
-                })
-            }finally{
+            const response = await fetch(`@Url.Content("~/ProductApi/AddToCart?")stockId=${stockId}&qty=${qty}`)
+            const data = await response.json()
+
+            const { message, statusCode } = data;
+            if(statusCode==200){
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: '加入購物車成功!',
+                    title: message,
                     confirmButtonColor: '#3C3C3C',
                     confirmButtonText: '確認'
                 })
-
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             }
+
             GetCartItems()
         }
     </script>
