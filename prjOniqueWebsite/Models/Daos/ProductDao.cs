@@ -116,15 +116,15 @@ namespace prjOniqueWebsite.Models.Repositories
 
         public ProductStockDetails GetStockDetail(int productId, int colorId, int sizeId)
         {
-            ProductStockDetails psd = _context.ProductStockDetails.Where(psd=>psd.ProductId==productId
-            &&psd.ColorId==colorId
-            &&psd.SizeId==sizeId)
+            ProductStockDetails psd = _context.ProductStockDetails.Where(psd => psd.ProductId == productId
+            && psd.ColorId == colorId
+            && psd.SizeId == sizeId)
                 .FirstOrDefault();
 
             return psd;
         }
 
-        public void AddToCart(int stockId,int qty,Members member)
+        public void AddToCart(int stockId, int qty, Members member)
         {
             var shoppingCart = new ShoppingCart();
             shoppingCart.StockId = stockId;
@@ -174,9 +174,24 @@ namespace prjOniqueWebsite.Models.Repositories
 
         public void DeleteCartItem(int shoppingCartId)
         {
-            var query = _context.ShoppingCart.FirstOrDefault(sc=>sc.Id == shoppingCartId);
+            var query = _context.ShoppingCart.FirstOrDefault(sc => sc.Id == shoppingCartId);
             _context.Remove(query);
             _context.SaveChanges();
+        }
+
+        public UpdateShoppingQtyVM GetCartItems(int memberId, int updateQty, int stockId)
+        {
+            var cart = _context.ShoppingCart.Where(sc => sc.MemberId == memberId && sc.StockId == stockId)
+                .Select(sc=>new UpdateShoppingQtyVM
+                {
+                    ShoppingCartId = sc.Id,
+                    UpdateQty = sc.OrderQuantity+updateQty,
+                    StockId = stockId
+                })
+                .FirstOrDefault();
+            if (cart == null)
+                return null;
+            return cart;
         }
     }
 }

@@ -2,6 +2,7 @@
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
+using prjOniqueWebsite.Models.Services;
 using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
@@ -53,11 +54,11 @@ namespace prjOniqueWebsite.Controllers
 
             Members member = JsonSerializer.Deserialize<Members>(json);
 
-            dao.AddToCart(stockId,qty,member);
+            var service = new ProductService(_context);
 
-            var cart = dao.CartItems(member);
-            
-            return Json(cart.Count);
+            var vm = service.AddToCart(stockId,qty,member); 
+
+            return Json(vm);
         }
         public IActionResult CartItems()
         {
