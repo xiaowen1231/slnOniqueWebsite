@@ -4,6 +4,7 @@ using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
+using System.Runtime.Intrinsics.X86;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -23,7 +24,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Create()
         {
-            MemberVM member = (from m in _context.Members
+            MemberVM vm = (from m in _context.Members
                                join c in _context.Citys
                                on m.Citys equals c.CityId
                                join a in _context.Areas
@@ -36,14 +37,38 @@ namespace prjOniqueWebsite.Controllers
                                    Citys = c.CityName,
                                    Areas = a.AreaName
                                }).FirstOrDefault();
-            ViewBag.memberlevel = member.MemberLevel;
-            ViewBag.city = member.Citys;
-            ViewBag.area = member.Areas;
+            ViewBag.memberlevel = vm.MemberLevel;
+            ViewBag.city = vm.Citys;
+            ViewBag.area = vm.Areas;
             return View();
         }
+        [HttpPost]
+        public IActionResult Create(MemberVM vm)
+        {
+            var mem = new Members()
+            {
+                Name = vm.Name,
+                Password = vm.Password,
+                Email = vm.Email,
+                Phone = vm.Phone,
+                Gender = Convert.ToBoolean(vm.Gender),
+                Citys = Convert.ToInt32(vm.Citys),
+                Areas = Convert.ToInt32(vm.Areas),
+                Address = vm.Address,
+                MemberLevel = Convert.ToInt32(vm.MemberLevel),
+                RegisterDate = Convert.ToDateTime(vm.RegisterDate),
+                DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
+            };
+            //string fileName = $"MemberId_{member.MemberId}.jpg";
+           
+            _context.Members.Add(mem); 
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Edit(int id)
         {
-            MemberVM member = (from m in _context.Members
+            MemberVM vm = (from m in _context.Members
                                   join c in _context.Citys
                                   on m.Citys equals c.CityId
                                   join a in _context.Areas
@@ -53,23 +78,22 @@ namespace prjOniqueWebsite.Controllers
                                   where m.MemberId == id
                                   select new MemberVM
                                   {
-                                      PhotoPath = m.PhotoPath,
                                       MemberId = m.MemberId,
+                                      PhotoPath = m.PhotoPath,
                                       Name = m.Name,
                                       Password = m.Password,
-                                      Phone = m.Phone,
                                       Email = m.Email,
+                                      Phone = m.Phone,
                                       Gender = m.Gender ? "女" : "男",
                                       Citys = c.CityName,
                                       Areas = a.AreaName,
                                       Address = m.Address,
-                                      DateOfBirth = Convert.ToDateTime( m.DateOfBirth).ToString("yyyy-MM-dd"),
+                                      MemberLevel = ml.MemberLevelName,
                                       RegisterDate =Convert.ToDateTime( m.RegisterDate).ToString("yyyy-MM-dd"),
-                                      MemberLevel = ml.MemberLevelName
+                                      DateOfBirth = Convert.ToDateTime( m.DateOfBirth).ToString("yyyy-MM-dd")
                                   }).FirstOrDefault();
             
-           
-            return View(member);
+            return View(vm);
         }
         [HttpPost]
         public IActionResult Edit(MemberVM vm)
@@ -88,29 +112,22 @@ namespace prjOniqueWebsite.Controllers
                     }
                 }
                 member.Name = vm.Name;
+                member.Password = vm.Password;
+                member.Phone = vm.Phone;
+                member.Citys = Convert.ToInt32(vm.Citys);
+                member.Areas = Convert.ToInt32(vm.Areas);
+                member.Address = vm.Address;
+                member.MemberLevel = Convert.ToInt32(vm.MemberLevel);
+
             }
             _context.SaveChanges();
-            //mem.PhotoPath = $"MemberId_{id}.jpg";
-            //mem.Name = member.Name;
-            //mem.Password = member.Password;
-            //if (mem.Email == member.Email && mem.Phone == member.Phone)
-            //{
-
-            //}
-            //else
-            //{
-            //    mem.Phone = member.Phone;
-            //    mem.Email = member.Email;
-            //}
-            //mem.DateOfBirth = Convert.ToDateTime(member.DateOfBirth);
-            //mem.RegisterDate = Convert.ToDateTime(member.RegisterDate);
-            //mem.MemberLevel = _context.MemberLevel.Where(c => c.MemberLevelName == level.MemberLevelName).Select(c => c.MemberLevelId).FirstOrDefault();
-            //mem.Citys = _context.Citys.Where(c => c.CityName == city.CityName).Select(c => c.CityId).FirstOrDefault();
-            //mem.Areas = _context.Areas.Where(c => c.AreaName == area.AreaName).Select(c => c.AreaId).FirstOrDefault();
-            //mem.Address = member.Address;
-            //_context.Members.Add(mem);
-            //_context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public ActionResult Delete(int id)
+        {
+            return RedirectToAction("Index");
+        }
+
     }
 }
