@@ -6,6 +6,8 @@ namespace prjOniqueWebsite.Models.ViewModels
     {
         [Required]
         public int MemberId { get; set; }
+        public string PhotoPath { get; set; }
+        public IFormFile Photo { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
@@ -17,7 +19,6 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string MemberLevel { get; set; }
         public string RegisterDate { get; set; }
         public string DateOfBirth { get; set; }
-        public string PhotoPath { get; set; }
-        public IFormFile Photo { get; set; }
+        
     }
 }
