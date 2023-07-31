@@ -30,6 +30,11 @@
     height: 60px;
     border-radius: 50%;
 }
+.circle-size-150 {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
 
 .color-95CACA {
     background-color: #95CACA;

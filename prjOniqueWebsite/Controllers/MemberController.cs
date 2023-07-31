@@ -47,19 +47,20 @@ namespace prjOniqueWebsite.Controllers
         {
             var mem = new Members()
             {
+                //string fileName = $"MemberId_{member.MemberId}.jpg";
                 Name = vm.Name,
                 Password = vm.Password,
                 Email = vm.Email,
                 Phone = vm.Phone,
-                Gender = Convert.ToBoolean(vm.Gender),
+                //Gender = Convert.ToBoolean(vm.Gender),
                 Citys = Convert.ToInt32(vm.Citys),
                 Areas = Convert.ToInt32(vm.Areas),
                 Address = vm.Address,
                 MemberLevel = Convert.ToInt32(vm.MemberLevel),
-                RegisterDate = Convert.ToDateTime(vm.RegisterDate),
+                //RegisterDate = Convert.ToDateTime(vm.RegisterDate),
                 DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
             };
-            //string fileName = $"MemberId_{member.MemberId}.jpg";
+            
            
             _context.Members.Add(mem); 
             _context.SaveChanges();
