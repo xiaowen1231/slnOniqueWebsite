@@ -197,6 +197,14 @@ namespace prjOniqueWebsite.Controllers
             ViewBag.ColorName = query.ColorName;
             return View();
         }
+        public IActionResult BgDiscountCreate()
+        {
+            return View();
+        }
+        public IActionResult BgDiscountManage()
+        {
+            return View();
+        }
         private bool ProductsExists(int id)
         {
           return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();

@@ -1,0 +1,73 @@
+﻿@model prjOniqueWebsite.Models.EFModels.Discounts
+@{
+    ViewData["Title"] = "BgDiscountManage";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+
+<div class="container my-2 p-2 border border-secondary rounded-4 shadow justify-content-center">
+    <div>
+        <div class="row text-center border-bottom mx-2 p-2">
+            <div class="fs-3 fw-bold">優惠管理</div>
+        </div>
+        <div class="col-2 mx-4 my-3">
+            <button class="btn btn-dark">新增商品</button>
+        </div>
+    </div>
+    <div class="container justify-content-center d-flex">
+        <table class="table table-striped align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>活動編號</th>
+                    <th>活動名稱</th>
+                    <th>生效日期</th>
+                    <th>結束日期</th>
+                    <th>折扣方式</th>
+                    <th>活動圖片</th>
+                    <th>編輯</th>
+                    <th>刪除</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>夏日特賣</td>
+                    <td>2023/7/12</td>
+                    <td>2023/8/25</td>
+                    <td>9折</td>
+                    <td><img src="../Images/Discount/夏日特賣.jpg" class="square-170 cover"></td>
+                    <td><img src="../Images/EmployeePhoto/edit.png" class="square-32" alt=""></td>
+                    <td><img src="../Images/ShoppingCart/trash.png" class="square-32" alt=""></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>熱銷優惠</td>
+                    <td>2023/6/30</td>
+                    <td>2023/8/25</td>
+                    <td>85折</td>
+                    <td><img src="../Images/Discount/熱銷優惠.jpg" class="square-170 cover"></td>
+                    <td><img src="../Images/EmployeePhoto/edit.png" class="square-32" alt=""></td>
+                    <td><img src="../Images/ShoppingCart/trash.png" class="square-32" alt=""></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" style="color: black;" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" style="color: black;" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" style="color: black;" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" style="color: black;" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" style="color: black;" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
