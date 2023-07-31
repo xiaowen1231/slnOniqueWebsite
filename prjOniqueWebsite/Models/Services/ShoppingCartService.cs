@@ -1,33 +1,39 @@
 ﻿using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
+using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Models.Services
 {
     public class ShoppingCartService
     {
         private readonly ProductDao _dao;
-        private readonly OniqueContext _context;
         public ShoppingCartService(OniqueContext context)
         {
-            _context = context;
-            _dao = new ProductDao(_context);
+            _dao = new ProductDao(context);
         }
-        public ShoppingCart UpdateOrderQty(int stockId, int orderQty, int shoppingCartId)
+        public UpdateShoppingQtyVM UpdateOrderQty(UpdateShoppingQtyVM vm)
         {
-            var psdInDb = _dao.GetProductStock(stockId);
+            var psdInDb = _dao.GetProductStock(vm.StockId);
 
-            if (orderQty <= 0)
+            if (vm.UpdateQty <= 0)
             {
-                throw new Exception("訂購數量不可小於1件!");
+                vm.StatusCode = 500;
+                vm.Message = "訂購數量不可小於1件!";
+                return vm;
             }
-            else if (orderQty > psdInDb.Quantity)
+            else if (vm.UpdateQty > psdInDb.Quantity)
             {
-                throw new Exception("訂購數量不可超過庫存數量!");
+                vm.StatusCode = 500;
+                vm.Message = "訂購數量不可超過庫存數量!";
+                return vm;
             }
             else
             {
-                var cart = _dao.UpdateOrderQty(shoppingCartId, orderQty);
-                return cart;
+               
+                _dao.UpdateOrderQty(vm);
+                vm.StatusCode = 200;
+                vm.Message = "更新購物車數量成功!";
+                return vm;
             }
         }
 

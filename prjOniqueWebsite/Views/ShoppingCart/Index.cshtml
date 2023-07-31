@@ -3,7 +3,7 @@
     ViewData["Title"] = "查看購物車";
 }
 
-<div class="container">
+<div class="container" id="shoppingCartContext">
     <div>
         <div class="status d-flex justify-content-center gap-5 mb-3 py-4 border-bottom border-secondary">
             <div class="active">
@@ -25,8 +25,8 @@
     @{
         if (Model.Count > 0)
         {
-            <div class="border border-dark-subtle shadow rounded-3 p-2">
-                <table class="table table-borderless table-striped align-middle text-center" data-aos="fade-up">
+            <div class="border border-dark-subtle shadow rounded-3 p-2" data-aos="fade-up">
+                <table class="table table-borderless table-striped align-middle text-center">
                     <thead class="table-dark">
                         <tr>
                             <th>商品圖片</th>
@@ -85,11 +85,12 @@
                                     </td>
 
                                     <td>
-                                        <a href="" class="d-flex justify-content-center">
+                                        <div class="d-flex justify-content-center btnDelete">
+                                            <input type="hidden" name="shoppingCartId" value="@item.ShoppingCart.Id" />
                                             <div class="circle-size-25">
                                                 <img src="@Url.Content("~/images/icon/delete.png")" />
                                             </div>
-                                        </a>
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -146,22 +147,125 @@
 }
 @section Scripts{
     <script>
-        $(".btnIncrease").click(function () {
+        $(".btnDelete").click(function () {
+            Swal.fire({
+                text: "確定要刪除這個商品嗎?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#000000',
+                cancelButtonColor: '#9D9D9D	',
+                cancelButtonText: '保留商品',
+                confirmButtonText: '刪除商品'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let shoppingCartId = Number($(this).find('input').eq(0).val())
+
+                    DeleteCart(shoppingCartId)
+
+                }
+            })
+        })
+        async function DeleteCart(shoppingCartId) {
+            const response = await fetch(`@Url.Content("~/ShoppingCartApi/DeleteCart?")shoppingCartId=${shoppingCartId}`)
+            const result = await response.json();
+
+            const { statusCode, statusMessage }=result;
+            if(statusCode==200)
+            {
+                Swal.fire({
+                    title: statusMessage,
+                    icon: 'success',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+                setTimeout(() => {
+                    window.location.href = `@Url.Content("~/shoppingcart/index")`
+                }, 1500)
+            }
+            else
+            {
+                Swal.fire({
+                    title: statusMessage,
+                    icon: 'error',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+               
+        }
+
+        $(".btnIncrease").click(async function () {
             let stockId = Number($(this).parent().find('input').eq(0).val());
-            let orderQty = Number($(this).parent().find('input').eq(1).val());
+            let originalQty = Number($(this).parent().find('input').eq(1).val());
             let shoppingCartId = Number($(this).parent().find('input').eq(2).val());
 
-            orderQty++;
+            let updateQty = originalQty + 1;
 
-            UpdateOrderQty(stockId, orderQty, shoppingCartId);
+            UpdateOrderQty(stockId, originalQty, updateQty, shoppingCartId);
+        })
+        $(".btnReduce").click(async function () {
+            let stockId = Number($(this).parent().find('input').eq(0).val());
+            let originalQty = Number($(this).parent().find('input').eq(1).val());
+            let shoppingCartId = Number($(this).parent().find('input').eq(2).val());
 
+            let updateQty = originalQty - 1;
+
+            UpdateOrderQty(stockId, originalQty, updateQty, shoppingCartId);
         })
 
-        async function UpdateOrderQty(stockId, orderQty, shoppingCartId) {
-            const response = await fetch(`@Url.Content("~/ShoppingCartApi/UpdateOrderQty")?stockId=${stockId}&orderQty=${orderQty}&shoppingCartId=${shoppingCartId}`)
+        async function UpdateOrderQty(stockId, originalQty, updateQty, shoppingCartId) {
+
+
+            const response = await fetch(`@Url.Content("~/ShoppingCartApi/UpdateOrderQty")?stockId=${stockId}&originalQty=${originalQty}&updateQty=${updateQty}&shoppingCartId=${shoppingCartId}`)
             const data = await response.json()
 
+            const { statusCode, message } = data;
             console.log(data)
+            if (statusCode == 200) {
+                Swal.fire({
+                    title: message,
+                    icon: 'success',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+
+                setTimeout(() => {
+                    window.location.href = `@Url.Content("~/shoppingcart/index")`
+                }, 1500)
+
+            }
+            else {
+                Swal.fire({
+                    title: message,
+                    icon: 'error',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
         }
     </script>
 }

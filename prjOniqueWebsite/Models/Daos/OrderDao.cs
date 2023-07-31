@@ -108,15 +108,7 @@ namespace prjOniqueWebsite.Models.Daos
             return query.FirstOrDefault();
             
         }
-            
-                
-                
-            
-
-            
-            
-            
-
+        
         public IQueryable<OrderStatusDto> GetAllOrderStatus()
         {
             var status = from o in _context.Orders
