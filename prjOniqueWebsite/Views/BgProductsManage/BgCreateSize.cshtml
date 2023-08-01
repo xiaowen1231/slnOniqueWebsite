@@ -8,15 +8,12 @@
         <div class="text-center my-2">
             <div class=" border p-3 rounded-4 ">
                 <div class="p-2 my-1 bg-dark text-white rounded">
-                    商品細部編輯
+                    細項新增
                 </div>
                 <div class="container">
-                    <input type="button" value="尺寸、顏色設定"
-                           class="btn btn-outline-dark form-control border my-2 fw-bold">
                     <a class="btn btn-outline-dark border form-control my-2 fw-bold" asp-action="BgCreateSize">新增尺寸</a>
                     <a class="btn btn-outline-dark border form-control my-2 fw-bold" asp-action="BgCreateColor">新增顏色</a>
-                    <input type="button" value="庫存量設定"
-                           class="btn btn-outline-dark border form-control my-2 fw-bold">
+                    <a class="btn btn-outline-dark border form-control my-2 fw-bold" asp-action="BgDiscountCreate">新增優惠</a>
                 </div>
             </div>
         </div>
@@ -70,7 +67,7 @@
         </div>
         <div style="margin-bottom: 20px;">
             <div class="text-center">
-                <input type="button" class="btn btn-outline-dark fw-bold mx-4" value="取消">
+                <a class="btn btn-outline-dark fw-bold mx-4" asp-action="Index">取消</a>
                 <input type="submit" class="btn btn-dark fw-bold" value="確認新增">
             </div>
         </div>

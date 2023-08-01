@@ -23,7 +23,19 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult showOrderList()
         {
-            List<OrderListDto> dto = dao.getOrderList();
+            List<OrderListDto> dto = dao.getOrderList().ToList();
+            return Json(dto);
+        }
+        /// <summary>
+        /// 分頁
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public IActionResult orderPage(int page,int pageSize) 
+        {
+            List<OrderListDto> dto = dao.getOrderList().OrderBy(x => x.OrderId)
+                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return Json(dto);
         }
         public IActionResult search(string? keyWord)
