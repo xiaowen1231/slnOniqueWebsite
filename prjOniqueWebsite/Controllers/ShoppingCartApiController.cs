@@ -3,6 +3,7 @@ using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
 using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -42,6 +43,37 @@ namespace prjOniqueWebsite.Controllers
                 vm.StatusCode = 500;
                 vm.StatusMessage = "刪除失敗";
             }
+            return Json(vm);
+        }
+        
+        public IActionResult CartItems()
+        {
+            string json = HttpContext.Session.GetString("Login");
+            Members member = JsonSerializer.Deserialize<Members>(json);
+            var cartList = _dao.CartItems(member);
+            return Json(cartList);
+        }
+
+        public IActionResult DisplayShippingMethod()
+        {
+            List<ShippingMethods> shippingMethods = _dao.DisplayShippingMethod();
+            return Json(shippingMethods);
+        }
+        
+        public IActionResult DisplayPaymentMethods()
+        {
+            List<PaymentMethods> paymentMethods = _dao.DisplayPaymentMethods();
+            return Json(paymentMethods);
+        }
+
+        public IActionResult GetMemberInfo()
+        {
+            string json = HttpContext.Session.GetString("Login");
+            Members member = JsonSerializer.Deserialize<Members>(json);
+            OrderConfirmationVM vm = new OrderConfirmationVM();
+            vm.Members = member;
+            vm.CitysName = _context.Citys.Where(c => c.CityId == member.Citys).Select(c => c.CityName).FirstOrDefault();
+            vm.AreasName = _context.Areas.Where(a => a.AreaId == member.Areas).Select(a => a.AreaName).FirstOrDefault();
             return Json(vm);
         }
     }

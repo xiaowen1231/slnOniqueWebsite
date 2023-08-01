@@ -24,5 +24,13 @@ namespace prjOniqueWebsite.Controllers
             List<ShoppingCartDto> cart = _dao.CartItems(member);
             return View(cart);
         }
+        [TypeFilter(typeof(MemberVerify))]
+        public IActionResult OrderConfirmation()
+        {
+            string json = HttpContext.Session.GetString("Login");
+            Members member = JsonSerializer.Deserialize<Members>(json);
+            return View(member);
+        }
+
     }
 }

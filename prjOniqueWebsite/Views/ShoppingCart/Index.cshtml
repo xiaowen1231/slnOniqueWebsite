@@ -3,7 +3,7 @@
     ViewData["Title"] = "查看購物車";
 }
 
-<div class="container" id="shoppingCartContext">
+<form class="container" id="shoppingCartContext">
     <div>
         <div class="status d-flex justify-content-center gap-5 mb-3 py-4 border-bottom border-secondary">
             <div class="active">
@@ -49,7 +49,7 @@
                                     <td>
                                         <input type="hidden" value="@item.Product.ProductId" id="inputProductId">
                                         <a href="@Url.Content("~/product/detail/")@item.Product.ProductId">
-                                            <img src="@Url.Content("~/images/uploads/products/")@item.ProductStock.PhotoPath" alt="@item.Product.ProductName"
+                                            <img src="@Url.Content("~/images/uploads/products/")@item.PhotoPath" alt="@item.Product.ProductName"
                                                  class="w-120-h-120 rounded-3 shadow-sm">
                                         </a>
                                     </td>
@@ -61,18 +61,18 @@
                                     </td>
                                     <td>
                                         <div>
-                                            @item.Colors.ColorName
+                                            @item.ProductColors.ColorName
                                         </div>
                                     </td>
                                     <td>
                                         <div>
-                                            @item.Sizes.SizeName
+                                            @item.ProductSizes.SizeName
                                         </div>
                                     </td>
                                     <td class="mx-auto">
                                         <div class="d-flex justify-content-center">
                                             <div class="border border-dark-subtle text-center cursor-pointer btnReduce" style="width: 25px;">-</div>
-                                            <input type="hidden" name="stockId" value="@item.ProductStock.StockId" />
+                                            <input type="hidden" name="stockId" value="@item.StockId" />
                                             <input type="text" value="@item.ShoppingCart.OrderQuantity" disabled id="orderQty" class="width-50px text-center" />
                                             <input type="hidden" name="shoppingCartId" value="@item.ShoppingCart.Id" />
                                             <div class="border border-dark-subtle text-center cursor-pointer btnIncrease" style="width: 25px;">+</div>
@@ -105,7 +105,9 @@
                 </div>
                 <div class="mt-5">
                     <input type="button" value="繼續購物" class="btn btn-outline-dark" style="width: 150px;">
-                    <input type="submit" value="結帳" class="btn btn-dark" style="width: 150px;">
+                    <a href="@Url.Content("~/ShoppingCart/OrderConfirmation")">
+                        <div class="btn btn-dark" style="width: 150px;">結帳</div>
+                    </a>
                 </div>
             </div>
         }
@@ -126,7 +128,7 @@
             </div>
         }
     }
-</div>
+</form>
 
 
 @section Styles{
@@ -141,6 +143,10 @@
 
         .price::before {
             content: "$";
+        }
+
+        .btnDelete {
+            cursor: pointer;
         }
     </style>
 
@@ -169,18 +175,11 @@
             const response = await fetch(`@Url.Content("~/ShoppingCartApi/DeleteCart?")shoppingCartId=${shoppingCartId}`)
             const result = await response.json();
 
-            const { statusCode, statusMessage }=result;
-            if(statusCode==200)
-            {
+            const { statusCode, statusMessage } = result;
+            if (statusCode == 200) {
                 Swal.fire({
                     title: statusMessage,
                     icon: 'success',
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    },
                     showConfirmButton: false,
                     timer: 1500,
                 })
@@ -188,22 +187,15 @@
                     window.location.href = `@Url.Content("~/shoppingcart/index")`
                 }, 1500)
             }
-            else
-            {
+            else {
                 Swal.fire({
                     title: statusMessage,
                     icon: 'error',
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    },
                     showConfirmButton: false,
                     timer: 1500
                 })
             }
-               
+
         }
 
         $(".btnIncrease").click(async function () {
@@ -237,12 +229,6 @@
                 Swal.fire({
                     title: message,
                     icon: 'success',
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    },
                     showConfirmButton: false,
                     timer: 1500,
                 })
@@ -256,12 +242,6 @@
                 Swal.fire({
                     title: message,
                     icon: 'error',
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    },
                     showConfirmButton: false,
                     timer: 1500
                 })

@@ -1,0 +1,306 @@
+﻿@model prjOniqueWebsite.Models.EFModels.Members
+@{
+    ViewData["Title"] = "訂單確認";
+}
+
+<div class="container" data-aos="fade-up">
+    <div>
+        <div class="status d-flex justify-content-center gap-5 mb-3 py-4 border-bottom border-secondary">
+            <div>
+                <span class="step">1</span>
+                <span>查看購物車</span>
+            </div>
+            <div>&gt;</div>
+            <div class="active">
+                <span class="step">2</span>
+                <span>訂單確認</span>
+            </div>
+            <div>&gt;</div>
+            <div>
+                <span class="step">3</span>
+                <span>訂單結算</span>
+            </div>
+        </div>
+    </div>
+    <div class="border border-dark-subtle rounded-3 p-2">
+        <table class="table table-borderless table-striped align-middle text-center my-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>商品圖片</th>
+                    <th>商品名稱</th>
+                    <th>尺寸</th>
+                    <th>顏色</th>
+                    <th>數量</th>
+                    <th>小計</th>
+                </tr>
+            </thead>
+            <tbody id="tableCartList">
+            </tbody>
+        </table>
+
+    </div>
+    <div class="border border-dark-subtle rounded my-2 p-2">
+        <div class="p-2 bg-dark text-white rounded">付款與運送方式</div>
+        <div class="p-2 my-2">
+            <div class="p-2 d-flex align-items-center">
+                <div class="text-end" style="width: 100px;">付款方式:</div>
+                <div class="mx-3" style="width: 237px">
+                    <select class="form-select" id="selelctPayment">
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="p-2 d-flex align-items-center">
+                <div class="text-end" style="width: 100px;">運送方式:</div>
+                <div class="mx-3" style="width: 237px;">
+                    <select class="form-select" id="selectShippingMethod">
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border border-dark-subtle rounded my-2 p-2">
+        <div class="p-2 bg-dark text-white rounded">
+            請填寫收件人資料
+        </div>
+        <div class="form-check m-3">
+            <input class="form-check-input" type="checkbox" id="checkboxSameMemberInfo" name="checkboxSameMemberInfo">
+            <label class="form-check-label fw-bold" for="checkboxSameMemberInfo">
+                同會員資料
+            </label>
+        </div>
+        <div class="p-2 my-2">
+            <div class="p-2 d-flex">
+                <div class="text-end" style="width: 100px;">帳號</div>
+                <div class="mx-3">@Model.Email</div>
+            </div>
+            <div class="p-2 d-flex align-items-center">
+                <div class="text-end" style="width: 100px;">收件人</div>
+                <div class="mx-3">
+                    <input type="text" class="form-control" placeholder="收件人姓名" id="inputName">
+                </div>
+            </div>
+            <div class="p-2 d-flex align-items-center">
+                <div class="text-end" style="width: 100px;">電話</div>
+                <div class="mx-3">
+                    <input type="text" class="form-control" placeholder="請輸入手機號碼" id="inputPhone">
+                </div>
+            </div>
+            <div class="p-2 d-flex align-items-center">
+                <div class="text-end" style="width: 100px;">地址</div>
+                <div class="mx-3">
+                    <select class="form-select w-100" id="selectCity">
+
+                    </select>
+                </div>
+                <div class="mx-3">
+                    <select class="form-select w-100" id="selectArea">
+                        
+                    </select>
+                </div>
+                <div class="mx-3" style="width: 500px;">
+                    <input type="text" class="form-control" placeholder="收貨地址" id="inputAddress">
+                </div>
+            </div>
+            <div class="p-2 d-flex">
+                <div class="text-end" style="width: 100px;">備註</div>
+                <div class="form-floating mx-3">
+                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"
+                              style="width: 500px ;height:100px;"></textarea>
+                    <label for="floatingTextarea" style="font-size: 14px;">請輸入訂單備註，以方便我們提供更好的服務</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border rounded my-4 border-dark-subtle p-2 ">
+        <div class=" p-2 my-2 d-flex">
+            <div class=" fw-bold" style="width: 95px;">商品總額: $</div>
+            <div class=" text-end" style="width: 95px;" id="divProductsSubTotal"></div>
+        </div>
+        <div class="p-2 my-2 d-flex justify-content-between">
+            <div class="d-flex ">
+                <div class="fw-bold" style="width: 95px;">運送費用: $</div>
+                <div class="text-end " style="width: 95px;">123</div>
+            </div>
+            <div class="d-flex">
+                <div class="fw-bold text-black-50" style="width: 95px;" >付款方式</div>
+                <div class="mx-3 text-danger-emphasis fw-bold text-end" style="width: 95px;" id="divPaymentMethod"></div>
+            </div>
+        </div>
+        <div class="p-2 my-2 d-flex justify-content-between align-items-center">
+            <div class="d-flex ">
+                <div class="fw-bold lh-lg" style="width: 95px;">應付總額: $</div>
+                <div class="text-end text-danger fw-bold fs-5 " style="width: 95px;">123</div>
+            </div>
+            <div class="d-flex">
+                <div class="fw-bold text-black-50" style="width: 95px;" >運送方式</div>
+                <div class="mx-3 text-danger-emphasis fw-bold text-end" style="width: 95px;" id="divShippingMethod"></div>
+            </div>
+        </div>
+    </div>
+    <div class="p-2 text-center">
+        <input type="button" value="返回購物車" class="btn btn-outline-dark" style="width: 150px;">
+        <input type="submit" value="提交訂單" class="btn btn-dark" style="width: 150px;">
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        const tableCartList = document.querySelector('#tableCartList');
+        let isCheck = false
+        let memberArea = 0;
+        let shippingMethod = ""
+        let payment = ""
+        let orderTotal = 0;
+
+        DisplayCartList();
+        DisplayShippingMethod();
+        DisplayPaymentMethods();
+        LoadCity()
+
+        async function DisplayCartList() {
+            const response = await fetch(`@Url.Content("~/ShoppingCartApi/CartItems")`);
+            const datas = await response.json();
+
+            const cartList = datas.map(item => {
+                const { photoPath, product, productSizes, productColors, shoppingCart } = item;
+
+                let subTotal = product.price * shoppingCart.orderQuantity;
+                orderTotal += subTotal;
+                
+                return (`<tr class="border">
+                            <td class="w-90-h-90">
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${product.productName}" class="w-90-h-90 rounded">
+                            </td>
+                            <td>
+                                ${product.productName}
+                            </td>
+                            <td>${productSizes.sizeName}</td>
+                            <td>${productColors.colorName}</td>
+                            <td>${shoppingCart.orderQuantity}</td>
+                            <td>
+                                <div class="price">
+                                    ${subTotal}
+                                </div>
+                            </td>
+                        </tr>`)
+            })
+            tableCartList.innerHTML = cartList.join("");
+            $('#divProductsSubTotal').text(orderTotal)
+        }
+
+        async function DisplayShippingMethod() {
+            const response = await fetch(`@Url.Content("~/ShoppingCartApi/DisplayShippingMethod")`);
+            const datas = await response.json();
+
+            const shippingMethods = datas.map(item => {
+                const { methodId, methodName } = item;
+
+                return `<option value="${methodId}">${methodName}</option>`
+            })
+
+            $('#selectShippingMethod').html(shippingMethods.join(""));
+            shippingMethod = $('#selectShippingMethod').find("option:selected").text();
+            $('#divShippingMethod').text(shippingMethod)
+        }
+
+        async function DisplayPaymentMethods(){
+            const response = await fetch(`@Url.Content("~/ShoppingCartApi/DisplayPaymentMethods")`);
+            const datas = await response.json();
+
+            const paymentMethods = datas.map(item => {
+                const { paymentMethodId, paymentMethodName } = item;
+
+                return `<option value="${paymentMethodId}">${paymentMethodName}</option>`
+            })
+
+            $('#selelctPayment').html(paymentMethods.join(""));
+            payment = $('#selelctPayment').find("option:selected").text();
+            $('#divPaymentMethod').text(payment)
+        }
+
+        async function LoadCity(){
+            const response = await fetch(`@Url.Content("~/MemberApi/LoadCity")`)
+            const datas = await response.json()
+
+            const citys = datas.map(item=>{
+                const { cityId, cityName } = item;
+
+                return `<option value="${cityId}">${cityName}</option>`
+            })
+            $('#selectCity').html(citys.join(""));
+            LoadArea()
+        }
+
+        async function LoadArea(){
+            const cityId = $('#selectCity').val();
+            const response = await fetch(`@Url.Content("~/MemberApi/LoadArea")?cityId=${cityId}`)
+            const datas = await response.json()
+
+            const area = datas.map(item=>{
+                const { areaId, areaName } = item;
+
+                return `<option value="${areaId}">${areaName}</option>`
+            })
+            $('#selectArea').html(area.join(""));
+            selectedMemberArea(isCheck, memberArea)
+        }
+
+        function selectedMemberArea(isCheck, memberArea) {
+            if(isCheck){
+                $('#selectArea').val(memberArea)
+                memberArea = 1;
+            }
+        }
+
+        async function SameMemberInfo(){
+            const response = await fetch(`@Url.Content("~/ShoppingCartApi/GetMemberInfo")`)
+            const datas = await response.json()
+
+            const { members, citysName, areasName} = datas;
+            memberArea = members.areas
+            $('#inputName').val(members.name)
+            $('#inputPhone').val(members.phone)
+            $('#selectCity').val(members.citys)
+            LoadArea()
+            $('#inputAddress').val(members.address)
+        }
+
+        $('#checkboxSameMemberInfo').change(function(){
+            isCheck = $(this).is(':checked')
+            if(isCheck){
+                SameMemberInfo()
+            }
+            else{
+                $('#inputName').val("")
+                $('#inputPhone').val("")
+                $('#selectCity').val(1)
+                LoadArea()
+                $('#inputAddress').val("")
+            }
+        })
+
+        $("#selectCity").change(function(){
+            LoadArea()
+        })
+
+        $('#selectShippingMethod').change(function () {
+            shippingMethod = $(this).find("option:selected").text();
+            $('#divShippingMethod').text(shippingMethod)
+        })
+
+        $('#selelctPayment').change(function () {
+            payment = $('#selelctPayment').find("option:selected").text();
+            $('#divPaymentMethod').text(payment)
+        })
+
+    </script>
+}
+@section Styles{
+    <link href="~/css/shoppingcart.css" rel="stylesheet" />
+    <style>
+        .price::before {
+            content: "$";
+        }
+    </style>
+}

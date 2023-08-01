@@ -142,18 +142,19 @@ namespace prjOniqueWebsite.Models.Repositories
                        on s.StockId equals psd.StockId
                        join p in _context.Products
                        on psd.ProductId equals p.ProductId
-                       join c in _context.ProductColors
-                       on psd.ColorId equals c.ColorId
+                       join pc in _context.ProductColors
+                       on psd.ColorId equals pc.ColorId
                        join ps in _context.ProductSizes
                        on psd.SizeId equals ps.SizeId
                        where s.MemberId == member.MemberId
                        select new ShoppingCartDto
                        {
                            Product = p,
-                           ProductStock = psd,
                            ShoppingCart = s,
-                           Sizes = ps,
-                           Colors = c
+                           StockId = psd.StockId,
+                           PhotoPath = psd.PhotoPath,
+                           ProductColors = pc,
+                           ProductSizes = ps,
                        };
 
             return cart.ToList();
@@ -182,16 +183,29 @@ namespace prjOniqueWebsite.Models.Repositories
         public UpdateShoppingQtyVM GetCartItems(int memberId, int updateQty, int stockId)
         {
             var cart = _context.ShoppingCart.Where(sc => sc.MemberId == memberId && sc.StockId == stockId)
-                .Select(sc=>new UpdateShoppingQtyVM
+                .Select(sc => new UpdateShoppingQtyVM
                 {
                     ShoppingCartId = sc.Id,
-                    UpdateQty = sc.OrderQuantity+updateQty,
+                    UpdateQty = sc.OrderQuantity + updateQty,
                     StockId = stockId
                 })
                 .FirstOrDefault();
             if (cart == null)
                 return null;
             return cart;
+        }
+        public List<ShippingMethods> DisplayShippingMethod()
+        {
+            var query = from shippingMethod in _context.ShippingMethods
+                        select shippingMethod;
+            return query.ToList();
+        }
+
+        public List<PaymentMethods> DisplayPaymentMethods()
+        {
+            var query = from paymentMethod in _context.PaymentMethods
+                        select paymentMethod;
+            return query.ToList();
         }
     }
 }
