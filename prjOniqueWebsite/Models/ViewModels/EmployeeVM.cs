@@ -11,7 +11,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         
         public string PhotoPath { get; set; }
         public string DateOfBirth { get; set; }
-        public string Gender { get; set; }
+        public bool Gender { get; set; }
         [Required(ErrorMessage = "手機不可空白")]
         public string Phone { get; set; }
         [Required(ErrorMessage = "信箱不可空白")]
