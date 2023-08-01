@@ -120,7 +120,7 @@
         <div class="p-2 my-2 d-flex justify-content-between">
             <div class="d-flex ">
                 <div class="fw-bold" style="width: 95px;">運送費用: $</div>
-                <div class="text-end " style="width: 95px;">123</div>
+                <div class="text-end " style="width: 95px;" id="divShippingCost"></div>
             </div>
             <div class="d-flex">
                 <div class="fw-bold text-black-50" style="width: 95px;" >付款方式</div>
@@ -130,7 +130,7 @@
         <div class="p-2 my-2 d-flex justify-content-between align-items-center">
             <div class="d-flex ">
                 <div class="fw-bold lh-lg" style="width: 95px;">應付總額: $</div>
-                <div class="text-end text-danger fw-bold fs-5 " style="width: 95px;">123</div>
+                <div class="text-end text-danger fw-bold fs-5 " style="width: 95px;" id="divAmountOfOrder"></div>
             </div>
             <div class="d-flex">
                 <div class="fw-bold text-black-50" style="width: 95px;" >運送方式</div>
@@ -151,10 +151,11 @@
         let memberArea = 0;
         let shippingMethod = ""
         let payment = ""
-        let orderTotal = 0;
+        let quantumOfOutput = 0;
+        let shippingCost = 0;
+        let amountOfOrder = 0;
 
         DisplayCartList();
-        DisplayShippingMethod();
         DisplayPaymentMethods();
         LoadCity()
 
@@ -166,7 +167,7 @@
                 const { photoPath, product, productSizes, productColors, shoppingCart } = item;
 
                 let subTotal = product.price * shoppingCart.orderQuantity;
-                orderTotal += subTotal;
+                quantumOfOutput += subTotal;
                 
                 return (`<tr class="border">
                             <td class="w-90-h-90">
@@ -186,7 +187,8 @@
                         </tr>`)
             })
             tableCartList.innerHTML = cartList.join("");
-            $('#divProductsSubTotal').text(orderTotal)
+            $('#divProductsSubTotal').text(quantumOfOutput);
+            DisplayShippingMethod();
         }
 
         async function DisplayShippingMethod() {
@@ -201,7 +203,7 @@
 
             $('#selectShippingMethod').html(shippingMethods.join(""));
             shippingMethod = $('#selectShippingMethod').find("option:selected").text();
-            $('#divShippingMethod').text(shippingMethod)
+            UpdateShippingCost(shippingMethod)
         }
 
         async function DisplayPaymentMethods(){
@@ -257,13 +259,13 @@
             const response = await fetch(`@Url.Content("~/ShoppingCartApi/GetMemberInfo")`)
             const datas = await response.json()
 
-            const { members, citysName, areasName} = datas;
-            memberArea = members.areas
-            $('#inputName').val(members.name)
-            $('#inputPhone').val(members.phone)
-            $('#selectCity').val(members.citys)
+            const { areaId, name, phone, cityId, address } = datas;
+            memberArea = areaId
+            $('#inputName').val(name)
+            $('#inputPhone').val(phone)
+            $('#selectCity').val(cityId)
             LoadArea()
-            $('#inputAddress').val(members.address)
+            $('#inputAddress').val(address)
         }
 
         $('#checkboxSameMemberInfo').change(function(){
@@ -286,7 +288,7 @@
 
         $('#selectShippingMethod').change(function () {
             shippingMethod = $(this).find("option:selected").text();
-            $('#divShippingMethod').text(shippingMethod)
+            UpdateShippingCost(shippingMethod)
         })
 
         $('#selelctPayment').change(function () {
@@ -294,6 +296,25 @@
             $('#divPaymentMethod').text(payment)
         })
 
+        function UpdateShippingCost(shippingMethod){
+            $('#divShippingMethod').text(shippingMethod)
+            if (shippingMethod == "宅配") {
+                shippingCost = 100;
+            }
+            else if (shippingMethod == "郵寄") {
+                shippingCost = 120
+            }
+            else {
+                shippingCost = 60
+            }
+            $('#divShippingCost').text(shippingCost)
+            UpdateAmountOfOrder()
+        }
+
+        function UpdateAmountOfOrder(){
+            amountOfOrder = quantumOfOutput + shippingCost;
+            $('#divAmountOfOrder').text(amountOfOrder)
+        }
     </script>
 }
 @section Styles{

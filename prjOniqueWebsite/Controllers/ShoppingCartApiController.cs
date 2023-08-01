@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
 using prjOniqueWebsite.Models.Services;
@@ -45,7 +46,7 @@ namespace prjOniqueWebsite.Controllers
             }
             return Json(vm);
         }
-        
+
         public IActionResult CartItems()
         {
             string json = HttpContext.Session.GetString("Login");
@@ -59,7 +60,7 @@ namespace prjOniqueWebsite.Controllers
             List<ShippingMethods> shippingMethods = _dao.DisplayShippingMethod();
             return Json(shippingMethods);
         }
-        
+
         public IActionResult DisplayPaymentMethods()
         {
             List<PaymentMethods> paymentMethods = _dao.DisplayPaymentMethods();
@@ -70,11 +71,15 @@ namespace prjOniqueWebsite.Controllers
         {
             string json = HttpContext.Session.GetString("Login");
             Members member = JsonSerializer.Deserialize<Members>(json);
-            OrderConfirmationVM vm = new OrderConfirmationVM();
-            vm.Members = member;
-            vm.CitysName = _context.Citys.Where(c => c.CityId == member.Citys).Select(c => c.CityName).FirstOrDefault();
-            vm.AreasName = _context.Areas.Where(a => a.AreaId == member.Areas).Select(a => a.AreaName).FirstOrDefault();
-            return Json(vm);
+
+            OrderConfirmationDto dto = new OrderConfirmationDto();
+            dto.Name = member.Name;
+            dto.Phone = member.Phone;
+            dto.CityId = member.Citys;
+            dto.AreaId = member.Areas;
+            dto.Address = member.Address;
+
+            return Json(dto);
         }
     }
 }
