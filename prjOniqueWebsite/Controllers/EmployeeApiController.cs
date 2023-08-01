@@ -27,7 +27,7 @@ namespace prjOniqueWebsite.Controllers
                             PhotoPath = e.PhotoPath,
                             EmployeeName = e.EmployeeName,
                             DateOfBirth = (DateTime)e.DateOfBirth,
-                            Gender = e.Gender ? "女" : "男",
+                            Gender = e.Gender ? "男" : "女",
                             Phone = e.Phone,
                             Email = e.Email,
                             EmployeeLevelName = el.EmployeeLevelName
