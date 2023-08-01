@@ -71,6 +71,11 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(dto);
         }
-        
+        public IActionResult LoadDiscountList()
+        {
+            var Discount = from d in _context.Discounts
+                           select d;
+            return Json(Discount);
+        }
     }
 }
