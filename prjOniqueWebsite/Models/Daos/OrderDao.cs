@@ -16,7 +16,7 @@ namespace prjOniqueWebsite.Models.Daos
         /// 回傳全部的會員資料list
         /// </summary>
         /// <returns></returns>
-        public List<OrderListDto> getOrderList()
+        public IQueryable<OrderListDto> getOrderList()
         {
             var orderList = from o in _context.Orders
                             join os in _context.OrderStatus
@@ -34,7 +34,7 @@ namespace prjOniqueWebsite.Models.Daos
                                 PaymentMethodName = pm.PaymentMethodName,
                                 PhotoPath = m.PhotoPath
                             };
-            return orderList.ToList();
+            return orderList;
         }
         public List<OrderProductsListDto> getProductDetail(int orderId)
         {
