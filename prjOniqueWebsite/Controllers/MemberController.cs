@@ -127,6 +127,13 @@ namespace prjOniqueWebsite.Controllers
 
         public ActionResult Delete(int id)
         {
+            var member = _context.Members.FirstOrDefault(m=>m.MemberId == id);
+            if (member != null)
+            {
+                _context.Members.Remove(member);
+                
+            }
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 

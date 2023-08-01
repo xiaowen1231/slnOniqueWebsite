@@ -16,8 +16,8 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string Citys { get; set; }
         public string Areas { get; set; }
         public string? Address { get; set; }
-        public string MemberLevel { get; set; }
-        public string RegisterDate { get; set; }
+        public string? MemberLevel { get; set; }
+        public string? RegisterDate { get; set; }
         public string? DateOfBirth { get; set; }
         
     }
