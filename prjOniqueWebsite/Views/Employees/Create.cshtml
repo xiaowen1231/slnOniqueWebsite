@@ -22,7 +22,8 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">姓名</div>
                         <div class="mx-2">
-                            <input type="text" class="form-control " name="EmployeeName" placeholder="員工姓名" />
+                            <input type="text" class="form-control" name="EmployeeName" placeholder="員工姓名" />
+                            @Html.ValidationMessageFor(model => model.EmployeeName)
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
@@ -38,20 +39,22 @@
                         <div class="mx-3 d-flex row">
 
                              <div class="pt-2 d-flex col-6 align-items-center">
-                                <input type="radio" name="Gender" value="1" id="male">
+                                <input type="radio" name="Gender" value="true" id="male" >
                                     <label for="male">男</label>
                              </div>
+
                              <div class="pt-2 d-flex col-6 align-items-center">
-                                <input type="radio" name="Gender" value="0" id="female">
+                                <input type="radio" name="Gender" value="false" id="female" >
                                     <label for="female">女</label>
                               </div>
-
+                            
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">電話</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" name="Phone" placeholder="請輸入手機號碼">
+                            @Html.ValidationMessageFor(model => model.Phone)
                         </div>
                     </div>
                 </div>
@@ -60,12 +63,14 @@
                         <div class=" width-90px text-end fw-bold">信箱</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" name="Email" placeholder="請輸入電子信箱">
+                            @Html.ValidationMessageFor(model => model.Email)
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">密碼</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" name="Password" placeholder="請輸入密碼">
+                            @Html.ValidationMessageFor(model => model.Password)
                         </div>
                     </div>
                 </div>
@@ -73,12 +78,16 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">身分</div>
                         <div class="mx-3">
-                            <input type="hidden" id="employeeLevel"/>
+                            
+                            <input type="hidden" id="employeeLevel" required="required" />
                             <select class="form-select" name="EmployeeLevel" id="level">
                                 <option selected>-請選擇身分</option>
                                 
                             </select>
+                            
+                            
                         </div>
+                        
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">註冊日期</div>
@@ -92,22 +101,24 @@
                     <div class="col-12  mt-2 d-flex justify-content-start ">
                         <div class=" width-90px text-end fw-bold">地址</div>
                         <div class="mx-3">
-                            <input type="hidden"  id="employeeCity" />
-                            <select class="form-select " name="Citys" value="" id="city">
+                            <input type="hidden" id="employeeCity"  />
+                            <select class="form-select " name="Citys" value="" id="city" >
                                 <option selected>-請選擇縣市-</option>
                                 @*<option value="1">台北市</option>
                                 <option value="2">新北市</option>
                                 <option value="3">桃園市</option>*@
                             </select>
+                            @Html.ValidationMessageFor(model => model.Citys)
                         </div>
                         <div class="mx-3">
-                            <input type="hidden"  id="employeeArea" />
+                            <input type="hidden" id="employeeArea"  />
                             <select class="form-select " name="Areas" value="" id="area">
                                 <option selected>-請選擇地區-</option>
                                 @*<option value="1">大安區</option>
                                 <option value="2">中山區</option>
                                 <option value="3">中正區</option>*@
                             </select>
+                            @Html.ValidationMessageFor(model => model.Areas)
                         </div>
                         <div class="mx-3 ">
                             <input type="text" class="form-control" name="Address" placeholder="請輸入地址">
@@ -206,6 +217,12 @@
     <link href="~/css/EmployeeCreate.css" rel="stylesheet" />
     <link href="~/css/Common.css" rel="stylesheet" />
     <link href="~/css/Reset.css" rel="stylesheet" />
+
+    <style>
+        .field-validation-error {
+            color: red; 
+        }
+    </style>
 }
 
 

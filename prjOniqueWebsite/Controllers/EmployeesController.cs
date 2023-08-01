@@ -39,27 +39,50 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Create(EmployeeVM vm)
         {
-            Employees employee = new Employees();
-            employee.EmployeeName = vm.EmployeeName;
-            employee.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
-            employee.Gender = vm.Gender;
-            employee.Position = Convert.ToInt32(vm.EmployeeLevel);
-            employee.Phone = vm.Phone;
-            employee.Email = vm.Email;
-            employee.Password = vm.Password;
-            employee.RegisterDate = Convert.ToDateTime(vm.RegisterDate);
-            employee.Citys = Convert.ToInt32(vm.Citys);
-            employee.Areas = Convert.ToInt32(vm.Areas);
-            employee.Address = vm.Address;
-            _context.Add(employee);
-            _context.SaveChanges();
+            if (ModelState.IsValid )
+            {
+                Employees employee = new Employees();
+                employee.PhotoPath = vm.PhotoPath;
+                employee.EmployeeId = vm.EmployeeId;
+                employee.EmployeeName = vm.EmployeeName;
+                employee.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
+                employee.Gender = vm.Gender;
+                employee.Position = Convert.ToInt32(vm.EmployeeLevel);
+                employee.Phone = vm.Phone;
+                employee.Email = vm.Email;
+                employee.Password = vm.Password;
+                employee.RegisterDate = Convert.ToDateTime(vm.RegisterDate);
+                employee.Citys = Convert.ToInt32(vm.Citys);
+                employee.Areas = Convert.ToInt32(vm.Areas);
+                employee.Address = vm.Address;
+                _context.Add(employee);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(vm);
 
-            return RedirectToAction("Index");
-            
+
+
         }
+
+
 
         public IActionResult Edit()
         {
+            return View();
+        }
+
+        public IActionResult Delete(EmployeeVM vm)
+        {
+            var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
+
+            if (employee != null) 
+            {
+                _context.Remove(employee);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+
+            }
             return View();
         }
     }
