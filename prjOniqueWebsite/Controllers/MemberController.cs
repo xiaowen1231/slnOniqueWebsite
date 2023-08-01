@@ -25,18 +25,18 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult Create()
         {
             MemberVM vm = (from m in _context.Members
-                               join c in _context.Citys
-                               on m.Citys equals c.CityId
-                               join a in _context.Areas
-                               on m.Areas equals a.AreaId
-                               join ml in _context.MemberLevel
-                               on m.MemberLevel equals ml.MemberLevelId
-                               select new MemberVM
-                               {
-                                   MemberLevel = ml.MemberLevelName,
-                                   Citys = c.CityName,
-                                   Areas = a.AreaName
-                               }).FirstOrDefault();
+                           join c in _context.Citys
+                           on m.Citys equals c.CityId
+                           join a in _context.Areas
+                           on m.Areas equals a.AreaId
+                           join ml in _context.MemberLevel
+                           on m.MemberLevel equals ml.MemberLevelId
+                           select new MemberVM
+                           {
+                               MemberLevel = ml.MemberLevelName,
+                               Citys = c.CityName,
+                               Areas = a.AreaName
+                           }).FirstOrDefault();
             ViewBag.memberlevel = vm.MemberLevel;
             ViewBag.city = vm.Citys;
             ViewBag.area = vm.Areas;
@@ -52,12 +52,12 @@ namespace prjOniqueWebsite.Controllers
                 Password = vm.Password,
                 Email = vm.Email,
                 Phone = vm.Phone,
-                //Gender = Convert.ToBoolean(vm.Gender),
+                Gender = Convert.ToBoolean(vm.Gender),
                 Citys = Convert.ToInt32(vm.Citys),
                 Areas = Convert.ToInt32(vm.Areas),
                 Address = vm.Address,
                 MemberLevel = Convert.ToInt32(vm.MemberLevel),
-                //RegisterDate = Convert.ToDateTime(vm.RegisterDate),
+                RegisterDate = DateTime.Now,
                 DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
             };
             
@@ -127,6 +127,13 @@ namespace prjOniqueWebsite.Controllers
 
         public ActionResult Delete(int id)
         {
+            var member = _context.Members.FirstOrDefault(m=>m.MemberId == id);
+            if (member != null)
+            {
+                _context.Members.Remove(member);
+                
+            }
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 

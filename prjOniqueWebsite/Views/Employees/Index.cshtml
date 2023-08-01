@@ -160,6 +160,25 @@
             </tbody>
         </table>
     </div>
+
+    <div class="modal" id="confirmDialog" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">確認刪除</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmMessage">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-danger" id="confirmButton">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <div class="container">
     <nav class="d-flex justify-content-center" aria-label="Page navigation example">
@@ -222,7 +241,8 @@
                                         </td>
                                         <td>
                                             <div class="circle-size-25">
-                                                <a href="" ><img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt=""></a>
+                                                 <a href="javascript:void(0);" onclick="openDelete(${employeeId})">
+                                                 <img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt=""></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -239,6 +259,21 @@
             return `${year}-${month}-${day}`;
         }
 
+        function openDelete(employeeId) {
+            const confirmDialog = new bootstrap.Modal(document.getElementById("confirmDialog"));
+            const confirmMessageElement = document.getElementById("confirmMessage");
+            const confirmButton = document.getElementById("confirmButton");
+
+            confirmMessageElement.textContent = `確定要刪除員工編號 為 ${employeeId} 的員工嗎？`;
+
+            confirmButton.onclick = function () {
+                const url = '@Url.Action("Delete", "Employees")' + '?employeeId=' + employeeId;
+                window.location.href = url;
+            };
+
+            confirmDialog.show();
+        }
+
         
 
     </script>
@@ -248,5 +283,7 @@
     <link href="~/css/Employee.css" rel="stylesheet" />
     <link href="~/css/Common.css" rel="stylesheet" />
     <link href="~/css/Reset.css" rel="stylesheet" />
+
+    
 }
 
