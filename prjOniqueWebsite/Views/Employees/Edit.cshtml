@@ -1,18 +1,20 @@
-﻿@{
+﻿@model prjOniqueWebsite.Models.ViewModels.EmployeeVM
+@{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
 
-<div class="container my-5 p-2 border border-secondary rounded-4 shadow">
+<form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post">
+    <input type="hidden" name="EmployeeId" value="@Model.EmployeeId" />
     <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">編輯員工</div>
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
-                <img src="../Images/ManagerPhoto/範例頭貼1.jpg"
+                <img src="../images/uploads/Employee/@Model.PhotoPath"
                      class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
             </div>
             <div>
-                <input type="file" name="" id="" class="form-control my-5">
+                <input type="file" name="Photo" id="Photo" class="form-control my-5">
             </div>
         </div>
         <div class=" col-8 border mx-2">
@@ -21,13 +23,13 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">姓名</div>
                         <div class="mx-2">
-                            <input type="text" class="form-control " value="peter" />
+                            <input type="text" class="form-control " value="@Model.EmployeeName" name="EmployeeName" />
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">生日</div>
                         <div class="mx-2">
-                            <input type="date" class="form-control" />
+                            <div class="mx-3" name="DateOfBirth" id="DateOfBirth">@Model.DateOfBirth</div>
                         </div>
                     </div>
                 </div>
@@ -35,13 +37,13 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">性別</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="男" />
+                            <div class="mx-3" name="Gender" id="Gender">@Model.Gender</div>
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">電話</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="0999999999">
+                            <input type="text" class="form-control" value="@Model.Phone" name="Phone">
                         </div>
                     </div>
                 </div>
@@ -49,13 +51,13 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">信箱</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="peter@gmail.com">
+                            <div class="form-control" name="Email" id="Email">@Model.Email</div>
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">密碼</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="1234">
+                            <input type="text" class="form-control" value="@Model.Password" name="Password">
                         </div>
                     </div>
                 </div>
@@ -63,13 +65,14 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">身分</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="經理">
+                            <input type="hidden" value="@Model.EmployeeLevel" id="employeeLevel" />
+                            <select class="form-select" name="EmployeeLevel" id="level"></select>
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">註冊日期</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" value="2023/07/19">
+                            <div class="mx-3" name="RegisterDate" id="RegisterDate">@Model.RegisterDate</div>
                         </div>
                     </div>
 
@@ -78,37 +81,110 @@
                     <div class="col-12  mt-2 d-flex justify-content-start ">
                         <div class=" width-90px text-end fw-bold">地址</div>
                         <div class="mx-3">
-                            <select class="form-select ">
-                                <option selected>-請選擇縣市-</option>
+                            <input type="hidden" value="@Model.Citys" id="employeeCity" />
+                            <select class="form-select" name="Citys" id="city">
+                                @*<option selected>-請選擇縣市-</option>
                                 <option value="1">台北市</option>
                                 <option value="2">新北市</option>
-                                <option value="3">桃園市</option>
+                                <option value="3">桃園市</option>*@
                             </select>
                         </div>
                         <div class="mx-3">
-                            <select class="form-select ">
-                                <option selected>-請選擇地區-</option>
+                            <input type="hidden" value="@Model.Areas" id="employeeArea" />
+                            <select class="form-select" name="Areas" id="area">
+                                @*<option selected>-請選擇地區-</option>
                                 <option value="1">大安區</option>
                                 <option value="2">中山區</option>
-                                <option value="3">中正區</option>
+                                <option value="3">中正區</option>*@
                             </select>
                         </div>
                         <div class="mx-3 ">
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" value="@Model.Address" name="Address">
                         </div>
                     </div>
                 </div>
 
                 <div class="row justify-content-around p-5">
                     <div class="text-center ">
-                        <input type="button" value="確定新增" class="EditAddButton p-2 px-4">
+                        <input type="submit" value="確定編輯" class="EditAddButton p-2 px-4">
                         <a asp-action="Index"><input type="button" value="取消" class="AddButton p-2 px-4"></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
+
+@section Scripts{
+    <script>
+        loadCity()
+        loadEmployeeLevel()
+
+        async function loadEmployeeLevel() {
+            const response = await fetch(`@Url.Content("~/employeeapi/LoadEmployeeLevel")`)
+            const datas = await response.json();
+            const employeeLevel = $("#employeeLevel").val()
+            let employeeLevelOptions = ""
+            //console.log(datas)
+            datas.map(item => {
+                const { employeeLevelId, employeeLevelName } = item
+                if (employeeLevelName == employeeLevel) {
+                    employeeLevelOptions += `<option value="${employeeLevelId}" selected>${employeeLevelName}</option>`
+                }
+                else {
+                    employeeLevelOptions += `<option value="${employeeLevelId}" >${employeeLevelName}</option>`
+                }
+            })
+            //console.log(employeeLevelOptions)
+            $('#level').append(employeeLevelOptions)
+        }
+
+        async function loadCity() {
+            const response = await fetch(`@Url.Content("~/employeeapi/LoadCity")`)
+            const datas = await response.json();
+            const employeeCity = $("#employeeCity").val()
+            let selectOptions = ""
+
+            datas.map(item => {
+                const { cityId, cityName } = item
+                if (cityName == employeeCity) {
+                    selectOptions += ` <option value="${cityId}" selected>${cityName}</option>`
+                } else {
+                    selectOptions += ` <option value="${cityId}">${cityName}</option>`
+                }
+            })
+
+            $("#city").append(selectOptions)
+
+            loadArea();
+        }
+
+        $("#city").change(function () {
+            // 清空area選項
+            $("#area").empty();
+            loadArea();
+        })
+
+        async function loadArea() {
+            const cityId = $("#city").val()
+            const response = await fetch(`@Url.Content("~/employeeapi/loadarea?cityId=")${cityId}`)
+            const datas = await response.json();
+            const employeeArea = $("#employeeArea").val()
+            let selectOptions = ""
+
+            datas.map(item => {
+                const { areaId, areaName } = item
+                if (areaName == employeeArea) {
+                    selectOptions += ` <option value="${areaId}" selected>${areaName}</option>`
+                } else {
+                    selectOptions += ` <option value="${areaId}">${areaName}</option>`
+                }
+            })
+
+            $("#area").append(selectOptions);
+        }
+    </script>
+}
 
 @section Styles{
     <link href="~/css/EmployeeCreate.css" rel="stylesheet" />

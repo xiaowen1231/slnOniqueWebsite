@@ -105,3 +105,17 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
     height: 100%;
     object-fit: cover;
 }
+
+SearchButton {
+    border: 1;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer; /*改變滑鼠游標形狀 */
+    font-size: 17px;
+}
+
+.SearchButton:hover {
+    color: white;
+    background-color: #5B5B5B;
+}

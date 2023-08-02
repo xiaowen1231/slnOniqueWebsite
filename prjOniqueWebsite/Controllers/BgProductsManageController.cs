@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,16 +10,17 @@ using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
+using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Controllers
 {
     public class BgProductsManageController : Controller
     {
-        private readonly OniqueContext _context;
+        private readonly OniqueContext _context;        
 
-        public BgProductsManageController(OniqueContext context)
+        public BgProductsManageController(OniqueContext context,IWebHostEnvironment environment)
         {
-            _context = context;
+            _context = context;            
         }
 
         // GET: BgProductsManage
@@ -85,8 +87,7 @@ namespace prjOniqueWebsite.Controllers
             if (id != products.ProductId)
             {
                 return NotFound();
-            }
-
+            }            
             if (ModelState.IsValid)
             {
                 try
@@ -152,15 +153,37 @@ namespace prjOniqueWebsite.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        //GET BgCreateColor
         public IActionResult BgCreateColor()
         {
             return View();
+        }
+        [HttpPost]
+        public IActionResult BgCreateColor(BgColorSizeSettingVM vm)
+        {
+            var color = new ProductColors()
+            {
+                ColorName = vm.ColorName
+            };
+            _context.ProductColors.Add(color);
+            _context.SaveChanges();
+            return RedirectToAction("BgCreateColor");
         }
         public IActionResult BgCreateSize()
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult BgCreateSize(BgColorSizeSettingVM vm)
+        {
+            var size = new ProductSizes()
+            {                
+                SizeName = vm.SizeName
+            };
+            _context.ProductSizes.Add(size);
+            _context.SaveChanges();
+            return RedirectToAction("BgCreateSize");
+        }
+        
         public IActionResult BgColorSizeSetting()
         {
             return View();
@@ -197,6 +220,19 @@ namespace prjOniqueWebsite.Controllers
             ViewBag.ColorName = query.ColorName;
             return View();
         }
+        //[HttpPost]
+        //public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
+        //{
+        //    var BgCss = new ProductStockDetails()
+        //    {
+        //        ProductId = vm.ProductId,
+        //        ColorId = vm.ColorId,
+        //        SizeId = vm.SizeId,
+        //    };
+        //    _context.ProductStockDetails.Add(BgCss);
+        //    _context.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
         public IActionResult BgDiscountCreate()
         {
             return View();

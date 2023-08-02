@@ -1,6 +1,6 @@
-﻿namespace prjOniqueWebsite.Models.ViewModels
+﻿namespace prjOniqueWebsite.Models.Infra
 {
-    public class HttpStatusVM
+    public class ApiResult
     {
         public int StatusCode { get; set; }
         public string StatusMessage { get; set; }

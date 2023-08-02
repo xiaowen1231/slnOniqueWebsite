@@ -25,7 +25,7 @@
             <div class="col-2 d-flex align-items-center">
                 <div class="fw-bold mx-2">商品分類:</div>
                 <div>
-                    <select class="form-select">
+                    <select class="form-select" id="selectCategory">
                         <option>請選擇</option>
                         <option>T恤</option>
                         <option>襯衫</option>
@@ -42,7 +42,7 @@
             <div class="col-2 d-flex align-items-center">
                 <div class="fw-bold mx-2">優惠活動:</div>
                 <div>
-                    <select class="form-select">
+                    <select class="form-select" id="selectDiscount">
                         <option>請選擇</option>
                         <option>夏日特賣</option>
                         <option>熱銷優惠</option>
@@ -87,7 +87,7 @@
                     string path = Url.Content("~/images/uploads/products/") + item.PhotoPath;
                     <tr>
                         <td>
-                            <img src="@path" id="img" />
+                            <img src="@path" id="productImg" />
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ProductName)
@@ -138,9 +138,9 @@
         }
 
         #productImg {
-            width: 120px;
-            height: 120px;
-            margin: auto;
+            width: 130px;
+            height: 130px;
+            object-fit:cover;
         }
 
         #img {
@@ -149,4 +149,33 @@
             object-fit: cover;
         }
     </style>
+}
+@section Scripts{
+    <script>
+        const selectCategory = document.querySelector("#selectCategory")
+        const selectDiscount = document.querySelector("#selectDiscount")
+        loadcategory()
+        async function loadcategory() {
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowCategoryList")`)
+            const datas = await response.json();
+            console.log(datas)
+            const category = datas.map(category=>{
+                const { categoryId, categoryName }=category;
+                return `<option value="${categoryId}">${categoryName}</option>`
+            })
+            selectCategory.innerHTML=category.join("")            
+        }       
+
+        loadDiscount();
+        async function loadDiscount(){
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowDiscountList")`)
+            const datas = await response.json();
+            console.log(datas)
+            const discount = datas.map(discount=>{
+                const { id,title }=discount;
+                return `<option value="${id}">${title}</option>`
+            })
+            selectDiscount.innerHTML = discount.join("");
+        }
+    </script>
 }
