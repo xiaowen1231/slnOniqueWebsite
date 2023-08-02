@@ -30,6 +30,18 @@ namespace prjOniqueWebsite.Controllers
             List<ProductColors> dto = query.ToList();
             return Json(dto);
         }
+        public IActionResult ShowCategoryList()
+        {
+            var query = from c in _context.Categories
+                        select c;
+            return Json(query);
+        }
+        public IActionResult ShowDiscountList()
+        {
+            var query = from d in _context.Discounts
+                        select d;
+            return Json(query);
+        }
         public IActionResult ShowSizeList()
         {
             var query = from s in _context.ProductSizes
