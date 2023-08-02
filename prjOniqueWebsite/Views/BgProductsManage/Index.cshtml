@@ -43,9 +43,9 @@
                 <div class="fw-bold mx-2">優惠活動:</div>
                 <div>
                     <select class="form-select" id="selectDiscount">
-                        @*<option>請選擇</option>
+                        <option>請選擇</option>
                         <option>夏日特賣</option>
-                        <option>熱銷優惠</option>*@
+                        <option>熱銷優惠</option>
                     </select>
                 </div>
             </div>
@@ -153,11 +153,12 @@
 @section Scripts{
     <script>
         const selectCategory = document.querySelector("#selectCategory")
-        //const selectDiscount = document.querySelector("#selectDiscount")
+        const selectDiscount = document.querySelector("#selectDiscount")
         loadcategory()
         async function loadcategory() {
             const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowCategoryList")`)
             const datas = await response.json();
+            console.log(datas)
             const category = datas.map(category=>{
                 const { categoryId, categoryName }=category;
                 return `<option value="${categoryId}">${categoryName}</option>`
@@ -165,15 +166,16 @@
             selectCategory.innerHTML=category.join("")            
         }       
 
-        //loadDiscount();
-        //async function loadDiscount(){
-        //    const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowDiscountList")`)
-        //    const datas = await response.json();
-        //    const discount = datas.map(discount=>{
-        //        const { id,title }=discount;
-        //        return `<option value="${id}">${title}</option>`
-        //    })
-        //    selectCategory.innerHTML = discount.join("");
-        //}
+        loadDiscount();
+        async function loadDiscount(){
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowDiscountList")`)
+            const datas = await response.json();
+            console.log(datas)
+            const discount = datas.map(discount=>{
+                const { id,title }=discount;
+                return `<option value="${id}">${title}</option>`
+            })
+            selectDiscount.innerHTML = discount.join("");
+        }
     </script>
 }
