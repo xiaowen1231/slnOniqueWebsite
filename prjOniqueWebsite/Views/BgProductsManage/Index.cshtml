@@ -25,7 +25,7 @@
             <div class="col-2 d-flex align-items-center">
                 <div class="fw-bold mx-2">商品分類:</div>
                 <div>
-                    <select class="form-select">
+                    <select class="form-select" id="selectCategory">
                         <option>請選擇</option>
                         <option>T恤</option>
                         <option>襯衫</option>
@@ -42,10 +42,10 @@
             <div class="col-2 d-flex align-items-center">
                 <div class="fw-bold mx-2">優惠活動:</div>
                 <div>
-                    <select class="form-select">
-                        <option>請選擇</option>
+                    <select class="form-select" id="selectDiscount">
+                        @*<option>請選擇</option>
                         <option>夏日特賣</option>
-                        <option>熱銷優惠</option>
+                        <option>熱銷優惠</option>*@
                     </select>
                 </div>
             </div>
@@ -149,4 +149,31 @@
             object-fit: cover;
         }
     </style>
+}
+@section Scripts{
+    <script>
+        const selectCategory = document.querySelector("#selectCategory")
+        //const selectDiscount = document.querySelector("#selectDiscount")
+        loadcategory()
+        async function loadcategory() {
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowCategoryList")`)
+            const datas = await response.json();
+            const category = datas.map(category=>{
+                const { categoryId, categoryName }=category;
+                return `<option value="${categoryId}">${categoryName}</option>`
+            })
+            selectCategory.innerHTML=category.join("")            
+        }       
+
+        //loadDiscount();
+        //async function loadDiscount(){
+        //    const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowDiscountList")`)
+        //    const datas = await response.json();
+        //    const discount = datas.map(discount=>{
+        //        const { id,title }=discount;
+        //        return `<option value="${id}">${title}</option>`
+        //    })
+        //    selectCategory.innerHTML = discount.join("");
+        //}
+    </script>
 }
