@@ -6,6 +6,7 @@
         public int OrderId { get; set; }
         public string Name { get; set; }
         public DateTime? ShippingDate { get; set; }
+        public DateTime? OrderDate { get; set; }
         public string PaymentMethodName { get; set; }
         public string PhotoPath { get; set; }
     }

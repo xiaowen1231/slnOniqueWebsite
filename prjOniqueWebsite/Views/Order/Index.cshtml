@@ -38,16 +38,25 @@
     </div>
     <div class="d-flex justify-content-between px-4">
         <div class="d-flex align-items-center gap-2">
-            <div class="width-90px  ">每頁顯示 : </div>
+            <div class="width-70px">每頁顯示</div>
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數" id="dataPerPage">
-                    <option value="10">10</option>
-                    <option value="20">20</option>
+                    <option value="10">10筆資料</option>
+                    <option value="20">20筆資料</option>
+                    <option value="30">30筆資料</option>
+                </select>
+            </div>
+           
+            <div class="width-70px">排序方式</div>
+            <div>
+                <select class="form-select d-inline" aria-label="資料筆數" id="dataPerPage">
+                    <option value="10">下單時間:早至晚</option>
+                    <option value="20">下單時間:晚至早</option>
                     <option value="30">30</option>
                 </select>
             </div>
-            <div class="width-50px ">筆資料</div>
         </div>
+
 
 
         <div class="d-flex align-items-center">
@@ -75,86 +84,17 @@
                     </tr>
                 </thead>
                 <tbody id="orderTable">
-                    @*<tr>
-                    <td>
-                    <div class="d-flex gap-2">
-                    <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                    <div>待出貨</div>
-                    </div>
-                    </td>
-                    <td>
-                    <span>OrderNum001</span>
-                    </td>
-                    <td>
-                    <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
-                    <span>OOO</span>
-                    </td>
-                    <td>2023/07/16</td>
-                    <td>貨到付款</td>
-                    <td>
-                    <div class="text-danger">2000</div>
-                    </td>
-                    <td>
-                    <a href="" class="link-underline-light link-secondary">
-                    <div class="d-flex align-items-center gap-2">
-                    <div class="circle-size-25">
-                    <img src="../Images/EmployeePhoto/edit.png" alt="">
-                    </div>
-                    <span>檢視訂單詳情</span>
-                    </div>
-                    </a>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td>
-                    <div class="d-flex gap-2">
-                    <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                    <div>待出貨</div>
-                    </div>
-                    </td>
-                    <td>
-                    <span>OrderNum001</span>
-                    </td>
-                    <td>
-                    <img src="../Images/ManagerPhoto/範例頭貼1.jpg" alt="" class="cover circle-size-40">
-                    <span>OOO</span>
-                    </td>
-                    <td>2023/07/16</td>
-                    <td>貨到付款</td>
-                    <td>
-                    <div class="text-danger">2000</div>
-                    </td>
-                    <td>
-                    <a href="" class="link-underline-light link-secondary">
-                    <div class="d-flex align-items-center gap-2">
-                    <div class="circle-size-25">
-                    <img src="../Images/EmployeePhoto/edit.png" alt="">
-                    </div>
-                    <span>檢視訂單詳情</span>
-                    </div>
-                    </a>
-                    </td>
-                    </tr>*@
+                    
                 </tbody>
             </table>
         </div>
     </div>
     <div class="container">
         <nav class="d-flex justify-content-center" aria-label="Page navigation example">
-            <ul class="pagination">
-                @*<li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                </a>
-                </li>*@
+            <ul class="pagination">                
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                @*<li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                </a>
-                </li>*@
+                <li class="page-item"><a class="page-link" href="#">3</a></li>               
             </ul>
         </nav>
     </div>
@@ -168,7 +108,7 @@
         const searchbtn = document.querySelector("#Search")
         const keywordtxt = document.querySelector("#txtKeyWord")
         const inputkeyWord = keywordtxt.textContent;
-
+        const dataPerPageSel = document.querySelector("#dataPerPage")
 
         load();
         async function load() {
@@ -179,60 +119,60 @@
             data.map(item => {
 
 
-                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
-
+                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item
                 let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
-                //console.log(displayPhotoPath)
+                displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
+                //console.log(displayorderDate)
                 tableOrdersList += `
-                                                                                        <tr>
-                                                                                        <td>
-                                                                                        <div class="d-flex gap-2">`;
+                                                                                                                                <tr>
+                                                                                                                                <td>
+                                                                                                                                <div class="d-flex gap-2">`;
                 if (statusName == "待出貨") {
                     tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 else if (statusName == "已出貨") {
                     tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 else if (statusName == "已完成") {
                     tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 else if (statusName == "已取消") {
                     tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 else if (statusName == "退款中") {
                     tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 else if (statusName == "已退款") {
                     tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 else {
                     tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 tableOrdersList += `
-                                                    </div>
-                                                    </td>
-                                                    <td>
-                                                    <span>${orderId}</span>
-                                                    </td>
-                                                    <td>
-                                                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                                    <span>${name}</span>
-                                                    </td>
-                                                    <td>2023/07/16</td>
-                                                    <td>${paymentMethodName}</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                                    </div>
-                                                    </a>
-                                                    </td>
-                                                    </tr>`
+                                        </div>
+                                        </td>
+                                        <td>
+                                        <span>${orderId}</span>
+                                        </td>
+                                        <td>
+                                                <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                        <span>${name}</span>
+                                        </td>
+                                            <td>${displayorderDate}</td>
+                                            <td>${paymentMethodName}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                        </div>
+                                        </a>
+                                        </td>
+                                        </tr>`
             })
 
             $("#orderTable").append(tableOrdersList)
@@ -290,64 +230,66 @@
             const data = await response.json();
 
             data.map(row => {
-                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = row
+                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = row
 
                 let tableOrdersList = "";
                 data.map(item => {
 
                     const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
                     let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
-
+                    displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19)
+                    console.log(displayorder)
                     tableOrdersList += `
-                                                                                <tr>
-                                                                                <td>
-                                                                                <div class="d-flex gap-2">`;
+                                                                                                                        <tr>
+                                                                                                                        <td>
+                                                                                                                        <div class="d-flex gap-2">`;
                     if (statusName == "待出貨") {
                         tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已出貨") {
                         tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已完成") {
                         tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已取消") {
                         tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "退款中") {
                         tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已退款") {
                         tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else {
                         tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                    <div>${statusName}</div>`
                     }
                     tableOrdersList += `
-                                                                                    </div>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                    <span>${orderId}</span>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                                                                    <span>${name}</span>
-                                                                                    </td>
-                                                                                    <td>2023/07/16</td>
-                                                                                    <td>${paymentMethodName}</td>
-                                                                                    <td>
-                                                                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                                                                    </div>
-                                                                                    </a>
-                                                                                    </td>
-                                                                                    </tr>`
+                                    </div>
+                                    </td>
+                                    <td>
+                                    <span>${orderId}</span>
+                                    </td>
+                                    <td>
+                                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                    <span>${name}</span>
+                                    </td>
+                                                    <td>${displayorderDate}</td>
+                                    <td>${paymentMethodName}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視
+                                        詳情</button>
+                                    </div>
+                                    </a>
+                                    </td>
+                                    </tr>`
                 })
 
                 $("#orderTable").html(tableOrdersList)
@@ -360,10 +302,15 @@
 
 
         }
+        //計算當每頁10筆資料的總頁數,並製作可點選的頁碼,應該依顯示資料筆數動態改變
+        const totalcount = @Model.OrderCount
+            let pagesize = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
+        console.log(pagesize)
+        const totalPages = Math.ceil(totalcount / pagesize);
+        console.log(totalPages)
 
-        const totalPages = @Model.TotalPages
+        const items = []
 
-                        const items = []
         for (let i = 1; i <= totalPages; i++) {
 
             const item = ` <li class="page-item" onclick="clickHandler(${i})"> <a class="page-link">${i}</a></li >`;
@@ -371,78 +318,108 @@
             items.push(item)
         }
         $(".pagination").html(items.join(""))
-        const clickHandler = thePage => {
+        //抓到點選的頁碼數
 
-            let pagesize = @Model.PageSize;
-            let page = thePage;
-            console.log(thePage)
-            getPageData(page, pagesize);
+        const clickHandler = pageIndex => {
+            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
+            let pagesize = dataShowOnPage;
+            let page = pageIndex;
+            let sort = descending;
+            getPageData(page, pagesize,sort);
         }
+        //轉換每頁顯示筆數會回到第一頁
+        dataPerPageSel.addEventListener('change', () => {
+            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
+
+            let pagesize = dataShowOnPage
+            let page = 1;
+            const totalcount = @Model.OrderCount
+
+                console.log(pagesize)
+            const totalPages = Math.ceil(totalcount / pagesize);
+            console.log(totalPages)
+
+            const items = []
+
+            for (let i = 1; i <= totalPages; i++) {
+
+                const item = ` <li class="page-item" onclick="clickHandler(${i})"> <a class="page-link">${i}</a></li >`;
+
+                items.push(item)
+            }
+            $(".pagination").html(items.join(""))
+            getPageData(page, pagesize);
+
+        })
+        //畫面顯示的預設設定
+        $(document).ready(() => {
+            let page = 1;
+            let pagesize = 10
+            getPageData(page, pagesize,sort)
+        })
 
 
-
-
-        async function getPageData(page, pagesize) {
+        async function getPageData(page, pagesize,sort) {
             const response = await fetch(`@Url.Content("~/OrderApi/orderPage?page=")${page}&pageSize=${pagesize}`)
             const data = await response.json()
             let tableOrdersList = "";
             data.map(item => {
 
 
-                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
-
+                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item
+                displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19)
                 let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
                 //console.log(displayPhotoPath)
                 tableOrdersList += `
-                                            <tr>
-                                            <td>
-                                            <div class="d-flex gap-2">`;
+                                                                                    <tr>
+                                                                                    <td>
+                                                                                    <div class="d-flex gap-2">`;
                 if (statusName == "待出貨") {
                     tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已出貨") {
                     tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已完成") {
                     tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已取消") {
                     tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "退款中") {
                     tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已退款") {
                     tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else {
                     tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 tableOrdersList += `
-                                                    </div>
-                                                    </td>
-                                                    <td>
-                                                    <span>${orderId}</span>
-                                                    </td>
-                                                    <td>
-                                                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                                    <span>${name}</span>
-                                                    </td>
-                                                    <td>2023/07/16</td>
-                                                    <td>${paymentMethodName}</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                                    </div>
-                                                    </a>
-                                                    </td>
-                                                    </tr>`
+                                                                                            </div>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                            <span>${orderId}</span>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                    <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                                                                            <span>${name}</span>
+                                                                                            </td>
+                                                                                                            <td>${displayorderDate}</td>
+                                                                                            <td>${paymentMethodName}</td>
+                                                                                            <td>
+                                                                                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                                                                            </div>
+                                                                                            </a>
+                                                                                            </td>
+                                                                                            </tr>`
             })
 
             $("#orderTable").html(tableOrdersList)
@@ -454,6 +431,7 @@
     <style>
         .statusName:hover {
             color: crimson;
+            background-color:antiquewhite;
             font-weight: bold;
             cursor: pointer;
         }

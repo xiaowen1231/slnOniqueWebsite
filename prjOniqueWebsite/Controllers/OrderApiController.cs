@@ -32,10 +32,25 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public IActionResult orderPage(int page,int pageSize) 
+        public IActionResult orderPage(int page,int pageSize,string sort) 
         {
-            List<OrderListDto> dto = dao.getOrderList().OrderBy(x => x.OrderId)
+            List<OrderListDto> dto;
+            switch (sort)
+            {
+                case "ascending":
+                    dto = dao.getOrderList().OrderBy(order => order.OrderDate)
                 .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    break;
+                case "descending":
+                    dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
+                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    break;
+                default:
+                    dto = dao.getOrderList().OrderBy(order => order.OrderId)
+                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    break;
+            }
+                
             return Json(dto);
         }
         public IActionResult search(string? keyWord)
@@ -54,6 +69,7 @@ namespace prjOniqueWebsite.Controllers
                             StatusName = os.StatusName,
                             OrderId = o.OrderId,
                             Name = m.Name,
+                            OrderDate=o.OrderDate,
                             ShippingDate = (DateTime)o.ShippingDate,
                             PaymentMethodName = pm.PaymentMethodName,
                             PhotoPath = m.PhotoPath
@@ -166,7 +182,7 @@ namespace prjOniqueWebsite.Controllers
             }
             if (statusNow == "已退款")
             {
-                data = query.Where(c => c.StatusName == "已完成").ToList();
+                data = null;
             }
             if (statusNow == "未取貨" && paymentMethodNow == "貨到付款")
             {

@@ -17,17 +17,18 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
             dao = new OrderDao(_context);
         }
-        public IActionResult Index(int page=1,int pageSize=10)
+        public IActionResult Index()
         {
             OrderPagination pagination = new OrderPagination();
-            pagination.PageSize = pageSize;
-            pagination.PageIndex = page;
+
+
             pagination.OrderCount = _context.Orders.Count();
-            pagination.TotalPages = (int)Math.Ceiling((double)pagination.OrderCount / pageSize);
-            int startIndex = pageSize * (page - 1);
-            pagination.Orders=dao.getOrderList().OrderBy(c=>c.OrderId).Skip(startIndex).Take(pageSize).ToList();
+
+
+
             //每一頁的內容物
-                     
+
+
             return View(pagination);
         }
         public IActionResult Details(int orderId)
@@ -38,10 +39,14 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Details(OrderStatusVM vm)
         {
-            var query = _context.Orders.FirstOrDefault(o => o.OrderId == vm.OrderId);
+            var query = _context.Orders.Where(O => O.OrderId == vm.OrderId).FirstOrDefault();    
+            var orderDetails = _context.OrderDetails.Where(o => o.OrderId == vm.OrderId).ToList();
 
-            query.OrderStatusId = vm.StatusId;
-
+           
+            
+        
+           query.OrderStatusId = vm.StatusId;
+            
             vm.StatusName = _context.OrderStatus.Where(os => os.StatusId == vm.StatusId).Select(vm => vm.StatusName).FirstOrDefault();
 
 
@@ -52,10 +57,34 @@ namespace prjOniqueWebsite.Controllers
                 if (vm.StatusName == "已出貨")
                 {
                     query.ShippingDate = DateTime.Now;
+                    foreach (var item in orderDetails)
+                    {
+                        var productStockDetail = _context.ProductStockDetails.Where(psd => psd.StockId == item.StockId).FirstOrDefault();
+                        productStockDetail.Quantity = productStockDetail.Quantity - item.OrderQuantity;
+                        _context.SaveChanges();
+                    }
                 }
                 else if (vm.StatusName == "已完成")
                 {
                     query.CompletionDate = DateTime.Now;
+                }
+                else if (vm.StatusName == "未取貨")
+                {
+                    foreach (var item in orderDetails)
+                    {
+                        var productStockDetail = _context.ProductStockDetails.Where(psd => psd.StockId == item.StockId).FirstOrDefault();
+                        productStockDetail.Quantity = productStockDetail.Quantity + item.OrderQuantity;
+                        _context.SaveChanges();
+                    }
+                }
+                else if(vm.StatusName== "退款中" && vm.formerStatusName== "已完成")
+                {
+                    foreach (var item in orderDetails)
+                    {
+                        var productStockDetail = _context.ProductStockDetails.Where(psd => psd.StockId == item.StockId).FirstOrDefault();
+                        productStockDetail.Quantity = productStockDetail.Quantity + item.OrderQuantity;
+                        _context.SaveChanges();
+                    }
                 }
 
                 _context.SaveChanges();

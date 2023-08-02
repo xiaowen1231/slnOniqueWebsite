@@ -31,6 +31,7 @@ namespace prjOniqueWebsite.Models.Daos
                                 OrderId = o.OrderId,
                                 Name = m.Name,
                                 ShippingDate = (DateTime)o.ShippingDate,
+                                OrderDate = (DateTime)o.OrderDate,
                                 PaymentMethodName = pm.PaymentMethodName,
                                 PhotoPath = m.PhotoPath
                             };
