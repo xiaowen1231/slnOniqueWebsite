@@ -13,10 +13,10 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string EmployeeName { get; set; }
         
         public string? PhotoPath { get; set; }
+        public IFormFile? Photo { get; set; }
         public string? DateOfBirth { get; set; }
 
-        [Display(Name = "性別")]
-        [Required(ErrorMessage = "性別不可空白")]
+        [Required(ErrorMessage = "請選擇性別")]
         public bool Gender { get; set; }
 
         [Display(Name = "電話")]
