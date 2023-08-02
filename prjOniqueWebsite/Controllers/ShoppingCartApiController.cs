@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.Repositories;
 using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
@@ -32,19 +33,19 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult DeleteCart(int shoppingCartId)
         {
-            HttpStatusVM vm = new HttpStatusVM();
+            ApiResult result = new ApiResult();
             try
             {
                 _dao.DeleteCartItem(shoppingCartId);
-                vm.StatusCode = 200;
-                vm.StatusMessage = "刪除成功";
+                result.StatusCode = 200;
+                result.StatusMessage = "刪除成功";
             }
             catch (Exception ex)
             {
-                vm.StatusCode = 500;
-                vm.StatusMessage = "刪除失敗";
+                result.StatusCode = 500;
+                result.StatusMessage = "刪除失敗";
             }
-            return Json(vm);
+            return Json(result);
         }
 
         public IActionResult CartItems()
@@ -80,6 +81,11 @@ namespace prjOniqueWebsite.Controllers
             dto.Address = member.Address;
 
             return Json(dto);
+        }
+
+        public IActionResult CreateOrder(OrderConfirmationVM vm)
+        {
+            return Content("test");
         }
     }
 }
