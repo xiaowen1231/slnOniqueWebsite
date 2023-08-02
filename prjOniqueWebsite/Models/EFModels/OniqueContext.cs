@@ -253,6 +253,16 @@ namespace prjOniqueWebsite.Models.EFModels
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Recipient)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.RecipientPhone)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Remark).HasMaxLength(50);
+
                 entity.Property(e => e.ShippingAddress)
                     .IsRequired()
                     .HasMaxLength(250);
