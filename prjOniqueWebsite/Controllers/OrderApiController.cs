@@ -27,21 +27,22 @@ namespace prjOniqueWebsite.Controllers
             return Json(dto);
         }
         /// <summary>
-        /// 分頁
+        /// 傳分頁資料給前台OrderIndex更新頁面資料
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
-        /// <returns></returns>
+        /// <param name="sort">分類</param>
+        /// <returns>List<OrderListDto> dto</returns>
         public IActionResult orderPage(int page,int pageSize,string sort) 
         {
             List<OrderListDto> dto;
             switch (sort)
             {
-                case "ascending":
+                case "OrderDateAscending":
                     dto = dao.getOrderList().OrderBy(order => order.OrderDate)
                 .Skip((page - 1) * pageSize).Take(pageSize).ToList();
                     break;
-                case "descending":
+                case "OrderDateDescending":
                     dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
                 .Skip((page - 1) * pageSize).Take(pageSize).ToList();
                     break;

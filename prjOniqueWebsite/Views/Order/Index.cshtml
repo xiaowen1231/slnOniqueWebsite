@@ -46,13 +46,13 @@
                     <option value="30">30筆資料</option>
                 </select>
             </div>
-           
-            <div class="width-70px">排序方式</div>
+
+            <div class="width-70px ms-3">排序方式</div>
             <div>
-                <select class="form-select d-inline" aria-label="資料筆數" id="dataPerPage">
-                    <option value="10">下單時間:早至晚</option>
-                    <option value="20">下單時間:晚至早</option>
-                    <option value="30">30</option>
+                <select class="form-select d-inline" aria-label="資料筆數" id="sort">
+                    <option value="OrderDateAscending">下單時間:早至晚</option>
+                    <option value="OrderDateDescending">下單時間:晚至早</option>
+
                 </select>
             </div>
         </div>
@@ -84,17 +84,16 @@
                     </tr>
                 </thead>
                 <tbody id="orderTable">
-                    
                 </tbody>
             </table>
         </div>
     </div>
     <div class="container">
         <nav class="d-flex justify-content-center" aria-label="Page navigation example">
-            <ul class="pagination">                
+            <ul class="pagination">
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>               
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
             </ul>
         </nav>
     </div>
@@ -109,75 +108,75 @@
         const keywordtxt = document.querySelector("#txtKeyWord")
         const inputkeyWord = keywordtxt.textContent;
         const dataPerPageSel = document.querySelector("#dataPerPage")
+        const sortsel = document.querySelector('#sort')
+        //load();
+        //async function load() {
+        //    const response = await fetch(`@Url.Content("~/OrderApi/showOrderList")`)
+        //    const data = await response.json();
 
-        load();
-        async function load() {
-            const response = await fetch(`@Url.Content("~/OrderApi/showOrderList")`)
-            const data = await response.json();
-
-            let tableOrdersList = "";
-            data.map(item => {
+        //    let tableOrdersList = "";
+        //    data.map(item => {
 
 
-                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item
-                let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
-                displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
-                //console.log(displayorderDate)
-                tableOrdersList += `
-                                                                                                                                <tr>
-                                                                                                                                <td>
-                                                                                                                                <div class="d-flex gap-2">`;
-                if (statusName == "待出貨") {
-                    tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                                                                    <div>${statusName}</div>`
-                }
-                else if (statusName == "已出貨") {
-                    tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                                                                    <div>${statusName}</div>`
-                }
-                else if (statusName == "已完成") {
-                    tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                                                                    <div>${statusName}</div>`
-                }
-                else if (statusName == "已取消") {
-                    tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                                                                    <div>${statusName}</div>`
-                }
-                else if (statusName == "退款中") {
-                    tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                                                                    <div>${statusName}</div>`
-                }
-                else if (statusName == "已退款") {
-                    tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                                                                    <div>${statusName}</div>`
-                }
-                else {
-                    tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
-                }
-                tableOrdersList += `
-                                        </div>
-                                        </td>
-                                        <td>
-                                        <span>${orderId}</span>
-                                        </td>
-                                        <td>
-                                                <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                        <span>${name}</span>
-                                        </td>
-                                            <td>${displayorderDate}</td>
-                                            <td>${paymentMethodName}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                        </div>
-                                        </a>
-                                        </td>
-                                        </tr>`
-            })
+        //        const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item
+        //        let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
+        //        displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
+        //        //console.log(displayorderDate)
+        //        tableOrdersList += `
+        //                                                                                                                                        <tr>
+        //                                                                                                                                        <td>
+        //                                                                                                                                        <div class="d-flex gap-2">`;
+        //        if (statusName == "待出貨") {
+        //            tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
+        //                                                                                                                                                                                                            <div>${statusName}</div>`
+        //        }
+        //        else if (statusName == "已出貨") {
+        //            tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
+        //                                                                                                                                                                                                            <div>${statusName}</div>`
+        //        }
+        //        else if (statusName == "已完成") {
+        //            tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
+        //                                                                                                                                                                                                            <div>${statusName}</div>`
+        //        }
+        //        else if (statusName == "已取消") {
+        //            tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
+        //                                                                                                                                                                                                            <div>${statusName}</div>`
+        //        }
+        //        else if (statusName == "退款中") {
+        //            tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
+        //                                                                                                                                                                                                            <div>${statusName}</div>`
+        //        }
+        //        else if (statusName == "已退款") {
+        //            tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
+        //                                                                                                                                                                                                            <div>${statusName}</div>`
+        //        }
+        //        else {
+        //            tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
+        //                                                                                                                                                                                                                    <div>${statusName}</div>`
+        //        }
+        //        tableOrdersList += `
+        //                                                </div>
+        //                                                </td>
+        //                                                <td>
+        //                                                <span>${orderId}</span>
+        //                                                </td>
+        //                                                <td>
+        //                                                        <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+        //                                                <span>${name}</span>
+        //                                                </td>
+        //                                                    <td>${displayorderDate}</td>
+        //                                                    <td>${paymentMethodName}</td>
+        //                                                <td>
+        //                                                    <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+        //                                                </div>
+        //                                                </a>
+        //                                                </td>
+        //                                                </tr>`
+        //    })
 
-            $("#orderTable").append(tableOrdersList)
+        //    $("#orderTable").append(tableOrdersList)
 
-        }
+        //}
 
 
 
@@ -212,86 +211,84 @@
             const data = await response.json();
             let Tags = data;
 
-
-            //console.log(Tags)
-
-
             $("#txtKeyWord").autocomplete({
                 source: Tags, //將資訊丟進Source參數裡
                 minLength: 1 //使用者最少輸入多少個字才啟動autocomplete
             });
         }
 
-
+        //Ketyword傳回的資料不會分頁,應該是依keyword傳回的資料筆數作芬頁及頁碼
         async function showSearchdata(keyWord) {
 
 
             const response = await fetch(`@Url.Content("~/OrderApi/search?keyWord=")${keyWord}`)
             const data = await response.json();
-
+            
+            
             data.map(row => {
                 const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = row
-
+                //console.log(row)
                 let tableOrdersList = "";
                 data.map(item => {
 
                     const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
+                    
                     let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
                     displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19)
-                    console.log(displayorder)
+                   
                     tableOrdersList += `
-                                                                                                                        <tr>
-                                                                                                                        <td>
-                                                                                                                        <div class="d-flex gap-2">`;
+                                <tr>
+                                <td>
+                                <div class="d-flex gap-2">`;
                     if (statusName == "待出貨") {
                         tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已出貨") {
                         tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已完成") {
                         tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已取消") {
                         tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "退款中") {
                         tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else if (statusName == "已退款") {
                         tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                     }
                     else {
                         tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                                                    <div>${statusName}</div>`
                     }
                     tableOrdersList += `
-                                    </div>
-                                    </td>
-                                    <td>
-                                    <span>${orderId}</span>
-                                    </td>
-                                    <td>
-                                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                    <span>${name}</span>
-                                    </td>
-                                                    <td>${displayorderDate}</td>
-                                    <td>${paymentMethodName}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視
-                                        詳情</button>
-                                    </div>
-                                    </a>
-                                    </td>
-                                    </tr>`
+                                                    </div>
+                                                    </td>
+                                                    <td>
+                                                    <span>${orderId}</span>
+                                                    </td>
+                                                    <td>
+                                                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                                    <span>${name}</span>
+                                                    </td>
+                                                                    <td>${displayorderDate}</td>
+                                                    <td>${paymentMethodName}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單內容
+                                                        </button>
+                                                    </div>
+                                                    </a>
+                                                    </td>
+                                                    </tr>`
                 })
-
+               
                 $("#orderTable").html(tableOrdersList)
             })
         }
@@ -302,13 +299,10 @@
 
 
         }
-        //計算當每頁10筆資料的總頁數,並製作可點選的頁碼,應該依顯示資料筆數動態改變
+        //製作可點選的"頁碼"",應該依顯示資料筆數動態改變
         const totalcount = @Model.OrderCount
             let pagesize = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
-        console.log(pagesize)
         const totalPages = Math.ceil(totalcount / pagesize);
-        console.log(totalPages)
-
         const items = []
 
         for (let i = 1; i <= totalPages; i++) {
@@ -318,14 +312,27 @@
             items.push(item)
         }
         $(".pagination").html(items.join(""))
-        //抓到點選的頁碼數
+        //切換分類方式
+        sortsel.addEventListener('change', () => {
+            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value;
+            const sortSolution = sortsel.options[sortsel.selectedIndex].value;
+            let pagesize = dataShowOnPage;
+            let page = 1;
+            let sort = sortSolution;
 
+            getPageData(page, pagesize, sort);
+        })
+        
+
+        //抓到點選的頁碼數，帶入參數呼叫api
         const clickHandler = pageIndex => {
-            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
+            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value;
+            const sortSolution = sortsel.options[sortsel.selectedIndex].value;
             let pagesize = dataShowOnPage;
             let page = pageIndex;
-            let sort = descending;
-            getPageData(page, pagesize,sort);
+            let sort = sortSolution;
+
+            getPageData(page, pagesize, sort);
         }
         //轉換每頁顯示筆數會回到第一頁
         dataPerPageSel.addEventListener('change', () => {
@@ -348,19 +355,20 @@
                 items.push(item)
             }
             $(".pagination").html(items.join(""))
-            getPageData(page, pagesize);
+            getPageData(page, pagesize, sort);
 
         })
         //畫面顯示的預設設定
         $(document).ready(() => {
             let page = 1;
             let pagesize = 10
-            getPageData(page, pagesize,sort)
+
+            getPageData(page, pagesize, sort)
         })
-
-
-        async function getPageData(page, pagesize,sort) {
-            const response = await fetch(`@Url.Content("~/OrderApi/orderPage?page=")${page}&pageSize=${pagesize}`)
+        
+        //呼叫更新頁面畫面的api
+        async function getPageData(page, pagesize, sort) {
+            const response = await fetch(`@Url.Content("~/OrderApi/orderPage?page=")${page}&pageSize=${pagesize}&sort=${sort}`)
             const data = await response.json()
             let tableOrdersList = "";
             data.map(item => {
@@ -371,55 +379,55 @@
                 let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
                 //console.log(displayPhotoPath)
                 tableOrdersList += `
-                                                                                    <tr>
-                                                                                    <td>
-                                                                                    <div class="d-flex gap-2">`;
+                                                                                                    <tr>
+                                                                                                    <td>
+                                                                                                    <div class="d-flex gap-2">`;
                 if (statusName == "待出貨") {
                     tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已出貨") {
                     tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已完成") {
                     tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已取消") {
                     tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "退款中") {
                     tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else if (statusName == "已退款") {
                     tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                                                                            <div>${statusName}</div>`
+                                                                                                                                                                                                                            <div>${statusName}</div>`
                 }
                 else {
                     tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                                                                    <div>${statusName}</div>`
+                                                                                                                                                                                                                                    <div>${statusName}</div>`
                 }
                 tableOrdersList += `
-                                                                                            </div>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                            <span>${orderId}</span>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                    <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                                                                            <span>${name}</span>
-                                                                                            </td>
-                                                                                                            <td>${displayorderDate}</td>
-                                                                                            <td>${paymentMethodName}</td>
-                                                                                            <td>
-                                                                                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                                                                            </div>
-                                                                                            </a>
-                                                                                            </td>
-                                                                                            </tr>`
+                                                                                                            </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                            <span>${orderId}</span>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                    <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                                                                                            <span>${name}</span>
+                                                                                                            </td>
+                                                                                                                            <td>${displayorderDate}</td>
+                                                                                                            <td>${paymentMethodName}</td>
+                                                                                                            <td>
+                                                                                                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                                                                                            </div>
+                                                                                                            </a>
+                                                                                                            </td>
+                                                                                                            </tr>`
             })
 
             $("#orderTable").html(tableOrdersList)
@@ -431,7 +439,7 @@
     <style>
         .statusName:hover {
             color: crimson;
-            background-color:antiquewhite;
+            background-color: antiquewhite;
             font-weight: bold;
             cursor: pointer;
         }
