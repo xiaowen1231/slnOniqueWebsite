@@ -87,7 +87,7 @@
                     string path = Url.Content("~/images/uploads/products/") + item.PhotoPath;
                     <tr>
                         <td>
-                            <img src="@path" id="img" />
+                            <img src="@path" id="productImg" />
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ProductName)
@@ -138,9 +138,9 @@
         }
 
         #productImg {
-            width: 120px;
-            height: 120px;
-            margin: auto;
+            width: 130px;
+            height: 130px;
+            object-fit:cover;
         }
 
         #img {
