@@ -32,5 +32,41 @@ namespace prjOniqueWebsite.Controllers
             return View(member);
         }
 
+        [TypeFilter(typeof(MemberVerify))]
+        public IActionResult OrderSettlement(int orderId)
+        {
+            var dto = new OrderSettlementDto();
+            var orderDetails = _context.OrderDetails.Where(od=>od.OrderId == orderId).ToList();
+
+            decimal total = 0;
+            foreach (var item in orderDetails)
+            {
+                total += (item.Price * item.OrderQuantity);
+            }
+
+            string methodName = (from o in _context.Orders
+                                 join sm in _context.ShippingMethods
+                                 on o.MethodId equals sm.MethodId
+                                 where o.OrderId == orderId
+                                 select sm.MethodName).ToString();
+            
+            if (methodName == "宅配")
+            {
+                total += 100;
+            }
+            else if (methodName == "郵寄")
+            {
+                total += 120;
+            }
+            else
+            {
+                total += 60;
+            }
+
+            dto.OrderId = orderId;
+            dto.Total = total;
+
+            return View(dto);
+        }
     }
 }

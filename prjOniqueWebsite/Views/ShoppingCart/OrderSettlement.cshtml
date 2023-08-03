@@ -1,0 +1,51 @@
+﻿@model prjOniqueWebsite.Models.Dtos.OrderSettlementDto
+@{
+    ViewData["Title"] = "訂單結算";
+}
+
+<div class="container">
+    <div>
+        <div class="status d-flex justify-content-center gap-5 mb-3 py-4 border-bottom border-secondary">
+            <div>
+                <span class="step">1</span>
+                <span>查看購物車</span>
+            </div>
+            <div>&gt;</div>
+            <div>
+                <span class="step">2</span>
+                <span>訂單確認</span>
+            </div>
+            <div>&gt;</div>
+            <div class="active">
+                <span class="step">3</span>
+                <span>訂單結算</span>
+            </div>
+        </div>
+    </div>
+    <div class="border border-dark-subtle rounded d-flex" style="height: 60vh;">
+        <div class="text-center m-auto">
+            <div class="fs-4 m-3">
+                恭喜你已完成訂購
+            </div>
+            <div class="d-flex gap-5">
+                <div>
+                    <span>訂單金額</span>
+                    <span class="text-danger ">NT$@Model.Total.ToString()</span>
+                </div>
+                <div>
+                    <span>訂單編號</span>
+                    <span>@Model.OrderId.ToString()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-end my-4">
+        <input type="button" value="查看訂單" class="btn btn-outline-dark" style="width: 150px;">
+        <input type="submit" value="繼續購物" class="btn btn-dark" style="width: 150px;">
+    </div>
+</div>
+@section Styles{
+    <link href="~/css/shoppingcart.css" rel="stylesheet" />
+    <style>
+    </style>
+}

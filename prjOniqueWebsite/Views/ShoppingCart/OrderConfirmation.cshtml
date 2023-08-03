@@ -179,21 +179,21 @@
                 quantumOfOutput += subTotal;
 
                 return (`<tr class="border">
-                                    <td class="w-90-h-90">
-                                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${product.productName}" class="w-90-h-90 rounded">
-                                    </td>
-                                    <td>
-                                        ${product.productName}
-                                    </td>
-                                    <td>${productSizes.sizeName}</td>
-                                    <td>${productColors.colorName}</td>
-                                    <td>${shoppingCart.orderQuantity}</td>
-                                    <td>
-                                        <div class="price">
-                                            ${subTotal}
-                                        </div>
-                                    </td>
-                                </tr>`)
+                            <td class="w-90-h-90">
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${product.productName}" class="w-90-h-90 rounded">
+                            </td>
+                            <td>
+                                ${product.productName}
+                            </td>
+                            <td>${productSizes.sizeName}</td>
+                            <td>${productColors.colorName}</td>
+                            <td>${shoppingCart.orderQuantity}</td>
+                            <td>
+                                <div class="price">
+                                    ${subTotal}
+                                </div>
+                            </td>
+                        </tr>`)
             })
             tableCartList.innerHTML = cartList.join("");
             $('#divProductsSubTotal').text(quantumOfOutput);
@@ -328,16 +328,37 @@
         $('#btnSubmit').click(async function (event) {
             event.preventDefault();
             let isValid = checkValue();
-            console.log(isValid)
-            //const formData = new FormData(document.orderForm);
 
-            //const response = await fetch('@Url.Content("~/ShoppingCartApi/CreateOrder")',{
-            //    body: formData,
-            //    method:'POST'
-            //});
+            if (isValid) {
+                const formData = new FormData(document.orderForm);
 
-            //const datas = response.text();
+                const response = await fetch('@Url.Content("~/ShoppingCartApi/CreateOrder")', {
+                    body: formData,
+                    method: 'POST'
+                });
 
+                const datas = await response.json();
+                if (datas.result.statusCode == 200) {
+                    Swal.fire({
+                        title: datas.result.statusMessage,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                    setTimeout(() => {
+                        window.location.href = `@Url.Content("~/shoppingcart/OrderSettlement?")orderId=${datas.orderId}`
+                    }, 1500)
+                }
+                else {
+                    Swal.fire({
+                        title: "訂購失敗!",
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    console.log()
+                }
+            }
         })
 
         let constraints = {
@@ -350,19 +371,19 @@
                 presence: {
                     message: "^電話是必填的欄位!",
 
-                }, 
+                },
                 length: {
-                    minimum: 9, // 輸入值不能短於此值
-                    maximum: 11, // 輸入值不能長於此值
+                    minimum: 10,
+                    maximum: 10,
                     message: "^電話長度需10碼!"
                 },
-                numericality:{
-                    message:"^請輸入數字!"
+                numericality: {
+                    message: "^請輸入數字!"
                 }
 
             },
-            "Address":{
-                presence:{
+            "Address": {
+                presence: {
                     message: "^請填寫詳細住址!",
                 }
             }
@@ -378,10 +399,10 @@
             if (result) {
                 setMessage(result);
                 return false
-            }else{
+            } else {
                 return true
             }
-        } 
+        }
         function setMessage(result) {
             let message;
             let nameList = Object.keys(result);

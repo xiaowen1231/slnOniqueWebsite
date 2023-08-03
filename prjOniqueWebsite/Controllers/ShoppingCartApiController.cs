@@ -85,7 +85,74 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult CreateOrder(OrderConfirmationVM vm)
         {
-            return Content("test");
+            var dto = new OrderSettlementDto();
+            var result = new ApiResult();
+
+            try
+            {
+
+                string city = _context.Citys.Where(c => c.CityId == vm.City).Select(c => c.CityName).FirstOrDefault();
+                string area = _context.Areas.Where(a => a.AreaId == vm.Area).Select(a => a.AreaName).FirstOrDefault();
+                string shippingAddress = city + area + vm.Address;
+
+                var member = _context.Members.FirstOrDefault(m => m.MemberId == vm.MemberId);
+
+                var order = new Orders
+                {
+                    MemberId = vm.MemberId,
+                    MethodId = vm.MethodId,
+                    ShippingAddress = shippingAddress,
+                    OrderStatusId = 1,
+                    OrderDate = DateTime.Now,
+                    PaymentMethodId = vm.PaymentMethodId,
+                    Recipient = vm.Recipient,
+                    Remark = vm.Remark,
+                    RecipientPhone = vm.RecipientPhone
+                };
+                var orderDetail = _dao.CartItems(member);
+
+                foreach (var item in orderDetail)
+                {
+                    order.OrderDetails.Add(new OrderDetails
+                    {
+                        StockId = item.StockId,
+                        OrderQuantity = item.ShoppingCart.OrderQuantity,
+                        Price = item.Product.Price
+                    });
+                }
+                
+                List<ShoppingCart> cartItems = new List<ShoppingCart>();
+                cartItems = _context.ShoppingCart.Where(sc=>sc.MemberId == vm.MemberId).ToList();
+
+                foreach (var item in cartItems)
+                {
+                    _context.ShoppingCart.Remove(item);
+                }
+
+                _context.Orders.Add(order);
+                _context.SaveChanges();
+
+                int orderId = order.OrderId;
+
+                
+
+                result.StatusCode = 200;
+                result.StatusMessage = "恭喜您已完成訂購";
+
+                dto.OrderId = orderId;
+                dto.Result = result;
+            }
+            catch (Exception ex)
+            {
+                result.StatusCode = 500;
+                result.StatusMessage = "訂購失敗" + ex.Message;
+                dto.Result = result;
+
+            }
+
+            return Json(dto);
         }
+
+
     }
 }
