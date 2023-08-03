@@ -182,12 +182,8 @@ namespace prjOniqueWebsite.Controllers
             _context.ProductSizes.Add(size);
             _context.SaveChanges();
             return RedirectToAction("BgCreateSize");
-        }
-        
-        public IActionResult BgColorSizeSetting()
-        {
-            return View();
-        }public IActionResult BgColorSizeDetails(int id)
+        }        
+        public IActionResult BgColorSizeDetails(int id)
         {
             try
             {
@@ -199,26 +195,17 @@ namespace prjOniqueWebsite.Controllers
                 return Content(ex.Message);
             }
         }
-        public IActionResult BgColorSizeSettingCreate()
+        public IActionResult BgColorSizeSettingCreate(int id)
         {
-            BgProductColorSizeSettingDto query = (from psd in _context.ProductStockDetails
-                                                  join p in _context.Products
-                                                  on psd.ProductId equals p.ProductId
-                                                  join c in _context.ProductColors
-                                                  on psd.ColorId equals c.ColorId
-                                                  join s in _context.ProductSizes
-                                                  on psd.SizeId equals s.SizeId
-                                                  select new BgProductColorSizeSettingDto
-                                                  {
-                                                      ProductId = p.ProductId,
-                                                      ProductName = p.ProductName,
-                                                      ColorName = c.ColorName,
-                                                      SizeName = s.SizeName
-                                                  }).FirstOrDefault();
-            ViewBag.ProductName = query.ProductName;
-            ViewBag.SizeName = query.SizeName;
-            ViewBag.ColorName = query.ColorName;
-            return View();
+            try
+            {
+                ProductDetailDto dto = new ProductDao(_context).GetProductDetail(id);
+                return View(dto);
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }           
         }
         //[HttpPost]
         //public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
