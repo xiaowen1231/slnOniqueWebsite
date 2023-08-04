@@ -18,6 +18,7 @@ namespace prjOniqueWebsite.Controllers
         {
             if (keyword == null)
             {
+                ViewBag.Keyword = null;
                 return View();
             }
             else

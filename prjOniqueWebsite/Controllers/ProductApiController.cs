@@ -78,5 +78,11 @@ namespace prjOniqueWebsite.Controllers
             
             return Json(cart);
         }
+
+        public IActionResult ProductList(string keyword)
+        {
+            var datas = dao.SearchProductList(keyword);
+            return Json(datas);
+        }
     }
 }

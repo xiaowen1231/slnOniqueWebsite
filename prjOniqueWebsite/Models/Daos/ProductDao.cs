@@ -207,5 +207,21 @@ namespace prjOniqueWebsite.Models.Repositories
                         select paymentMethod;
             return query.ToList();
         }
+
+        public List<ProductCardDto> SearchProductList(string keyword)
+        {
+            if (!string.IsNullOrEmpty(keyword))
+            {
+
+            }
+            var query = _context.Products.Select(p => new ProductCardDto
+            {
+                Id = p.ProductId,
+                ProductName = p.ProductName,
+                Price = p.Price,
+                PhotoPath = p.PhotoPath
+            });
+            return query.ToList();
+        }
     }
 }
