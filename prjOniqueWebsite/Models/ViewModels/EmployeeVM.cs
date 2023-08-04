@@ -17,7 +17,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string? DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "請選擇性別")]
-        public bool Gender { get; set; }
+        public string Gender { get; set; }
 
         [Display(Name = "電話")]
         [Required(ErrorMessage = "手機不可空白")]

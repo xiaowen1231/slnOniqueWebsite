@@ -33,7 +33,7 @@
         </div>
         <div class="my-5" id="colorsizeTable">
             <div class="d-flex p-2 align-items-center text-center my-2" style="font-size: 18px; margin-left: 30%;">
-                <input type="hidden" value="@Model.products.ProductId" id="productId" />
+                <input type="hidden" value="@Model.products.ProductId" id="productId" name="ProductId" />
                 <div class="text-center fw-bold">商品名稱 :</div>
                 <div class="mx-2">@Model.products.ProductName</div>
             </div>
@@ -41,7 +41,7 @@
                 <div class="fw-bold text-center">商品尺寸 :</div>
                 <div class="mx-2" id="selectSize">
                     <input type="hidden" id="selectSize" />
-                    <select class="form-select" name="Sizes" id="Size">
+                    <select class="form-select" name="SizeId" id="Size">
                         @*<option value=""></option>*@
                     </select>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="fw-bold text-center">商品顏色 :</div>
                 <div class="mx-2">
                     <input type="hidden" id="selectColor" />
-                    <select class="form-select" name="Colors" id="Color">
+                    <select class="form-select" name="ColorId" id="Color">
                         @*<option value=""></option>*@
                     </select>
                 </div>
