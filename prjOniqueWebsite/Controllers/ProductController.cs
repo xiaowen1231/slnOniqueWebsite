@@ -22,8 +22,13 @@ namespace prjOniqueWebsite.Controllers
             }
             catch (Exception ex)
             {
-                return Content(ex.Message);
+                return RedirectToAction("NotReady");
             }
+        }
+
+        public IActionResult NotReady()
+        {
+            return View();
         }
     }
 }
