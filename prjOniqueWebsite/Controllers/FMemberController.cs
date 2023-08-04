@@ -21,10 +21,10 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult MemberInfo()
         {
             string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
-            var mem = (from m in _context.Members
-                       join 
-                       )
+            //Members member = JsonSerializer.Deserialize<Members>(json);
+            //var mem = (from m in _context.Members
+            //           join 
+            //           )
             return PartialView();
         }
         public IActionResult MemberOrder()
