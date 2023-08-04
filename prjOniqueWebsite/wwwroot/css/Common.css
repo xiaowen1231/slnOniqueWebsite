@@ -123,11 +123,11 @@
 .width-1000px{
     width:1000px;
 }
-.width-1320px {
-    width: 1320px;
+.width-1060px {
+    width: 1200px;
 }
-.width-1500px {
-    width: 1500px;
+.width-1350px {
+    width: 1350px;
 }
 
 .w-500-h-500 {
@@ -138,13 +138,13 @@
     width: 450px;
     height: 450px;
 }
-.w-210-h-300 {
-    width: 210px;
-    height: 300px;
+.w-240-h-330 {
+    width: 240px;
+    height: 330px;
 }
-.w-200-h-200 {
-    width: 200px;
-    height: 200px;
+.w-220-h-220 {
+    width: 220px;
+    height: 220px;
 }
 .w-120-h-120{
     width:120px;
