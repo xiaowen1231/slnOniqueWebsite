@@ -4,7 +4,7 @@ namespace prjOniqueWebsite.Models.ViewModels
 {
     public class MemberVM
     {
-        [Required]
+        //[Required]
         public int MemberId { get; set; }
         public string? PhotoPath { get; set; }
         public IFormFile? Photo { get; set; }

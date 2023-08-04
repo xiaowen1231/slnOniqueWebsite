@@ -60,7 +60,7 @@ namespace prjOniqueWebsite.Controllers
                 employee.EmployeeId = vm.EmployeeId;
                 employee.EmployeeName = vm.EmployeeName;
                 employee.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
-                employee.Gender = vm.Gender;
+                employee.Gender = vm.Gender=="男"? true : false;
                 employee.Position = Convert.ToInt32(vm.EmployeeLevel);
                 employee.Phone = vm.Phone;
                 employee.Email = vm.Email;
@@ -97,7 +97,7 @@ namespace prjOniqueWebsite.Controllers
                                        EmployeeName = e.EmployeeName,
                                        PhotoPath = e.PhotoPath,
                                        DateOfBirth = Convert.ToDateTime(e.DateOfBirth).ToString("yyyy-MM-dd"),
-                                       Gender = e.Gender ,
+                                       Gender = e.Gender==true? "男" : "女",
                                        Phone = e.Phone,
                                        Email = e.Email,
                                        Password = e.Password,
@@ -120,11 +120,15 @@ namespace prjOniqueWebsite.Controllers
                 {
                     string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
                     string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
+                    
                     using (var fileStream = new FileStream(photoPath, FileMode.Create))
                     {
                         vm.Photo.CopyTo(fileStream);
+                        
                     }
+                    employee.PhotoPath = fileName;
                 }
+
                 employee.EmployeeName = vm.EmployeeName;
                 employee.Password = vm.Password;
                 employee.Phone = vm.Phone;
