@@ -1,0 +1,83 @@
+﻿@{
+    string title = "所有商品";
+
+    if (!string.IsNullOrEmpty(ViewBag.Keyword))
+    {
+        title = ViewBag.Keyword;
+    }
+
+    ViewData["Title"] = title;
+
+    Layout = Url.Content("~/Views/Shared/_Layout_Product.cshtml");
+}
+
+<div>
+    <div class="m-2">
+        <a href="@Url.Content("~/Home/Index")" class="fs-5 fw-bold link-underline-light link-dark">首頁</a>
+        <span class="fs-5 fw-bold">&gt;</span>
+        <span class="fs-5 fw-bold">@title</span>
+        <input type="hidden" value="@ViewBag.Keyword" id="searchKeyword" />
+    </div>
+    <div class="d-flex m-2 gap-3 align-items-center">
+        <div>排序方式: </div>
+        <div>
+            <select class="form-select form-select-sm">
+                <option>最新上架</option>
+                <option>熱賣商品</option>
+                <option>價格高到低</option>
+                <option>價格低到高</option>
+            </select>
+        </div>
+    </div>
+    <div class="mx-auto d-flex flex-md-wrap" id="divProductList">
+    </div>
+    <div class="container m-3">
+        <nav class="d-flex justify-content-center" aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@section Styles{
+    <style>
+        .price:before {
+            content: "$"
+        }
+    </style>
+}
+@section Scripts{
+    <script>
+        let keyword = $('#searchKeyword').val()
+        Display(keyword)
+        async function Display(keyword){
+            const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}`)
+            const datas = await response.json()
+            
+            const cards = datas.map(item=>{
+                const{id,productName,price,photoPath}=item;
+
+                return (`<a href="@Url.Content("~/Product/Detail/")${id}" class="link-dark link-underline-opacity-0 border rounded shadow-sm m-2">
+                            <div class="w-240-h-240 m-2">
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                            </div>
+                            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                    <div class="price text-center">${price}</div>
+                            <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                <div class="w-25-h-25">
+                                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                </div>
+                                <div class="w-25-h-25">
+                                    <img src="@Url.Content("~/images/icon/love.png")" />
+                                </div>
+                            </div>
+                        </a>`)
+
+            })
+            $('#divProductList').html(cards.join(""))
+        }
+    </script>
+}

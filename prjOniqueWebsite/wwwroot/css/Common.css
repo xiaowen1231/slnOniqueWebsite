@@ -3,11 +3,13 @@
     height: 16px;
     border-radius: 50%;
 }
+
 .circle-size-25 {
     width: 25px;
     height: 25px;
     border-radius: 50%;
 }
+
 .circle-size-35 {
     width: 35px;
     height: 35px;
@@ -25,16 +27,19 @@
     height: 55px;
     border-radius: 50%;
 }
+
 .circle-size-60 {
     width: 60px;
     height: 60px;
     border-radius: 50%;
 }
+
 .circle-size-150 {
     width: 150px;
     height: 150px;
     border-radius: 50%;
 }
+
 .circle-size-300 {
     width: 300px;
     height: 300px;
@@ -76,9 +81,11 @@
 .color-fff {
     background-color: #fff;
 }
+
 .width-16px {
     width: 16px
 }
+
 .width-30px {
     width: 30px;
 }
@@ -91,12 +98,12 @@
     width: 50px;
 }
 
-.width-60px{
-    width:60px;
+.width-60px {
+    width: 60px;
 }
 
-.width-80px{
-    width:80px;
+.width-80px {
+    width: 80px;
 }
 
 .width-90px {
@@ -114,43 +121,79 @@
 .width-170px {
     width: 170px;
 }
+
+.width-200px {
+    width: 200px;
+}
+
+.width-250px {
+    width: 250px;
+}
+
 .width-265px {
     width: 265px;
 }
+
 .width-300px {
     width: 300px;
 }
-.width-1000px{
-    width:1000px;
+
+.width-1000px {
+    width: 1000px;
 }
-.width-1320px {
-    width: 1320px;
+
+.width-1110px {
+    width: 1110px;
+}
+
+.width-1200px {
+    width: 1200px;
+}
+
+.width-1400px {
+    width: 1400px;
+}
+
+.w-25-h-25 {
+    width: 25px;
+    height: 25px;
+}
+
+.w-90-h-90 {
+    width: 90px;
+    height: 90px;
+}
+
+.w-120-h-120 {
+    width: 120px;
+    height: 120px;
+}
+
+.w-150-h-150 {
+    width: 150px;
+    height: 150px;
+}
+
+.w-240-h-240 {
+    width: 240px;
+    height: 240px;
+}
+
+.w-260-h-330 {
+    width: 260px;
+    height: 330px;
+}
+
+.w-450-h-450 {
+    width: 450px;
+    height: 450px;
 }
 
 .w-500-h-500 {
     width: 500px;
     height: 500px;
 }
-.w-450-h-450 {
-    width: 450px;
-    height: 450px;
-}
-.w-120-h-120{
-    width:120px;
-    height:120px;
-}
-.w-90-h-90 {
-    width: 90px;
-    height: 90px;
-}
-.w-25-h-25 {
-    width: 25px;
-    height: 25px;
-}
-.w-150-h-150 {
-    width: 150px;
-    height: 150px;
-}
+
 .cover {
     object-fit: cover;
 }
@@ -158,9 +201,11 @@
 .fs-12px {
     font-size: 12px;
 }
+
 .fs-14px {
     font-size: 14px;
 }
+
 .cursor-pointer {
     cursor: pointer
 }
