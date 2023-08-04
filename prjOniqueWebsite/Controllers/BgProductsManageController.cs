@@ -16,11 +16,13 @@ namespace prjOniqueWebsite.Controllers
 {
     public class BgProductsManageController : Controller
     {
-        private readonly OniqueContext _context;        
+        private readonly OniqueContext _context;
+        private readonly IWebHostEnvironment _environment;
 
         public BgProductsManageController(OniqueContext context,IWebHostEnvironment environment)
         {
             _context = context;            
+            _environment = environment;
         }
 
         // GET: BgProductsManage
@@ -194,6 +196,33 @@ namespace prjOniqueWebsite.Controllers
             {
                 return Content(ex.Message);
             }
+        }
+        [HttpPost]
+        public IActionResult BgColorSizeDetails(BgColorSizeSettingVM vm)
+        {
+            var productStockDetail = new ProductDao(_context).GetStockDetail(vm.ProductId, vm.ColorId, vm.SizeId);
+
+            var query = _context.ProductStockDetails.Where(psd => psd.StockId == productStockDetail.StockId).FirstOrDefault();
+
+            if(vm.Photo!=null)
+            {
+                string fileName = "StockId_" + productStockDetail.StockId + ".jpg";
+
+                query.PhotoPath = fileName;
+
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
+                using(var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
+
+            }
+
+            query.Quantity = vm.Quantity;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Edit", new {  id =vm.ProductId});
         }
         public IActionResult BgColorSizeSettingCreate(int id)
         {
