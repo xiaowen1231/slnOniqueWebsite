@@ -14,11 +14,25 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
         }
 
+        public IActionResult List(string keyword)
+        {
+            if (keyword == null)
+            {
+                return View();
+            }
+            else
+            {
+                ViewBag.Keyword = keyword;
+                return View();
+            }
+        }
+
         public IActionResult Detail(int id)
         {
-            try { 
-            ProductDetailDto dto = new ProductDao(_context).GetProductDetail(id);
-            return View(dto);
+            try
+            {
+                ProductDetailDto dto = new ProductDao(_context).GetProductDetail(id);
+                return View(dto);
             }
             catch (Exception ex)
             {

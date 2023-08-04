@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
+using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {

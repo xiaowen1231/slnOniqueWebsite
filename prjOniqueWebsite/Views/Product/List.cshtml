@@ -1,0 +1,99 @@
+﻿@{
+    string title = "所有商品";
+    if (!string.IsNullOrEmpty(ViewBag.Keyword))
+    {
+        title = ViewBag.Keyword;
+    }
+    ViewData["Title"] = title;
+    Layout = Url.Content("~/Views/Shared/_Layout_Product.cshtml");
+}
+
+<div>
+    <div class="m-2">
+        <a href="@Url.Content("~/Home/Index")" class="fs-5 fw-bold link-underline-light link-dark">首頁</a>
+        <span class="fs-5 fw-bold">&gt;</span>
+        <span class="fs-5 fw-bold">@title</span>
+    </div>
+    <div class="d-flex m-2 gap-3 align-items-center">
+        <div>排序方式: </div>
+        <div>
+            <select class="form-select form-select-sm">
+                <option>最新上架</option>
+                <option>熱賣商品</option>
+                <option>價格高到低</option>
+                <option>價格低到高</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="p-1">
+        <div class="border w-210-h-330 rounded  shadow-sm d-inline-block">
+            <div class="w-200-h-200 mx-auto my-2">
+                <img src="@Url.Content("~/images/uploads/products/日系復古 素色Basic口袋襯衫.jpg")" class="rounded" />
+            </div>
+            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">日系復古 </div>
+            <div class="price text-center">680</div>
+            <div class="d-flex gap-3 mx-3 justify-content-end align-items-center">
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                </div>
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/love.png")" />
+                </div>
+            </div>
+        </div>
+        <div class="border w-260-h-360 rounded m-2 shadow-sm d-inline-block">
+            <div class="w-240-h-240 mx-auto my-2">
+                <img src="@Url.Content("~/images/uploads/products/日系復古 素色Basic口袋襯衫.jpg")" class="rounded" />
+            </div>
+            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">日系復古 素色Basic口袋襯衫</div>
+            <div class="price text-center">680</div>
+            <div class="d-flex gap-3 mx-3 justify-content-end align-items-center">
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                </div>
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/love.png")" />
+                </div>
+            </div>
+        </div>
+        <div class="border w-260-h-360 rounded m-2 shadow-sm d-inline-block">
+            <div class="w-240-h-240 mx-auto my-2">
+                <img src="@Url.Content("~/images/uploads/products/日系復古 素色Basic口袋襯衫.jpg")" class="rounded" />
+            </div>
+            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">日系復古 素色Basic口袋襯衫</div>
+            <div class="price text-center">680</div>
+            <div class="d-flex gap-3 mx-3 justify-content-end align-items-center">
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                </div>
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/love.png")" />
+                </div>
+            </div>
+        </div>
+        <div class="border w-260-h-360 rounded m-2 shadow-sm d-inline-block">
+            <div class="w-240-h-240 mx-auto my-2">
+                <img src="@Url.Content("~/images/uploads/products/日系復古 素色Basic口袋襯衫.jpg")" class="rounded" />
+            </div>
+            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">日系復古 素色Basic口袋襯衫</div>
+            <div class="price text-center">680</div>
+            <div class="d-flex gap-3 mx-3 justify-content-end align-items-center">
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                </div>
+                <div class="w-25-h-25">
+                    <img src="@Url.Content("~/images/icon/love.png")" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <style>
+        .price:before {
+            content: "$"
+        }
+    </style>
+}
