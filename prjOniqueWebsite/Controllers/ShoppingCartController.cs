@@ -39,17 +39,21 @@ namespace prjOniqueWebsite.Controllers
             var orderDetails = _context.OrderDetails.Where(od=>od.OrderId == orderId).ToList();
 
             decimal total = 0;
+
             foreach (var item in orderDetails)
             {
                 total += (item.Price * item.OrderQuantity);
             }
 
-            string methodName = (from o in _context.Orders
-                                 join sm in _context.ShippingMethods
-                                 on o.MethodId equals sm.MethodId
-                                 where o.OrderId == orderId
-                                 select sm.MethodName).ToString();
-            
+            var query = from o in _context.Orders
+                                join s in _context.ShippingMethods
+                                on o.MethodId equals s.MethodId
+                                where o.OrderId == orderId
+                                select s.MethodName;
+
+            string methodName = query.FirstOrDefault();
+
+
             if (methodName == "宅配")
             {
                 total += 100;
