@@ -84,5 +84,11 @@ namespace prjOniqueWebsite.Controllers
             var datas = dao.SearchProductList(keyword);
             return Json(datas);
         }
+
+        public IActionResult GetCategories()
+        {
+            var datas = dao.GetCategories();
+            return Json(datas);
+        }
     }
 }

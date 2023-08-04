@@ -40,7 +40,7 @@
                             <a class="nav-link text-white nav-text" asp-area="" asp-controller="Home" asp-action="Privacy">熱銷商品</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white nav-text" asp-area="" asp-controller="Home" asp-action="Privacy">所有商品</a>
+                            <a class="nav-link text-white nav-text" href="@Url.Content("~/product/list")">所有商品</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white nav-text" asp-area="" asp-controller="Home" asp-action="Privacy">優惠專區</a>
@@ -107,36 +107,8 @@
                         </div>
                         <div class="border rounded shadow-sm" data-aos="fade-right">
                             <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">商品分類</div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">
-                                    T恤
-                                </a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">襯衫</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">毛衣</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">外套</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">背心</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">牛仔褲</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">
-                                    休閒褲
-                                </a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">短褲</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">飾品</a>
+                            <div class="divCategories">
+
                             </div>
                         </div>
                     </div>
@@ -247,26 +219,26 @@
 
                 }
                 str += `</button>
-                                            <ul class="dropdown-menu dropdown-menu-dark">
-                                                <li class="d-flex align-items-center mx-2">
-                                                    <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
-                                                    <a class="dropdown-item fs-12px" href="#">會員資料</a>
-                                                </li>
-                                                <li class="d-flex align-items-center mx-2">
-                                                    <img src="@Url.Content("~/images/background/shopping-list.png")" class="width-16px" />
-                                                    <a class="dropdown-item fs-12px" href="#">訂單查詢</a>
-                                                </li>
-                                                <li class="d-flex align-items-center mx-2">
-                                                    <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
-                                                    <a class="dropdown-item fs-12px" href="#">我的收藏</a>
-                                                </li>
-                                                <li class="d-flex align-items-center mx-2">
-                                                            <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
-                                                    <a class="dropdown-item fs-12px" asp-action="Logout" asp-controller="Home">會員登出</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>`;
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li class="d-flex align-items-center mx-2">
+                                    <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
+                                    <a class="dropdown-item fs-12px" href="#">會員資料</a>
+                                </li>
+                                <li class="d-flex align-items-center mx-2">
+                                    <img src="@Url.Content("~/images/background/shopping-list.png")" class="width-16px" />
+                                    <a class="dropdown-item fs-12px" href="#">訂單查詢</a>
+                                </li>
+                                <li class="d-flex align-items-center mx-2">
+                                    <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
+                                    <a class="dropdown-item fs-12px" href="#">我的收藏</a>
+                                </li>
+                                <li class="d-flex align-items-center mx-2">
+                                            <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
+                                    <a class="dropdown-item fs-12px" asp-action="Logout" asp-controller="Home">會員登出</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>`;
 
                 $("#memberIcon").html(str)
 
@@ -280,13 +252,31 @@
             const data = await response.json()
             let totalItems = data.toString()
             let str = `<img src="@Url.Content("~/images/header/shopping-cart.png")" />
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
-                                            ${totalItems}
-                                            <span class="visually-hidden">unread messages</span>
-                                        </span>`;
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
+                            ${totalItems}
+                            <span class="visually-hidden">unread messages</span>
+                        </span>`;
 
             $("#cartItems").append(str);
         }
+
+        DisplayCategories()
+        
+        async function DisplayCategories(){
+            const response = await fetch(`@Url.Content("~/productapi/GetCategories")`)
+            const datas = await response.json();
+            
+            const categories = datas.map(item=>{
+                return `<div class="p-1 my-1 mx-3"><div class="divSearchByCategory link-underline-light link-dark fw-bold fs-14px cursor-pointer">${item}</div></div>`
+            })
+
+            $('.divCategories').html(categories.join(""))
+        }
+
+        $('.divCategories').on('click', '.divSearchByCategory', function () {
+            let categoryName = $(this).text();
+            
+        })
 
     </script>
     @if (TempData["AlertLogin"] != null)

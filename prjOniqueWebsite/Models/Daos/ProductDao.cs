@@ -214,14 +214,22 @@ namespace prjOniqueWebsite.Models.Repositories
             {
 
             }
-            var query = _context.Products.Select(p => new ProductCardDto
-            {
-                Id = p.ProductId,
-                ProductName = p.ProductName,
-                Price = p.Price,
-                PhotoPath = p.PhotoPath
-            });
+            var query = _context.Products
+                .OrderByDescending(p => p.AddedTime)
+                .Select(p => new ProductCardDto
+                {
+                    Id = p.ProductId,
+                    ProductName = p.ProductName,
+                    Price = p.Price,
+                    PhotoPath = p.PhotoPath
+                });
             return query.ToList();
+        }
+
+        public List<string> GetCategories()
+        {
+            var query = _context.Categories.Select(c => c.CategoryName).ToList();
+            return query;
         }
     }
 }
