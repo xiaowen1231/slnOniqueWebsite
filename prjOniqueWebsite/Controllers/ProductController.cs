@@ -14,18 +14,11 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
         }
 
-        public IActionResult List(string keyword)
+        public IActionResult List(string keyword, string categoryName,string rank)
         {
-            if (keyword == null)
-            {
-                ViewBag.Keyword = null;
-                return View();
-            }
-            else
-            {
-                ViewBag.Keyword = keyword;
-                return View();
-            }
+            ViewBag.CategoryName=categoryName;
+            ViewBag.Keyword = keyword;
+            return View();
         }
 
         public IActionResult Detail(int id)

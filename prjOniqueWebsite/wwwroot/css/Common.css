@@ -173,7 +173,10 @@
     width: 150px;
     height: 150px;
 }
-
+.w-200-h-200 {
+    width: 200px;
+    height: 200px;
+}
 .w-240-h-240 {
     width: 240px;
     height: 240px;

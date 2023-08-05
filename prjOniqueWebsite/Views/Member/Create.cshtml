@@ -9,10 +9,10 @@
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
-                <img src="~/images/uploads/members/default.jpg" />
+                <img src="@Url.Content("~/images/uploads/members/default.jpg")" id="imgMember" />
             </div>
             <div>
-                <input type="file" name="" id="" class="form-control my-5" value="">
+                <input type="file" name="Photo" id="Photo" class="form-control my-5">
             </div>
         </div>
         <div class=" col-8 border mx-2">
@@ -171,5 +171,17 @@
 
             $("#area").append(selectOptions);
         }
+        const photo = document.querySelector('#Photo')
+        photo.addEventListener('change',()=>{
+            const file = photo.files
+            if(file.length == 0 ){
+                let imgDefault = '@Url.Content("~/images/uploads/members/default.jpg")'
+                $('#imgMember').attr('src', imgDefault)
+            }
+            else{
+                const url = URL.createObjectURL(file[0]);
+                $('#imgMember').attr('src', url)
+            }
+        })
 </script>
 }
