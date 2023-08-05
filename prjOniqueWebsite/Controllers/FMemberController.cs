@@ -13,10 +13,20 @@ namespace prjOniqueWebsite.Controllers
         {
             _context = context;
         }
+
+        [TypeFilter(typeof(MemberVerify))]
         public IActionResult Index( string display)
         {
             ViewBag.Display = display;
-            return View();
+            string json = HttpContext.Session.GetString("Login");
+            Members member = JsonSerializer.Deserialize<Members>(json);
+            var photo = (from m in _context.Members
+                         where m.MemberId == member.MemberId
+                         select new FMemberDto{
+                             MemberId = member.MemberId,
+                             PhotoPath = m.PhotoPath
+                         }).FirstOrDefault();
+            return View(photo);
         }
         [TypeFilter(typeof(MemberVerify))]
         public IActionResult MemberInfo( )
@@ -47,6 +57,11 @@ namespace prjOniqueWebsite.Controllers
         {
             string json = HttpContext.Session.GetString("Login");
             Members member = JsonSerializer.Deserialize<Members>(json);
+            //var order = (from m in _context.Members
+            //             join o in _context.Orders
+            //             on m.MemberId equals o.MemberId
+            //             where m.MemberId == member.MemberId
+            //             select new)
             return PartialView();
         }
         [TypeFilter(typeof(MemberVerify))]

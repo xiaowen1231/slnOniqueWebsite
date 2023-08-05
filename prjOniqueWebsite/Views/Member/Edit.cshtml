@@ -224,6 +224,8 @@
             else {
                 let originalPhotoPath = document.getElementById('imgMember').dataset.originalpath
 
+                console.log(originalPhotoPath)
+
                 $('#imgMember').attr('src', `@Url.Content("~/images/uploads/members/")${originalPhotoPath}`)
             }
         });
