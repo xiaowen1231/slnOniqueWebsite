@@ -57,6 +57,11 @@ namespace prjOniqueWebsite.Controllers
         {
             string json = HttpContext.Session.GetString("Login");
             Members member = JsonSerializer.Deserialize<Members>(json);
+            //var order = (from m in _context.Members
+            //             join o in _context.Orders
+            //             on m.MemberId equals o.MemberId
+            //             where m.MemberId == member.MemberId
+            //             select new)
             return PartialView();
         }
         [TypeFilter(typeof(MemberVerify))]
