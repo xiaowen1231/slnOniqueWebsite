@@ -217,14 +217,10 @@ namespace prjOniqueWebsite.Models.Repositories
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                Products = (from p in _context.Products
-                    join psd in _context.ProductStockDetails
-                    on p.ProductId equals psd.ProductId
-                    join od in _context.OrderDetails
-                    on psd.StockId equals od.StockId
-                    where p.ProductCategory.CategoryName.Contains(keyword) ||
-                    p.ProductName.Contains(keyword)
-                    select new ProductCardDto
+                Products = _context.Products
+                    .Where(p => p.ProductCategory.CategoryName.Contains(keyword) ||
+                    p.ProductName.Contains(keyword)).
+                    Select(p => new ProductCardDto
                     {
                         Id = p.ProductId,
                         ProductName = p.ProductName,
@@ -236,7 +232,7 @@ namespace prjOniqueWebsite.Models.Repositories
             else if (!string.IsNullOrEmpty(categoryName))
             {
                 Products = _context.Products
-                    .Where(p => p.ProductCategory.CategoryName.Contains( categoryName))
+                    .Where(p => p.ProductCategory.CategoryName.Contains(categoryName))
                     .Select(p => new ProductCardDto
                     {
                         Id = p.ProductId,
@@ -261,22 +257,28 @@ namespace prjOniqueWebsite.Models.Repositories
                        AddedTime = p.AddedTime
 
                    })
-                   .OrderByDescending(p=>p.AddedTime)
+                   .OrderByDescending(p => p.AddedTime)
                    .ToList();
             }
-
+            
             return Products;
         }
-        //public List<ProductCardDto> sortProductList(List<ProductCardDto> products,string rank)
-        //{
-        //    if(rank== "newest")
-        //    {
-        //        products.OrderByDescending(p => p.AddedTime);
-        //    }else if(rank == "sales")
-        //    {
-        //        products.OrderByDescending(p => p.)
-        //    }
-        //}
+        public List<ProductCardDto> sortProductList(List<ProductCardDto> products, string rank)
+        {
+            if (rank == "newest")
+            {
+                products.OrderByDescending(p => p.AddedTime);
+            }
+            else if (rank == "priceDesc")
+            {
+                products.OrderByDescending(p => p.Price);
+            }
+            else if (rank == "priceAsc")
+            {
+                products.OrderBy(p => p.Price);
+            }
+            return products;
+        }
 
         public List<string> GetCategories()
         {
