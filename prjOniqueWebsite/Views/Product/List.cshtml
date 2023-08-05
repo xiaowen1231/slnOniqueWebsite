@@ -1,12 +1,20 @@
 ﻿@{
     string title = "所有商品";
-
+    string categoryName = string.Empty;
+    string pageTitle = title;
     if (!string.IsNullOrEmpty(ViewBag.Keyword))
     {
         title = ViewBag.Keyword;
+
+        pageTitle = title;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.CategoryName))
+    {
+        categoryName = ViewBag.CategoryName;
+        pageTitle += " > " + categoryName;
     }
 
-    ViewData["Title"] = title;
+    ViewData["Title"] = pageTitle;
 
     Layout = Url.Content("~/Views/Shared/_Layout_Product.cshtml");
 }
@@ -15,8 +23,9 @@
     <div class="m-2">
         <a href="@Url.Content("~/Home/Index")" class="fs-5 fw-bold link-underline-light link-dark">首頁</a>
         <span class="fs-5 fw-bold">&gt;</span>
-        <span class="fs-5 fw-bold">@title</span>
+        <span class="fs-5 fw-bold">@pageTitle</span>
         <input type="hidden" value="@ViewBag.Keyword" id="searchKeyword" />
+        <input type="hidden" value="@categoryName" id="searchCategoryName" />
     </div>
     <div class="d-flex m-2 gap-3 align-items-center">
         <div>排序方式: </div>
@@ -52,9 +61,12 @@
 @section Scripts{
     <script>
         let keyword = $('#searchKeyword').val()
-        Display(keyword)
+        let categoryName = $('#searchCategoryName').val()
+
+        Display(keyword, categoryName)
+
         async function Display(keyword){
-            const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}`)
+            const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}`)
             const datas = await response.json()
             
             const cards = datas.map(item=>{

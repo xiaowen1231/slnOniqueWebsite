@@ -275,7 +275,7 @@
 
         $('.divCategories').on('click', '.divSearchByCategory', function () {
             let categoryName = $(this).text();
-            
+            window.location.href = `@Url.Content("~/Product/List?categoryName=")${categoryName}`
         })
 
     </script>

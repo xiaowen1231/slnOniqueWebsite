@@ -4,6 +4,7 @@ using prjOniqueWebsite.Models.EFModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace prjOniqueWebsite.Models.Repositories
 {
@@ -208,22 +209,40 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
-        public List<ProductCardDto> SearchProductList(string keyword)
+        public List<ProductCardDto> SearchProductList(string keyword, string categoryName)
         {
+            List<ProductCardDto> Products = new List<ProductCardDto>();
+
             if (!string.IsNullOrEmpty(keyword))
             {
+            }
+            else if (!string.IsNullOrEmpty(categoryName))
+            {
+                Products = _context.Products
+                    .Where(p => p.ProductCategory.CategoryName == categoryName)
+                    .Select(p => new ProductCardDto
+                    {
+                        Id = p.ProductId,
+                        ProductName = p.ProductName,
+                        Price = p.Price,
+                        PhotoPath = p.PhotoPath
+                    }).ToList();
 
             }
-            var query = _context.Products
-                .OrderByDescending(p => p.AddedTime)
-                .Select(p => new ProductCardDto
-                {
-                    Id = p.ProductId,
-                    ProductName = p.ProductName,
-                    Price = p.Price,
-                    PhotoPath = p.PhotoPath
-                });
-            return query.ToList();
+            else
+            {
+
+                Products = _context.Products
+                   .OrderByDescending(p => p.AddedTime)
+                   .Select(p => new ProductCardDto
+                   {
+                       Id = p.ProductId,
+                       ProductName = p.ProductName,
+                       Price = p.Price,
+                       PhotoPath = p.PhotoPath
+                   }).ToList();
+            }
+            return Products;
         }
 
         public List<string> GetCategories()
