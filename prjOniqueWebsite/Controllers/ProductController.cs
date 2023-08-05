@@ -14,7 +14,7 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
         }
 
-        public IActionResult List(string keyword, string categoryName)
+        public IActionResult List(string keyword, string categoryName,string rank)
         {
             ViewBag.CategoryName=categoryName;
             ViewBag.Keyword = keyword;

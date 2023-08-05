@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
+using System.Data.Entity;
 
 namespace prjOniqueWebsite.Models.Repositories
 {
@@ -209,21 +211,26 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
-        public List<ProductCardDto> SearchProductList(string keyword, string categoryName)
+        public List<ProductCardDto> SearchProductList(string keyword, string categoryName, string rank)
         {
             List<ProductCardDto> Products = new List<ProductCardDto>();
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                Products = _context.Products
-                    .Where(p => p.ProductCategory.CategoryName.Contains(keyword) ||
-                    p.ProductName.Contains(keyword))
-                    .Select(p => new ProductCardDto
+                Products = (from p in _context.Products
+                    join psd in _context.ProductStockDetails
+                    on p.ProductId equals psd.ProductId
+                    join od in _context.OrderDetails
+                    on psd.StockId equals od.StockId
+                    where p.ProductCategory.CategoryName.Contains(keyword) ||
+                    p.ProductName.Contains(keyword)
+                    select new ProductCardDto
                     {
                         Id = p.ProductId,
                         ProductName = p.ProductName,
                         Price = p.Price,
-                        PhotoPath = p.PhotoPath
+                        PhotoPath = p.PhotoPath,
+                        AddedTime = p.AddedTime
                     }).ToList();
             }
             else if (!string.IsNullOrEmpty(categoryName))
@@ -235,7 +242,9 @@ namespace prjOniqueWebsite.Models.Repositories
                         Id = p.ProductId,
                         ProductName = p.ProductName,
                         Price = p.Price,
-                        PhotoPath = p.PhotoPath
+                        PhotoPath = p.PhotoPath,
+                        AddedTime = p.AddedTime
+
                     }).ToList();
 
             }
@@ -243,17 +252,31 @@ namespace prjOniqueWebsite.Models.Repositories
             {
 
                 Products = _context.Products
-                   .OrderByDescending(p => p.AddedTime)
                    .Select(p => new ProductCardDto
                    {
                        Id = p.ProductId,
                        ProductName = p.ProductName,
                        Price = p.Price,
-                       PhotoPath = p.PhotoPath
-                   }).ToList();
+                       PhotoPath = p.PhotoPath,
+                       AddedTime = p.AddedTime
+
+                   })
+                   .OrderByDescending(p=>p.AddedTime)
+                   .ToList();
             }
+
             return Products;
         }
+        //public List<ProductCardDto> sortProductList(List<ProductCardDto> products,string rank)
+        //{
+        //    if(rank== "newest")
+        //    {
+        //        products.OrderByDescending(p => p.AddedTime);
+        //    }else if(rank == "sales")
+        //    {
+        //        products.OrderByDescending(p => p.)
+        //    }
+        //}
 
         public List<string> GetCategories()
         {
