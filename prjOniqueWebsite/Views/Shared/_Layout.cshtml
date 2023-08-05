@@ -49,13 +49,13 @@
                     <div class="d-flex align-items-center gap-2 mx-3">
                         <div class="d-flex align-items-center gap-2 p-1 bg-white rounded-3 mx-2">
                             <div class="width-170px">
-                                <input type="text" class="form-control border-0" placeholder="請輸入關鍵字" />
+                                <input type="text" class="form-control border-0" id="inputKeyword" placeholder="請輸入關鍵字" />
                             </div>
-                            <a asp-controller="">
+                            <div class="divKeyword cursor-pointer">
                                 <div class="width-30px">
                                     <img src="~/images/header/loupe.png" />
                                 </div>
-                            </a>
+                            </div>
                         </div>
                         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                             <ul class="navbar-nav">
@@ -235,7 +235,17 @@
 
             $("#cartItems").append(str);
         }
+        $('.divKeyword').on('click', function () {
+            let keyword = $('#inputKeyword').val()
+            window.location.href = `@Url.Content("~/Product/List?keyword=")${keyword}`
+        })
+        $('#inputKeyword').on('keypress', function (event) {
+            if (event.key === "Enter") {
 
+                let keyword = $(this).val()
+                window.location.href = `@Url.Content("~/Product/List?keyword=")${keyword}`
+            }
+        })
     </script>
     @if (TempData["AlertLogin"] != null)
     {

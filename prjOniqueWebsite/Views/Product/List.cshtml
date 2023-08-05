@@ -39,7 +39,7 @@
             </select>
         </div>
     </div>
-    <div class="mx-auto d-flex flex-md-wrap" id="divProductList">
+    <div class="mx-auto d-flex flex-md-wrap " id="divProductList">
     </div>
     <div class="container m-3">
         <nav class="d-flex justify-content-center" aria-label="Page navigation example">
@@ -57,6 +57,13 @@
         .price:before {
             content: "$"
         }
+
+        .divNotFound {
+            position: fixed;
+            top: 50%;
+            transform: translate(-45%,-30%);
+            left: 50%;
+        }
     </style>
 }
 @section Scripts{
@@ -66,31 +73,48 @@
 
         Display(keyword, categoryName)
 
-        async function Display(keyword){
+        async function Display(keyword) {
             const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}`)
             const datas = await response.json()
-            
-            const cards = datas.map(item=>{
-                const{id,productName,price,photoPath}=item;
+            if (datas.length != 0) {
+                const cards = datas.map(item => {
 
-                return (`<a href="@Url.Content("~/Product/Detail/")${id}" class="link-dark link-underline-opacity-0 border rounded shadow-sm m-2">
-                            <div class="w-240-h-240 m-2">
-                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-                            </div>
-                            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-                                    <div class="price text-center">${price}</div>
-                            <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                <div class="w-25-h-25">
-                                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
-                                </div>
-                                <div class="w-25-h-25">
-                                    <img src="@Url.Content("~/images/icon/love.png")" />
-                                </div>
-                            </div>
-                        </a>`)
+                    const { id, productName, price, photoPath } = item;
 
-            })
-            $('#divProductList').html(cards.join(""))
+                    return (`<a href="@Url.Content("~/Product/Detail/")${id}" class="link-dark link-underline-opacity-0 border rounded shadow-sm m-2">
+                                <div class="w-240-h-240 m-2">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                </div>
+                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                        <div class="price text-center">${price}</div>
+                                <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                    <div class="w-25-h-25">
+                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                    </div>
+                                    <div class="w-25-h-25">
+                                        <img src="@Url.Content("~/images/icon/love.png")" />
+                                    </div>
+                                </div>
+                            </a>`)
+
+                })
+                $('#divProductList').html(cards.join(""))
+            }
+            else {
+                let searchHint = `<div class="flex-fill divNotFound">
+                                        <div class="w-200-h-200 mx-auto">
+                                             <img src="@Url.Content("~/images/icon/box.png")" alt="" style="height: 100%;height: 100%;">
+                                        </div>
+                                        <div class="text-center m-3 fw-bold fs-5 no_items.png">
+                                            (ಥ_ಥ) 很抱歉 , 找不到相關商品
+                                        </div>
+                                                <div class="text-secondary text-center fs-14px m-3 fw-bold">
+                                            請確認搜尋條件
+                                        </div>
+                                   </div>`;
+
+                $('#divProductList').html(searchHint)
+            }
         }
     </script>
 }
