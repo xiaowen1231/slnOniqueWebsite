@@ -10,7 +10,7 @@
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
-                <img src="~/images/uploads/members/@Model.PhotoPath"  /> 
+                <img src="~/images/uploads/members/@Model.PhotoPath" id="imgMember" data-originalpath="@Model.PhotoPath" />
             </div>
             <div>
                 <input type="file" name="Photo" id="Photo" class="form-control my-5" />
@@ -38,39 +38,39 @@
                         <div class=" width-90px text-end fw-bold">性別</div>
                         <div class="mx-3 d-flex">
                             <div class="mx-3" name="Gender" id="Gender">@Model.Gender</div>
-                               @* @{
-                                    if (Model.Gender=="男")
-                                    {
-                                    <div class="form-check ">
-                                        <input class="form-check-input" type="radio" name="Gender" id="genderTrue" value="@Model.Gender">
-                                        <label class="form-check-label" for="genderTrue">
-                                            女
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="Gender" id="genderFalse" value="@Model.Gender" checked>
-                                        <label class="form-check-label" for="genderFalse">
-                                            男
-                                        </label>
-                                    </div>
-                                    }
-                                else
-                                {
-                                    <div class="form-check ">
-                                        <input class="form-check-input" type="radio" name="Gender" id="genderTrue" value="@Model.Gender" checked>
-                                        <label class="form-check-label" for="genderTrue">
-                                            女
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="Gender" id="genderFalse" value="@Model.Gender" >
-                                        <label class="form-check-label" for="genderFalse">
-                                            男
-                                        </label>
-                                    </div>
-                                }
+                            @* @{
+                            if (Model.Gender=="男")
+                            {
+                            <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="Gender" id="genderTrue" value="@Model.Gender">
+                            <label class="form-check-label" for="genderTrue">
+                            女
+                            </label>
+                            </div>
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Gender" id="genderFalse" value="@Model.Gender" checked>
+                            <label class="form-check-label" for="genderFalse">
+                            男
+                            </label>
+                            </div>
+                            }
+                            else
+                            {
+                            <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="Gender" id="genderTrue" value="@Model.Gender" checked>
+                            <label class="form-check-label" for="genderTrue">
+                            女
+                            </label>
+                            </div>
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Gender" id="genderFalse" value="@Model.Gender" >
+                            <label class="form-check-label" for="genderFalse">
+                            男
+                            </label>
+                            </div>
+                            }
                             }*@
-                      </div>
+                        </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">電話</div>
@@ -97,7 +97,7 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">會員等級</div>
                         <div class="mx-3">
-                            <input type="hidden"  value="@Model.MemberLevel" id="memberLevel" />
+                            <input type="hidden" value="@Model.MemberLevel" id="memberLevel" />
                             <select class="form-select" name="MemberLevel" id="level"></select>
                         </div>
                     </div>
@@ -149,41 +149,41 @@
     <script>
         loadCity()
         loadMemberLevel()
-        async function loadMemberLevel(){
-                const response = await fetch(`@Url.Content("~/memberapi/LoadMemberLevel")`)
-                const datas = await response.json();
-                const memberLevel = $("#memberLevel").val()
-                let memberLevelOptions = ""
-                //console.log(datas)
-                datas.map(item=>{
-                    const {memberLevelId, memberLevelName} = item
-                    if(memberLevelName == memberLevel){
-                        memberLevelOptions += `<option value="${memberLevelId}" selected>${memberLevelName}</option>`
-                    }
-                    else{
-                        memberLevelOptions += `<option value="${memberLevelId}" >${memberLevelName}</option>`
-                    }
-                })
-                //console.log(memberLevelOptions)
-                $('#level').append(memberLevelOptions)
+        async function loadMemberLevel() {
+            const response = await fetch(`@Url.Content("~/memberapi/LoadMemberLevel")`)
+            const datas = await response.json();
+            const memberLevel = $("#memberLevel").val()
+            let memberLevelOptions = ""
+            //console.log(datas)
+            datas.map(item => {
+                const { memberLevelId, memberLevelName } = item
+                if (memberLevelName == memberLevel) {
+                    memberLevelOptions += `<option value="${memberLevelId}" selected>${memberLevelName}</option>`
+                }
+                else {
+                    memberLevelOptions += `<option value="${memberLevelId}" >${memberLevelName}</option>`
+                }
+            })
+            //console.log(memberLevelOptions)
+            $('#level').append(memberLevelOptions)
         }
         async function loadCity() {
-                const response = await fetch(`@Url.Content("~/memberapi/LoadCity")`)
-                const datas = await response.json();
-                const memberCity = $("#memberCity").val()
-                let selectOptions = ""
+            const response = await fetch(`@Url.Content("~/memberapi/LoadCity")`)
+            const datas = await response.json();
+            const memberCity = $("#memberCity").val()
+            let selectOptions = ""
 
-                datas.map(item => {
-                    const { cityId, cityName } = item
-                    if (cityName == memberCity) {
-                        selectOptions += ` <option value="${cityId}" selected>${cityName}</option>`
-                    } else {
-                        selectOptions += ` <option value="${cityId}">${cityName}</option>`
-                    }
-                })
+            datas.map(item => {
+                const { cityId, cityName } = item
+                if (cityName == memberCity) {
+                    selectOptions += ` <option value="${cityId}" selected>${cityName}</option>`
+                } else {
+                    selectOptions += ` <option value="${cityId}">${cityName}</option>`
+                }
+            })
 
-                $("#city").append(selectOptions)
-            
+            $("#city").append(selectOptions)
+
             loadArea();
         }
 
@@ -208,9 +208,25 @@
                     selectOptions += ` <option value="${areaId}">${areaName}</option>`
                 }
             })
-            
+
             $("#area").append(selectOptions);
         }
-        
+
+        const photo = document.querySelector('#Photo')
+
+        photo.addEventListener('change', () => {
+            let file = photo.files
+
+            if (file.length != 0) {
+                const url = URL.createObjectURL(file[0]);
+                $('#imgMember').attr('src', url)
+            }
+            else {
+                let originalPhotoPath = document.getElementById('imgMember').dataset.originalpath
+
+                $('#imgMember').attr('src', `@Url.Content("~/images/uploads/members/")${originalPhotoPath}`)
+            }
+        });
+
     </script>
 }
