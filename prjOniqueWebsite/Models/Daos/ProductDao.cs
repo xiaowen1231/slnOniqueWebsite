@@ -215,11 +215,21 @@ namespace prjOniqueWebsite.Models.Repositories
 
             if (!string.IsNullOrEmpty(keyword))
             {
+                Products = _context.Products
+                    .Where(p => p.ProductCategory.CategoryName.Contains(keyword) ||
+                    p.ProductName.Contains(keyword))
+                    .Select(p => new ProductCardDto
+                    {
+                        Id = p.ProductId,
+                        ProductName = p.ProductName,
+                        Price = p.Price,
+                        PhotoPath = p.PhotoPath
+                    }).ToList();
             }
             else if (!string.IsNullOrEmpty(categoryName))
             {
                 Products = _context.Products
-                    .Where(p => p.ProductCategory.CategoryName == categoryName)
+                    .Where(p => p.ProductCategory.CategoryName.Contains( categoryName))
                     .Select(p => new ProductCardDto
                     {
                         Id = p.ProductId,

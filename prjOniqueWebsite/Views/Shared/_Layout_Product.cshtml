@@ -49,13 +49,13 @@
                     <div class="d-flex align-items-center gap-2 mx-3">
                         <div class="d-flex align-items-center gap-2 p-1 bg-white rounded-3 mx-2">
                             <div class="width-170px">
-                                <input type="text" class="form-control border-0" placeholder="請輸入關鍵字" />
+                                <input type="text" class="form-control border-0" id="inputKeyword" placeholder="請輸入關鍵字" />
                             </div>
-                            <a asp-controller="">
+                            <div class="divKeyword cursor-pointer">
                                 <div class="width-30px">
                                     <img src="~/images/header/loupe.png" />
                                 </div>
-                            </a>
+                            </div>
                         </div>
                         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                             <ul class="navbar-nav">
@@ -108,7 +108,6 @@
                         <div class="border rounded shadow-sm" data-aos="fade-right">
                             <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">商品分類</div>
                             <div class="divCategories">
-
                             </div>
                         </div>
                     </div>
@@ -209,8 +208,8 @@
 
                 let str = "";
                 str += `<ul class="navbar-nav">
-                                        <li class="nav-item dropdown" id="memberIcon">
-                                            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">`;
+                                                <li class="nav-item dropdown" id="memberIcon">
+                                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">`;
                 if (datas.photoPath != null) {
                     str += `<img src="@Url.Content("~/images/uploads/members/")${datas.photoPath}" class="circle-size-35" />`
                 }
@@ -219,26 +218,26 @@
 
                 }
                 str += `</button>
-                            <ul class="dropdown-menu dropdown-menu-dark">
-                                <li class="d-flex align-items-center mx-2">
-                                    <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
-                                    <a class="dropdown-item fs-12px" href="#">會員資料</a>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li class="d-flex align-items-center mx-2">
+                                            <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" href="#">會員資料</a>
+                                        </li>
+                                        <li class="d-flex align-items-center mx-2">
+                                            <img src="@Url.Content("~/images/background/shopping-list.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" href="#">訂單查詢</a>
+                                        </li>
+                                        <li class="d-flex align-items-center mx-2">
+                                            <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" href="#">我的收藏</a>
+                                        </li>
+                                        <li class="d-flex align-items-center mx-2">
+                                                    <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" asp-action="Logout" asp-controller="Home">會員登出</a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li class="d-flex align-items-center mx-2">
-                                    <img src="@Url.Content("~/images/background/shopping-list.png")" class="width-16px" />
-                                    <a class="dropdown-item fs-12px" href="#">訂單查詢</a>
-                                </li>
-                                <li class="d-flex align-items-center mx-2">
-                                    <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
-                                    <a class="dropdown-item fs-12px" href="#">我的收藏</a>
-                                </li>
-                                <li class="d-flex align-items-center mx-2">
-                                            <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
-                                    <a class="dropdown-item fs-12px" asp-action="Logout" asp-controller="Home">會員登出</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>`;
+                            </ul>`;
 
                 $("#memberIcon").html(str)
 
@@ -252,21 +251,21 @@
             const data = await response.json()
             let totalItems = data.toString()
             let str = `<img src="@Url.Content("~/images/header/shopping-cart.png")" />
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
-                            ${totalItems}
-                            <span class="visually-hidden">unread messages</span>
-                        </span>`;
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
+                                    ${totalItems}
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>`;
 
             $("#cartItems").append(str);
         }
 
         DisplayCategories()
-        
-        async function DisplayCategories(){
+
+        async function DisplayCategories() {
             const response = await fetch(`@Url.Content("~/productapi/GetCategories")`)
             const datas = await response.json();
-            
-            const categories = datas.map(item=>{
+
+            const categories = datas.map(item => {
                 return `<div class="p-1 my-1 mx-3"><div class="divSearchByCategory link-underline-light link-dark fw-bold fs-14px cursor-pointer">${item}</div></div>`
             })
 
@@ -278,6 +277,17 @@
             window.location.href = `@Url.Content("~/Product/List?categoryName=")${categoryName}`
         })
 
+        $('.divKeyword').on('click', function () {
+            let keyword = $('#inputKeyword').val()
+            window.location.href = `@Url.Content("~/Product/List?keyword=")${keyword}`
+        })
+        $('#inputKeyword').on('keypress', function (event) {
+            if (event.key === "Enter") {
+
+                let keyword = $(this).val()
+                window.location.href = `@Url.Content("~/Product/List?keyword=")${keyword}`
+            }
+        })
     </script>
     @if (TempData["AlertLogin"] != null)
     {
