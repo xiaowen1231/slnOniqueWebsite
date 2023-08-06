@@ -15,18 +15,18 @@
     <div class="myContainer nav">
         <div class="nav">
             <div class="logoAndTitle">
-                <figure class="logo">
-                    <img src="~/images/footer/logoen.png" />
-                </figure>
+                <div class="logo cursor-pointer">
+                    <img src="@Url.Content("~/images/footer/logoen.png")" />
+                </div>
                 <div class="title">後台管理系統</div>
             </div>
             <div class="accountAndManage">
                 <div>歡迎 , OOO</div>
                 <div class="photoStickers">
-                    <img src="~/images/background/範例頭貼1.jpg" />
+                    <img src="@Url.Content("~/images/background/範例頭貼1.jpg")" />
                 </div>
                 <div class="backgroundHeadIcon">
-                    <img src="~/images/background/bell.png" />
+                    <img src="@Url.Content("~/images/background/bell.png")" />
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         99+
                         <span class="visually-hidden">unread messages</span>
@@ -40,19 +40,19 @@
             <div class="managerOptions sticky pt-2">
                 <div class="btnOptions menu" id="btnMenu">
                     <figure class="icon">
-                        <img src="~/images/background/close.png" />
+                        <img src="@Url.Content("~/images/background/close.png")" />
                     </figure>
                 </div>
                 <div class="btnOptions">
                     <div class="icon">
-                        <img src="~/images/background/employee.png" />
+                        <img src="@Url.Content("~/images/background/employee.png")" />
                     </div>
                     <div>員工管理</div>
                 </div>
                 <a class="nav-link text-white" asp-controller="member" asp-action="Index">
                 <div class="btnOptions">
                     <div class="icon">
-                        <img src="~/images/background/group.png" />
+                        <img src="@Url.Content("~/images/background/group.png")" />
                     </div>
                     <div>會員管理</div>
                 </div>
@@ -60,7 +60,7 @@
                 <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="Index">
                     <div class="btnOptions">
                         <div class="icon">
-                            <img src="~/images/background/tshirt.png" />
+                            <img src="@Url.Content("~/images/background/tshirt.png")" />
                         </div>
                         <div>商品管理</div>
                     </div>
@@ -68,7 +68,7 @@
                 <a class="nav-link text-white" asp-controller="order" asp-action="Index">
                     <div class="btnOptions" id="order">
                         <div class="icon">
-                            <img src="~/images/background/shopping-list.png" />
+                            <img src="@Url.Content("~/images/background/shopping-list.png")" />
                         </div>
                         <div>訂單管理</div>
                     </div>
@@ -76,7 +76,7 @@
                 <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="BgDiscountManage">
                     <div class="btnOptions">
                         <div class="icon">
-                            <img src="~/images/background/coupon.png" />
+                            <img src="@Url.Content("~/images/background/coupon.png")" />
                         </div>
                         <div>優惠管理</div>
                     </div>
