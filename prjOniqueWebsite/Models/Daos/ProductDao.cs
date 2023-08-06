@@ -19,12 +19,12 @@ namespace prjOniqueWebsite.Models.Repositories
             _context = context;
         }
 
-        public List<ProductCardDto> NewArrivalsTop4()
+        public List<ProductsListDto> NewArrivalsTop4()
         {
             var query = _context.Products
                 .OrderByDescending(p => p.AddedTime)
                 .Take(4)
-                .Select(p => new ProductCardDto
+                .Select(p => new ProductsListDto
                 {
                     Id = p.ProductId,
                     ProductName = p.ProductName,
@@ -35,7 +35,7 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
-        public List<ProductCardDto> HotTop4()
+        public List<ProductsListDto> HotTop4()
         {
             var query = (from p in _context.Products
                          join psd in _context.ProductStockDetails
@@ -44,7 +44,7 @@ namespace prjOniqueWebsite.Models.Repositories
                          on psd.StockId equals od.StockId
                          group od by new { p.Price, p.ProductName, p.PhotoPath, p.ProductId } into grouped
                          orderby grouped.Sum(od => od.OrderQuantity) descending
-                         select new ProductCardDto
+                         select new ProductsListDto
                          {
                              Id = grouped.Key.ProductId,
                              ProductName = grouped.Key.ProductName,
@@ -99,6 +99,7 @@ namespace prjOniqueWebsite.Models.Repositories
 
             return sizes.ToList();
         }
+
         public List<ProductColors> GetStockColor(int id)
         {
             var color = (from p in _context.Products
@@ -162,6 +163,7 @@ namespace prjOniqueWebsite.Models.Repositories
 
             return cart.ToList();
         }
+
         public void UpdateOrderQty(UpdateShoppingQtyVM vm)
         {
             ShoppingCart shoppingCart = _context.ShoppingCart.FirstOrDefault(psd => psd.Id == vm.ShoppingCartId);
@@ -169,6 +171,7 @@ namespace prjOniqueWebsite.Models.Repositories
             _context.SaveChanges();
 
         }
+
         public ProductStockDetails GetProductStock(int stockId)
         {
             var productStockDetails = _context.ProductStockDetails.FirstOrDefault(psd => psd.StockId == stockId);
@@ -197,6 +200,7 @@ namespace prjOniqueWebsite.Models.Repositories
                 return null;
             return cart;
         }
+
         public List<ShippingMethods> DisplayShippingMethod()
         {
             var query = from shippingMethod in _context.ShippingMethods
@@ -211,73 +215,59 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
-        public List<ProductCardDto> SearchProductList(string keyword, string categoryName, string rank)
+        public List<ProductsListDto> SearchProductList(string keyword, string categoryName, string rank)
         {
-            List<ProductCardDto> Products = new List<ProductCardDto>();
+            var query = from p in _context.Products
+                        join psd in _context.ProductStockDetails
+                        on p.ProductId equals psd.ProductId into psdGroup
+                        from psd in psdGroup.DefaultIfEmpty()
+                        join od in _context.OrderDetails
+                        on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
+                        from od in odGroup.DefaultIfEmpty()
+                        group od by new { p.ProductName, p.Price, p.PhotoPath, p.AddedTime, p.ProductCategory.CategoryName } into grouped
+                        select new ProductsListDto
+                        {
+                            ProductName = grouped.Key.ProductName,
+                            Price = grouped.Key.Price,
+                            PhotoPath = grouped.Key.PhotoPath,
+                            AddedTime = grouped.Key.AddedTime,
+                            catagoryName = grouped.Key.CategoryName,
+                            SubQuantity = grouped.Sum(x => x != null ? x.OrderQuantity : 0)
+                        };
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                Products = _context.Products
-                    .Where(p => p.ProductCategory.CategoryName.Contains(keyword) ||
-                    p.ProductName.Contains(keyword)).
-                    Select(p => new ProductCardDto
-                    {
-                        Id = p.ProductId,
-                        ProductName = p.ProductName,
-                        Price = p.Price,
-                        PhotoPath = p.PhotoPath,
-                        AddedTime = p.AddedTime
-                    }).ToList();
+                query = query.Where(p => p.catagoryName.Contains(keyword) || p.ProductName.Contains(keyword));
             }
             else if (!string.IsNullOrEmpty(categoryName))
             {
-                Products = _context.Products
-                    .Where(p => p.ProductCategory.CategoryName.Contains(categoryName))
-                    .Select(p => new ProductCardDto
-                    {
-                        Id = p.ProductId,
-                        ProductName = p.ProductName,
-                        Price = p.Price,
-                        PhotoPath = p.PhotoPath,
-                        AddedTime = p.AddedTime
-
-                    }).ToList();
-
+                query = query.Where(p => p.catagoryName.Contains(categoryName));
             }
-            else
-            {
 
-                Products = _context.Products
-                   .Select(p => new ProductCardDto
-                   {
-                       Id = p.ProductId,
-                       ProductName = p.ProductName,
-                       Price = p.Price,
-                       PhotoPath = p.PhotoPath,
-                       AddedTime = p.AddedTime
+            List<ProductsListDto> datas = query.ToList();
 
-                   })
-                   .OrderByDescending(p => p.AddedTime)
-                   .ToList();
-            }
-            
-            return Products;
+            return SortProductList(datas, rank);
         }
-        public List<ProductCardDto> sortProductList(List<ProductCardDto> products, string rank)
+
+        public List<ProductsListDto> SortProductList(List<ProductsListDto> datas, string rank)
         {
-            if (rank == "newest")
+            if (rank == "newest" || string.IsNullOrEmpty(rank))
             {
-                products.OrderByDescending(p => p.AddedTime);
+                datas = datas.OrderByDescending(p => p.AddedTime).ToList();
             }
-            else if (rank == "priceDesc")
+            if (rank == "sales")
             {
-                products.OrderByDescending(p => p.Price);
+                datas = datas.OrderByDescending(p => p.SubQuantity).ToList();
             }
-            else if (rank == "priceAsc")
+            if (rank == "priceDesc")
             {
-                products.OrderBy(p => p.Price);
+                datas = datas.OrderByDescending(p => p.Price).ToList();
             }
-            return products;
+            if (rank == "priceAsc")
+            {
+                datas = datas.OrderBy(p => p.Price).ToList();
+            }
+            return datas;
         }
 
         public List<string> GetCategories()

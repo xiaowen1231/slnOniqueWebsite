@@ -20,13 +20,13 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult NewArrivalsTop4()
         {
-            List<ProductCardDto> dto = dao.NewArrivalsTop4();
+            List<ProductsListDto> dto = dao.NewArrivalsTop4();
             return Json(dto);
         }
 
         public IActionResult HotTop4()
         {
-            List<ProductCardDto> dto = dao.HotTop4();
+            List<ProductsListDto> dto = dao.HotTop4();
             return Json(dto);
         }
 
