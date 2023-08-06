@@ -69,9 +69,6 @@
                     <th width="180">
                         商品分類
                     </th>
-                    <th width="150">
-                        活動優惠
-                    </th>
                     <th width="120">
                         編輯
                     </th>
@@ -97,9 +94,6 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ProductCategory.CategoryName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Discount.Title)
                         </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.ProductId"><img src="~/images/BgProductManage/edit.png" class="width-30px" style="margin: auto;" /></a>
