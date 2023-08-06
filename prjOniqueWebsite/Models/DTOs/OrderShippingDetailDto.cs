@@ -8,6 +8,10 @@
         public string MethodName { get; set; }
         public string StatusName { get; set; }
         public string ShippingAddress { get; set; }
+        
+        public string Recipient { get; set; }
+        public string Remark { get; set; }
+        public string RecipientPhone { get; set; }
         public string Phone { get; set; }
         public string PaymentMethodName { get; set; }
         public DateTime? OrderDate { get; set; }

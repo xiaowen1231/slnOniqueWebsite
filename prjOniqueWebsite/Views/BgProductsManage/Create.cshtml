@@ -63,10 +63,10 @@
                 </div>
                 <div class="col-5 container">
                     <div class="my-3 d-flex">
-                        <img asp-for="PhotoPath" src="~/images/uploads/products/" class="rounded img-thumbnail" id="img" />
+                        <img asp-for="PhotoPath" src="@Url.Content("~/images/uploads/products/default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto" />
                         <span asp-validation-for="PhotoPath" class="text-danger"></span>
                     </div>
-                    <input type="file" class="form-control" name="photo"/>
+                    <input type="file" class="form-control" name="photo" id="inputPhoto"/>
                 </div>
             </div>
             <div class="container text-center mb-4">
@@ -81,12 +81,26 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        const photo = document.querySelector("#inputPhoto");
+        photo.addEventListener('change',function(){
+            const files = photo.files
+            if(files.length==0){
+                const defaultPath = "@Url.Content("~/images/uploads/products/default.jpg")"
+                $("#imgProductPhoto").attr("src", defaultPath)
+            }
+            else{
+                const url = URL.createObjectURL(files[0])
+                $("#imgProductPhoto").attr("src", url)
+            }
+        })
+    </script>
 }
 @section Styles{
     <style>
-        #img {
-            width: 70%;
-            height: 70%;
+        #imgProductPhoto {
+            width: 90%;
+            height: 90%;
             object-fit: cover;
             margin: auto;
         }
