@@ -50,8 +50,8 @@
             <div class="width-70px ms-3">排序方式</div>
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數" id="sort">
-                    <option value="OrderDateAscending">下單時間:早至晚</option>
                     <option value="OrderDateDescending">下單時間:晚至早</option>
+                    <option value="OrderDateAscending">下單時間:早至晚</option>
 
                 </select>
             </div>
@@ -313,7 +313,7 @@
         }
         $(".pagination").html(items.join(""))
         //切換分類方式
-        sortsel.addEventListener('change', () => {
+        sortsel.addEventListener('click', () => {
             const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value;
             const sortSolution = sortsel.options[sortsel.selectedIndex].value;
             let pagesize = dataShowOnPage;
@@ -361,8 +361,8 @@
         //畫面顯示的預設設定
         $(document).ready(() => {
             let page = 1;
-            let pagesize = 10
-
+            let pagesize = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
+            let sort = sortsel.options[sortsel.selectedIndex].value;
             getPageData(page, pagesize, sort)
         })
         

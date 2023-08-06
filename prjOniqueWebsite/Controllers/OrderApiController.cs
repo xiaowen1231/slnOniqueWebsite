@@ -35,23 +35,17 @@ namespace prjOniqueWebsite.Controllers
         /// <returns>List<OrderListDto> dto</returns>
         public IActionResult orderPage(int page,int pageSize,string sort) 
         {
-            List<OrderListDto> dto;
-            switch (sort)
+            List<OrderListDto> dto=null;
+            if(sort== "OrderDateAscending")
             {
-                case "OrderDateAscending":
-                    dto = dao.getOrderList().OrderBy(order => order.OrderDate)
+                dto = dao.getOrderList().OrderBy(order => order.OrderDate)
                 .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                    break;
-                case "OrderDateDescending":
-                    dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
-                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                    break;
-                default:
-                    dto = dao.getOrderList().OrderBy(order => order.OrderId)
-                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                    break;
             }
-                
+            else if(sort== "OrderDateDescending")
+            {
+                dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
+               .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }         
             return Json(dto);
         }
         public IActionResult search(string? keyWord)
