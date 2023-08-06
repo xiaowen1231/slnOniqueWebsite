@@ -125,6 +125,10 @@ namespace prjOniqueWebsite.Controllers
             var tag = _context.Members.Select(c => c.Name).ToList();
             return Json(tag);
         }
+        public IActionResult getOrderStatusCount(int statusId)
+        {
+            var count=dao.GetOrderStatusCount(statusId); return Json(count);
+        }
         /// <summary>
         /// 依照orderId找出目前的statusName，再給予依照商業邏輯正確的statusName的選擇，傳回的是選項，不是order的資料
         /// 要把pay的方式列入考慮
