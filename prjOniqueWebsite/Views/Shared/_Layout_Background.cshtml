@@ -2,7 +2,7 @@
 <html lang="zh-Hant-TW">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/CSS/BackgroundSystemHomePage.css">
+    <link rel="stylesheet" href="~/css/BackgroundSystemHomePage.css">
     <link href="~/css/reset.css" rel="stylesheet" />
     <link href="~/css/common.css" rel="stylesheet" />
     <link href="~/css/sweetalert2.min.css" rel="stylesheet" />
@@ -34,47 +34,47 @@
     </div>
     <div class="myContainer">
         <div class="optionsAndContent">
-            <div class="managerOptions sticky">
+            <div class="managerOptions sticky pt-2">
                 <div class="btnOptions menu" id="btnMenu">
                     <figure class="icon">
                         <img src="~/images/background/close.png" />
                     </figure>
                 </div>
                 <div class="btnOptions">
-                    <figure class="icon">
+                    <div class="icon">
                         <img src="~/images/background/employee.png" />
-                    </figure>
+                    </div>
                     <div>員工管理</div>
                 </div>
                 <a class="nav-link text-white" asp-controller="member" asp-action="Index">
                 <div class="btnOptions">
-                    <figure class="icon">
+                    <div class="icon">
                         <img src="~/images/background/group.png" />
-                    </figure>
+                    </div>
                     <div>會員管理</div>
                 </div>
                 </a>
                 <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="Index">
                     <div class="btnOptions">
-                        <figure class="icon">
+                        <div class="icon">
                             <img src="~/images/background/tshirt.png" />
-                        </figure>
+                        </div>
                         <div>商品管理</div>
                     </div>
                 </a>
                 <a class="nav-link text-white" asp-controller="order" asp-action="Index">
                     <div class="btnOptions" id="order">
-                        <figure class="icon">
+                        <div class="icon">
                             <img src="~/images/background/shopping-list.png" />
-                        </figure>
+                        </div>
                         <div>訂單管理</div>
                     </div>
                 </a>
                 <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="BgDiscountManage">
                     <div class="btnOptions">
-                        <figure class="icon">
+                        <div class="icon">
                             <img src="~/images/background/coupon.png" />
-                        </figure>
+                        </div>
                         <div>優惠管理</div>
                     </div>
                 </a>
