@@ -2,7 +2,7 @@
 <html lang="zh-Hant-TW">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/CSS/BackgroundSystemHomePage.css">
+    <link rel="stylesheet" href="~/css/BackgroundSystemHomePage.css">
     <link href="~/css/reset.css" rel="stylesheet" />
     <link href="~/css/common.css" rel="stylesheet" />
     <link href="~/css/sweetalert2.min.css" rel="stylesheet" />
@@ -15,66 +15,69 @@
     <div class="myContainer nav">
         <div class="nav">
             <div class="logoAndTitle">
-                <figure class="logo">
-                    <img src="~/images/footer/logoen.png" />
-                </figure>
+                <div class="logo cursor-pointer">
+                    <img src="@Url.Content("~/images/footer/logoen.png")" />
+                </div>
                 <div class="title">後台管理系統</div>
             </div>
             <div class="accountAndManage">
                 <div>歡迎 , OOO</div>
-                <figure class="photoStickers">
-                    <img src="~/images/background/範例頭貼1.jpg" />
-                </figure>
-                <figure class="backgroundHeadIcon">
-                    <img src="~/images/background/bell.png" />
-                    <span class="notify" id="notify">99</span>
-                </figure>
+                <div class="photoStickers">
+                    <img src="@Url.Content("~/images/background/範例頭貼1.jpg")" />
+                </div>
+                <div class="backgroundHeadIcon">
+                    <img src="@Url.Content("~/images/background/bell.png")" />
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        99+
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
     <div class="myContainer">
         <div class="optionsAndContent">
-            <div class="managerOptions sticky">
+            <div class="managerOptions sticky pt-2">
                 <div class="btnOptions menu" id="btnMenu">
                     <figure class="icon">
-                        <img src="~/images/background/close.png" />
+                        <img src="@Url.Content("~/images/background/close.png")" />
                     </figure>
                 </div>
                 <div class="btnOptions">
-                    <figure class="icon">
-                        <img src="~/images/background/employee.png" />
-                    </figure>
+                    <div class="icon">
+                        <img src="@Url.Content("~/images/background/employee.png")" />
+                    </div>
                     <div>員工管理</div>
                 </div>
                 <a class="nav-link text-white" asp-controller="member" asp-action="Index">
                 <div class="btnOptions">
-                    <figure class="icon">
-                        <img src="~/images/background/group.png" />
-                    </figure>
+                    <div class="icon">
+                        <img src="@Url.Content("~/images/background/group.png")" />
+                    </div>
                     <div>會員管理</div>
                 </div>
                 </a>
                 <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="Index">
                     <div class="btnOptions">
-                        <figure class="icon">
-                            <img src="~/images/background/tshirt.png" />
-                        </figure>
+                        <div class="icon">
+                            <img src="@Url.Content("~/images/background/tshirt.png")" />
+                        </div>
                         <div>商品管理</div>
                     </div>
                 </a>
                 <a class="nav-link text-white" asp-controller="order" asp-action="Index">
                     <div class="btnOptions" id="order">
-                        <figure class="icon">
-                            <img src="~/images/background/shopping-list.png" />
-                        </figure>
+                        <div class="icon">
+                            <img src="@Url.Content("~/images/background/shopping-list.png")" />
+                        </div>
                         <div>訂單管理</div>
                     </div>
                 </a>
                 <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="BgDiscountManage">
                     <div class="btnOptions">
-                        <figure class="icon">
-                            <img src="~/images/background/coupon.png" />
-                        </figure>
+                        <div class="icon">
+                            <img src="@Url.Content("~/images/background/coupon.png")" />
+                        </div>
                         <div>優惠管理</div>
                     </div>
                 </a>
