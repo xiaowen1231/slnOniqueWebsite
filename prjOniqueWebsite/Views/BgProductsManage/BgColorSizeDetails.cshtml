@@ -73,7 +73,7 @@
             </div>
             <div class="col-5 container p-3">
                 <img src="@Url.Content("~/images/uploads/products/")@Model.products.PhotoPath" class="rounded img-thumbnail" id="productPhoto" />
-                <input type="file" class="form-control my-4" name="Photo">
+                <input type="file" class="form-control my-4" name="Photo" id="inputPhoto">
             </div>
         </div>
     </div>
@@ -81,6 +81,19 @@
 
 @section Scripts{
     <script>
+        const photo = document.querySelector("#inputPhoto");
+        photo.addEventListener('change', function () {
+            const files = photo.files
+            if (files.length == 0) {
+                const defaultPath = "@Url.Content("~/images/uploads/products/default.jpg")"
+                $("#productPhoto").attr("src", defaultPath)
+            }
+            else {
+                const url = URL.createObjectURL(files[0])
+                $("#productPhoto").attr("src", url)
+            }
+        })
+
         const selectSize = document.querySelector("#selectSize")
         const selectColor = document.querySelector("#selectColor")
         const productId = $("#productId").val();
@@ -128,6 +141,6 @@
                 $("#stockQty").text(`${quantity}`)
                 $("#stockId").val(`${stockId}`)            
         }
-        
+
     </script>
 }
