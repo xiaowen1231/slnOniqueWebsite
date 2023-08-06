@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
-<form asp-action="Create">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="d-flex container">
         <div class="col-2 p" style="margin-left: 8%;">
@@ -66,7 +66,7 @@
                         <img asp-for="PhotoPath" src="~/images/uploads/products/" class="rounded img-thumbnail" id="img" />
                         <span asp-validation-for="PhotoPath" class="text-danger"></span>
                     </div>
-                    <input type="file" class="form-control" />
+                    <input type="file" class="form-control" name="photo"/>
                 </div>
             </div>
             <div class="container text-center mb-4">

@@ -46,10 +46,20 @@ namespace prjOniqueWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products,IFormFile photo)
         {
             if (ModelState.IsValid)
             {
+                if (photo != null)
+                {
+                    string fileName = products.ProductName + ".jpg";
+                    products.PhotoPath = fileName;
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
+                    using(var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        photo.CopyTo(fileStream);
+                    }
+                }
                 _context.Add(products);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

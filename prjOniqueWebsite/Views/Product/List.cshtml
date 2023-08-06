@@ -77,7 +77,7 @@
         let keyword = $('#searchKeyword').val()
         let categoryName = $('#searchCategoryName').val()
 
-        Display(keyword, categoryName,null)
+        Display(keyword, categoryName,"")
 
         async function Display(keyword, categoryName, rank) {
             const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}`)
