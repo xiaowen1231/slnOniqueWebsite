@@ -224,9 +224,10 @@ namespace prjOniqueWebsite.Models.Repositories
                         join od in _context.OrderDetails
                         on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
                         from od in odGroup.DefaultIfEmpty()
-                        group od by new { p.ProductName, p.Price, p.PhotoPath, p.AddedTime, p.ProductCategory.CategoryName } into grouped
+                        group od by new { p.ProductId,p.ProductName, p.Price, p.PhotoPath, p.AddedTime, p.ProductCategory.CategoryName } into grouped
                         select new ProductsListDto
                         {
+                            Id = grouped.Key.ProductId,
                             ProductName = grouped.Key.ProductName,
                             Price = grouped.Key.Price,
                             PhotoPath = grouped.Key.PhotoPath,

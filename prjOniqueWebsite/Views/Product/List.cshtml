@@ -28,7 +28,7 @@
         <input type="hidden" value="@keyword" id="searchKeyword" />
         <input type="hidden" value="@categoryName" id="searchCategoryName" />
     </div>
-    <div class="d-flex m-2 gap-3 align-items-center">
+    <div class="d-flex m-2 gap-3 align-items-center ">
         <div>排序方式: </div>
         <div>
             <select class="form-select form-select-sm" id="selectOrderBy">
@@ -87,21 +87,21 @@
 
                     const { id, productName, price, photoPath } = item;
 
-                    return (`<a href="@Url.Content("~/Product/Detail/")${id}" class=" link-dark link-underline-opacity-0 border rounded shadow-sm m-2">
+                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="zoom-in">
                                 <div class="w-240-h-240 m-2">
                                     <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
                                 </div>
                                 <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
                                         <div class="price text-center">${price}</div>
                                 <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                    <div class="w-25-h-25">
+                                    <div class="w-25-h-25 divShopping" >
                                         <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                     </div>
-                                    <div class="w-25-h-25">
+                                    <div class="w-25-h-25 divCollection">
                                         <img src="@Url.Content("~/images/icon/love.png")" />
                                     </div>
                                 </div>
-                            </a>`)
+                            </div>`)
 
                 })
                 $('#divProductList').html(cards.join(""))
@@ -129,6 +129,20 @@
             let keyword = $('#searchKeyword').val()
 
             Display(keyword, categoryName, rank)
+        })
+
+        $('#divProductList').on('click', '.divProductDetail', function (event) {
+            let id = $(this).data("id")
+            window.location.href = `@Url.Content("~/Product/Detail/")${id}`;
+        })
+
+        $('#divProductList').on('click', '.divShopping', function (event) {
+            event.stopPropagation();
+            console.log('購物車')
+        })
+        $('#divProductList').on('click', '.divCollection', function (event) {
+            event.stopPropagation();
+            console.log('收藏')
         })
     </script>
 }

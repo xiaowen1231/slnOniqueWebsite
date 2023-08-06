@@ -28,7 +28,7 @@
             新商品
         </p>
     </div>
-    <div class="ProductWall" id="divNewArrivals">
+    <div class="ProductWall d-flex flex-wrap justify-content-center" id="divNewArrivals">
     </div>
     <div class="myTitle">
         <div class="TitleIcon">
@@ -38,12 +38,19 @@
             熱銷商品
         </p>
     </div>
-    <div class="ProductWall" id="divHot">
+    <div class="ProductWall d-flex flex-wrap justify-content-center" id="divHot">
         
     </div>
 </div>
 @section Styles{
     <link href="~/css/homepage.css" rel="stylesheet" />
+    <style>
+        .w-240-h-240:hover {
+            width: 245px;
+            height: 245px;
+            transition: all 0.4s;
+        }
+    </style>
 }
 
 @section Scripts{
@@ -61,25 +68,21 @@
 
             const cards = datas.map(theCard => {
                 const { id, productName, price, photoPath } = theCard
-                return (`<a href="@Url.Content("~/product/detail/")${id}" class="productCard link-dark" data-aos="fade-up">
-                            <div class="productPhoto">
-                                <img src="@Url.Content("/images/uploads/products/")${photoPath}" />
+                return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="zoom-in">
+                            <div class="w-240-h-240 m-2">
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
                             </div>
-                            <p class="productName" id="Name">
-                                ${productName}
-                            </p>
-                            <p class="productPrice">
-                                <span id="price">${price}</span>
-                            </p>
-                            <div class="productIcon">
-                                <div class="cardIcon">
-                                    <img src="@Url.Content("/images/icon/shopping_black.png")" />
+                            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                    <div class="price text-center">${price}</div>
+                            <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                <div class="w-25-h-25 divShopping" >
+                                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                 </div>
-                                <div class="cardIcon">
+                                <div class="w-25-h-25 divCollection">
                                     <img src="@Url.Content("~/images/icon/love.png")" />
                                 </div>
                             </div>
-                        </a>`)
+                        </div>`)
             })
 
             divHot.innerHTML += cards.join("");
@@ -93,28 +96,38 @@
 
             const cards = datas.map(theCard => {
                 const { id, productName, price, photoPath } = theCard
-                return (`<a href="@Url.Content("~/product/detail/")${id}" class="productCard link-dark" data-aos="fade-up">
-                            <div class="productPhoto">
-                                <img src="@Url.Content("/images/uploads/products/")${photoPath}" />
+                return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="zoom-in">
+                            <div class="w-240-h-240 m-2">
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
                             </div>
-                            <p class="productName" id="Name">
-                                ${productName}
-                            </p>
-                            <p class="productPrice">
-                                <span id="price">${price}</span>
-                            </p>
-                            <div class="productIcon">
-                                <div class="cardIcon">
-                                    <img src="@Url.Content("/images/icon/shopping_black.png")" />
+                            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                    <div class="price text-center">${price}</div>
+                            <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                <div class="w-25-h-25 divShopping" >
+                                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                 </div>
-                                <div class="cardIcon">
+                                <div class="w-25-h-25 divCollection">
                                     <img src="@Url.Content("~/images/icon/love.png")" />
                                 </div>
                             </div>
-                        </a>`)
+                        </div>`)
             })
 
             divNewArrivals.innerHTML = cards.join("")
         }
+
+        $('.ProductWall').on('click', '.divProductDetail', function (event) {
+            let id = $(this).data("id")
+            window.location.href = `@Url.Content("~/Product/Detail/")${id}`;
+        })
+
+        $('.ProductWall').on('click', '.divShopping', function (event) {
+            event.stopPropagation();
+            console.log('購物車')
+        })
+        $('.ProductWall').on('click', '.divCollection', function (event) {
+            event.stopPropagation();
+            console.log('收藏')
+        })
     </script>
 }
