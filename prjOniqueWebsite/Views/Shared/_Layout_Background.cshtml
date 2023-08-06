@@ -54,12 +54,14 @@
                     <div>會員管理</div>
                 </div>
                 </a>
-                <div class="btnOptions">
-                    <figure class="icon">
-                        <img src="~/images/background/tshirt.png" />
-                    </figure>
-                    <div>商品管理</div>
-                </div>
+                <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="Index">
+                    <div class="btnOptions">
+                        <figure class="icon">
+                            <img src="~/images/background/tshirt.png" />
+                        </figure>
+                        <div>商品管理</div>
+                    </div>
+                </a>
                 <a class="nav-link text-white" asp-controller="order" asp-action="Index">
                     <div class="btnOptions" id="order">
                         <figure class="icon">
@@ -68,12 +70,14 @@
                         <div>訂單管理</div>
                     </div>
                 </a>
-                <div class="btnOptions">
-                    <figure class="icon">
-                        <img src="~/images/background/coupon.png" />
-                    </figure>
-                    <div>優惠管理</div>
-                </div>
+                <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="BgDiscountManage">
+                    <div class="btnOptions">
+                        <figure class="icon">
+                            <img src="~/images/background/coupon.png" />
+                        </figure>
+                        <div>優惠管理</div>
+                    </div>
+                </a>
             </div>
             <div class="container">
                 @RenderBody()
