@@ -86,7 +86,6 @@ namespace prjOniqueWebsite.Controllers
 
                 if (vm.Photo != null)
                 {
-                    // 使用生成的 EmployeeId 生成照片文件名
                     string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
                     employee.PhotoPath = fileName;
                     string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/employee", fileName);
@@ -95,7 +94,6 @@ namespace prjOniqueWebsite.Controllers
                         vm.Photo.CopyTo(fileStream);
                     }
 
-                    // 更新员工信息，将 PhotoPath 存入数据库
                     _context.Update(employee);
                     _context.SaveChanges();
                 }
