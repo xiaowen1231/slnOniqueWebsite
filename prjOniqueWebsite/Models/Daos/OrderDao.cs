@@ -80,6 +80,9 @@ namespace prjOniqueWebsite.Models.Daos
                                      Phone = m.Phone,
                                      OrderId = o.OrderId,
                                      ShippingAddress = o.ShippingAddress,
+                                     Recipient=o.Recipient,
+                                     RecipientPhone=o.RecipientPhone,
+                                     Remark=o.Remark,
                                      StatusName = os.StatusName,
                                      MethodName = sm.MethodName,
                                      PaymentMethodName = pm.PaymentMethodName,
@@ -123,12 +126,24 @@ namespace prjOniqueWebsite.Models.Daos
                              OrderId = o.OrderId,
                              StatusName = os.StatusName,
                              StatusId = os.StatusId,
-                              PaymentMethodName = pm.PaymentMethodName
+                             PaymentMethodName = pm.PaymentMethodName
 
                          };
 
             return status;
 
+        }
+        /// <summary>
+        /// 取得處於某訂單狀態的訂單數量
+        /// </summary>
+        /// <param name="statusId"></param>
+        /// <returns></returns>
+        public int GetOrderStatusCount(int statusId)
+        {
+            var count = (from o in _context.Orders
+                         where o.OrderStatusId == statusId
+                         select o).Count();
+            return count;           
         }
     }
 }

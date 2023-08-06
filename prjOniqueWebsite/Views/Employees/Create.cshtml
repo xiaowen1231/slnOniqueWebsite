@@ -4,16 +4,16 @@
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
 
-<form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post">
+<form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post" enctype="multipart/form-data">
     <div class="m-2 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">新增員工</div>
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
-                <img src="../Images/uploads/employee/Jacky.png"
+                <img src="@Url.Content("~/Images/uploads/employee/default.jpg")" id="imageEmployee"
                      class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
             </div>
             <div>
-                <input type="file" name="" id="" class="form-control my-5">
+                <input type="file" name="Photo" id="Photo" class="form-control my-5">
             </div>
         </div>
         <div class=" col-8 border mx-2">
@@ -211,6 +211,19 @@
             var day = ("0" + date.getDate()).slice(-2); 
             return year + "-" + month + "-" + day;
         }
+
+        const photo = document.querySelector('#Photo')
+        photo.addEventListener('change', () => {
+            const file = photo.files
+            if (file.length == 0) {
+                let imgDefault = '@Url.Content("~/images/uploads/employee/default.jpg")'
+                $('#imageEmployee').attr('src', imgDefault)
+            }
+            else {
+                const url = URL.createObjectURL(file[0]);
+                $('#imageEmployee').attr('src', url)
+            }
+        })
     </script>
 }
 
