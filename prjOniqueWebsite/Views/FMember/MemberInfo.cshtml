@@ -3,7 +3,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <form method="post">
-<div class="container my-5 p-2">
+<div class="container">
     <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">個人資料</div>
     <div class="p-2 ">
             <input type="hidden" name="MemberId" value="@Model.MemberId" />
@@ -58,7 +58,7 @@
     </div>
     <div class="justify-content-around p-5">
         <div class="text-center">
-            <input type="submit" value="修改個人資料" class="btn btn-dark p-2 px-4">
+                <input type="submit" value="修改個人資料" class="btn btn-dark p-2 px-4 btnEdit"  data-id="@Model.MemberId">
         </div>
     </div>
     </div>
