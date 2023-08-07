@@ -56,55 +56,55 @@ namespace prjOniqueWebsite.Controllers
             
             return Json(dto);
         }
-        public IActionResult search(string? keyWord,int page,int pageSize,string? sort)
-        {
-            IEnumerable<OrderListDto> data = null;
+        //public IActionResult search(string? keyWord,int page,int pageSize,string? sort)
+        //{
+        //    IEnumerable<OrderListDto> data = null;
 
-            var query = from o in _context.Orders
-                        join os in _context.OrderStatus
-                        on o.OrderStatusId equals os.StatusId
-                        join m in _context.Members
-                        on o.MemberId equals m.MemberId
-                        join pm in _context.PaymentMethods
-                        on o.PaymentMethodId equals pm.PaymentMethodId
-                        select new OrderListDto
-                        {
-                            StatusName = os.StatusName,
-                            OrderId = o.OrderId,
-                            Name = m.Name,
-                            OrderDate = o.OrderDate,
-                            ShippingDate = (DateTime)o.ShippingDate,
-                            PaymentMethodName = pm.PaymentMethodName,
-                            PhotoPath = m.PhotoPath
-                        };
-            if (string.IsNullOrEmpty(keyWord))
-            {
-                switch (sort)
-                {
+        //    var query = from o in _context.Orders
+        //                join os in _context.OrderStatus
+        //                on o.OrderStatusId equals os.StatusId
+        //                join m in _context.Members
+        //                on o.MemberId equals m.MemberId
+        //                join pm in _context.PaymentMethods
+        //                on o.PaymentMethodId equals pm.PaymentMethodId
+        //                select new OrderListDto
+        //                {
+        //                    StatusName = os.StatusName,
+        //                    OrderId = o.OrderId,
+        //                    Name = m.Name,
+        //                    OrderDate = o.OrderDate,
+        //                    ShippingDate = (DateTime)o.ShippingDate,
+        //                    PaymentMethodName = pm.PaymentMethodName,
+        //                    PhotoPath = m.PhotoPath
+        //                };
+        //    if (string.IsNullOrEmpty(keyWord))
+        //    {
+        //        switch (sort)
+        //        {
 
-                    case "OrderDateAscending":
-                        data = query.OrderBy(order => order.OrderDate)
-                        .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                    case "OrderDateDescending":
-                        data =query.OrderByDescending(order => order.OrderDate)
-                        .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                    default:
-                        data = query.OrderByDescending(order => order.OrderDate)
-                        .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        break;
-                }
-            }
-            else
-            {
-                data = query.Where(o => o.Name.Contains(keyWord) || o.StatusName.Contains(keyWord) || o.OrderId.ToString().Contains(keyWord))
-            }
+        //            case "OrderDateAscending":
+        //                data = query.OrderBy(order => order.OrderDate)
+        //                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        //                break;
+        //            case "OrderDateDescending":
+        //                data =query.OrderByDescending(order => order.OrderDate)
+        //                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        //                break;
+        //            default:
+        //                data = query.OrderByDescending(order => order.OrderDate)
+        //                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        //                break;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        data = query.Where(o => o.Name.Contains(keyWord) || o.StatusName.Contains(keyWord) || o.OrderId.ToString().Contains(keyWord))
+        //    }
 
            
 
-            return Json(data);
-        }
+        //    return Json(data);
+        //}
 
 
         public IActionResult orderProductDetail(int orderId)
