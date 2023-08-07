@@ -16,17 +16,6 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Index()
         {
-            //IEnumerable<Employees> datas = null;
-
-            //if (string.IsNullOrEmpty(vm.txtKeyword))
-            //    datas = from e in _context.Employees
-            //            select e;
-            //else
-            //{
-            //    datas = _context.Employees.Where(e => e.EmployeeName.Contains(vm.txtKeyword) ||
-            //          e.Phone.Contains(vm.txtKeyword) ||
-            //          e.Email.Contains(vm.txtKeyword));
-            //}
             return View();
         }
 
