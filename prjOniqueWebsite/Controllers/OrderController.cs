@@ -17,20 +17,24 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
             dao = new OrderDao(_context);
         }
-        public IActionResult Index()
+        /// <summary>
+        /// orderList的展示頁面
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Index(string keyword, string sort, int pagenumber,int pagesize)
         {
-            OrderPagination pagination = new OrderPagination();
+            ViewBag.Keyword = keyword;
+            ViewBag.Sort = sort;
+            ViewBag.Pagenumber = pagenumber;
+            ViewBag.PageSize = pagesize;
 
-
-            pagination.OrderCount = _context.Orders.Count();
-
-
-
-            //每一頁的內容物
-
-
-            return View(pagination);
+            return View();
         }
+
+
+
+
+
         public IActionResult Details(int orderId)
         {
             ViewBag.OrderId = orderId;
@@ -39,14 +43,14 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Details(OrderStatusVM vm)
         {
-            var query = _context.Orders.Where(O => O.OrderId == vm.OrderId).FirstOrDefault();    
+            var query = _context.Orders.Where(O => O.OrderId == vm.OrderId).FirstOrDefault();
             var orderDetails = _context.OrderDetails.Where(o => o.OrderId == vm.OrderId).ToList();
 
-           
-            
-        
-           query.OrderStatusId = vm.StatusId;
-            
+
+
+
+            query.OrderStatusId = vm.StatusId;
+
             vm.StatusName = _context.OrderStatus.Where(os => os.StatusId == vm.StatusId).Select(vm => vm.StatusName).FirstOrDefault();
 
 
@@ -77,7 +81,7 @@ namespace prjOniqueWebsite.Controllers
                         _context.SaveChanges();
                     }
                 }
-                else if(vm.StatusName== "退款中" && vm.formerStatusName== "已完成")
+                else if (vm.StatusName == "退款中" && vm.formerStatusName == "已完成")
                 {
                     foreach (var item in orderDetails)
                     {

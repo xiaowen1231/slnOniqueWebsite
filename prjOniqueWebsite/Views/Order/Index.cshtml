@@ -2,12 +2,33 @@
 @{
     ViewData["Title"] = "訂單總覽";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
+    string keyword = string.Empty;
+    int pagesize = 0;
+    int pagenumber = 0;
+
+    if (ViewBag.Pagenumber != 0)
+    {
+        pagenumber = ViewBag.Pagenumber;
+    }
+    if (!string.IsNullOrEmpty(keyword))
+    {
+        keyword = ViewBag.Keyword;
+    }
+    if (ViewBag.PageSize != 0)
+    {
+        pagesize = ViewBag.PageSize;
+    }
 }
 
 <div class="container">
+    
     <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">訂單管理</div>
     <div class="m-3 d-flex gap-3 justify-content-center">
         <div class="d-flex gap-2">
+            <input type="hidden" value="@keyword" id="searchKeyword"/>
+            <input type="hidden" value="@pagenumber" id="searchPagenumber" />
+            <input type="hidden" value="@pagesize" id="searchSize" />
+
             <div class="circle-size-25 color-95CACA border rounded-circle"></div>
             <div class="statusName">待出貨</div>
         </div>
@@ -40,7 +61,7 @@
         <div class="d-flex align-items-center gap-2">
             <div class="width-70px">每頁顯示</div>
             <div>
-                <select class="form-select d-inline" aria-label="資料筆數" id="dataPerPage">
+                <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">
                     <option value="10">10筆資料</option>
                     <option value="20">20筆資料</option>
                     <option value="30">30筆資料</option>
@@ -49,7 +70,7 @@
 
             <div class="width-70px ms-3">排序方式</div>
             <div>
-                <select class="form-select d-inline" aria-label="資料筆數" id="sort">
+                <select class="form-select d-inline" aria-label="資料筆數" id="selectOrder">
                     <option value="OrderDateDescending">下單時間:晚至早</option>
                     <option value="OrderDateAscending">下單時間:早至晚</option>
 
@@ -105,10 +126,15 @@
     <script>
         const orderTable = document.querySelector("#orderTable")
         const searchbtn = document.querySelector("#Search")
-        const keywordtxt = document.querySelector("#txtKeyWord")
+       
         const inputkeyWord = keywordtxt.textContent;
         const dataPerPageSel = document.querySelector("#dataPerPage")
         const sortsel = document.querySelector('#sort')
+
+        let keyword = $("#searchKeyword").val()
+        let pagenumber =$("#searchPagenumber").val()
+        //todo
+        async function DisplayOrders(keyword, sort, pagenumber,page)
         //load();
         //async function load() {
         //    const response = await fetch(`@Url.Content("~/OrderApi/showOrderList")`)

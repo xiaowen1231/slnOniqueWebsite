@@ -1,6 +1,8 @@
-﻿using prjOniqueWebsite.Models.DTOs;
+﻿using Humanizer.Localisation.TimeToClockNotation;
+using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Runtime.CompilerServices;
 
 namespace prjOniqueWebsite.Models.Daos
 {
@@ -13,12 +15,13 @@ namespace prjOniqueWebsite.Models.Daos
             _context = context;
         }
         /// <summary>
-        /// 回傳全部的會員資料list
+        /// filter by layer
+        /// 依據搜尋的keyword回傳訂單資料(半成品)，再傳給下一個f()繼續篩選
         /// </summary>
         /// <returns></returns>
-        public IQueryable<OrderListDto> getOrderList()
+        public List<OrderListDto> SearchOrderList(string sort,string keyword)
         {
-            var orderList = from o in _context.Orders
+            var query = from o in _context.Orders
                             join os in _context.OrderStatus
                             on o.OrderStatusId equals os.StatusId
                             join m in _context.Members
@@ -35,7 +38,30 @@ namespace prjOniqueWebsite.Models.Daos
                                 PaymentMethodName = pm.PaymentMethodName,
                                 PhotoPath = m.PhotoPath
                             };
-            return orderList;
+            if(!string.IsNullOrEmpty(keyword) )
+            {
+                query=query.Where(o=>o.Name.Contains(keyword)||o.StatusName.Contains(keyword));
+            }
+            List<OrderListDto> data=query.ToList();
+            return SortOrderList(data, sort);
+         }
+        /// <summary>
+        /// 接續搜尋回傳的資料，以此做分類
+        /// </summary>
+        /// <param name="data">回傳的資料</param>
+        /// <param name="sort">分類的方式</param>
+        /// <returns></returns>
+        public List<OrderListDto> SortOrderList(List<OrderListDto> data,string sort)
+        {
+            if(sort== "OrderDateDescending" || string.IsNullOrEmpty(sort))//default setting
+            {
+                data=data.OrderByDescending(o=>o.OrderDate).ToList();
+            }
+            if(sort== "OrderDateAscending")
+            {
+                data=data.OrderBy(o=>o.OrderDate).ToList();
+            }
+            return data;
         }
         public List<OrderProductsListDto> getProductDetail(int orderId)
         {
