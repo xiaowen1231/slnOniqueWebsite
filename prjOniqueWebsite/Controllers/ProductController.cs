@@ -14,10 +14,11 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
         }
 
-        public IActionResult List(string keyword, string categoryName,string rank)
+        public IActionResult List(string keyword, string categoryName,string rank,int pageNumber)
         {
             ViewBag.CategoryName=categoryName;
             ViewBag.Keyword = keyword;
+            ViewBag.PageNumber = pageNumber;
             return View();
         }
 
