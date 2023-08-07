@@ -27,7 +27,7 @@
                 </div>
                 <div class="backgroundHeadIcon">
                     <img src="@Url.Content("~/images/background/bell.png")" />
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notify">
                         99+
                         <span class="visually-hidden">unread messages</span>
                     </span>
@@ -50,12 +50,12 @@
                     <div>員工管理</div>
                 </div>
                 <a class="nav-link text-white" asp-controller="member" asp-action="Index">
-                <div class="btnOptions">
-                    <div class="icon">
-                        <img src="@Url.Content("~/images/background/group.png")" />
+                    <div class="btnOptions">
+                        <div class="icon">
+                            <img src="@Url.Content("~/images/background/group.png")" />
+                        </div>
+                        <div>會員管理</div>
                     </div>
-                    <div>會員管理</div>
-                </div>
                 </a>
                 <a class="nav-link text-white" asp-controller="BgProductsManage" asp-action="Index">
                     <div class="btnOptions">
@@ -109,19 +109,19 @@
             }
         })
 
-        const notify = document.querySelector("#notify")
-        async function getOrderStatusCount(){
-            const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusCount?statusId=1")`)
-            const data=await response.json()
-            console.log(typeof(data))
-            //const count=data
-            notify.innerHTML = data;
-        }
-        getOrderStatusCount()
+        //const notify = document.querySelector("#notify")
+        //async function getOrderStatusCount() {
+        //    const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusCount?statusId=1")`)
+        //    const data = await response.json()
+        //    console.log(typeof (data))
+        //    console.log(data)
+        //    //const count=data
+        //    getOrderStatusCount()
+        //    notify.innerHTML = data;
 
-        
-        
-        
+
+
+
 
     </script>
     @await RenderSectionAsync("Scripts", required: false)
