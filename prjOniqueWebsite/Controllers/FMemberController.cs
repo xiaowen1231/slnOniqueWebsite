@@ -52,6 +52,11 @@ namespace prjOniqueWebsite.Controllers
             }).FirstOrDefault();
             return PartialView(mem);
         }
+        public IActionResult MemberInfoEdit(int id)
+        {
+            var member = _context.Members.FirstOrDefault(m=>m.MemberId==id);
+            return PartialView(member);
+        }
         [TypeFilter(typeof(MemberVerify))]
         public IActionResult MemberOrder()
         {
@@ -61,7 +66,10 @@ namespace prjOniqueWebsite.Controllers
             //             join o in _context.Orders
             //             on m.MemberId equals o.MemberId
             //             where m.MemberId == member.MemberId
-            //             select new)
+            //             select new MemberOrderDto
+            //             {
+
+            //             })
             return PartialView();
         }
         [TypeFilter(typeof(MemberVerify))]

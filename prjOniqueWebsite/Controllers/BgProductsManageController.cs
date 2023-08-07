@@ -242,9 +242,10 @@ namespace prjOniqueWebsite.Controllers
             return View(dto);                    
         }
         //[HttpPost]
-        //public IActionResult BgColorSizeSettingCreate(bg)
+        //public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
         //{
         //    // to do 邏輯判斷是否有重複要新增的顏色 尺寸
+          
         //    var BgCss = new ProductStockDetails()
         //    {
         //        ProductId = vm.ProductId,
