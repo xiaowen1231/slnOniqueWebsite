@@ -19,6 +19,16 @@ namespace prjOniqueWebsite.Controllers
             //}
             return View();
         }
+        public IActionResult showProductName()
+        {
+            var query = from p in _context.Products
+                        select new Products
+                        {
+                            ProductId = p.ProductId,
+                            ProductName = p.ProductName
+                        };
+            return View(query);
+        }
         public IActionResult ShowColorList()
         {
             var query = from c in _context.ProductColors

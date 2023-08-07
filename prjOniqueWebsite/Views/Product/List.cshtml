@@ -116,8 +116,8 @@
                 let liPagination = ""
 
                 if (pagination.pageNumber >= 1) {
-                    liPagination += `<li  class="page-item">
-                                                <a class="page-link" href="@Url.Content("~/Product/List?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pagination.pageItemPrevNumber}" aria-label="Previous">
+                    liPagination += `<li  class="page-item ">
+                                        <a class="page-link pageItemPrevNumber" data-pagenumber="${pagination.pageItemPrevNumber}" aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>`
@@ -125,18 +125,20 @@
                 for (let i = 0; i < pagination.pageBarItemCount;i++){
                     let active = pagination.pageBarStartNumber + i == pagination.pageNumber ? "active" : "";
                     let clickPageNumber = pagination.pageBarStartNumber + i;
-                    liPagination += `<li class="${active} page-item"><a class="page-link" href="@Url.Content("~/Product/List?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${clickPageNumber}">${clickPageNumber}</a></li>`
+                    liPagination += `<li class="${active} page-item"><a class="page-link pageItemPrevNumber" data-pagenumber="${clickPageNumber}">${clickPageNumber}</a></li>`
                 }
 
                 if (pagination.pageNumber < pagination.pages)
                 {
                     liPagination += `<li class="page-item">
-                                         <a class="page-link" href="@Url.Content("~/Product/List?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pagination.pageItemNextNumber}" aria-label="Next">
+                                        <a class="page-link pageItemPrevNumber" data-pagenumber="${pagination.pageItemNextNumber}" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>`
                 }
+
                 $('#divProductList').html(cards.join(""))
+
                 $('.ulGUI').html(liPagination)
 
             }
@@ -177,6 +179,12 @@
         $('#divProductList').on('click', '.divCollection', function (event) {
             event.stopPropagation();
             console.log('收藏')
+        })
+        $(".ulGUI").on('click', '.pageItemPrevNumber',function(){
+            let rank = $("#selectOrderBy").val();
+            let pageNumber = $(this).data("pagenumber");
+            console.log(pageNumber)
+            Display(keyword, categoryName, rank, pageNumber)
         })
     </script>
 }
