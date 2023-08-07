@@ -55,6 +55,17 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
+        public AddToCartDto ShowProductInfo(int id)
+        {
+            var dto = _context.Products.Where(p => p.ProductId == id).Select(p => new AddToCartDto
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                Price = p.Price,
+                PhotoPath = p.PhotoPath
+            });
+            return dto.FirstOrDefault();
+        }
         public ProductDetailDto GetProductDetail(int id)
         {
 

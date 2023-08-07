@@ -193,5 +193,11 @@ namespace prjOniqueWebsite.Controllers
                 : PageItemCount;
             public int PageItemNextNumber => (PageBarStartNumber + PageItemCount >= Pages) ? Pages : PageBarStartNumber + PageItemCount;
         }
+
+        public IActionResult ShowProductInfo(int id)
+        {
+            AddToCartDto dto = dao.ShowProductInfo(id);
+            return Json(dto);
+        }
     }
 }
