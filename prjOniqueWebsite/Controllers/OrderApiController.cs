@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Data;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -33,22 +35,28 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="pageSize"></param>
         /// <param name="sort">分類</param>
         /// <returns>List<OrderListDto> dto</returns>
-        public IActionResult orderPage(int page,int pageSize,string sort) 
+        public IActionResult orderPage(int page, int pageSize, string? sort)
         {
-            List<OrderListDto> dto=null;
-            if(sort== "OrderDateAscending")
+            List<OrderListDto> dto = null;
+            switch (sort)
             {
-                dto = dao.getOrderList().OrderBy(order => order.OrderDate)
-                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                case "OrderDateAscending":
+                    dto = dao.getOrderList().OrderBy(order => order.OrderDate)
+                    .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    break;
+                case "OrderDateDescending":
+                    dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
+                    .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    break;
+                default:
+                    dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
+                    .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    break;
             }
-            else if(sort== "OrderDateDescending")
-            {
-                dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
-               .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            }         
+            
             return Json(dto);
         }
-        public IActionResult search(string? keyWord)
+        public IActionResult search(string? keyWord,int page,int pageSize,string? sort)
         {
             IEnumerable<OrderListDto> data = null;
 
@@ -64,22 +72,37 @@ namespace prjOniqueWebsite.Controllers
                             StatusName = os.StatusName,
                             OrderId = o.OrderId,
                             Name = m.Name,
-                            OrderDate=o.OrderDate,
+                            OrderDate = o.OrderDate,
                             ShippingDate = (DateTime)o.ShippingDate,
                             PaymentMethodName = pm.PaymentMethodName,
                             PhotoPath = m.PhotoPath
                         };
-
-
             if (string.IsNullOrEmpty(keyWord))
             {
-                data = query.ToList();
+                switch (sort)
+                {
+
+                    case "OrderDateAscending":
+                        data = query.OrderBy(order => order.OrderDate)
+                        .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                        break;
+                    case "OrderDateDescending":
+                        data =query.OrderByDescending(order => order.OrderDate)
+                        .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                        break;
+                    default:
+                        data = query.OrderByDescending(order => order.OrderDate)
+                        .Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                        break;
+                }
             }
             else
             {
-                data = query.Where(o => o.Name.Contains(keyWord) || o.StatusName.Contains(keyWord) || o.OrderId.ToString().Contains(keyWord)).ToList();
-
+                data = query.Where(o => o.Name.Contains(keyWord) || o.StatusName.Contains(keyWord) || o.OrderId.ToString().Contains(keyWord))
             }
+
+           
+
             return Json(data);
         }
 
@@ -121,7 +144,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult getOrderStatusCount(int statusId)
         {
-            var count=dao.GetOrderStatusCount(statusId); return Json(count);
+            var count = dao.GetOrderStatusCount(statusId); return Json(count);
         }
         /// <summary>
         /// 依照orderId找出目前的statusName，再給予依照商業邏輯正確的statusName的選擇，傳回的是選項，不是order的資料
@@ -135,21 +158,21 @@ namespace prjOniqueWebsite.Controllers
             var statusNow = dao.GetOrderStatus(OrderId).StatusName;
             var paymentMethodNow = dao.GetOrderStatus(OrderId).PaymentMethodName;
             var orderStatus = from o in _context.Orders
-                        join os in _context.OrderStatus
-                        on o.OrderStatusId equals os.StatusId
-                        join pm in _context.PaymentMethods
-                        on o.PaymentMethodId equals pm.PaymentMethodId
-                        where o.OrderId == OrderId
-                        select new OrderStatusDto
-                        {
-                            OrderId = o.OrderId,
-                            StatusName = os.StatusName,
-                            PaymentMethodName = pm.PaymentMethodName,
-                            StatusId = os.StatusId
-                        };
+                              join os in _context.OrderStatus
+                              on o.OrderStatusId equals os.StatusId
+                              join pm in _context.PaymentMethods
+                              on o.PaymentMethodId equals pm.PaymentMethodId
+                              where o.OrderId == OrderId
+                              select new OrderStatusDto
+                              {
+                                  OrderId = o.OrderId,
+                                  StatusName = os.StatusName,
+                                  PaymentMethodName = pm.PaymentMethodName,
+                                  StatusId = os.StatusId
+                              };
             var query = _context.OrderStatus;
 
-            List<OrderStatus> data=null;
+            List<OrderStatus> data = null;
 
 
             if (statusNow == "待出貨")
@@ -170,8 +193,8 @@ namespace prjOniqueWebsite.Controllers
             {
                 data = query.Where(c => c.StatusName == "退款中").ToList();
             }
-            
-            if(statusNow == "已取消" && paymentMethodNow == "貨到付款")
+
+            if (statusNow == "已取消" && paymentMethodNow == "貨到付款")
             {
                 data = null;
             }

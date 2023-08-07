@@ -101,5 +101,11 @@
             $('#divPartial').load('@Url.Content("~/fmember/MemberPassword")')
         })
 
+        $("#divPartial").on("click", ".btnEdit",function(event){
+            event.preventDefault()
+            let id = $(this).data("id");
+            $('#divPartial').load(`@Url.Content("~/fmember/MemberInfoEdit/")${id}`)
+
+        })
     </script>
 }

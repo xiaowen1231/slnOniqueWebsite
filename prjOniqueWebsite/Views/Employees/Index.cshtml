@@ -206,51 +206,87 @@
 
 @section Scripts{
     <script>
-        const employeetable = document.querySelector("#employeetable")
-        load()
+        const employeetable = document.querySelector("#employeetable");
+        let data = []; 
+
+        load();
 
         async function load() {
-            const response = await fetch(`@Url.Content("~/EmployeeApi/showEmployeeList")`)
-            const data = await response.json();
+            const response = await fetch(`@Url.Content("~/EmployeeApi/showEmployeeList")`);
+            data = await response.json(); 
 
+            renderTable(data); 
+        }
+
+        function performSearch() {
+            const keyword = document.getElementById("txtKeyword").value.toLowerCase();
+            //console.log("Keyword:", keyword); 
+            const filteredData = data.filter(item => {
+                const employeeName = item.employeeName.toLowerCase();
+                const phone = item.phone.toLowerCase();
+                const email = item.email.toLowerCase();
+
+                return employeeName.includes(keyword) || phone.includes(keyword) || email.includes(keyword);
+            });
+            renderTable(filteredData); 
+        }
+
+        function renderTable(data) {
             const tableEmployeeList = data.map(item => {
-                const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item
+                const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item;
                 const formattedDateOfBirth = formatDate(dateOfBirth);  //轉換型態
 
                 return (`
-
-                                            <tr>
-                                                <td>${employeeId}</td>
-                                                <td>
-                                                    <div class="d-flex gap-2 imgbox">
-                                                         <img src="@Url.Content("~/images/uploads/Employee/")${photoPath}" alt="" />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span>${employeeName}</span>
-                                                </td>
-                                                    <td>${formattedDateOfBirth}</td>
-                                                    <td>${gender}</td>
-                                                    <td>${phone}</td>
-                                                    <td>${email}</td>
-                                                    <td>${employeeLevelName}</td>
-                                                <td>
-                                                    <div class="circle-size-25">
-                                                        <a href="@Url.Content("~/employees/edit?id=")${employeeId}"><img src="@Url.Content("~/images/uploads/Employee/edit.png")" alt=""></a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="circle-size-25">
-                                                         <a href="javascript:void(0);" onclick="openDelete(${employeeId})">
-                                                         <img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt=""></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        `)
+                        <tr>
+                            <td>${employeeId}</td>
+                            <td>
+                                <div class="d-flex gap-2 imgbox">
+                                     <img src="@Url.Content("~/images/uploads/Employee/")${photoPath}" alt="" />
+                                </div>
+                            </td>
+                            <td>
+                                <span>${employeeName}</span>
+                            </td>
+                            <td>${formattedDateOfBirth}</td>
+                            <td>${gender}</td>
+                            <td>${phone}</td>
+                            <td>${email}</td>
+                            <td>${employeeLevelName}</td>
+                            <td>
+                                <div class="circle-size-25">
+                                    <a href="@Url.Content("~/employees/edit?id=")${employeeId}">
+                                        <img src="@Url.Content("~/images/uploads/Employee/edit.png")" alt="">
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="circle-size-25">
+                                     <a href="javascript:void(0);" onclick="openDelete(${employeeId})">
+                                         <img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt="">
+                                     </a>
+                                </div>
+                            </td>
+                        </tr>
+                    `)
             })
             employeetable.innerHTML = tableEmployeeList.join("");
-
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // 綁定查詢按鈕點擊事件
+            const btnSearch = document.getElementById("btnSearch");
+            btnSearch.addEventListener("click", function () {
+                performSearch();
+            });
+
+            // 綁定表單提交事件，防止預設的表單提交行為
+            const form = document.querySelector("form");
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                performSearch();
+            });
+        });
+
         function formatDate(dateString) {
             const date = new Date(dateString);
             const year = date.getFullYear();
@@ -274,28 +310,7 @@
             confirmDialog.show();
         }
 
-        // 在頁面載入完成後綁定事件處理函式
-        document.addEventListener("DOMContentLoaded", function () {
-            // 綁定查詢按鈕點擊事件
-            const btnSearch = document.getElementById("btnSearch");
-            btnSearch.addEventListener("click", function () {
-                performSearch();
-            });
-
-            // 綁定表單提交事件，防止預設的表單提交行為
-            const form = document.querySelector("form");
-            form.addEventListener("submit", function (event) {
-                event.preventDefault();
-                performSearch();
-            });
-        });
-
-        // 定義搜尋功能的函式
-        function performSearch() {
-            const keyword = document.getElementById("txtKeyword").value;
-            const filteredData = data.filter(item => item.employeeName.includes(keyword));
-            renderTable(filteredData); // 假設有一個渲染表格的函式 renderTable()，可以把搜尋結果顯示出來
-        }
+        
 
     </script>
 }
