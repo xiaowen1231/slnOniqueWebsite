@@ -56,19 +56,6 @@ namespace prjOniqueWebsite.Controllers
             if (ModelState.IsValid )
             {
                 Employees employee = new Employees();
-                //if (vm.Photo != null)
-                //{
-                //    string fileName = $"EmployeeId_{vm.EmployeeId}.jpg";
-                //    employee.PhotoPath = fileName;
-                //    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/employee", fileName);
-                //    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                //    {
-                //        vm.Photo.CopyTo(fileStream);
-                //    }
-                //}
-
-
-                //employee.PhotoPath = vm.PhotoPath;
                 employee.EmployeeId = vm.EmployeeId;
                 employee.EmployeeName = vm.EmployeeName;
                 employee.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
