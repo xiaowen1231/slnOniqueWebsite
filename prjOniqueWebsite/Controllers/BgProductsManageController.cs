@@ -236,19 +236,15 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult BgColorSizeSettingCreate(int id)
         {
-            try
-            {
-                ProductDetailDto dto = new ProductDao(_context).GetProductDetail(id);
-                return View(dto);
-            }
-            catch (Exception ex)
-            {
-                return Content(ex.Message);
-            }           
+            var dto = _context.Products.Where(p=>p.ProductId==id).Select(p=>new BgProductColorSizeSettingDto {ProductId=id,ProductName=p.ProductName}).FirstOrDefault();
+            dto.ProductSizes=_context.ProductSizes.ToList();
+            dto.ProductColors=_context.ProductColors.ToList();
+            return View(dto);                    
         }
         //[HttpPost]
-        //public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
+        //public IActionResult BgColorSizeSettingCreate(bg)
         //{
+        //    // to do 邏輯判斷是否有重複要新增的顏色 尺寸
         //    var BgCss = new ProductStockDetails()
         //    {
         //        ProductId = vm.ProductId,
