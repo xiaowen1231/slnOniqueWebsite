@@ -3,6 +3,11 @@
     string categoryName = string.Empty;
     string keyword = string.Empty;
     string pageTitle = title;
+    int pageNumber = 0;
+    if (ViewBag.PageNumber != 0) 
+    {
+        pageNumber = ViewBag.PageNumber;
+    }
     if (!string.IsNullOrEmpty(ViewBag.Keyword))
     {
         keyword = ViewBag.Keyword;
@@ -27,6 +32,7 @@
         <span class="fs-5 fw-bold">@pageTitle</span>
         <input type="hidden" value="@keyword" id="searchKeyword" />
         <input type="hidden" value="@categoryName" id="searchCategoryName" />
+        <input type="hidden" value="@pageNumber" id="searchPageNumber" />
     </div>
     <div class="d-flex m-2 gap-3 align-items-center ">
         <div>排序方式: </div>
@@ -41,12 +47,9 @@
     </div>
     <div class="mx-auto d-flex flex-md-wrap " id="divProductList">
     </div>
-    <div class="container m-3">
+    <div class="container m-3 ">
         <nav class="d-flex justify-content-center" aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <ul class="pagination ulGUI">
             </ul>
         </nav>
     </div>
@@ -68,7 +71,7 @@
         .w-240-h-240:hover {
             width: 245px;
             height: 245px;
-            transition:all 0.4s;
+            transition: all 0.4s;
         }
     </style>
 }
@@ -76,14 +79,19 @@
     <script>
         let keyword = $('#searchKeyword').val()
         let categoryName = $('#searchCategoryName').val()
+        let pageNumber = $("#searchPageNumber").val()
 
-        Display(keyword, categoryName,"")
+        Display(keyword, categoryName, "", pageNumber)
 
-        async function Display(keyword, categoryName, rank) {
-            const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}`)
+        async function Display(keyword, categoryName, rank, pageNumber) {
+            const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pageNumber}`)
             const datas = await response.json()
-            if (datas.length != 0) {
-                const cards = datas.map(item => {
+            console.log(datas)
+
+            const { products, pagination } = datas.value;
+
+            if (products.length != 0) {
+                const cards = products.map(item => {
 
                     const { id, productName, price, photoPath } = item;
 
@@ -92,7 +100,7 @@
                                     <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
                                 </div>
                                 <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-                                        <div class="price text-center">${price}</div>
+                                        <div    class="price text-center">${price}</div>
                                 <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
                                     <div class="w-25-h-25 divShopping" >
                                         <img src="@Url.Content("~/images/icon/shopping_black.png")" />
@@ -104,26 +112,52 @@
                             </div>`)
 
                 })
+
+                let liPagination = ""
+
+                if (pagination.pageNumber >= 1) {
+                    liPagination += `<li  class="page-item">
+                                                <a class="page-link" href="@Url.Content("~/Product/List?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pagination.pageItemPrevNumber}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>`
+                }
+                for (let i = 0; i < pagination.pageBarItemCount;i++){
+                    let active = pagination.pageBarStartNumber + i == pagination.pageNumber ? "active" : "";
+                    let clickPageNumber = pagination.pageBarStartNumber + i;
+                    liPagination += `<li class="${active} page-item"><a class="page-link" href="@Url.Content("~/Product/List?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${clickPageNumber}">${clickPageNumber}</a></li>`
+                }
+
+                if (pagination.pageNumber < pagination.pages)
+                {
+                    liPagination += `<li class="page-item">
+                                         <a class="page-link" href="@Url.Content("~/Product/List?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pagination.pageItemNextNumber}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>`
+                }
                 $('#divProductList').html(cards.join(""))
+                $('.ulGUI').html(liPagination)
+
             }
             else {
                 let searchHint = `<div class="flex-fill divNotFound">
-                                        <div class="w-200-h-200 mx-auto">
-                                             <img src="@Url.Content("~/images/icon/box.png")" alt="" style="height: 100%;height: 100%;">
-                                        </div>
-                                        <div class="text-center m-3 fw-bold fs-5 no_items.png">
-                                            (ಥ_ಥ) 很抱歉 , 找不到相關商品
-                                        </div>
-                                                <div class="text-secondary text-center fs-14px m-3 fw-bold">
-                                            請確認搜尋條件
-                                        </div>
-                                   </div>`;
+                                    <div class="w-200-h-200 mx-auto">
+                                            <img src="@Url.Content("~/images/icon/box.png")" alt="" style="height: 100%;height: 100%;">
+                                    </div>
+                                    <div class="text-center m-3 fw-bold fs-5 no_items.png">
+                                        (ಥ_ಥ) 很抱歉 , 找不到相關商品
+                                    </div>
+                                            <div class="text-secondary text-center fs-14px m-3 fw-bold">
+                                        請確認搜尋條件
+                                    </div>
+                                </div>`;
 
                 $('#divProductList').html(searchHint)
             }
         }
 
-        $("#selectOrderBy").on('change',function(){
+        $("#selectOrderBy").on('change', function () {
             let rank = $(this).val();
             let catagoryName = $("#searchCategoryName").val();
             let keyword = $('#searchKeyword').val()
