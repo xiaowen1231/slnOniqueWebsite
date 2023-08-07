@@ -233,11 +233,11 @@
 
         function renderTable(data) {
             const pageSize = 10; // 每頁顯示的資料筆數
-            const totalItems = data.length;
-            const totalPages = Math.ceil(totalItems / pageSize);
+            const totalItems = data.length;  //儲存資料的總筆數
+            const totalPages = Math.ceil(totalItems / pageSize); //計算資料的總頁數
             let currentPage = 1;
 
-            const tableEmployeeList = data.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(item => {
+            const tableEmployeeList = data.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(item => {  //取得第一頁的10筆資料
                 const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item;
                 const formattedDateOfBirth = formatDate(dateOfBirth);
 
@@ -275,7 +275,7 @@
                 `)
             });
 
-            employeetable.innerHTML = tableEmployeeList.join("");
+            employeetable.innerHTML = tableEmployeeList.join("");  //將HTML內容動態放入到指定的元素中
 
             // 生成分頁籤
             const paginationElement = document.getElementById("pagination");
@@ -348,10 +348,10 @@
                 performSearch();
             });
 
-            // 綁定表單提交事件，防止預設的表單提交行為
+            // 綁定表單提交事件，防止清單生成
             const form = document.querySelector("form");
             form.addEventListener("submit", function (event) {
-                event.preventDefault();
+                event.preventDefault();//因送出時會重新load清單，所以使用event.preventDefault()取消該行為，防止清單生成
                 performSearch();
             });
         });
