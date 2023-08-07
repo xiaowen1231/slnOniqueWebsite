@@ -27,7 +27,6 @@
                     <div class="container">                        
                         <a class="btn btn-outline-dark border form-control my-2 fw-bold" asp-action="BgCreateSize">新增尺寸</a>
                         <a class="btn btn-outline-dark border form-control my-2 fw-bold" asp-action="BgCreateColor">新增顏色</a>
-                        <a class="btn btn-outline-dark border form-control my-2 fw-bold" asp-action="BgDiscountCreate">新增優惠</a>
                     </div>
                 </div>
             </div>
@@ -67,11 +66,6 @@
                         <label asp-for="SupplierId" class="width-120px">供應商:</label>
                         <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
                         <span asp-validation-for="SupplierId" class="text-danger"></span>
-                    </div>
-                    <div class="align-items-center my-3 d-flex">
-                        <label asp-for="DiscountId" class="form-label width-120px">活動優惠:</label>
-                        <select asp-for="DiscountId" class="form-control" asp-items="ViewBag.DiscountId"></select>
-                        <span asp-validation-for="DiscountId" class="text-danger"></span>
                     </div>
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
