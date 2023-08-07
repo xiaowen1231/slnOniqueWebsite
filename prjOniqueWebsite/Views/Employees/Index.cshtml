@@ -182,7 +182,7 @@
 </div>
 <div class="container">
     <nav class="d-flex justify-content-center" aria-label="Page navigation example">
-        <ul class="pagination">
+        <ul class="pagination" id="pagination">
             <li class="page-item">
                 <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
@@ -232,45 +232,114 @@
         }
 
         function renderTable(data) {
-            const tableEmployeeList = data.map(item => {
+            const pageSize = 10; // 每頁顯示的資料筆數
+            const totalItems = data.length;
+            const totalPages = Math.ceil(totalItems / pageSize);
+            let currentPage = 1;
+
+            const tableEmployeeList = data.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(item => {
                 const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item;
-                const formattedDateOfBirth = formatDate(dateOfBirth);  //轉換型態
+                const formattedDateOfBirth = formatDate(dateOfBirth);
 
                 return (`
-                        <tr>
-                            <td>${employeeId}</td>
-                            <td>
-                                <div class="d-flex gap-2 imgbox">
-                                     <img src="@Url.Content("~/images/uploads/Employee/")${photoPath}" alt="" />
-                                </div>
-                            </td>
-                            <td>
-                                <span>${employeeName}</span>
-                            </td>
-                            <td>${formattedDateOfBirth}</td>
-                            <td>${gender}</td>
-                            <td>${phone}</td>
-                            <td>${email}</td>
-                            <td>${employeeLevelName}</td>
-                            <td>
-                                <div class="circle-size-25">
-                                    <a href="@Url.Content("~/employees/edit?id=")${employeeId}">
-                                        <img src="@Url.Content("~/images/uploads/Employee/edit.png")" alt="">
-                                    </a>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="circle-size-25">
-                                     <a href="javascript:void(0);" onclick="openDelete(${employeeId})">
-                                         <img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt="">
-                                     </a>
-                                </div>
-                            </td>
-                        </tr>
-                    `)
-            })
+                    <tr>
+                        <td>${employeeId}</td>
+                        <td>
+                            <div class="d-flex gap-2 imgbox">
+                                <img src="@Url.Content("~/images/uploads/Employee/")${photoPath}" alt="" />
+                            </div>
+                        </td>
+                        <td>
+                            <span>${employeeName}</span>
+                        </td>
+                        <td>${formattedDateOfBirth}</td>
+                        <td>${gender}</td>
+                        <td>${phone}</td>
+                        <td>${email}</td>
+                        <td>${employeeLevelName}</td>
+                        <td>
+                            <div class="circle-size-25">
+                                <a href="@Url.Content("~/employees/edit?id=")${employeeId}">
+                                    <img src="@Url.Content("~/images/uploads/Employee/edit.png")" alt="">
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="circle-size-25">
+                                <a href="javascript:void(0);" onclick="openDelete(${employeeId})">
+                                    <img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt="">
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                `)
+            });
+
             employeetable.innerHTML = tableEmployeeList.join("");
+
+            // 生成分頁籤
+            const paginationElement = document.getElementById("pagination");
+            const paginationHTML = `
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous" onclick="changePage(${currentPage - 1})">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                ${Array.from({ length: totalPages }, (_, i) => `
+                    <li class="page-item ${currentPage === i + 1 ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="changePage(${i + 1})">${i + 1}</a>
+                    </li>
+                `).join("")}
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next" onclick="changePage(${currentPage + 1})">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            `;
+
+            paginationElement.innerHTML = paginationHTML;
         }
+
+        let currentPage = 1;
+
+        function changePage(pageNumber) {
+            const pageSize = 10;
+            const startIndex = (pageNumber - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+
+            currentPage = pageNumber;
+            const currentPageData = data.slice(startIndex, endIndex);
+            renderTable(currentPageData);
+            renderPagination(); // 重新生成分頁籤
+        }
+
+        function renderPagination() {
+            const paginationElement = document.getElementById("pagination");
+            const totalPages = Math.ceil(data.length / 10);
+            const paginationHTML = `
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous" onclick="changePage(${currentPage - 1})">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                ${Array.from({ length: totalPages }, (_, i) => `
+                    <li class="page-item ${currentPage === i + 1 ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="changePage(${i + 1})">${i + 1}</a>
+                    </li>
+                `).join("")}
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next" onclick="changePage(${currentPage + 1})">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            `;
+
+            paginationElement.innerHTML = paginationHTML;
+        }
+
+        // 先生成一次分頁籤
+        renderPagination();
+
 
         document.addEventListener("DOMContentLoaded", function () {
             // 綁定查詢按鈕點擊事件
