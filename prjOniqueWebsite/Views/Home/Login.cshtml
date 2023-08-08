@@ -17,14 +17,14 @@
                 帳號:
             </div>
             <div class="p-2">
-                <input type="text" class="form-control" name="Email" value="Asa@gmail.com">
+                <input type="text" class="form-control" name="Email" value="" id="inputEmail">
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>            
             <div class="fw-bold p-2 mt-2">
                 密碼:
             </div>
             <div class="p-2">
-                <input type="password" class="form-control" name="Password">
+                <input type="password" class="form-control" name="Password" id="inputPassword">
                 @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
@@ -36,6 +36,10 @@
                     @Html.ActionLink("註冊", "Register","Home", "",new {@class="btn btn-outline-dark" })
                     <input type="submit" value="登入" id="Login" class="btn btn-dark fw-bold">
                 </div>
+            </div>
+            <div class="mx-3 text-end position-sticky">
+                <input type="button" class="btn btn-outline-secondary" value="DemoMember" id="DemoMember" />
+                <input type="button" class="btn btn-outline-secondary" value="DemoEmployee" id="DemoEmployee" />
             </div>
         </div>
     </div>
@@ -49,4 +53,18 @@
             left:50%;
         }
     </style>
+}
+@section Scripts{
+    <script>
+        $('#DemoMember').on('click', function () {
+            let email = "Asa@gmail.com"
+            $('#inputEmail').val(email)
+            $('#inputPassword').val("123")
+        })
+        $('#DemoEmployee').on('click', function () {
+            let email = "Hank@gmail.com"
+            $('#inputEmail').val(email)
+            $('#inputPassword').val("123")
+        })
+    </script>
 }
