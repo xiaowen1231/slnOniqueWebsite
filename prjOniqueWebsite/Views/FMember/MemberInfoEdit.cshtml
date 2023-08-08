@@ -15,51 +15,55 @@
             <div class="pt-2 d-flex col-6 align-items-center">
                 <div class=" width-90px text-end fw-bold">生日</div>
                 <div class="mx-2">
-                    <input type="date" class="form-control" />
+                    @Model.DateOfBirth
+                    <input type="date" class="form-control" value="" />
                 </div>
             </div>
         </div>
         <div class="row justify-content-around p-3">
             <div class="pt-2 d-flex col-6 align-items-center">
-                <div class=" width-90px text-end fw-bold">性別</div>
+                <div class=" width-90px text-end fw-bold">信箱</div>
                 <div class="mx-3">
-                    <input type="text" class="form-control" value="男" />
+                    @Model.Email
                 </div>
             </div>
             <div class="pt-2 d-flex col-6 align-items-center">
                 <div class=" width-90px text-end fw-bold">電話</div>
                 <div class="mx-2">
-                    <input type="text" class="form-control" value="0912345678">
+                    <input type="text" class="form-control" value="@Model.Phone">
                 </div>
             </div>
         </div>
         <div class="pt-2 d-flex col-6 align-items-center p-3 mt-2">
-            <div class=" width-90px text-end fw-bold">信箱</div>
+            <div class=" width-90px text-end fw-bold">性別</div>
             <div class="mx-3">
-                <input type="text" class="form-control" value="@Model.Email">
+                @Model.Gender
+                <input type="text" class="form-control" value="">
             </div>
         </div>
         <div class="row justify-content-around p-3">
             <div class="col-12  mt-2 d-flex justify-content-start ">
-                <div class=" width-90px text-end fw-bold d-flex">地址</div>
+                <div class=" width-90px text-end fw-bold">地址</div>
                 <div class="mx-3">
-                    <select class="form-select ">
-                        <option selected>-請選擇縣市-</option>
+                    <input type="hidden" value="@ViewBag.city" id="memberCity" />
+                    <select class="form-select" name="Citys" id="city">
+                        @*<option selected>-請選擇縣市-</option>
                         <option value="1">台北市</option>
                         <option value="2">新北市</option>
-                        <option value="3">桃園市</option>
+                        <option value="3">桃園市</option>*@
                     </select>
                 </div>
                 <div class="mx-3">
-                    <select class="form-select ">
-                        <option selected>-請選擇地區-</option>
+                    <input type="hidden" value="@ViewBag.area" id="memberArea" />
+                    <select class="form-select" name="Areas" id="area">
+                       @* <option selected>-請選擇地區-</option>
                         <option value="1">大安區</option>
                         <option value="2">中山區</option>
-                        <option value="3">中正區</option>
+                        <option value="3">中正區</option>*@
                     </select>
                 </div>
                 <div class="mx-3 ">
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" value="@Model.Address">
                 </div>
             </div>
         </div>
@@ -67,7 +71,63 @@
     <div class="row justify-content-around p-5">
         <div class="text-center">
             <input type="submit" value="確定修改" class="btn btn-dark p-2 px-4">
-            <input type="submit" value="取消" class="btn btn-light p-2 px-4">
+            <input type="submit" value="取消" class="btnEditCancel btn btn-light p-2 px-4">
         </div>
     </div>
 </div>
+
+    <script>
+        loadCity();
+        async function loadCity() {
+            const response = await fetch(`@Url.Content("~/memberapi/LoadCity")`)
+            const datas = await response.json();
+            const memberCity = $("#memberCity").val()
+            let selectOptions = ""
+
+            datas.map(item => {
+                const { cityId, cityName } = item
+
+                selectOptions += ` <option value="${cityId}">${cityName}</option>`
+
+            })
+
+            $("#city").append(selectOptions)
+            
+            loadArea();
+        }
+
+        $("#city").change(function () {
+            // 清空area選項
+            $("#area").empty();
+            loadArea();
+        })
+
+        async function loadArea() {
+            const cityId = $("#city").val()
+            const response = await fetch(`@Url.Content("~/memberapi/loadarea?cityId=")${cityId}`)
+            const datas = await response.json();
+            const memberArea = $("#memberArea").val()
+            let selectOptions = ""
+
+            datas.map(item => {
+                const { areaId, areaName } = item
+
+                selectOptions += ` <option value="${areaId}">${areaName}</option>`
+
+            })
+
+            $("#area").append(selectOptions);
+        }
+        const photo = document.querySelector('#Photo')
+        photo.addEventListener('change', () => {
+            const file = photo.files
+            if (file.length == 0) {
+                let imgDefault = '@Url.Content("~/images/uploads/members/default.jpg")'
+                $('#imgMember').attr('src', imgDefault)
+            }
+            else {
+                const url = URL.createObjectURL(file[0]);
+                $('#imgMember').attr('src', url)
+            }
+        })
+    </script>
