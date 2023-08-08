@@ -231,22 +231,30 @@
             renderTable(filteredData); 
         }
 
+        
+
         function renderTable(data) {
             const pageSize = 10; // 每頁顯示的資料筆數
             const totalItems = data.length;  //儲存資料的總筆數
             const totalPages = Math.ceil(totalItems / pageSize); //計算資料的總頁數
             let currentPage = 1;
+            
 
             const tableEmployeeList = data.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(item => {  //取得第一頁的10筆資料
                 const { employeeId, photoPath, employeeName, dateOfBirth, gender, phone, email, employeeLevelName } = item;
                 const formattedDateOfBirth = formatDate(dateOfBirth);
+                const hasPhoto = !!photoPath; // 將是否有照片的狀態轉換為布林值
+
+                //true顯示上傳的圖片 false顯示default
+                const imgSrc = hasPhoto ? '@Url.Content("~/images/uploads/Employee/")' + photoPath : 
+                '@Url.Content("~/images/uploads/employee/default.jpg")';
 
                 return (`
                     <tr>
                         <td>${employeeId}</td>
                         <td>
                             <div class="d-flex gap-2 imgbox">
-                                <img src="@Url.Content("~/images/uploads/Employee/")${photoPath}" alt="" />
+                               <img src="${imgSrc}" alt="" />
                             </div>
                         </td>
                         <td>
@@ -341,7 +349,7 @@
         renderPagination();
 
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {  //頁面生成載入完後才會觸發
             // 綁定查詢按鈕點擊事件
             const btnSearch = document.getElementById("btnSearch");
             btnSearch.addEventListener("click", function () {

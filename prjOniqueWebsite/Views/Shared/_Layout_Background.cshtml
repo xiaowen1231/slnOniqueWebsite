@@ -43,12 +43,14 @@
                         <img src="@Url.Content("~/images/background/close.png")" />
                     </figure>
                 </div>
-                <div class="btnOptions">
-                    <div class="icon">
-                        <img src="@Url.Content("~/images/background/employee.png")" />
+                <a class="nav-link text-white" asp-controller="Employees" asp-action="Index">
+                    <div class="btnOptions">
+                        <div class="icon">
+                            <img src="@Url.Content("~/images/background/employee.png")" />
+                        </div>
+                        <div>員工管理</div>
                     </div>
-                    <div>員工管理</div>
-                </div>
+                </a>
                 <a class="nav-link text-white" asp-controller="member" asp-action="Index">
                     <div class="btnOptions">
                         <div class="icon">

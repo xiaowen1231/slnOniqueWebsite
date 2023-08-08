@@ -60,6 +60,7 @@
         const divHot = document.querySelector('#divHot');
 
         NewArrivals();
+
         HotTop4();
 
         async function HotTop4() {
@@ -75,7 +76,7 @@
                             <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
                                     <div class="price text-center">${price}</div>
                             <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                <div class="w-25-h-25 divShopping" >
+                                <div class="w-25-h-25 divShopping" data-productid=${id} >
                                     <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                 </div>
                                 <div class="w-25-h-25 divCollection">
@@ -103,7 +104,7 @@
                             <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
                                     <div class="price text-center">${price}</div>
                             <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                <div class="w-25-h-25 divShopping" >
+                                <div class="w-25-h-25 divShopping" data-productid=${id} >
                                     <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                 </div>
                                 <div class="w-25-h-25 divCollection">
@@ -121,13 +122,125 @@
             window.location.href = `@Url.Content("~/Product/Detail/")${id}`;
         })
 
-        $('.ProductWall').on('click', '.divShopping', function (event) {
+        $('.ProductWall').on('click', '.divShopping', async function (event) {
             event.stopPropagation();
-            console.log('購物車')
+
+            const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
+            const isLogin = await response.json();
+
+            if (isLogin) {
+                let productId = $(this).data("productid");
+
+                const resp = await fetch(`@Url.Content("~/ProductApi/ShowProductInfo/")${productId}`);
+                const data = await resp.json();
+
+                if (data.apiResult.statusCode == 200) {
+                    const modalAddToCart = new bootstrap.Modal(document.getElementById('modalAddToCart'));
+
+                    $('#modalProductName').text(`${data.productName}`);
+                    $('#modalPrice').text(`${data.price}`);
+                    $('#modalPhoto').prop("src", `@Url.Content("~/images/uploads/products/")${data.photoPath}`);
+                    $('#modalSelectColor').data("productid", data.productId)
+                    $('#modalSelectSize').data("productid", data.productId)
+
+                    loadColor(productId)
+
+                    modalAddToCart.show()
+
+                } else {
+                    Swal.fire({
+                        title: data.apiResult.statusMessage,
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+
+            } else {
+                Swal.fire({
+                    title: '尚未登入!',
+                    text: "如想使用購物車,請先登入!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3C3C3C',
+                    cancelButtonColor: '#D0D0D0',
+                    confirmButtonText: '進行登入',
+                    cancelButtonText: '稍後登入'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `@Url.Content("~/Home/Login")`
+                    }
+                })
+            }
         })
+
         $('.ProductWall').on('click', '.divCollection', function (event) {
             event.stopPropagation();
             console.log('收藏')
         })
+
+        async function loadColor(productId) {
+            const response = await fetch(`@Url.Content("~/productapi/GetStockColor/")${productId}`)
+            const datas = await response.json();
+
+            const colors = datas.map(color => {
+                const { colorId, colorName } = color;
+                return `<option value="${colorId}">${colorName}</option>`
+            })
+
+            $("#modalSelectColor").html(colors.join(""))
+
+            loadSize(productId);
+        }
+
+        async function loadSize(productId) {
+            const colorId = $("#modalSelectColor").val()
+            const response = await fetch(`@Url.Content("~/productapi/GetStockSize?")id=${productId}&colorId=${colorId}`)
+
+            const datas = await response.json();
+
+            const sizes = datas.map(size => {
+                const { sizeId, sizeName } = size
+                return `<option value="${sizeId}">${sizeName}</option>`
+            })
+
+            $("#modalSelectSize").html(sizes.join(""))
+
+            loadProductPhoto(productId)
+        }
+
+        $("#modalSelectColor").on('change', function () {
+            let productId = $(this).data("productid")
+
+            loadSize(productId)
+        })
+
+        $("#modalSelectSize").on('change', function () {
+            let productId = $(this).data("productid")
+
+            loadProductPhoto(productId)
+        })
+
+        async function loadProductPhoto(productId) {
+            const colorId = $("#modalSelectColor").val()
+            const sizeId = $("#modalSelectSize").val()
+
+            const response = await fetch(`@Url.Content("~/ProductApi/GetStockDetail?")productId=${productId}&colorId=${colorId}&sizeId=${sizeId}`)
+            const data = await response.json()
+
+            const { photoPath, stockId, quantity } = data
+
+            $("#modalPhoto").attr("src", `@Url.Content("~/images/uploads/products/")${photoPath}`)
+            $("#modalBtnAddToCart").data("stockid", stockId)
+        }
+
+        $('#modalBtnAddToCart').on('click', function () {
+
+            let stockId = $("#modalBtnAddToCart").data("stockid");
+            let qty = $("#modalOrderQty").val();
+
+            AddToCart(stockId, qty)
+        })
+
     </script>
 }

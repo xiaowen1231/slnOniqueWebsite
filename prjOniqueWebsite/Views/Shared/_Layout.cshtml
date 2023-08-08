@@ -91,6 +91,55 @@
 
     <div id="page-container">
         <div id="content-wrap">
+            <div class="modal fade" id="modalAddToCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header gap-3">
+                            <div class="fw-bold fs-5 text-center" id="modalProductName"></div>
+                            <div>
+                                <span>NT$</span>
+                                <span class="text-danger" id="modalPrice"></span>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class=" d-flex p-2 align-items-center justify-content-around">
+                                <div class="" style="width: 150px;height: 150px;">
+                                    <img src="" alt="" id="modalPhoto" class="rounded">
+                                </div>
+                                <div>
+                                    <div class="fw-bold mx-2">
+                                        顏色 :
+                                    </div>
+                                    <div class="m-2" style="width: 200px;">
+                                        <select name="" id="modalSelectColor" class="form-select form-select-sm">
+                                        </select>
+                                    </div>
+                                    <div class="fw-bold mx-2">
+                                        尺寸 :
+                                    </div>
+                                    <div class="m-2" style="width: 200px;">
+                                        <select name="" id="modalSelectSize" class="form-select form-select-sm">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <div class="fw-bold p-2 d-flex ">
+                                <div class="border border-dark-subtle text-center cursor-pointer" style="width: 25px;" id="modalBtnReduce">-</div>
+                                <input type="text" value="1" id="modalOrderQty" class="width-50px text-center" />
+                                <div class="border border-dark-subtle text-center cursor-pointer" style="width: 25px;" id="modalBtnIncrease">+</div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-dark" id="modalBtnAddToCart">加入</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             @RenderBody()
         </div>
         <footer id="footer" class="footer fs-6 bg-dark mt-3">
@@ -162,6 +211,7 @@
             </div>
         </footer>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.js"></script>
@@ -235,10 +285,12 @@
 
             $("#cartItems").append(str);
         }
+
         $('.divKeyword').on('click', function () {
             let keyword = $('#inputKeyword').val()
             window.location.href = `@Url.Content("~/Product/List?keyword=")${keyword}`
         })
+
         $('#inputKeyword').on('keypress', function (event) {
             if (event.key === "Enter") {
 
@@ -246,7 +298,53 @@
                 window.location.href = `@Url.Content("~/Product/List?keyword=")${keyword}`
             }
         })
+
+        $("#modalBtnReduce").click(function () {
+            let orderQty = Number($("#modalOrderQty").val())
+            if (orderQty <= 1) {
+                orderQty = 1
+                $("#modalOrderQty").val(orderQty.toString());
+            }
+            else {
+                orderQty--
+                $("#modalOrderQty").val(orderQty.toString());
+            }
+        })
+
+        $("#modalBtnIncrease").click(function () {
+            let orderQty = Number($("#modalOrderQty").val())
+            orderQty++
+            $("#modalOrderQty").val(orderQty)
+        })
+
+        async function AddToCart(stockId, qty) {
+
+            const response = await fetch(`@Url.Content("~/ProductApi/AddToCart?")stockId=${stockId}&qty=${qty}`)
+            const data = await response.json()
+
+            const { message, statusCode } = data;
+            if (statusCode == 200) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: message,
+                    confirmButtonColor: '#3C3C3C',
+                    confirmButtonText: '確認'
+                })
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    text: message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+
+            GetCartItems()
+        }
+
     </script>
+
     @if (TempData["AlertLogin"] != null)
     {
         <script>
@@ -259,7 +357,9 @@
             })
         </script>
     }
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 
 </html>
