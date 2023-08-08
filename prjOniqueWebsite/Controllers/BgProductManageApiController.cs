@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -34,7 +35,7 @@ namespace prjOniqueWebsite.Controllers
             var query = from c in _context.ProductColors
                         select new ProductColors
                         {
-                            ColorId= c.ColorId,
+                            ColorId = c.ColorId,
                             ColorName = c.ColorName
                         };
             List<ProductColors> dto = query.ToList();
@@ -85,7 +86,7 @@ namespace prjOniqueWebsite.Controllers
                             ProductName = p.ProductName,
                             PhotoPath = p.PhotoPath,
                             Price = p.Price,
-                            Category = c.CategoryName,                            
+                            Category = c.CategoryName,
                         };
 
             List<BgProductManageListDto> dto = query.ToList();
@@ -98,6 +99,39 @@ namespace prjOniqueWebsite.Controllers
             var Discount = from d in _context.Discounts
                            select d;
             return Json(Discount);
+        }
+
+        public IActionResult DeleteStock(int id)
+        {
+
+            var result = new ApiResult();
+            try
+            {
+
+                var psd = _context.ProductStockDetails.FirstOrDefault(psd => psd.StockId == id);
+
+                if (psd == null)
+                {
+                    result.StatusCode = 500;
+                    result.StatusMessage = "無此商品庫存設定，請重新確認";
+                    return Json(result);
+                }
+                else
+                {
+                    _context.ProductStockDetails.Remove(psd);
+                    _context.SaveChanges();
+                    result.StatusCode = 200;
+                    result.StatusMessage = "刪除成功!";
+                    return Json(result);
+                }
+            }catch (Exception ex)
+            {
+                result.StatusCode = 500;
+                result.StatusMessage = ex.Message; 
+                return Json(result);
+            }
+
+
         }
     }
 }

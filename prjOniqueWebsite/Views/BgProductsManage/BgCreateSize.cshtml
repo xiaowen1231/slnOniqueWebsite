@@ -64,6 +64,24 @@
                 </tr>*@
             </table>
         </div>
+
+        <div class="modal" id="confirmDialog" tabindex="-1" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">確認刪除</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="confirmMessage">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-danger" id="confirmButton">確定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div style="margin-bottom: 20px;">
             <div class="text-center">
                 <a class="btn btn-outline-dark fw-bold mx-4" asp-action="Index">取消</a>
@@ -88,12 +106,26 @@
                 <td>${sizeName}</td>
                 <td>
                     <div style="margin:auto">
-                                <a href=""><img src="@Url.Content("~/images/BgProductManage/trash.png")" class="width-30px"></a>
+                           <a href="javascript:void(0);" onclick="openDelete(${sizeId})"><img src="@Url.Content("~/images/BgProductManage/trash.png")" class="width-30px"></a>
                     </div>
                 </td>
                 `)
             })
         BgSizeTable.innerHTML = TableBgSizeList.join("");
      }
+        function openDelete(sizeId) {
+            const confirmDialog = new bootstrap.Modal(document.getElementById("confirmDialog"));
+            const confirmMessageElement = document.getElementById("confirmMessage");
+            const confirmButton = document.getElementById("confirmButton");
+
+            confirmMessageElement.textContent = `確定要刪除 尺寸${sizeId} 的商品嗎？`;
+
+            confirmButton.onclick = function () {
+                const url = '@Url.Action("DeleteSize", "BgProductsManage")' + '?sizeId=' + sizeId;
+                window.location.href = url;
+            };
+
+            confirmDialog.show();
+        }
     </script>
 }

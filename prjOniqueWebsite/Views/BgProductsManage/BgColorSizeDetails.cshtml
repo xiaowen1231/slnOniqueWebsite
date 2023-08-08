@@ -65,6 +65,7 @@
                 </div>                
                 <div class="text-center p-4">
                     <div>
+                        <div class="btn btn-outline-danger" id="btnDelete">刪除</div>
                         <a class="btn btn-outline-dark mx-4 fw-bold" asp-action="Index">取消</a>
                         <input type="submit" class="btn btn-dark fw-bold" value="修改庫存數">
                     </div>
@@ -138,8 +139,40 @@
                 const {photoPath,stockId,quantity}=psd
                 $("#productPhoto").attr("src",`@Url.Content("~/images/uploads/products/")${photoPath}`)
                 $("#stockQty").text(`${quantity}`)
-                $("#stockId").val(`${stockId}`)            
+            $("#btnDelete").data("stockid", stockId);
+            $("#btnDelete").data("productid", productId);
         }
+
+
+        $("#btnDelete").on("click",async function(){
+            let stockId = $(this).data("stockid");
+            let produtcId = $(this).data("productid");
+
+            const respo = await fetch(`@Url.Content("~/BgProductManageApi/DeleteStock/")${stockId}`)
+            const data = await respo.json();
+
+            if (data.statusCode == 200) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: data.statusMessage,
+                    confirmButtonColor: '#3C3C3C',
+                    confirmButtonText: '確認',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setTimeout(() => {
+                    window.location.href = `@Url.Content("~/BgProductsManage/Edit/")${produtcId}`
+                }, 1500)
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    text: data.statusMessage,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        })
 
     </script>
 }
