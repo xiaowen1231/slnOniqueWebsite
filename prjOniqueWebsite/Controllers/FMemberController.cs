@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
+using prjOniqueWebsite.Models.ViewModels;
 using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
@@ -54,7 +56,25 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult MemberInfoEdit(int id)
         {
-            var member = _context.Members.FirstOrDefault(m=>m.MemberId==id);
+            //var member = (from m in _context.Members
+            //              join c in _context.Citys
+            //              on m.Citys equals c.CityId
+            //              join a in _context.Areas
+            //              on m.Areas equals a.AreaId
+            //              where m.MemberId == id
+            //              select new FMemberDto
+            //              {
+            //                  MemberId = id,
+            //                  Name = m.Name,
+            //                  DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd"),
+            //                  Email = m.Email,
+            //                  Phone = m.Phone,
+            //                  Gender = m.Gender ? "女" : "男",
+            //                  Citys = c.CityName,
+            //                  Areas = a.AreaName,
+            //                  Address = m.Address
+            //              }).FirstOrDefault();
+            var member = _context.Members.FirstOrDefault(m => m.MemberId == id);
             return PartialView(member);
         }
         [TypeFilter(typeof(MemberVerify))]
@@ -62,15 +82,23 @@ namespace prjOniqueWebsite.Controllers
         {
             string json = HttpContext.Session.GetString("Login");
             Members member = JsonSerializer.Deserialize<Members>(json);
-            //var order = (from m in _context.Members
-            //             join o in _context.Orders
-            //             on m.MemberId equals o.MemberId
-            //             where m.MemberId == member.MemberId
-            //             select new MemberOrderDto
-            //             {
-
-            //             })
-            return PartialView();
+            var order = (from m in _context.Members
+                         join o in _context.Orders
+                         on m.MemberId equals o.MemberId
+                         join p in _context.PaymentMethods
+                         on o.PaymentMethodId equals p.PaymentMethodId
+                         join od in _context.OrderDetails
+                         on o.OrderId equals od.OrderId
+                         where m.MemberId == member.MemberId
+                         select new MemberOrderVM
+                         {
+                             MemberId = member.MemberId,
+                             OrderId = o.OrderId,
+                             OrderDate = Convert.ToDateTime(o.OrderDate).ToString("yyyy-MM-dd"),
+                             PaymentMethodName = p.PaymentMethodName,
+                             Price = od.Price,
+                         }).ToList();
+            return PartialView(order);
         }
         [TypeFilter(typeof(MemberVerify))]
         public IActionResult MemberMyKeep()

@@ -32,10 +32,10 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="sort"></param>
         /// <param name="pagenumber"></param>
         /// <returns></returns>
-        public IActionResult OrderList(string keyword,string sort,int pagenumber,int pagesize)
+        public IActionResult OrderList(string keyword, string sort, int pagenumber, int pagesize)
         {
             var dto = dao.SearchOrderList(keyword, sort);
-            var index= OrderListIndex(dto, pagenumber,pagesize);
+            var index = OrderListIndex(dto, pagenumber, pagesize);
             return Json(index);
         }
         /// <summary>
@@ -44,20 +44,21 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="order"></param>
         /// <param name="pagenumber"></param>
         /// <returns></returns>
-        public IActionResult OrderListIndex(List<OrderListDto>order,int pagenumber,int pagesize)
+        public IActionResult OrderListIndex(List<OrderListDto> order, int pagenumber, int pagesize)
         {
-            var data = new GUIdto();
-            var criteria = prepareCriteria(pagenumber,pagesize);
+            var data = new OrderGUIdto();
+
+            var criteria = prepareCriteria(pagenumber);
             criteria.PageSize = pagesize;
             data.Criteria = criteria;
 
-            int totalOrderCount=order.Count();
-            data.Pagination=new PaginationInfo(totalOrderCount, pagesize, criteria.PageNumber,$"/OrderApi/OrderList?pagenumber={pagenumber}&pagesize={pagesize}");
-            data.orders=order.Skip(criteria.recordStartIndex).Take(criteria.PageSize).ToList();
+            int totalOrderCount = order.Count();
+            data.OrderPaginationInfo = new OrderPaginationInfo(totalOrderCount, criteria.PageSize, criteria.PageNumber, $"/OrderApi/OrderList?pagenumber={pagenumber}&pagesize={pagesize}");
+            data.Orders = order.Skip(criteria.recordStartIndex).Take(criteria.PageSize).ToList();
             return Json(data);
         }
 
-        public class Criteria
+        public class OrderCriteria
         {
             private int _PageNumber = 1;
 
@@ -81,23 +82,23 @@ namespace prjOniqueWebsite.Controllers
             }
         }
 
-        public Criteria prepareCriteria(int pageNumber,int pagesize)
+        public OrderCriteria prepareCriteria(int pageNumber)
         {
-            var result = new Criteria();
+            var result = new OrderCriteria();
             result.PageNumber = pageNumber;
-            result.PageSize = pagesize;
+            
             return result;
         }
-        public class GUIdto
+        public class OrderGUIdto
         {
-            public Criteria Criteria { get; set; }
-            public PaginationInfo Pagination { get; set; }
-            public List<OrderListDto> orders{ get; set; }
+            public OrderCriteria Criteria { get; set; }
+            public OrderPaginationInfo OrderPaginationInfo { get; set; }
+            public List<OrderListDto> Orders { get; set; }
 
         }
-        public class PaginationInfo
+        public class  OrderPaginationInfo
         {
-            public PaginationInfo(int totalRecords, int pageSize, int pageNumber, string urlTemplate)
+            public OrderPaginationInfo(int totalRecords, int pageSize, int pageNumber, string urlTemplate)
             {
                 TotalRecords = totalRecords;
                 PageSize = pageSize;
@@ -136,88 +137,7 @@ namespace prjOniqueWebsite.Controllers
                 : PageItemCount;
             public int PageItemNextNumber => (PageBarStartNumber + PageItemCount >= Pages) ? Pages : PageBarStartNumber + PageItemCount;
         }
-        //public IActionResult showOrderList()
-        //{
-        //    List<OrderListDto> dto = dao.getOrderList().ToList();
-        //    return Json(dto);
-        //}
-        /// <summary>
-        /// 傳分頁資料給前台OrderIndex更新頁面資料
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
-        /// <param name="sort">分類</param>
-        /// <returns>List<OrderListDto> dto</returns>
-        //public IActionResult orderPage(int page, int pageSize, string? sort)
-        //{
-        //    List<OrderListDto> dto = null;
-        //    switch (sort)
-        //    {
-        //        case "OrderDateAscending":
-        //            dto = dao.getOrderList().OrderBy(order => order.OrderDate)
-        //            .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        //            break;
-        //        case "OrderDateDescending":
-        //            dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
-        //            .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        //            break;
-        //        default:
-        //            dto = dao.getOrderList().OrderByDescending(order => order.OrderDate)
-        //            .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        //            break;
-        //    }
-
-        //    return Json(dto);
-        //}
-        //public IActionResult search(string? keyWord,int page,int pageSize,string? sort)
-        //{
-        //    IEnumerable<OrderListDto> data = null;
-
-        //    var query = from o in _context.Orders
-        //                join os in _context.OrderStatus
-        //                on o.OrderStatusId equals os.StatusId
-        //                join m in _context.Members
-        //                on o.MemberId equals m.MemberId
-        //                join pm in _context.PaymentMethods
-        //                on o.PaymentMethodId equals pm.PaymentMethodId
-        //                select new OrderListDto
-        //                {
-        //                    StatusName = os.StatusName,
-        //                    OrderId = o.OrderId,
-        //                    Name = m.Name,
-        //                    OrderDate = o.OrderDate,
-        //                    ShippingDate = (DateTime)o.ShippingDate,
-        //                    PaymentMethodName = pm.PaymentMethodName,
-        //                    PhotoPath = m.PhotoPath
-        //                };
-        //    if (string.IsNullOrEmpty(keyWord))
-        //    {
-        //        switch (sort)
-        //        {
-
-        //            case "OrderDateAscending":
-        //                data = query.OrderBy(order => order.OrderDate)
-        //                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        //                break;
-        //            case "OrderDateDescending":
-        //                data =query.OrderByDescending(order => order.OrderDate)
-        //                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        //                break;
-        //            default:
-        //                data = query.OrderByDescending(order => order.OrderDate)
-        //                .Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        data = query.Where(o => o.Name.Contains(keyWord) || o.StatusName.Contains(keyWord) || o.OrderId.ToString().Contains(keyWord))
-        //    }
-
-
-
-        //    return Json(data);
-        //}
+        
 
 
         public IActionResult orderProductDetail(int orderId)
