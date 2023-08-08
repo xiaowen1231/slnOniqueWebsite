@@ -29,6 +29,8 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Login()
         {
+            if (HttpContext.Session.Keys.Contains("Login") && !HttpContext.Session.Keys.Contains("EmployeeLogin"))
+                return Content("權限不足");
             if (HttpContext.Session.Keys.Contains("Login"))
                 return Content("已登入,會員管理頁面");
             return View();

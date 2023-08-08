@@ -11,6 +11,11 @@ namespace prjOniqueWebsite.Controllers
             bool isLogin = HttpContext.Session.Keys.Contains("Login") ? true : false;
             return Json(isLogin);
         }
+        public IActionResult IsLoginByEmployee()
+        {
+            bool isLogin = HttpContext.Session.Keys.Contains("EmployeeLogin") ? true : false;
+            return Json(isLogin);
+        }
         public IActionResult UpdataNav()
         {
             string json = HttpContext.Session.GetString("Login");
@@ -28,5 +33,7 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(employees);
         }
+
+
     }
 }

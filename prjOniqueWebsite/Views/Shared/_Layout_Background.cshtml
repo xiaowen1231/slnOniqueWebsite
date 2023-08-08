@@ -115,7 +115,7 @@
 
         async function CheckLogin() {
 
-            const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
+            const response = await fetch(`@Url.Content("~/HomeApi/IsLoginByEmployee")`)
             const isLogin = await response.json();
 
             if (isLogin) {
