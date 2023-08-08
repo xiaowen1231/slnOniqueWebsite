@@ -111,15 +111,18 @@
             }
         })
 
-        //const notify = document.querySelector("#notify")
-        //async function getOrderStatusCount() {
-        //    const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusCount?statusId=1")`)
-        //    const data = await response.json()
-        //    console.log(typeof (data))
-        //    console.log(data)
-        //    //const count=data
-        //    getOrderStatusCount()
-        //    notify.innerHTML = data;
+        const notify = document.querySelector("#notify")
+        async function getOrderStatusCount() {
+            const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusCount?statusId=1")`)
+            const data = await response.json()
+            notify.innerHTML = data;
+        }
+            getOrderStatusCount();
+        
+        //$(".backgroundHeadIcon").on('click', function () {
+        //    window.location.href = `@Url.Content("~/order/Index?keyword=")待出貨&sort=&pagenumber=1&pagesize=30`
+        //    console.log("123");
+        //}   
 
 
 

@@ -30,38 +30,109 @@
 
     <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">訂單管理</div>
     <div class="m-3 d-flex gap-3 justify-content-center">
-        <div class="d-flex gap-2">
+        <div>
             <input type="hidden" value="@keyword" id="searchKeyword" />
             <input type="hidden" value="@sort" id="inputSort" />
             <input type="hidden" value="@pagenumber" id="searchPagenumber" />
             <input type="hidden" value="@pagesize" id="searchpageSize" />
+        </div>
 
+
+        <div class="d-flex gap-2">
             <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-            <div class="statusName">待出貨</div>
+            @{
+                if (!string.IsNullOrEmpty(keyword) && keyword == "待出貨")
+                {
+                    
+                <div class="statusName active">待出貨</div>
+                }else{
+                    <div class="statusName">待出貨</div>
+                }
+            }
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-            <div class="statusName">已出貨</div>
+            @{
+                if (!string.IsNullOrEmpty(keyword) && keyword == "已出貨")
+                {
+
+                    <div class="statusName active">已出貨</div>
+                }
+                else
+                {
+                    <div class="statusName">已出貨</div>
+                }
+            }
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-            <div class="statusName">已完成</div>
+            @{
+                if (!string.IsNullOrEmpty(keyword) && keyword == "已完成")
+                {
+
+                    <div class="statusName active">已完成</div>
+                }
+                else
+                {
+                    <div class="statusName">已完成</div>
+                }
+            }
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-            <div class="statusName">已取消</div>
+            @{
+                if (!string.IsNullOrEmpty(keyword) && keyword == "已取消")
+                {
+
+                    <div class="statusName active">已取消</div>
+                }
+                else
+                {
+                    <div class="statusName">已取消</div>
+                }
+            }
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-            <div class="statusName">退款中</div>
+            @{
+                if (!string.IsNullOrEmpty(keyword) && keyword == "退款中")
+                {
+
+                    <div class="statusName active">退款中</div>
+                }
+                else
+                {
+                    <div class="statusName">退款中</div>
+                }
+            }
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-            <div class="statusName">已退款</div>
+            @{
+                if (!string.IsNullOrEmpty(keyword) && keyword == "已退款")
+                {
+
+                    <div class="statusName active">已退款</div>
+                }
+                else
+                {
+                    <div class="statusName">已退款</div>
+                }
+            }
         </div>
         <div class="d-flex gap-2">
             <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-            <div class="statusName">未取貨</div>
+            @{
+                if (!string.IsNullOrEmpty(keyword) && keyword == "未取貨")
+                {
+
+                    <div class="statusName active">未取貨</div>
+                }
+                else
+                {
+                    <div class="statusName">未取貨</div>
+                }
+            }
         </div>
     </div>
     <div class="d-flex justify-content-between px-4">
@@ -307,9 +378,7 @@
             }else{
                 keyword = changeStatusName
             }
-            
-            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
-        
+            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=1&pagesize=${pagesize}`
         })
 
         $("#selectOrder").on('change', function () {
@@ -318,15 +387,22 @@
 
             window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
         })
-                
+            
 
+        
+
+                
+        
     </script>
 }
 @section Styles{
     <style>
-        .statusName:hover {
-            color: crimson;
-            background-color: antiquewhite;
+        .statusName:hover{
+            cursor:pointer;
+            font-weight:bold;
+        }
+        .statusName.active {
+           
             font-weight: bold;
             cursor: pointer;
         }
