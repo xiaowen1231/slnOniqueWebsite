@@ -19,47 +19,47 @@ namespace prjOniqueWebsite.Models.Daos
         /// 依據搜尋的keyword回傳訂單資料(半成品)，再傳給下一個f()繼續篩選
         /// </summary>
         /// <returns></returns>
-        public List<OrderListDto> SearchOrderList(string sort,string keyword)
+        public List<OrderListDto> SearchOrderList(string keyword, string sort)
         {
             var query = from o in _context.Orders
-                            join os in _context.OrderStatus
-                            on o.OrderStatusId equals os.StatusId
-                            join m in _context.Members
-                            on o.MemberId equals m.MemberId
-                            join pm in _context.PaymentMethods
-                            on o.PaymentMethodId equals pm.PaymentMethodId
-                            select new OrderListDto
-                            {
-                                StatusName = os.StatusName,
-                                OrderId = o.OrderId,
-                                Name = m.Name,
-                                ShippingDate = (DateTime)o.ShippingDate,
-                                OrderDate = (DateTime)o.OrderDate,
-                                PaymentMethodName = pm.PaymentMethodName,
-                                PhotoPath = m.PhotoPath
-                            };
-            if(!string.IsNullOrEmpty(keyword) )
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        join m in _context.Members
+                        on o.MemberId equals m.MemberId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        select new OrderListDto
+                        {
+                            StatusName = os.StatusName,
+                            OrderId = o.OrderId,
+                            Name = m.Name,
+                            ShippingDate = (DateTime)o.ShippingDate,
+                            OrderDate = (DateTime)o.OrderDate,
+                            PaymentMethodName = pm.PaymentMethodName,
+                            PhotoPath = m.PhotoPath
+                        };
+            if (!string.IsNullOrEmpty(keyword))
             {
-                query=query.Where(o=>o.Name.Contains(keyword)||o.StatusName.Contains(keyword));
+                query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword));
             }
-            List<OrderListDto> data=query.ToList();
+            List<OrderListDto> data = query.ToList();
             return SortOrderList(data, sort);
-         }
+        }
         /// <summary>
         /// 接續搜尋回傳的資料，以此做分類
         /// </summary>
         /// <param name="data">回傳的資料</param>
         /// <param name="sort">分類的方式</param>
         /// <returns></returns>
-        public List<OrderListDto> SortOrderList(List<OrderListDto> data,string sort)
+        public List<OrderListDto> SortOrderList(List<OrderListDto> data, string sort)
         {
-            if(sort== "OrderDateDescending" || string.IsNullOrEmpty(sort))//default setting
+            if (sort == "OrderDateDescending" || string.IsNullOrEmpty(sort))//default setting
             {
-                data=data.OrderByDescending(o=>o.OrderDate).ToList();
+                data = data.OrderByDescending(o => o.OrderDate).ToList();
             }
-            if(sort== "OrderDateAscending")
+            if (sort == "OrderDateAscending")
             {
-                data=data.OrderBy(o=>o.OrderDate).ToList();
+                data = data.OrderBy(o => o.OrderDate).ToList();
             }
             return data;
         }
@@ -106,9 +106,9 @@ namespace prjOniqueWebsite.Models.Daos
                                      Phone = m.Phone,
                                      OrderId = o.OrderId,
                                      ShippingAddress = o.ShippingAddress,
-                                     Recipient=o.Recipient,
-                                     RecipientPhone=o.RecipientPhone,
-                                     Remark=o.Remark,
+                                     Recipient = o.Recipient,
+                                     RecipientPhone = o.RecipientPhone,
+                                     Remark = o.Remark,
                                      StatusName = os.StatusName,
                                      MethodName = sm.MethodName,
                                      PaymentMethodName = pm.PaymentMethodName,
@@ -122,23 +122,23 @@ namespace prjOniqueWebsite.Models.Daos
         public OrderStatusDto GetOrderStatus(int orderId)
         {
             var query = from o in _context.Orders
-                         join os in _context.OrderStatus
-                         on o.OrderStatusId equals os.StatusId
-                         join pm in _context.PaymentMethods
-                         on o.PaymentMethodId equals pm.PaymentMethodId
-                         where o.OrderId == orderId
-                         select new OrderStatusDto
-                         {
-                             OrderId = o.OrderId,
-                             StatusName = os.StatusName,
-                             StatusId = os.StatusId,
-                             PaymentMethodName=pm.PaymentMethodName  
-                         };
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        where o.OrderId == orderId
+                        select new OrderStatusDto
+                        {
+                            OrderId = o.OrderId,
+                            StatusName = os.StatusName,
+                            StatusId = os.StatusId,
+                            PaymentMethodName = pm.PaymentMethodName
+                        };
 
             return query.FirstOrDefault();
-            
+
         }
-        
+
         public IQueryable<OrderStatusDto> GetAllOrderStatus()
         {
             var status = from o in _context.Orders
@@ -169,7 +169,7 @@ namespace prjOniqueWebsite.Models.Daos
             var count = (from o in _context.Orders
                          where o.OrderStatusId == statusId
                          select o).Count();
-            return count;           
+            return count;
         }
     }
 }

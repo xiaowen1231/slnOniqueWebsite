@@ -105,7 +105,12 @@
             event.preventDefault()
             let id = $(this).data("id");
             $('#divPartial').load(`@Url.Content("~/fmember/MemberInfoEdit/")${id}`)
-
         })
+        $("#divPartial").on("click", ".btnEditCancel",function(event){
+            event.preventDefault()
+            let id =$(this).data("id");
+            $('#divPartial').load('@Url.Content("~/fmember/MemberInfo")')
+        })
+        @RenderSection("MemberOrder",required:false)
     </script>
 }

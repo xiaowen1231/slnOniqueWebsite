@@ -3,6 +3,8 @@
     ViewData["Title"] = "訂單總覽";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
     string keyword = string.Empty;
+    string sort = string.Empty;
+
     int pagesize = 0;
     int pagenumber = 0;
 
@@ -10,9 +12,13 @@
     {
         pagenumber = ViewBag.Pagenumber;
     }
-    if (!string.IsNullOrEmpty(keyword))
+    if (!string.IsNullOrEmpty(ViewBag.Keyword))
     {
         keyword = ViewBag.Keyword;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Sort))
+    {
+        sort = ViewBag.Sort;
     }
     if (ViewBag.PageSize != 0)
     {
@@ -21,13 +27,14 @@
 }
 
 <div class="container">
-    
+
     <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">訂單管理</div>
     <div class="m-3 d-flex gap-3 justify-content-center">
         <div class="d-flex gap-2">
-            <input type="hidden" value="@keyword" id="searchKeyword"/>
+            <input type="hidden" value="@keyword" id="searchKeyword" />
+            <input type="hidden" value="@sort" id="inputSort" />
             <input type="hidden" value="@pagenumber" id="searchPagenumber" />
-            <input type="hidden" value="@pagesize" id="searchSize" />
+            <input type="hidden" value="@pagesize" id="searchpageSize" />
 
             <div class="circle-size-25 color-95CACA border rounded-circle"></div>
             <div class="statusName">待出貨</div>
@@ -71,9 +78,18 @@
             <div class="width-70px ms-3">排序方式</div>
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數" id="selectOrder">
-                    <option value="OrderDateDescending">下單時間:晚至早</option>
-                    <option value="OrderDateAscending">下單時間:早至晚</option>
-
+                    @{
+                        if (sort == "OrderDateDescending")
+                        {
+                            <option value="OrderDateDescending" selected>下單時間:晚至早</option>
+                            <option value="OrderDateAscending">下單時間:早至晚</option>
+                        }
+                        else
+                        {
+                            <option value="OrderDateDescending">下單時間:晚至早</option>
+                            <option value="OrderDateAscending" selected>下單時間:早至晚</option>
+                        }
+                    }
                 </select>
             </div>
         </div>
@@ -112,9 +128,7 @@
     <div class="container">
         <nav class="d-flex justify-content-center" aria-label="Page navigation example">
             <ul class="pagination">
-                @*<li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>*@
+                
             </ul>
         </nav>
     </div>
@@ -126,113 +140,133 @@
     <script>
         const orderTable = document.querySelector("#orderTable")
         const searchbtn = document.querySelector("#Search")
-       
-        const inputkeyWord = keywordtxt.textContent;
+
         const dataPerPageSel = document.querySelector("#dataPerPage")
-        const sortsel = document.querySelector('#sort')
 
+        let sort = $("#inputSort").val()
         let keyword = $("#searchKeyword").val()
-        let pagenumber =$("#searchPagenumber").val()
-        //todo
-        async function DisplayOrders(keyword, sort, pagenumber,page)
-        //load();
-        //async function load() {
-        //    const response = await fetch(`@Url.Content("~/OrderApi/showOrderList")`)
-        //    const data = await response.json();
+        let pagenumber = Number($("#searchPagenumber").val())
+        let pagesize = Number($("#searchpageSize").val())
+        
 
-        //    let tableOrdersList = "";
-        //    data.map(item => {
+        DisplayOrders(keyword, sort, pagenumber, pagesize)
+
+        async function DisplayOrders(keyword, sort, pagenumber, pagesize) {
+            //console.log("keyword:", keyword, "sort:", sort, "pagenumber:", pagenumber, "pagesize:", pagesize)
+            const response = await fetch(`@Url.Content("~/OrderApi/OrderList?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`);
+            const data = await response.json();
+
+            const { orderPaginationInfo, criteria, orders } = data.value;
+            console.log(data)
+            
+                let tableOrdersList = "";
+
+                orders.map(item => {
+                    const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item;
+                    let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath;
+                    let displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
+                    tableOrdersList += `
+                        <tr>
+                            <td>
+                                <div class="d-flex gap-2">`;
+
+                    if (statusName == "待出貨") {
+                        tableOrdersList += `
+                            <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                            <div>${statusName}</div>`;
+                    } else if (statusName == "已出貨") {
+                        tableOrdersList += `
+                            <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
+                            <div>${statusName}</div>`;
+                    } else if (statusName == "已完成") {
+                        tableOrdersList += `
+                            <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
+                            <div>${statusName}</div>`;
+                    } else if (statusName == "已取消") {
+                        tableOrdersList += `
+                            <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
+                            <div>${statusName}</div>`;
+                    } else if (statusName == "退款中") {
+                        tableOrdersList += `
+                            <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
+                            <div>${statusName}</div>`;
+                    } else if (statusName == "已退款") {
+                        tableOrdersList += `
+                            <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
+                            <div>${statusName}</div>`;
+                    } else {
+                        tableOrdersList += `
+                            <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
+                            <div>${statusName}</div>`;
+                    }
+
+                    tableOrdersList += `
+                                </div>
+                            </td>
+                            <td>
+                                <span>${orderId}</span>
+                            </td>
+                            <td>
+                                <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                <span>${name}</span>
+                            </td>
+                            <td>${displayorderDate}</td>
+                            <td>${paymentMethodName}</td>
+                            <td>
+                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                            </td>
+                        </tr>`;
+                });
+
+                $("#orderTable").html(tableOrdersList);
+
+                let liPagination = ""
+
+            if (orderPaginationInfo.pageNumber >= 1) {
+                    liPagination += `<li  class="page-item ">
+                                            <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemPrevNumber}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>`
+                }
+            for (let i = 0; i < orderPaginationInfo.pageBarItemCount; i++) {
+                let active = orderPaginationInfo.pageBarStartNumber + i == orderPaginationInfo.pageNumber ? "active" : "";
+                let clickPageNumber = orderPaginationInfo.pageBarStartNumber + i;
+                    liPagination += `<li class="${active} page-item"><a class="page-link pageItemPrevNumber" data-pagenumber="${clickPageNumber}">${clickPageNumber}</a></li>`
+                }
+
+            if (orderPaginationInfo.pageNumber < orderPaginationInfo.pages) {
+                    liPagination += `<li class="page-item">
+                                                <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemNextNumber}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>`
+                }
+                $(".pagination").html(liPagination);
+            
+        }
 
 
-        //        const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item
-        //        let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
-        //        displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
-        //        //console.log(displayorderDate)
-        //        tableOrdersList += `
-        //                                                                                                                                        <tr>
-        //                                                                                                                                        <td>
-        //                                                                                                                                        <div class="d-flex gap-2">`;
-        //        if (statusName == "待出貨") {
-        //            tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-        //                                                                                                                                                                                                            <div>${statusName}</div>`
-        //        }
-        //        else if (statusName == "已出貨") {
-        //            tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-        //                                                                                                                                                                                                            <div>${statusName}</div>`
-        //        }
-        //        else if (statusName == "已完成") {
-        //            tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-        //                                                                                                                                                                                                            <div>${statusName}</div>`
-        //        }
-        //        else if (statusName == "已取消") {
-        //            tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-        //                                                                                                                                                                                                            <div>${statusName}</div>`
-        //        }
-        //        else if (statusName == "退款中") {
-        //            tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-        //                                                                                                                                                                                                            <div>${statusName}</div>`
-        //        }
-        //        else if (statusName == "已退款") {
-        //            tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-        //                                                                                                                                                                                                            <div>${statusName}</div>`
-        //        }
-        //        else {
-        //            tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-        //                                                                                                                                                                                                                    <div>${statusName}</div>`
-        //        }
-        //        tableOrdersList += `
-        //                                                </div>
-        //                                                </td>
-        //                                                <td>
-        //                                                <span>${orderId}</span>
-        //                                                </td>
-        //                                                <td>
-        //                                                        <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-        //                                                <span>${name}</span>
-        //                                                </td>
-        //                                                    <td>${displayorderDate}</td>
-        //                                                    <td>${paymentMethodName}</td>
-        //                                                <td>
-        //                                                    <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-        //                                                </div>
-        //                                                </a>
-        //                                                </td>
-        //                                                </tr>`
-        //    })
+        $('#txtKeyWord').on('keypress',function(e){
+            if(e.key === "Enter"){
+              keyword = $(this).val();
 
-        //    $("#orderTable").append(tableOrdersList)
-
-        //}
-
-
-
-        //搜尋功能
-        searchbtn.addEventListener('click', () => {
-            let keyWord = keywordtxt.value;
-            showSearchdata(keyWord)
+                DisplayOrders(keyword, sort, 1, pagesize)
+            }
         })
+        $('#Search').on("click",function(event){
+            event.preventDefault();
 
-        let SelectStatus = "";
-
-        $('.statusName').click(function () {
-            const keyWord = $(this).text()
-            if (SelectStatus == keyWord) {
-                SelectStatus = ""
-                showSearchdata("")
-            }
-            else {
-                showSearchdata(keyWord)
-                SelectStatus = keyWord
-
-            }
+            keyword = $('#txtKeyWord').val();
+            console.log("123")
+            DisplayOrders(keyword, sort, 1, pagesize)
         })
 
         $(document).ready(() => {
             loadAutoCompleteData()
         })
+
         async function loadAutoCompleteData() {
-
-
             const response = await fetch(`@Url.Content("~/OrderApi/tags")`);
             const data = await response.json();
             let Tags = data;
@@ -243,81 +277,7 @@
             });
         }
 
-        //Ketyword傳回的資料不會分頁,應該是依keyword傳回的資料筆數作芬頁及頁碼
-        async function showSearchdata(keyWord) {
-
-
-            const response = await fetch(`@Url.Content("~/OrderApi/search?keyWord=")${keyWord}`)
-            const data = await response.json();
-            
-            
-            data.map(row => {
-                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = row
-                //console.log(row)
-                let tableOrdersList = "";
-                data.map(item => {
-
-                    const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath } = item
-                    
-                    let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
-                    displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19)
-                   
-                    tableOrdersList += `
-                                <tr>
-                                <td>
-                                <div class="d-flex gap-2">`;
-                    if (statusName == "待出貨") {
-                        tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                    }
-                    else if (statusName == "已出貨") {
-                        tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                    }
-                    else if (statusName == "已完成") {
-                        tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                    }
-                    else if (statusName == "已取消") {
-                        tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                    }
-                    else if (statusName == "退款中") {
-                        tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                    }
-                    else if (statusName == "已退款") {
-                        tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                    }
-                    else {
-                        tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                                                                                    <div>${statusName}</div>`
-                    }
-                    tableOrdersList += `
-                                                    </div>
-                                                    </td>
-                                                    <td>
-                                                    <span>${orderId}</span>
-                                                    </td>
-                                                    <td>
-                                                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                                    <span>${name}</span>
-                                                    </td>
-                                                                    <td>${displayorderDate}</td>
-                                                    <td>${paymentMethodName}</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單內容
-                                                        </button>
-                                                    </div>
-                                                    </a>
-                                                    </td>
-                                                    </tr>`
-                })
-               
-                $("#orderTable").html(tableOrdersList)
-            })
-        }
+        
 
         function openOrderDetails(orderId) {
             const url = '@Url.Action("Details", "Order")' + '?orderId=' + orderId; // 構造URL
@@ -325,134 +285,40 @@
 
 
         }
-        //製作可點選的"頁碼"",應該依顯示資料筆數動態改變
-        const totalcount = @Model.OrderCount
-            let pagesize = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
-        const totalPages = Math.ceil(totalcount / pagesize);
-        const items = []
-
-        for (let i = 1; i <= totalPages; i++) {
-
-            const item = ` <li class="page-item" onclick="clickHandler(${i})"> <a class="page-link">${i}</a></li >`;
-
-            items.push(item)
-        }
-        $(".pagination").html(items.join(""))
-        //切換分類方式
-        sortsel.addEventListener('click', () => {
-            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value;
-            const sortSolution = sortsel.options[sortsel.selectedIndex].value;
-            let pagesize = dataShowOnPage;
-            let page = 1;
-            let sort = sortSolution;
-
-            getPageData(page, pagesize, sort);
+        //改變pageSize
+        $("#pageSize").on('change', function () {
+            
+            pagesize = Number($(this).val())
+            
+            DisplayOrders(keyword, sort, 1, pagesize)
         })
-        
+        //點選分頁籤
+        $(".pagination").on("click", ".pageItemPrevNumber", function () {
+            pagenumber = $(this).data("pagenumber")
 
-        //抓到點選的頁碼數，帶入參數呼叫api
-        const clickHandler = pageIndex => {
-            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value;
-            const sortSolution = sortsel.options[sortsel.selectedIndex].value;
-            let pagesize = dataShowOnPage;
-            let page = pageIndex;
-            let sort = sortSolution;
+            DisplayOrders(keyword, sort, pagenumber, pagesize)
+        })
 
-            getPageData(page, pagesize, sort);
-        }
-        
-        //轉換每頁顯示筆數會回到第一頁
-        dataPerPageSel.addEventListener('change', () => {
-            const dataShowOnPage = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
-
-            let pagesize = dataShowOnPage
-            let page = 1;
-            const totalcount = @Model.OrderCount
-                console.log(dataShowOnPage)
-            const totalPages = Math.ceil(totalcount / pagesize);
-            const items = []
-            for (let i = 1; i <= totalPages; i++) {
-                const item = ` <li class="page-item" onclick="clickHandler(${i})"> <a class="page-link">${i}</a></li >`;
-                items.push(item)
+        $(".statusName").on('click', function () {
+            let changeStatusName = $(this).text()
+            console.log(changeStatusName, keyword)
+            if (keyword === changeStatusName) {
+                keyword=""
+            }else{
+                keyword = changeStatusName
             }
-            $(".pagination").html(items.join(""))
-            getPageData(page, pagesize, sort);
-
-        })
-        //畫面顯示的預設設定
-        $(document).ready(() => {
-            let page = 1;
-            let pagesize = dataPerPageSel.options[dataPerPageSel.selectedIndex].value
-            let sort = sortsel.options[sortsel.selectedIndex].value;
-            getPageData(page, pagesize, sort)
-        })
+            
+            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
         
-        //呼叫更新頁面畫面的api
-        async function getPageData(page, pagesize, sort) {
-            const response = await fetch(`@Url.Content("~/OrderApi/orderPage?page=")${page}&pageSize=${pagesize}&sort=${sort}`)
-            const data = await response.json()
-            let tableOrdersList = "";
-            data.map(item => {
+        })
 
+        $("#selectOrder").on('change', function () {
+            sort = $(this).val();
+            let keyword = $("#searchKeyword").val()
 
-                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item
-                displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19)
-                let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
-                //console.log(displayPhotoPath)
-                tableOrdersList += `
-                                                                                                    <tr>
-                                                                                                    <td>
-                                                                                                    <div class="d-flex gap-2">`;
-                if (statusName == "待出貨") {
-                    tableOrdersList += `<div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                }
-                else if (statusName == "已出貨") {
-                    tableOrdersList += ` <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                }
-                else if (statusName == "已完成") {
-                    tableOrdersList += `<div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                }
-                else if (statusName == "已取消") {
-                    tableOrdersList += `<div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                }
-                else if (statusName == "退款中") {
-                    tableOrdersList += `<div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                }
-                else if (statusName == "已退款") {
-                    tableOrdersList += `<div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                                                                                                                                                                                                            <div>${statusName}</div>`
-                }
-                else {
-                    tableOrdersList += ` <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                                                                                                                                                                                                                    <div>${statusName}</div>`
-                }
-                tableOrdersList += `
-                   </div>
-                    </td>
-                    <td>
-                    <span>${orderId}</span>
-                    </td>
-                    <td>
-                            <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                    <span>${name}</span>
-                    </td>
-                                    <td>${displayorderDate}</td>
-                    <td>${paymentMethodName}</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                    </div>
-                    </a>
-                    </td>
-                    </tr>`
-            })
-
-            $("#orderTable").html(tableOrdersList)
-        }
+            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
+        })
+                
 
     </script>
 }
