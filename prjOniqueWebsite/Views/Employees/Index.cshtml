@@ -14,10 +14,10 @@
         <div class="d-flex align-items-center gap-2">
             <div class="width-90px  ">每頁顯示 : </div>
             <div>
-                <select class="form-select d-inline" aria-label="資料筆數">
-                    <option value="">10</option>
-                    <option value="">20</option>
-                    <option value="">30</option>
+                <select class="form-select d-inline" aria-label="資料筆數" id="pageSizeSelect" onchange="changePage(1)">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
                 </select>
             </div>
             <div class="width-50px ">筆資料</div>
@@ -212,31 +212,37 @@
 
         async function load() {
             const response = await fetch(`@Url.Content("~/EmployeeApi/showEmployeeList")`);
-            data = await response.json(); 
+            data = await response.json();
 
-            renderTable(data); 
+            renderTable(data, 10);
         }
 
         function performSearch() {
             const keyword = document.getElementById("txtKeyword").value.toLowerCase();
-            //console.log("Keyword:", keyword); 
-            const filteredData = data.filter(item => {
+            const pageSize = parseInt(document.getElementById("pageSizeSelect").value); // 获取每页显示数据数量
+            filteredData = data.filter(item => {
                 const employeeName = item.employeeName.toLowerCase();
                 const phone = item.phone.toLowerCase();
                 const email = item.email.toLowerCase();
 
                 return employeeName.includes(keyword) || phone.includes(keyword) || email.includes(keyword);
             });
-            renderTable(filteredData); 
+
+            currentPage = 1;
+            renderTable(filteredData, pageSize);
+            renderPagination(filteredData.length, pageSize);
         }
 
-        
 
-        function renderTable(data) {
-            const pageSize = 10; // 每頁顯示的資料筆數
-            const totalItems = data.length;  //儲存資料的總筆數
-            const totalPages = Math.ceil(totalItems / pageSize); //計算資料的總頁數
+
+        function renderTable(data, pageSize) {
+            const totalItems = data.length;
+            const totalPages = Math.ceil(totalItems / pageSize);
             let currentPage = 1;
+
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const currentPageData = data.slice(startIndex, endIndex);
             
 
             const tableEmployeeList = data.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(item => {  //取得第一頁的10筆資料
@@ -308,21 +314,22 @@
         }
 
         let currentPage = 1;
+        let filteredData = [];
 
         function changePage(pageNumber) {
-            const pageSize = 10;
+            const pageSize = parseInt(document.getElementById("pageSizeSelect").value);
             const startIndex = (pageNumber - 1) * pageSize;
             const endIndex = startIndex + pageSize;
 
             currentPage = pageNumber;
             const currentPageData = data.slice(startIndex, endIndex);
-            renderTable(currentPageData);
-            renderPagination(); // 重新生成分頁籤
+            renderTable(currentPageData, pageSize); 
+            renderPagination(data.length, pageSize);
         }
 
-        function renderPagination() {
+        function renderPagination(totalItems, pageSize) {
             const paginationElement = document.getElementById("pagination");
-            const totalPages = Math.ceil(data.length / 10);
+            const totalPages = Math.ceil(totalItems / pageSize); 
             const paginationHTML = `
                 <li class="page-item">
                     <a class="page-link" href="#" aria-label="Previous" onclick="changePage(${currentPage - 1})">
