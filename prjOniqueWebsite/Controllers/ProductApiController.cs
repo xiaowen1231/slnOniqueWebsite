@@ -196,7 +196,8 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult ShowProductInfo(int id)
         {
-            AddToCartDto dto = dao.ShowProductInfo(id);
+            var dto =  new ProductService(_context).ShowProductInfo(id);
+
             return Json(dto);
         }
     }

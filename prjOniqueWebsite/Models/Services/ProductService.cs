@@ -1,4 +1,6 @@
-﻿using prjOniqueWebsite.Models.EFModels;
+﻿using prjOniqueWebsite.Models.DTOs;
+using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.Repositories;
 using prjOniqueWebsite.Models.ViewModels;
 
@@ -18,11 +20,11 @@ namespace prjOniqueWebsite.Models.Services
         public UpdateShoppingQtyVM AddToCart(int stockId, int qty, Members? member)
         {
             var cartInDb = _dao.GetCartItems(member.MemberId, qty, stockId);
-            if(cartInDb != null)
+            if (cartInDb != null)
             {
                 cartInDb = new ShoppingCartService(_context).UpdateOrderQty(cartInDb);
-                if(cartInDb.StatusCode==200)
-                cartInDb.Message = "此商品已存在在購物車，" + cartInDb.Message;
+                if (cartInDb.StatusCode == 200)
+                    cartInDb.Message = "此商品已存在在購物車，" + cartInDb.Message;
                 return cartInDb;
             }
             else
@@ -44,12 +46,36 @@ namespace prjOniqueWebsite.Models.Services
                 }
                 else
                 {
-                    _dao.AddToCart(stockId,qty, member);
-                    newCart.StatusCode= 200;
+                    _dao.AddToCart(stockId, qty, member);
+                    newCart.StatusCode = 200;
                     newCart.Message = "加入購物車成功";
                     return newCart;
 
                 }
+            }
+        }
+
+        public AddToCartDto ShowProductInfo(int id)
+        {
+            AddToCartDto dto = new AddToCartDto();
+
+            var checkHasStock = _dao.CheckProductStock(id);
+
+            if (checkHasStock == null)
+            {
+                dto.ApiResult.StatusCode = 500;
+                dto.ApiResult.StatusMessage = "商品正在準備中!";
+                return dto;
+            }
+            else
+            {
+                dto.ApiResult.StatusCode = 200;
+                dto.ApiResult.StatusMessage = "請選擇商品尺寸,顏色";
+                dto.ProductName = checkHasStock.ProductName;
+                dto.ProductId = checkHasStock.ProductId;
+                dto.Price = checkHasStock.Price;
+                dto.PhotoPath = checkHasStock.PhotoPath;
+                return dto;
             }
         }
     }

@@ -79,8 +79,8 @@
 
         $("#btnReduce").click(function () {
             let orderQty = Number($("#orderQty").val())
-            if (orderQty <= 0) {
-                orderQty = 0
+            if (orderQty <= 1) {
+                orderQty = 1;
                 $("#orderQty").val(orderQty.toString());
             }
             else {
@@ -105,19 +105,25 @@
                 const { colorId, colorName } = color;
                 return `<option value="${colorId}">${colorName}</option>`
             })
+
             selectColor.innerHTML = colors.join("")
+
             loadSize();
         }
 
         async function loadSize() {
             const colorId = $("#selectColor").val()
+
             const response = await fetch(`@Url.Content("~/productapi/GetStockSize?")id=${productId}&colorId=${colorId}`)
             const datas = await response.json();
+
             const sizes = datas.map(size => {
                 const { sizeId, sizeName } = size
                 return `<option value="${sizeId}">${sizeName}</option>`
             })
+
             selectSize.innerHTML = sizes.join("")
+
             loadProductPhoto()
         }
 
@@ -132,15 +138,20 @@
         async function loadProductPhoto() {
             const colorId = $("#selectColor").val()
             const sizeId = $("#selectSize").val()
+
             const response = await fetch(`@Url.Content("~/ProductApi/GetStockDetail?")productId=${productId}&colorId=${colorId}&sizeId=${sizeId}`)
             const psd = await response.json()
+
             const { photoPath, stockId, quantity } = psd
+
             $("#productPhoto").attr("src", `@Url.Content("~/images/uploads/products/")${photoPath}`)
             $("#stockQty").text(`${quantity}`)
             $("#stockId").val(`${stockId}`)
+
         }
 
         $('#btnAddToCart').click(async function () {
+
             const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
             const isLogin = await response.json();
 
@@ -164,36 +175,10 @@
                 })
             }
             else {
-                AddToCart()
+                const stockId = $("#stockId").val()
+                const qty = $("#orderQty").val()
+                AddToCart(stockId, qty)
             }
         })
-        async function AddToCart() {
-
-            const stockId = $("#stockId").val()
-            const qty = $("#orderQty").val()
-
-            const response = await fetch(`@Url.Content("~/ProductApi/AddToCart?")stockId=${stockId}&qty=${qty}`)
-            const data = await response.json()
-
-            const { message, statusCode } = data;
-            if(statusCode==200){
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: message,
-                    confirmButtonColor: '#3C3C3C',
-                    confirmButtonText: '確認'
-                })
-            }else{
-                Swal.fire({
-                    icon: 'error',
-                    text: message,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            }
-
-            GetCartItems()
-        }
     </script>
 }
