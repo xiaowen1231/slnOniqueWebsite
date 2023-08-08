@@ -245,7 +245,9 @@
                 const formattedDateOfBirth = formatDate(dateOfBirth);
                 const hasPhoto = !!photoPath; // 將是否有照片的狀態轉換為布林值
 
-                const imgSrc = hasPhoto ? '@Url.Content("~/images/uploads/Employee/")' + photoPath : '@Url.Content("~/images/uploads/employee/default.jpg")';
+                //true顯示上傳的圖片 false顯示default
+                const imgSrc = hasPhoto ? '@Url.Content("~/images/uploads/Employee/")' + photoPath : 
+                '@Url.Content("~/images/uploads/employee/default.jpg")';
 
                 return (`
                     <tr>
