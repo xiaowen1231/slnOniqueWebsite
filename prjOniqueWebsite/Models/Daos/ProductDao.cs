@@ -235,7 +235,7 @@ namespace prjOniqueWebsite.Models.Repositories
                         join od in _context.OrderDetails
                         on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
                         from od in odGroup.DefaultIfEmpty()
-                        group od by new { p.ProductId,p.ProductName, p.Price, p.PhotoPath, p.AddedTime, p.ProductCategory.CategoryName } into grouped
+                        group od by new { p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.AddedTime, p.ProductCategory.CategoryName } into grouped
                         select new ProductsListDto
                         {
                             Id = grouped.Key.ProductId,
@@ -286,6 +286,29 @@ namespace prjOniqueWebsite.Models.Repositories
         {
             var query = _context.Categories.Select(c => c.CategoryName).ToList();
             return query;
+        }
+
+        public AddToCartDto CheckProductStock(int id)
+        {
+            var query = _context.ProductStockDetails.Where(psd => psd.ProductId == id);
+            if (query.Count() == 0)
+            {
+                return null;
+            }
+            else
+            {
+                var dto = _context.Products
+                    .Where(p => p.ProductId == id)
+                    .Select(p => new AddToCartDto
+                    {
+                        ProductId = p.ProductId,
+                        ProductName = p.ProductName,
+                        Price = p.Price,
+                        PhotoPath = p.PhotoPath,
+                    }).FirstOrDefault();
+
+                return dto;
+            }
         }
     }
 }

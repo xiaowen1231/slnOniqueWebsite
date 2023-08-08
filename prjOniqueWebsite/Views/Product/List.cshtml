@@ -121,6 +121,7 @@
                                                 </a>
                                             </li>`
                 }
+
                 for (let i = 0; i < pagination.pageBarItemCount; i++) {
                     let active = pagination.pageBarStartNumber + i == pagination.pageNumber ? "active" : "";
                     let clickPageNumber = pagination.pageBarStartNumber + i;
@@ -177,20 +178,34 @@
             const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
             const isLogin = await response.json();
 
-            if (!isLogin) {
+            if (isLogin) {
                 let productId = $(this).data("productid");
 
                 const resp = await fetch(`@Url.Content("~/ProductApi/ShowProductInfo/")${productId}`);
                 const data = await resp.json();
 
+                if(data.apiResult.statusCode == 200){
+                    const modalAddToCart = new bootstrap.Modal(document.getElementById('modalAddToCart'));
 
-                $('#modalProductName').text(`${data.productName}`);
-                $('#modalPrice').text(`${data.price}`);
-                $('#modalPhoto').prop("src", `@Url.Content("~/images/uploads/products/")${data.photoPath}`);
+                    $('#modalProductName').text(`${data.productName}`);
+                    $('#modalPrice').text(`${data.price}`);
+                    $('#modalPhoto').prop("src", `@Url.Content("~/images/uploads/products/")${data.photoPath}`);
+                    $('#modalSelectColor').data("productid", data.productId)
+                    $('#modalSelectSize').data("productid", data.productId)
 
-                const exampleModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                loadColor(productId);
-                exampleModal.show()
+                    loadColor(productId)
+
+                    modalAddToCart.show()
+
+                }else{
+                    Swal.fire({
+                        title: data.apiResult.statusMessage,
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+
             } else {
                 Swal.fire({
                     title: '尚未登入!',
@@ -242,7 +257,6 @@
             Display(keyword, categoryName, rank, pageNumber)
         })
 
-
         async function loadColor(productId) {
             const response = await fetch(`@Url.Content("~/productapi/GetStockColor/")${productId}`)
             const datas = await response.json();
@@ -251,49 +265,60 @@
                 const { colorId, colorName } = color;
                 return `<option value="${colorId}">${colorName}</option>`
             })
-            $("#selectColor").html(colors.join(""))
+
+            $("#modalSelectColor").html(colors.join(""))
+
             loadSize(productId);
         }
 
         async function loadSize(productId) {
-            const colorId = $("#selectColor").val()
+            const colorId = $("#modalSelectColor").val()
             const response = await fetch(`@Url.Content("~/productapi/GetStockSize?")id=${productId}&colorId=${colorId}`)
+            
             const datas = await response.json();
+
             const sizes = datas.map(size => {
                 const { sizeId, sizeName } = size
                 return `<option value="${sizeId}">${sizeName}</option>`
             })
-            $("#selectSize").html(sizes.join(""))
+
+            $("#modalSelectSize").html(sizes.join(""))
+
             loadProductPhoto(productId)
         }
 
-
-        $("#selectColor").on('change', function () {
-            loadSize()
+        $("#modalSelectColor").on('change', function () {
+            let productId = $(this).data("productid")
+            
+            loadSize(productId)
         })
-        $("#selectSize").on('change', function () {
-            loadProductPhoto()
+
+        $("#modalSelectSize").on('change', function () {
+            let productId = $(this).data("productid")
+
+            loadProductPhoto(productId)
         })
 
         async function loadProductPhoto(productId) {
-            const colorId = $("#selectColor").val()
-            const sizeId = $("#selectSize").val()
+            const colorId = $("#modalSelectColor").val()
+            const sizeId = $("#modalSelectSize").val()
+
             const response = await fetch(`@Url.Content("~/ProductApi/GetStockDetail?")productId=${productId}&colorId=${colorId}&sizeId=${sizeId}`)
-            const psd = await response.json()
-            if (psd != null) {
-                const { photoPath, stockId, quantity } = psd
-                $("#modalPhoto").attr("src", `@Url.Content("~/images/uploads/products/")${photoPath}`)
-                //$("#stockQty").text(`${quantity}`)
-                //$("#stockId").val(`${stockId}`)
-            }
-            else{
-                Swal.fire({
-                    title: '商品正在準備中!',
-                    icon: 'warning',
-                    showconfirmButton:false,
-                    timer: 1500
-                })
-            }
+            const data = await response.json()
+
+            const { photoPath, stockId, quantity } = data
+
+            $("#modalPhoto").attr("src", `@Url.Content("~/images/uploads/products/")${photoPath}`)
+            $("#modalBtnAddToCart").data("stockid", stockId)
         }
+
+        $('#modalBtnAddToCart').on('click', function () {
+
+            let stockId = $("#modalBtnAddToCart").data("stockid");
+            let qty = $("#modalOrderQty").val();
+
+            AddToCart(stockId, qty)
+        })
+
     </script>
 }
