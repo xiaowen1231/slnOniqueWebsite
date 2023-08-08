@@ -43,9 +43,11 @@
             @{
                 if (!string.IsNullOrEmpty(keyword) && keyword == "待出貨")
                 {
-                    
-                <div class="statusName active">待出貨</div>
-                }else{
+
+                    <div class="statusName active">待出貨</div>
+                }
+                else
+                {
                     <div class="statusName">待出貨</div>
                 }
             }
@@ -140,9 +142,13 @@
             <div class="width-70px">每頁顯示</div>
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">
-                    <option value="10">10筆資料</option>
-                    <option value="20">20筆資料</option>
-                    <option value="30">30筆資料</option>
+                  
+                        
+                            <option value="10">10筆資料</option>
+                            <option value="20">20筆資料</option>
+                            <option value="30">30筆資料</option>
+                      
+                    
                 </select>
             </div>
 
@@ -199,7 +205,6 @@
     <div class="container">
         <nav class="d-flex justify-content-center" aria-label="Page navigation example">
             <ul class="pagination">
-                
             </ul>
         </nav>
     </div>
@@ -218,7 +223,7 @@
         let keyword = $("#searchKeyword").val()
         let pagenumber = Number($("#searchPagenumber").val())
         let pagesize = Number($("#searchpageSize").val())
-        
+
 
         DisplayOrders(keyword, sort, pagenumber, pagesize)
 
@@ -229,103 +234,103 @@
 
             const { orderPaginationInfo, criteria, orders } = data.value;
             console.log(data)
-            
-                let tableOrdersList = "";
 
-                orders.map(item => {
-                    const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item;
-                    let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath;
-                    let displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
+            let tableOrdersList = "";
+
+            orders.map(item => {
+                const { statusName, orderId, name, shippingDate, paymentMethodName, photoPath, orderDate } = item;
+                let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath;
+                let displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
+                tableOrdersList += `
+                                <tr>
+                                    <td>
+                                        <div class="d-flex gap-2">`;
+
+                if (statusName == "待出貨") {
                     tableOrdersList += `
-                        <tr>
-                            <td>
-                                <div class="d-flex gap-2">`;
-
-                    if (statusName == "待出貨") {
-                        tableOrdersList += `
-                            <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                            <div>${statusName}</div>`;
-                    } else if (statusName == "已出貨") {
-                        tableOrdersList += `
-                            <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                            <div>${statusName}</div>`;
-                    } else if (statusName == "已完成") {
-                        tableOrdersList += `
-                            <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                            <div>${statusName}</div>`;
-                    } else if (statusName == "已取消") {
-                        tableOrdersList += `
-                            <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                            <div>${statusName}</div>`;
-                    } else if (statusName == "退款中") {
-                        tableOrdersList += `
-                            <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                            <div>${statusName}</div>`;
-                    } else if (statusName == "已退款") {
-                        tableOrdersList += `
-                            <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                            <div>${statusName}</div>`;
-                    } else {
-                        tableOrdersList += `
-                            <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                            <div>${statusName}</div>`;
-                    }
-
+                                    <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                                    <div>${statusName}</div>`;
+                } else if (statusName == "已出貨") {
                     tableOrdersList += `
-                                </div>
-                            </td>
-                            <td>
-                                <span>${orderId}</span>
-                            </td>
-                            <td>
-                                <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                <span>${name}</span>
-                            </td>
-                            <td>${displayorderDate}</td>
-                            <td>${paymentMethodName}</td>
-                            <td>
-                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                            </td>
-                        </tr>`;
-                });
+                                    <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
+                                    <div>${statusName}</div>`;
+                } else if (statusName == "已完成") {
+                    tableOrdersList += `
+                                    <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
+                                    <div>${statusName}</div>`;
+                } else if (statusName == "已取消") {
+                    tableOrdersList += `
+                                    <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
+                                    <div>${statusName}</div>`;
+                } else if (statusName == "退款中") {
+                    tableOrdersList += `
+                                    <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
+                                    <div>${statusName}</div>`;
+                } else if (statusName == "已退款") {
+                    tableOrdersList += `
+                                    <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
+                                    <div>${statusName}</div>`;
+                } else {
+                    tableOrdersList += `
+                                    <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
+                                    <div>${statusName}</div>`;
+                }
 
-                $("#orderTable").html(tableOrdersList);
+                tableOrdersList += `
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span>${orderId}</span>
+                                    </td>
+                                    <td>
+                                        <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                        <span>${name}</span>
+                                    </td>
+                                    <td>${displayorderDate}</td>
+                                    <td>${paymentMethodName}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                    </td>
+                                </tr>`;
+            });
 
-                let liPagination = ""
+            $("#orderTable").html(tableOrdersList);
+
+            let liPagination = ""
 
             if (orderPaginationInfo.pageNumber >= 1) {
-                    liPagination += `<li  class="page-item ">
-                                            <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemPrevNumber}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>`
-                }
+                liPagination += `<li  class="page-item ">
+                                                    <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemPrevNumber}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>`
+            }
             for (let i = 0; i < orderPaginationInfo.pageBarItemCount; i++) {
                 let active = orderPaginationInfo.pageBarStartNumber + i == orderPaginationInfo.pageNumber ? "active" : "";
                 let clickPageNumber = orderPaginationInfo.pageBarStartNumber + i;
-                    liPagination += `<li class="${active} page-item"><a class="page-link pageItemPrevNumber" data-pagenumber="${clickPageNumber}">${clickPageNumber}</a></li>`
-                }
+                liPagination += `<li class="${active} page-item"><a class="page-link pageItemPrevNumber" data-pagenumber="${clickPageNumber}">${clickPageNumber}</a></li>`
+            }
 
             if (orderPaginationInfo.pageNumber < orderPaginationInfo.pages) {
-                    liPagination += `<li class="page-item">
-                                                <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemNextNumber}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>`
-                }
-                $(".pagination").html(liPagination);
-            
+                liPagination += `<li class="page-item">
+                                                        <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemNextNumber}" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>`
+            }
+            $(".pagination").html(liPagination);
+
         }
 
 
-        $('#txtKeyWord').on('keypress',function(e){
-            if(e.key === "Enter"){
-              keyword = $(this).val();
+        $('#txtKeyWord').on('keypress', function (e) {
+            if (e.key === "Enter") {
+                keyword = $(this).val();
 
                 DisplayOrders(keyword, sort, 1, pagesize)
             }
         })
-        $('#Search').on("click",function(event){
+        $('#Search').on("click", function (event) {
             event.preventDefault();
 
             keyword = $('#txtKeyWord').val();
@@ -348,7 +353,7 @@
             });
         }
 
-        
+
 
         function openOrderDetails(orderId) {
             const url = '@Url.Action("Details", "Order")' + '?orderId=' + orderId; // 構造URL
@@ -358,9 +363,9 @@
         }
         //改變pageSize
         $("#pageSize").on('change', function () {
-            
+
             pagesize = Number($(this).val())
-            
+
             DisplayOrders(keyword, sort, 1, pagesize)
         })
         //點選分頁籤
@@ -374,8 +379,8 @@
             let changeStatusName = $(this).text()
             console.log(changeStatusName, keyword)
             if (keyword === changeStatusName) {
-                keyword=""
-            }else{
+                keyword = ""
+            } else {
                 keyword = changeStatusName
             }
             window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=1&pagesize=${pagesize}`
@@ -387,22 +392,22 @@
 
             window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
         })
-            
 
-        
 
-                
-        
+
+
+
+
     </script>
 }
 @section Styles{
     <style>
-        .statusName:hover{
-            cursor:pointer;
-            font-weight:bold;
+        .statusName:hover {
+            cursor: pointer;
+            font-weight: bold;
         }
+
         .statusName.active {
-           
             font-weight: bold;
             cursor: pointer;
         }
