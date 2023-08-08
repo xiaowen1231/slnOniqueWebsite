@@ -26,6 +26,7 @@ namespace prjOniqueWebsite.Controllers
         }
         /// <summary>
         ///依據回傳的資料更新畫面
+        ///資料和分頁籤
         /// </summary>
         /// <param name="keyword"></param>
         /// <param name="sort"></param>
@@ -51,7 +52,7 @@ namespace prjOniqueWebsite.Controllers
             data.Criteria = criteria;
 
             int totalOrderCount=order.Count();
-            data.Pagination=new PaginationInfo(totalOrderCount, pagesize, criteria.PageNumber,$"/OrderApi/OrderList?pagenumber={pagenumber}");
+            data.Pagination=new PaginationInfo(totalOrderCount, pagesize, criteria.PageNumber,$"/OrderApi/OrderList?pagenumber={pagenumber}&pagesize={pagesize}");
             data.orders=order.Skip(criteria.recordStartIndex).Take(criteria.PageSize).ToList();
             return Json(data);
         }
