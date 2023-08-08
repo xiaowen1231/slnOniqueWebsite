@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 using prjOniqueWebsite.Models;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.ViewModels;
+using System;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -26,21 +29,48 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Login()
         {
-            if (HttpContext.Session.Keys.Contains("Login")) 
+            if (HttpContext.Session.Keys.Contains("Login"))
                 return Content("已登入,會員管理頁面");
             return View();
         }
         [HttpPost]
         public IActionResult Login(LoginVM vm)
         {
+            if (ModelState.IsValid == false)
+            {
+                return View(vm);
+            }
 
-            var member = _context.Members.FirstOrDefault(m=>m.Email == vm.Email&&m.Password==vm.Password);
-            if(member == null)
-                return View();
-            string json = JsonSerializer.Serialize(member);
-            HttpContext.Session.SetString("Login", json);
-            TempData["AlertLogin"]=member.Name;
-            return RedirectToAction("index");
+            var member = _context.Members.FirstOrDefault(m => m.Email == vm.Email && m.Password == vm.Password);
+            var employee = _context.Employees.FirstOrDefault(e => e.Email == vm.Email && e.Password == vm.Password);
+
+            if (member != null)
+            {
+                string json = JsonSerializer.Serialize(member);
+                HttpContext.Session.SetString("Login", json);
+
+                TempData["AlertLogin"] = member.Name;
+
+                return RedirectToAction("index");
+            }
+            if (employee != null)
+            {
+                string json = JsonSerializer.Serialize(employee);
+
+                HttpContext.Session.SetString("Login", json);
+                HttpContext.Session.SetString("EmployeeLogin", json);
+
+                TempData["AlertLogin"] = employee.EmployeeName;
+
+                return RedirectToAction("BackgroundIndex");
+            }
+            ModelState.AddModelError("", "帳號密碼錯誤!");
+            return View(vm);
+        }
+
+        public IActionResult BackgroundIndex()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

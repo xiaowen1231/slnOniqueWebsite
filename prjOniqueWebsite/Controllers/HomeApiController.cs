@@ -19,5 +19,14 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(member);
         }
+
+        public IActionResult UpdataNavBackground()
+        {
+            string json = HttpContext.Session.GetString("EmployeeLogin");
+
+            Employees employees = JsonSerializer.Deserialize<Employees>(json);
+
+            return Json(employees);
+        }
     }
 }

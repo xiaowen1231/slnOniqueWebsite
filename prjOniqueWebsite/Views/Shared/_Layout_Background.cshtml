@@ -21,9 +21,9 @@
                 <div class="title">後台管理系統</div>
             </div>
             <div class="accountAndManage">
-                <div>歡迎 , OOO</div>
+                <div id="divEMPName"></div>
                 <div class="photoStickers">
-                    <img src="@Url.Content("~/images/background/範例頭貼1.jpg")" />
+                    <img src="" id="imgEmpPhoto"/>
                 </div>
                 <div class="backgroundHeadIcon">
                     <img src="@Url.Content("~/images/background/bell.png")" />
@@ -111,6 +111,26 @@
             }
         })
 
+        CheckLogin()
+
+        async function CheckLogin() {
+
+            const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
+            const isLogin = await response.json();
+
+            if (isLogin) {
+
+
+                const response = await fetch(`@Url.Content("~/HomeApi/UpdataNavBackground")`)
+                const datas = await response.json();
+
+                console.log(datas);
+                $('#imgEmpPhoto').attr("src", `@Url.Content("~/images/uploads/Employee/")${datas.photoPath}`)
+                $('#divEMPName').text(`您好,${datas.employeeName}`)
+            }else{
+                window.location.href = `@Url.Content("~/home/login")`
+            }
+        }
         //const notify = document.querySelector("#notify")
         //async function getOrderStatusCount() {
         //    const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusCount?statusId=1")`)
@@ -121,11 +141,23 @@
         //    getOrderStatusCount()
         //    notify.innerHTML = data;
 
-
-
-
-
     </script>
+
+
+
+
+    @if (TempData["AlertLogin"] != null)
+    {
+        <script>
+            Swal.fire({
+                title: '歡迎登入',
+                text: '您好!@TempData["AlertLogin"]',
+                icon: 'success',
+                confirmButtonColor: '#3C3C3C',
+                confirmButtonText: '確認'
+            })
+        </script>
+    }
     @await RenderSectionAsync("Scripts", required: false)
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>

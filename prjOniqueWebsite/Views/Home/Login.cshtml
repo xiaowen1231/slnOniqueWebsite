@@ -18,12 +18,15 @@
             </div>
             <div class="p-2">
                 <input type="text" class="form-control" name="Email" value="Asa@gmail.com">
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>            
             <div class="fw-bold p-2 mt-2">
                 密碼:
             </div>
             <div class="p-2">
                 <input type="password" class="form-control" name="Password">
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
             <div class="d-flex justify-content-between p-2">
                 <div class="p-2">
