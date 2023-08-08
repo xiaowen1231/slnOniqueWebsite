@@ -85,10 +85,10 @@
         async function Display(keyword, categoryName, rank, pageNumber) {
             const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pageNumber}`)
             const datas = await response.json()
-
+            console.log(datas)
 
             const { products, pagination } = datas.value;
-
+            
             if (products.length != 0) {
                 const cards = products.map(item => {
 
@@ -159,6 +159,7 @@
         }
 
         $("#selectOrderBy").on('change', function () {
+            console.log(pageNumber)
             let rank = $(this).val();
             let catagoryName = $("#searchCategoryName").val();
             let keyword = $('#searchKeyword').val()
