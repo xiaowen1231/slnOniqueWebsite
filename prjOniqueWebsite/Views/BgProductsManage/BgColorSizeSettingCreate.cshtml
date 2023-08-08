@@ -35,15 +35,15 @@
             <img src="@Url.Content("~/images/uploads/products/default.jpg")" id="productPhoto" />
         </div>
         <div class="width-265px mt-4 mx-auto">
-            <input type="file" name="Photo" class="form-control" name="Photo" id="inputPhoto" />
+            <input type="file" name="Photo" class="form-control" id="inputPhoto" />
         </div>
-        <div class="my-5" id="colorsizeTable">
-            <div class="d-flex p-2 align-items-center text-center my-2" style="font-size: 18px; margin-left: 30%;">
+        <div class="my-4" id="colorsizeTable">
+            <div class="d-flex p-2 align-items-center text-center my-2" style="font-size: 18px; margin-left: 20%;">
                 <input type="hidden" value="@Model.ProductId" id="productId" name="ProductId" />
                 <div class="text-center fw-bold">商品名稱 :</div>
                 <div class="mx-2">@Model.ProductName</div>
             </div>
-            <div class="d-flex p-2 align-items-center my-2" style="font-size: 18px; margin-left: 30%;">
+            <div class="d-flex p-2 align-items-center my-2" style="font-size: 18px; margin-left: 20%;">
                 <div class="fw-bold text-center">商品尺寸 :</div>
                 <div class="mx-2" id="selectSize">
                     <input type="hidden" id="selectSize" />
@@ -58,7 +58,7 @@
                     </select>
                 </div>
             </div>
-            <div class="d-flex p-2 align-items-center my-2" style="font-size: 18px; margin-left: 30%;">
+            <div class="d-flex p-2 align-items-center my-2" style="font-size: 18px; margin-left: 20%;">
                 <div class="fw-bold text-center">商品顏色 :</div>
                 <div class="mx-2">
                     <input type="hidden" id="selectColor" />

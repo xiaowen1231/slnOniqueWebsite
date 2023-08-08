@@ -208,7 +208,7 @@ namespace prjOniqueWebsite.Controllers
             }
         }
         [HttpPost]
-        public IActionResult BgColorSizeDetails(BgColorSizeSettingVM vm)
+        public IActionResult BgColorSizeDetails(BgColorSizeSettingVM vm )
         {
             var productStockDetail = new ProductDao(_context).GetStockDetail(vm.ProductId, vm.ColorId, vm.SizeId);
 
@@ -229,8 +229,8 @@ namespace prjOniqueWebsite.Controllers
             }
 
             query.Quantity = vm.Quantity;
-
             _context.SaveChanges();
+                       
 
             return RedirectToAction("Edit", new {  id =vm.ProductId});
         }
@@ -241,21 +241,40 @@ namespace prjOniqueWebsite.Controllers
             dto.ProductColors=_context.ProductColors.ToList();
             return View(dto);                    
         }
-        //[HttpPost]
-        //public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
-        //{
-        //    // to do 邏輯判斷是否有重複要新增的顏色 尺寸
-          
-        //    var BgCss = new ProductStockDetails()
-        //    {
-        //        ProductId = vm.ProductId,
-        //        ColorId = vm.ColorId,
-        //        SizeId = vm.SizeId,
-        //    };
-        //    _context.ProductStockDetails.Add(BgCss);
-        //    _context.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        [HttpPost]
+        public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
+        {
+            // to do 邏輯判斷是否有重複要新增的顏色 尺寸
+            try {
+                var BgCss = new ProductStockDetails()
+                {
+                    ProductId = vm.ProductId,
+                    ColorId = vm.ColorId,
+                    SizeId = vm.SizeId,
+                    Quantity = 0,
+                    PhotoPath= "default.jpg"
+                };
+
+                _context.ProductStockDetails.Add(BgCss);
+                _context.SaveChanges();
+
+                if (vm.Photo != null)
+                {
+                    string fileName = "StockId_" + BgCss.StockId + ".jpg";
+                    var query = _context.ProductStockDetails.FirstOrDefault(p => p.StockId == BgCss.StockId);
+                    query.PhotoPath = fileName;
+                    _context.SaveChanges();
+
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
+                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        vm.Photo.CopyTo(fileStream);
+                    }
+                }
+            }
+            catch (Exception ex) { return Content(ex.Message); }
+            return RedirectToAction("Index");
+        }
         public IActionResult BgDiscountCreate()
         {
             return View();
@@ -263,6 +282,27 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult BgDiscountManage()
         {
             return View();
+        }
+        public IActionResult DeleteSize(ProductSizes size)
+        {            
+            if(size!=null)
+            {
+                _context.Remove(size);
+                _context.SaveChanges();
+                return RedirectToAction("BgCreateSize");
+            }
+            return View();
+        }
+        public IActionResult DeleteColor(ProductColors color)
+        {            
+            if(color!=null)
+            {
+                _context.Remove(color);
+                _context.SaveChanges();
+                return RedirectToAction("BgCreateColor");
+            }
+            return View();
+           
         }
         private bool ProductsExists(int id)
         {
