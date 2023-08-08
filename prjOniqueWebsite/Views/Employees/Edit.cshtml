@@ -10,8 +10,16 @@
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
-                <img src="../images/uploads/Employee/@Model.PhotoPath"  id="imageEmployee" 
-                     class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                @if (string.IsNullOrEmpty(Model.PhotoPath))
+                {
+                    <img src="~/images/uploads/Employee/default.jpg" id="imageEmployee"
+                         class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                }
+                else
+                {
+                    <img src="~/images/uploads/Employee/@Model.PhotoPath" id="imageEmployee"
+                         class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                }
             </div>
             <div>
                 <input type="file" name="Photo" id="Photo" class="form-control my-5">
