@@ -102,10 +102,11 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(MemberVM vm)
+        public IActionResult Register(FMemberVM vm)
         {
             var mem = new Members()
             {
+                PhotoPath = vm.PhotoPath,
                 Name = vm.Name,
                 Password = vm.Password,
                 Email = vm.Email,
@@ -122,6 +123,7 @@ namespace prjOniqueWebsite.Controllers
 
             _context.Members.Add(mem);
             _context.SaveChanges();
+            
             return RedirectToAction("Login");
         }
     }
