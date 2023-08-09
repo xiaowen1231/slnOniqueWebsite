@@ -1,4 +1,4 @@
-﻿
+﻿@model prjOniqueWebsite.Models.ViewModels.BgColorSizeSettingVM
 @{
     ViewData["Title"] = "BgCreateSize";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
@@ -24,8 +24,12 @@
         <div class="d-flex p-2 align-items-center my-2" style="font-size: 18px; margin-left: 18%;">
             <div class="fw-bold text-center">新增尺寸 :</div>
             <div>
-                <input type="text" class="form-control mx-2" name="SizeName">
-            </div>
+                <input type="text" class="form-control mx-2" name="SizeName" required pattern="[A-Z]{1,10}" maxlength="10" title="請輸入大寫英文字母">
+                <div class="text-danger mx-5">
+                    @Html.ValidationMessageFor(model => model.SizeName)
+                </div>
+            </div> 
+            
         </div>
         <div class="d-flex my-2 " style="width: 50%; margin-left: 25%;">
             <table class="table align-middle text-center table-striped border">
@@ -118,7 +122,7 @@
             const confirmMessageElement = document.getElementById("confirmMessage");
             const confirmButton = document.getElementById("confirmButton");
 
-            confirmMessageElement.textContent = `確定要刪除 尺寸${sizeId} 的商品嗎？`;
+            confirmMessageElement.textContent = `確定要刪除嗎？`;
 
             confirmButton.onclick = function () {
                 const url = '@Url.Action("DeleteSize", "BgProductsManage")' + '?sizeId=' + sizeId;
