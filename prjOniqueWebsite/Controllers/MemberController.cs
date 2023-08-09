@@ -76,19 +76,19 @@ namespace prjOniqueWebsite.Controllers
                 _context.Update(mem);
                 _context.SaveChanges();
             }
-            else
-            {
-                mem.PhotoPath = "default.jpg";
-                string fileName = $"EmployeeId_{mem.MemberId}.jpg";
-                mem.PhotoPath = fileName;
-                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
-                using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                {
-                    vm.Photo.CopyTo(fileStream);
-                }
-                _context.Update(mem);
-                _context.SaveChanges();
-            }
+            //else
+            //{
+            //    mem.PhotoPath = "default.jpg";
+            //    string fileName = $"EmployeeId_{mem.MemberId}.jpg";
+            //    mem.PhotoPath = fileName;
+            //    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+            //    using (var fileStream = new FileStream(photoPath, FileMode.Create))
+            //    {
+            //        vm.Photo.CopyTo(fileStream);
+            //    }
+            //    _context.Update(mem);
+            //    _context.SaveChanges();
+            //}
             return RedirectToAction("Index");
         }
 

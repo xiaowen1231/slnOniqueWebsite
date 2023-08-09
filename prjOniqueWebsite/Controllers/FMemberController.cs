@@ -36,8 +36,7 @@ namespace prjOniqueWebsite.Controllers
         
         public IActionResult MemberInfo( )
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             var mem = (from m in _context.Members
                        join c in _context.Citys
                        on m.Citys equals c.CityId
