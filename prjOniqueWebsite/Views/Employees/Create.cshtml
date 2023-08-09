@@ -32,7 +32,9 @@
                         <div class=" width-90px text-end fw-bold">生日</div>
                         <div class="mx-2">
                             <input type="date" name="DateOfBirth" class="form-control" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                         </div>
+                        
                     </div>
                 </div>
                 <div class="row justify-content-around p-3">
@@ -49,14 +51,13 @@
                                 <input type="radio" name="Gender" value="女" id="female" >
                                     <label for="female">女</label>
                               </div>
-                            
+                            <span asp-validation-for="Gender" class="text-danger"></span>
                         </div>
-                        @Html.ValidationMessageFor(model => model.EmployeeLevel)
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">電話</div>
                         <div class="mx-3">
-                            <input type="text" class="form-control" name="Phone" placeholder="請輸入手機號碼">
+                            <input type="text" class="form-control" name="Phone" placeholder="請輸入電話號碼">
                             @Html.ValidationMessageFor(model => model.Phone)
                         </div>
                     </div>
@@ -111,7 +112,7 @@
                                 <option value="2">新北市</option>
                                 <option value="3">桃園市</option>*@
                             </select>
-                            @Html.ValidationMessageFor(model => model.Citys)
+                            <span asp-validation-for="Citys" class="text-danger"></span>
                         </div>
                         <div class="mx-3">
                             <input type="hidden" id="employeeArea"  />
@@ -121,7 +122,7 @@
                                 <option value="2">中山區</option>
                                 <option value="3">中正區</option>*@
                             </select>
-                            @Html.ValidationMessageFor(model => model.Areas)
+                            <span asp-validation-for="Areas" class="text-danger"></span>
                         </div>
                         <div class="mx-3 ">
                             <input type="text" class="form-control" name="Address" placeholder="請輸入地址">
