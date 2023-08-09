@@ -17,8 +17,9 @@
                 }
                 else
                 {
-                    <img src="~/images/uploads/Employee/@Model.PhotoPath" id="imageEmployee"
-                         class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                    <img src="~/images/uploads/Employee/@Model.PhotoPath?cache=@Guid.NewGuid()" id="imageEmployee" 
+                    class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                         
                 }
             </div>
             <div>
