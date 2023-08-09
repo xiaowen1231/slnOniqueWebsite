@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Data.SqlTypes;
 using System.Diagnostics.Metrics;
 
 namespace prjOniqueWebsite.Controllers
@@ -24,22 +25,6 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Create()
         {
-            //EmployeeVM employee = (from e in _context.Employees
-            //                             join el in _context.EmployeeLevel
-            //                             on e.Position equals el.EmployeeLevelId
-            //                             join c in _context.Citys
-            //                             on e.Citys equals c.CityId
-            //                             join a in _context.Areas
-            //                             on e.Areas equals a.AreaId
-            //                             select new EmployeeVM
-            //                             {
-            //                                 EmployeeLevel = el.EmployeeLevelName,
-            //                                 Citys = c.CityName,
-            //                                 Areas = a.AreaName,
-            //                             }).FirstOrDefault();
-            //ViewBag.employeeLevel = employee.EmployeeLevel;
-
-
             return View();
         }
         [HttpPost]
@@ -48,16 +33,65 @@ namespace prjOniqueWebsite.Controllers
             if (ModelState.IsValid )
             {
                 Employees employee = new Employees();
+                bool isPhoneUsed = _context.Employees.Any(e => e.Phone == vm.Phone);
+                bool isEmailUsed = _context.Employees.Any(e => e.Email == vm.Email);
+
+                if (isPhoneUsed)
+                {
+                    ModelState.AddModelError("Phone", "手機號碼已被使用");
+                    return View(vm);
+                }
+
+                if (isEmailUsed)
+                {
+                    ModelState.AddModelError("Email", "信箱已被使用");
+                    return View(vm);
+                }
+
+                if (vm.Gender != "男" && vm.Gender != "女")
+                {
+                    ModelState.AddModelError("Gender", "請選擇性別");
+                    return View(vm);
+                }
+
+                if (!int.TryParse(vm.Citys, out int parsedCitys))
+                {
+                    ModelState.AddModelError("Citys", "請選擇居住城市");
+                    return View(vm);
+                }
+                employee.Citys = parsedCitys;
+
+                DateTime parsedDateOfBirth;
+                if (!string.IsNullOrWhiteSpace(vm.DateOfBirth) && DateTime.TryParse(vm.DateOfBirth, out parsedDateOfBirth))
+                {
+                    if (parsedDateOfBirth > DateTime.Today)
+                    {
+                        ModelState.AddModelError("DateOfBirth", "出生日期時間錯誤");
+                        return View(vm);
+                    }
+
+                    //SqlDateTime 引起的錯誤，值需要在 1753 年到 9999 年之間
+                    if (parsedDateOfBirth < SqlDateTime.MinValue.Value || parsedDateOfBirth > SqlDateTime.MaxValue.Value)
+                    {
+                        ModelState.AddModelError("DateOfBirth", "請選擇生日");
+                        return View(vm);
+                    }
+                    employee.DateOfBirth = parsedDateOfBirth;
+                }
+                else
+                {
+                    ModelState.AddModelError("DateOfBirth", "請選擇生日");
+                    return View(vm);
+                }
                 employee.EmployeeId = vm.EmployeeId;
                 employee.EmployeeName = vm.EmployeeName;
-                employee.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
+                //employee.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
                 employee.Gender = vm.Gender=="男"? true : false;
                 employee.Position = Convert.ToInt32(vm.EmployeeLevel);
                 employee.Phone = vm.Phone;
                 employee.Email = vm.Email;
                 employee.Password = vm.Password;
                 employee.RegisterDate = Convert.ToDateTime(vm.RegisterDate);
-                employee.Citys = Convert.ToInt32(vm.Citys);
                 employee.Areas = Convert.ToInt32(vm.Areas);
                 employee.Address = vm.Address;
                 _context.Add(employee);
@@ -147,7 +181,7 @@ namespace prjOniqueWebsite.Controllers
             return RedirectToAction("Index");
         }
 
-            public IActionResult Delete(EmployeeVM vm)
+        public IActionResult Delete(EmployeeVM vm)
         {
             var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
 

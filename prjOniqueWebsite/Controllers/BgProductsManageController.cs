@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +29,17 @@ namespace prjOniqueWebsite.Controllers
         }
 
         // GET: BgProductsManage
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string txtKeyword)
         {
-            var oniqueContext = _context.Products.Include(p => p.Discount).Include(p => p.ProductCategory).Include(p => p.Supplier);
-            return View(await oniqueContext.ToListAsync());
+            IQueryable<Products> query = _context.Products.Include(p => p.Discount).Include(p => p.ProductCategory).Include(p => p.Supplier);
+            if (!string.IsNullOrEmpty(txtKeyword))
+            {
+                query = query.Where(p => p.ProductName.Contains(txtKeyword) ||
+                                    p.ProductCategory.CategoryName.Contains(txtKeyword) ||
+                                    p.Price.ToString().Contains(txtKeyword));
+            }
+           
+            return View(await query.ToListAsync());
         }       
 
         // GET: BgProductsManage/Create
@@ -52,6 +60,11 @@ namespace prjOniqueWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!Regex.IsMatch(products.Price.ToString(), @"^[1-9]\d*$"))
+                {
+                    ModelState.AddModelError("Price", "價格必須是正整數");                   
+                    return View(products);
+                }
                 if (photo != null)
                 {
                     string fileName = products.ProductName + ".jpg";
@@ -174,6 +187,11 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult BgCreateColor(BgColorSizeSettingVM vm)
         {
+            if (_context.ProductColors.Any(c => c.ColorName == vm.ColorName))
+            {
+                ModelState.AddModelError("ColorName", "該顏色已存在。");
+                return View();
+            }
             var color = new ProductColors()
             {
                 ColorName = vm.ColorName
@@ -189,13 +207,20 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult BgCreateSize(BgColorSizeSettingVM vm)
         {
+            if (_context.ProductSizes.Any(size => size.SizeName == vm.SizeName))
+            {
+                ModelState.AddModelError("SizeName", "該尺寸已存在。");
+                return View();
+            }
+            
             var size = new ProductSizes()
             {                
                 SizeName = vm.SizeName
             };
             _context.ProductSizes.Add(size);
-            _context.SaveChanges();
-            return RedirectToAction("BgCreateSize");
+            _context.SaveChanges();               
+            
+            return RedirectToAction("BgCreateSize");            
         }        
         public IActionResult BgColorSizeDetails(int id)
         {
@@ -247,7 +272,7 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
         {
             // to do 邏輯判斷是否有重複要新增的顏色 尺寸
-            try {
+            try { 
                 var BgCss = new ProductStockDetails()
                 {
                     ProductId = vm.ProductId,
@@ -281,6 +306,23 @@ namespace prjOniqueWebsite.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public  IActionResult BgDiscountCreate(Discounts model)
+        {
+            var BgDiscount = new Discounts()
+            {
+                Id = model.Id,
+                Title = model.Title,
+                DiscountMethod = model.DiscountMethod,
+                BeginDate = model.BeginDate,
+                EndDate = model.EndDate,
+                Description = model.Description,
+            };
+            _context.Discounts.Add(BgDiscount);
+            _context.SaveChanges();
+            return RedirectToAction("BgDiscountManage");
+        }
+        
         public IActionResult BgDiscountManage()
         {
             return View();

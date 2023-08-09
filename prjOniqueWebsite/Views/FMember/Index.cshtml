@@ -108,8 +108,11 @@
         })
         $("#divPartial").on("click", ".btnEditCancel",function(event){
             event.preventDefault()
-            let id =$(this).data("id");
             $('#divPartial').load('@Url.Content("~/fmember/MemberInfo")')
+        })
+        $('#divPartial').on("click", ".btnEditConfirm",function(event){
+            console.log("123")
+
         })
        
     </script>
