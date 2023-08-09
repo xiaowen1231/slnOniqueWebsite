@@ -9,7 +9,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         public int EmployeeId { get; set; }
 
         [Display(Name = "姓名")]
-        [Required(ErrorMessage = "姓名不可空白")]
+        [Required(ErrorMessage = "請輸入姓名")]
         public string EmployeeName { get; set; }
         
         public string? PhotoPath { get; set; }
@@ -20,15 +20,15 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string Gender { get; set; }
 
         [Display(Name = "電話")]
-        [Required(ErrorMessage = "手機不可空白")]
+        [Required(ErrorMessage = "請輸入電話號碼")]
         public string Phone { get; set; }
 
         [Display(Name = "信箱")]
-        [Required(ErrorMessage = "信箱不可空白")]
+        [Required(ErrorMessage = "請輸入電子信箱")]
         public string Email { get; set; }
 
         [Display(Name = "密碼")]
-        [Required(ErrorMessage = "密碼不可空白")]
+        [Required(ErrorMessage = "請輸入密碼")]
         public string Password { get; set; }
 
         [Display(Name = "身分")]
