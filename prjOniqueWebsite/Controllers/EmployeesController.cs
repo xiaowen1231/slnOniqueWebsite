@@ -21,22 +21,6 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Create()
         {
-            //EmployeeVM employee = (from e in _context.Employees
-            //                             join el in _context.EmployeeLevel
-            //                             on e.Position equals el.EmployeeLevelId
-            //                             join c in _context.Citys
-            //                             on e.Citys equals c.CityId
-            //                             join a in _context.Areas
-            //                             on e.Areas equals a.AreaId
-            //                             select new EmployeeVM
-            //                             {
-            //                                 EmployeeLevel = el.EmployeeLevelName,
-            //                                 Citys = c.CityName,
-            //                                 Areas = a.AreaName,
-            //                             }).FirstOrDefault();
-            //ViewBag.employeeLevel = employee.EmployeeLevel;
-
-
             return View();
         }
         [HttpPost]

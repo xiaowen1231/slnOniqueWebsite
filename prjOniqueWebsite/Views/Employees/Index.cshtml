@@ -252,14 +252,14 @@
 
                 //true顯示上傳的圖片 false顯示default
                 const imgSrc = hasPhoto ? '@Url.Content("~/images/uploads/Employee/")' + photoPath : 
-                '@Url.Content("~/images/uploads/employee/default.jpg")';
+                '@Url.Content("~/images/uploads/employee/defaults.jpg")';
 
                 return (`
                     <tr>
 
                         <td>
                             <div class="d-flex gap-2 imgbox">
-                               <img src="${imgSrc}" alt="" />
+                                 <img src="${imgSrc}?timestamp=${new Date().getTime()}" alt="" />
                             </div>
                         </td>
                         <td>

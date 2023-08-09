@@ -83,22 +83,22 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Register()
         {
-            MemberVM vm = (from m in _context.Members
-                           join c in _context.Citys
-                           on m.Citys equals c.CityId
-                           join a in _context.Areas
-                           on m.Areas equals a.AreaId
-                           join ml in _context.MemberLevel
-                           on m.MemberLevel equals ml.MemberLevelId
-                           select new MemberVM
-                           {
-                               MemberLevel = ml.MemberLevelName,
-                               Citys = c.CityName,
-                               Areas = a.AreaName
-                           }).FirstOrDefault();
-            ViewBag.memberlevel = vm.MemberLevel;
-            ViewBag.city = vm.Citys;
-            ViewBag.area = vm.Areas;
+            //MemberVM vm = (from m in _context.Members
+            //               join c in _context.Citys
+            //               on m.Citys equals c.CityId
+            //               join a in _context.Areas
+            //               on m.Areas equals a.AreaId
+            //               join ml in _context.MemberLevel
+            //               on m.MemberLevel equals ml.MemberLevelId
+            //               select new MemberVM
+            //               {
+            //                   MemberLevel = ml.MemberLevelName,
+            //                   Citys = c.CityName,
+            //                   Areas = a.AreaName
+            //               }).FirstOrDefault();
+            //ViewBag.memberlevel = vm.MemberLevel;
+            //ViewBag.city = vm.Citys;
+            //ViewBag.area = vm.Areas;
             return View();
         }
         [HttpPost]
@@ -106,7 +106,7 @@ namespace prjOniqueWebsite.Controllers
         {
             var mem = new Members()
             {
-                //string fileName = $"MemberId_{member.MemberId}.jpg";
+                PhotoPath = vm.PhotoPath,
                 Name = vm.Name,
                 Password = vm.Password,
                 Email = vm.Email,
@@ -123,6 +123,7 @@ namespace prjOniqueWebsite.Controllers
 
             _context.Members.Add(mem);
             _context.SaveChanges();
+            
             return RedirectToAction("Login");
         }
     }
