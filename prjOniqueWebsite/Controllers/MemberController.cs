@@ -64,6 +64,19 @@ namespace prjOniqueWebsite.Controllers
            
             _context.Members.Add(mem); 
             _context.SaveChanges();
+            if (vm.Photo != null)
+            {
+                string fileName = $"EmployeeId_{mem.MemberId}.jpg";
+                mem.PhotoPath = fileName;
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
+
+                _context.Update(mem);
+                _context.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
 

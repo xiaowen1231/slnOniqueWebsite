@@ -102,7 +102,7 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(MemberVM vm)
+        public IActionResult Register(FMemberVM vm)
         {
             var mem = new Members()
             {
