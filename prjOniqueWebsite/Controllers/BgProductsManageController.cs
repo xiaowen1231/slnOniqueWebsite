@@ -107,7 +107,7 @@ namespace prjOniqueWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products,IFormFile photo)
         {
             if (id != products.ProductId)
             {
@@ -131,6 +131,18 @@ namespace prjOniqueWebsite.Controllers
                         throw;
                     }
                 }
+                if (photo != null)
+                {
+                    string fileName = products.ProductName + ".jpg";
+                    products.PhotoPath = fileName;
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
+                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        photo.CopyTo(fileStream);
+                    }
+                }
+                _context.Update(products);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
