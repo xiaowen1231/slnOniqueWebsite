@@ -22,9 +22,15 @@
             </div>
             <div class="accountAndManage">
                 <div id="divEMPName"></div>
-                <div class="photoStickers">
-                    <img src="" id="imgEmpPhoto"/>
+                <div class="photoStickers" data-bs-toggle="dropdown">
+                    <img src="@Url.Content("~/images/uploads/Employee/default.jpg")" id="imgEmpPhoto" />
                 </div>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li class="d-flex align-items-center mx-2">
+                        <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
+                        <a class="dropdown-item fs-12px" href="@Url.Content("~/Home/Logout")">會員登出</a>
+                    </li>
+                </ul>
                 <div class="backgroundHeadIcon">
                     <img src="@Url.Content("~/images/background/bell.png")" />
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notify">
@@ -99,6 +105,7 @@
     <script src="~/js/sweetalert2.all.min.js"></script>
     <script>
         let minSize = false;
+
         $("#btnMenu").click(function () {
             $(this).parent().toggleClass("min")
             if (!minSize) {
@@ -111,52 +118,39 @@
             }
         })
 
-        CheckLogin()
-
-        async function CheckLogin() {
-
-            const response = await fetch(`@Url.Content("~/HomeApi/IsLoginByEmployee")`)
-            const isLogin = await response.json();
-
-            if (isLogin) {
-
-
-                const response = await fetch(`@Url.Content("~/HomeApi/UpdataNavBackground")`)
-                const datas = await response.json();
-
-                console.log(datas);
-                $('#imgEmpPhoto').attr("src", `@Url.Content("~/images/uploads/Employee/")${datas.photoPath}`)
-                $('#divEMPName').text(`您好,${datas.employeeName}`)
-            }else{
-                window.location.href = `@Url.Content("~/home/login")`
-            }
-        }
-        //const notify = document.querySelector("#notify")
-        //async function getOrderStatusCount() {
-        //    const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusCount?statusId=1")`)
-        //    const data = await response.json()
-        //    console.log(typeof (data))
-        //    console.log(data)
-        //    //const count=data
-        //    getOrderStatusCount()
-        //    notify.innerHTML = data;
         const notify = document.querySelector("#notify")
+
+        getOrderStatusCount();
+
         async function getOrderStatusCount() {
             const response = await fetch(`@Url.Content("~/OrderApi/getOrderStatusCount?statusId=1")`)
             const data = await response.json()
             notify.innerHTML = data;
         }
-            getOrderStatusCount();
-        
-        //$(".backgroundHeadIcon").on('click', function () {
-        //    window.location.href = `@Url.Content("~/order/Index?keyword=")待出貨&sort=&pagenumber=1&pagesize=30`
-        //    console.log("123");
-        //}   
+
+        CheckLogin()
+
+        async function CheckLogin() {
+            const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
+            const isLogin = await response.json();
+
+            if (isLogin) {
+
+                const response = await fetch(`@Url.Content("~/HomeApi/UpdataNav")`)
+                const dto = await response.json();
+
+                const { datas } = dto
+                
+                let hello = `Hello ! ${datas.employeeName}`
+
+                $("#divEMPName").text(hello)
+                if (datas.photoPath != null) {
+                    $("#imgEmpPhoto").attr("src", `@Url.Content("~/images/uploads/Employee/")${datas.photoPath}`)
+                }
+            }
+        }
 
     </script>
-
-
-
 
     @if (TempData["AlertLogin"] != null)
     {

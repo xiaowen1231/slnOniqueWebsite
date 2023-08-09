@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
@@ -7,36 +8,37 @@ using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
+    
     public class ShoppingCartController : Controller
     {
         private readonly OniqueContext _context;
         public readonly ProductDao _dao;
-        public ShoppingCartController(OniqueContext context)
+        private readonly UserInfoService _userInfoService;
+        public ShoppingCartController(OniqueContext context, UserInfoService userInfoService)
         {
             _context = context;
             _dao = new ProductDao(context);
+            _userInfoService = userInfoService;
         }
-        [TypeFilter(typeof(MemberVerify))]
+        [Authorize(Roles = "Member")]
         public IActionResult Index()
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             List<ShoppingCartDto> cart = _dao.CartItems(member);
             return View(cart);
         }
-        [TypeFilter(typeof(MemberVerify))]
+
         public IActionResult OrderConfirmation()
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             return View(member);
         }
 
-        [TypeFilter(typeof(MemberVerify))]
+
         public IActionResult OrderSettlement(int orderId)
         {
             var dto = new OrderSettlementDto();
-            var orderDetails = _context.OrderDetails.Where(od=>od.OrderId == orderId).ToList();
+            var orderDetails = _context.OrderDetails.Where(od => od.OrderId == orderId).ToList();
 
             decimal total = 0;
 
@@ -46,10 +48,10 @@ namespace prjOniqueWebsite.Controllers
             }
 
             var query = from o in _context.Orders
-                                join s in _context.ShippingMethods
-                                on o.MethodId equals s.MethodId
-                                where o.OrderId == orderId
-                                select s.MethodName;
+                        join s in _context.ShippingMethods
+                        on o.MethodId equals s.MethodId
+                        where o.OrderId == orderId
+                        select s.MethodName;
 
             string methodName = query.FirstOrDefault();
 

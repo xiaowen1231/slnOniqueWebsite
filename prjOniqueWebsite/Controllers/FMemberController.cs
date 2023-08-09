@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
@@ -8,20 +9,22 @@ using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
+    [Authorize (Roles = "Member")]
     public class FMemberController : Controller
     {
         private readonly OniqueContext _context;
-        public FMemberController(OniqueContext context)
+        private readonly UserInfoService _userInfoService;
+        public FMemberController(OniqueContext context,UserInfoService userInfoService)
         {
             _context = context;
+            _userInfoService = userInfoService;
         }
 
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult Index( string display)
         {
             ViewBag.Display = display;
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             var photo = (from m in _context.Members
                          where m.MemberId == member.MemberId
                          select new FMemberDto{
@@ -30,7 +33,7 @@ namespace prjOniqueWebsite.Controllers
                          }).FirstOrDefault();
             return View(photo);
         }
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult MemberInfo( )
         {
             string json = HttpContext.Session.GetString("Login");
@@ -89,7 +92,7 @@ namespace prjOniqueWebsite.Controllers
             _context.SaveChanges();
             return PartialView("MemberInfo");
         }
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult MemberOrder()
         {
             string json = HttpContext.Session.GetString("Login");
@@ -112,12 +115,12 @@ namespace prjOniqueWebsite.Controllers
                          }).ToList();
             return PartialView(order);
         }
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult MemberMyKeep()
         {
             return PartialView();
         }
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult MemberPassword()
         {
             return PartialView();
