@@ -61,9 +61,9 @@
                             <ul class="navbar-nav">
                                 <li class="nav-item dropdown" id="memberIcon">
                                     <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="~/images/header/user.png" class="circle-size-35" />
+                                        <img src="~/images/header/user.png" class="circle-size-35"/>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                    <ul class="dropdown-menu dropdown-menu-dark" id="empList">
                                         <li class="d-flex align-items-center mx-2">
                                             <img src="/images/icon/help_icon.png" class="width-16px" />
                                             <a class="dropdown-item fs-12px" href="#">幫助中心</a>
@@ -139,7 +139,6 @@
                     </div>
                 </div>
             </div>
-
             @RenderBody()
         </div>
         <footer id="footer" class="footer fs-6 bg-dark mt-3">
@@ -231,44 +230,76 @@
             if (isLogin) {
 
                 const response = await fetch(`@Url.Content("~/HomeApi/UpdataNav")`)
-                const datas = await response.json();
+                const dto = await response.json();
+                
+                const { datas , role } =dto;
+                
+                if (role == "Member") {
+                    let str = "";
+                    str += `<ul class="navbar-nav">
+                                        <li class="nav-item dropdown" id="memberIcon">
+                                            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">`;
+                    if (datas.photoPath != null) {
+                        str += `<img src="@Url.Content("~/images/uploads/members/")${datas.photoPath}" class="circle-size-35" />`
+                    }
+                    else {
+                        str += `<img src="@Url.Content("~/images/header/user.png")" class="circle-size-35" />`
 
-                let str = "";
-                str += `<ul class="navbar-nav">
-                                <li class="nav-item dropdown" id="memberIcon">
-                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">`;
-                if (datas.photoPath != null) {
-                    str += `<img src="@Url.Content("~/images/uploads/members/")${datas.photoPath}" class="circle-size-35" />`
-                }
-                else {
-                    str += `<img src="@Url.Content("~/images/header/user.png")" class="circle-size-35" />`
-
-                }
-                str += `</button>
+                    }
+                    str += `</button>
                                     <ul class="dropdown-menu dropdown-menu-dark">
                                         <li class="d-flex align-items-center mx-2">
                                             <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
-                                                    <a class="dropdown-item fs-12px" href="@Url.Content("~/fmember/index?display=MemberInfo")">會員資料</a>
+                                            <a class="dropdown-item fs-12px" href="@Url.Content("~/fmember/index?display=MemberInfo")">會員資料</a>
                                         </li>
                                         <li class="d-flex align-items-center mx-2">
                                             <img src="@Url.Content("~/images/background/shopping-list.png")" class="width-16px" />
-                                                               <a class="dropdown-item fs-12px" href="@Url.Content("~/fmember/index?display=MemberOrder")">訂單查詢</a>
+                                            <a class="dropdown-item fs-12px" href="@Url.Content("~/fmember/index?display=MemberOrder")">訂單查詢</a>
                                         </li>
                                         <li class="d-flex align-items-center mx-2">
                                             <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
                                             <a class="dropdown-item fs-12px" href="#">我的收藏</a>
                                         </li>
                                         <li class="d-flex align-items-center mx-2">
-                                                    <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
-                                            <a class="dropdown-item fs-12px" asp-action="Logout" asp-controller="Home">會員登出</a>
+                                            <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
+                                            <a class="dropdown-item fs-12px" href="@Url.Content("~/Home/Logout")">會員登出</a>
                                         </li>
                                     </ul>
                                 </li>
                             </ul>`;
 
-                $("#memberIcon").html(str)
+                    $("#memberIcon").html(str)
 
-                GetCartItems()
+                    GetCartItems()
+                }else{
+                    let str = "";
+                    str += `<ul class="navbar-nav">
+                                                <li class="nav-item dropdown" id="memberIcon">
+                                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">`;
+                    if (datas.photoPath != null) {
+                        str += `<img src="@Url.Content("~/images/uploads/Employee/")${datas.photoPath}" class="circle-size-35" />`
+                    }
+                    else {
+                        str += `<img src="@Url.Content("~/images/header/user.png")" class="circle-size-35" />`
+
+                    }
+                    str += `</button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                <li class="d-flex align-items-center mx-2">
+                                                    <img src="@Url.Content("~/images/header/user.png")" class="width-16px" />
+                                                    <a class="dropdown-item fs-12px" href="@Url.Content("~/home/backgroundindex")">後臺管理</a>
+                                                </li>
+                                                <li class="d-flex align-items-center mx-2">
+                                                    <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
+                                                    <a class="dropdown-item fs-12px" href="@Url.Content("~/Home/Logout")">會員登出</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>`;
+
+                    $("#memberIcon").html(str)
+                }
+
             }
         }
 

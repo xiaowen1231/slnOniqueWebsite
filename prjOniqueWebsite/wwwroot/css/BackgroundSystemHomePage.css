@@ -59,24 +59,25 @@ img{
         object-fit: cover;
         overflow: hidden;
     }
-.myContainer .nav .accountAndManage .photoStickers:hover{
-    height: 55px;
-    width: 55px;
-    border-radius: 50%;
-    object-fit: cover;
-    overflow: hidden;
-    transition: all 0.5s;
-    cursor: pointer;
-}
+        .myContainer .nav .accountAndManage .photoStickers:hover {
+            height: 6.5vh;
+            width: 6.5vh;
+            border-radius: 50%;
+            object-fit: cover;
+            overflow: hidden;
+            transition: all 0.5s;
+            cursor: pointer;
+        }
 .myContainer .nav .accountAndManage .backgroundHeadIcon{
     position: relative;
-    height: 30px;
-    width: 30px;
+    height: 40px;
+    width: 40px;
+    margin: 10px;
 }
 .myContainer .nav .accountAndManage .backgroundHeadIcon:hover{
     position: relative;
-    height: 35px;
-    width: 35px;
+    height: 45px;
+    width: 45px;
     transition: all 0.5s;
     cursor: pointer;
 }

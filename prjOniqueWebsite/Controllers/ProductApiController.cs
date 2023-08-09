@@ -1,23 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.Repositories;
 using prjOniqueWebsite.Models.Services;
 using System.Collections.Generic;
+using System.Data;
 using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
+    
+
     public class ProductApiController : Controller
     {
         private readonly OniqueContext _context;
         ProductDao dao = null;
+        private readonly UserInfoService _userInfoService;
 
-        public ProductApiController(OniqueContext context)
+        public ProductApiController(OniqueContext context, UserInfoService userInfoService)
         {
             _context = context;
             dao = new ProductDao(_context);
+            _userInfoService = userInfoService;
         }
 
         public IActionResult NewArrivalsTop4()
@@ -52,9 +59,7 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult AddToCart(int stockId, int qty)
         {
-            string json = HttpContext.Session.GetString("Login");
-
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
 
             var service = new ProductService(_context);
 
@@ -64,9 +69,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult CartItems()
         {
-            string json = HttpContext.Session.GetString("Login");
-
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
 
             var cart = dao.CartItems(member);
 
@@ -74,8 +77,8 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult CartList()
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
+
             var cart = dao.CartItems(member);
 
             return Json(cart);

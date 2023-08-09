@@ -1,14 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
+using prjOniqueWebsite.Models.ViewModels;
 using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
     public class HomeApiController : Controller
     {
+        private readonly UserInfoService _userInfoService;
+
+
+        public HomeApiController(UserInfoService userInfoService)
+        {
+
+            _userInfoService = userInfoService;
+
+        }
         public IActionResult IsLogin()
         {
-            bool isLogin = HttpContext.Session.Keys.Contains("Login") ? true : false;
+            bool isLogin = HttpContext.User.Identity.IsAuthenticated ? true : false;
             return Json(isLogin);
         }
         public IActionResult IsLoginByEmployee()
@@ -18,22 +30,28 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult UpdataNav()
         {
-            string json = HttpContext.Session.GetString("Login");
-            
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            if (HttpContext.User.IsInRole("Member"))
+            {
+                Members member = _userInfoService.GetMemberInfo();
+                var dto = new
+                {
+                    Role = "Member",
+                    datas = member
+                };
+                return Json(dto);
 
-            return Json(member);
+            }
+            else
+            {
+                Employees employee = _userInfoService.GetEmployeeInfo();
+                var dto = new
+                {
+                    Role = "Employee",
+                    datas = employee
+                };
+                return Json(dto);
+            }
+
         }
-
-        public IActionResult UpdataNavBackground()
-        {
-            string json = HttpContext.Session.GetString("EmployeeLogin");
-
-            Employees employees = JsonSerializer.Deserialize<Employees>(json);
-
-            return Json(employees);
-        }
-
-
     }
 }

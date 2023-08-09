@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
 
 namespace prjOniqueWebsite.Controllers
 {
+    [Authorize(Roles = "經理") ]
     public class EmployeesController : Controller
     {
         private readonly OniqueContext _context;
@@ -14,6 +16,7 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
             _environment = environment;
         }
+        
         public IActionResult Index()
         {
             return View();
