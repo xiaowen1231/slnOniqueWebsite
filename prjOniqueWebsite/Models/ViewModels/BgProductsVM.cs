@@ -6,7 +6,6 @@ namespace prjOniqueWebsite.Models.ViewModels
 {
     public class BgProductsVM
     {
-        
         public int ProductId { get; set; }
         [Display(Name = "商品名稱")]
         [Required(ErrorMessage = "商品名稱不可空白")]
