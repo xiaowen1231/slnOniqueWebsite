@@ -319,19 +319,12 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         [HttpPost]
-        public  IActionResult BgDiscountCreate(Discounts model)
+        public  IActionResult BgDiscountCreate(BgDiscointCreateVM vm)
         {
-            var BgDiscount = new Discounts()
+            if (ModelState.IsValid == false)
             {
-                Id = model.Id,
-                Title = model.Title,
-                DiscountMethod = model.DiscountMethod,
-                BeginDate = model.BeginDate,
-                EndDate = model.EndDate,
-                Description = model.Description,
-            };
-            _context.Discounts.Add(BgDiscount);
-            _context.SaveChanges();
+                return View(vm);
+            }
             return RedirectToAction("BgDiscountManage");
         }
         
