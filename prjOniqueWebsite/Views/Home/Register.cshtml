@@ -1,16 +1,15 @@
-﻿
+﻿@model prjOniqueWebsite.Models.ViewModels.FMemberVM
 @{
     ViewData["Title"] = "Register";
 }
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="width-1000px mx-auto p-2 border rounded d-flex shadow" data-aos="zoom-in">
         <div class="circle-size-300">
-            <img src="@Url.Content("~/images/uploads/members/MemberId_10.jpg")" class="circle-size-300" />
+            <img src="@Url.Content("~/images/uploads/members/default.jpg")" class="circle-size-300" id="imgMember" />
+            <input type="file" name="Photo" id="Photo" class="form-control my-5" />
         </div>
-        <div>
-            <input type="hidden" name="Photo" id="Photo" class="form-control my-5" />
-        </div>
+        
         <div class="flex-fill p-2">
             <div class="fs-5 fw-bold border-bottom p-2">
                 註冊新會員
@@ -19,13 +18,15 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">姓名</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control " name="Name" />
+                        <input type="text" class="form-control " name="Name" placeholder="請輸入姓名" />
+                        @Html.ValidationMessageFor(member=>member.Name,"",new{@class="text-danger"})
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">帳號</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control " name="Email" value="" />
+                        <input type="text" class="form-control " name="Email" placeholder="請輸入電子信箱" />
+                        @Html.ValidationMessageFor(member=>member.Email,"",new{@class="text-danger"})
                     </div>
                 </div>
             </div>
@@ -33,13 +34,15 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">電話</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" value="" name="Phone" />
+                        <input type="text" class="form-control" placeholder="請輸入電話" name="Phone" />
+                        @Html.ValidationMessageFor(member=>member.Phone,"",new{@class="text-danger"})
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">生日</div>
                     <div class="mx-2">
                         <input type="date" class="form-control" value="" name="DateOfBirth" id="memberDateOfBirth" />
+                        @Html.ValidationMessageFor(member=>member.DateOfBirth,"",new{@class="text-danger"})
                     </div>
                 </div>
             </div>
@@ -47,13 +50,15 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">密碼</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" value="" name="Password" />
+                        <input type="text" class="form-control" placeholder="請輸入密碼" name="Password" />
+                        @Html.ValidationMessageFor(member=>member.Password,"",new{@class="text-danger"})
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-80px  fw-bold">確認密碼</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" value="" name="ComfirmPassword" />
+                        <input type="text" class="form-control" placeholder="請重新輸入密碼" name="ComfirmPassword" />
+                        <span asp-validation-for="ComfirmPassword" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -96,7 +101,7 @@
                         </select>
                     </div>
                     <div class="mx-3 ">
-                        <input type="text" class="form-control" value="" name="Address" />
+                        <input type="text" class="form-control" placeholder="請輸入地址" name="Address" />
                     </div>
                 </div>
             </div>
@@ -148,10 +153,22 @@
                 const { areaId, areaName } = item
 
                 selectOptions += ` <option value="${areaId}">${areaName}</option>`
-
             })
             $("#area").append(selectOptions);
         }
+        
+        const photo = document.querySelector('#Photo')
+        photo.addEventListener('change', () => {
+            const file = photo.files
+            if (file.length == 0) {
+                let imgDefault = '@Url.Content("~/images/uploads/members/default.jpg")'
+                $('#imgMember').attr('src', imgDefault)
+            }
+            else {
+                const url = URL.createObjectURL(file[0]);
+                $('#imgMember').attr('src', url)
+            }
+        })
     </script>
 }
 

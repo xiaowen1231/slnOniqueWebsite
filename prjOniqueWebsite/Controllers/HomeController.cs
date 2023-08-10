@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using NuGet.Common;
 using prjOniqueWebsite.Models;
 using prjOniqueWebsite.Models.EFModels;
@@ -9,6 +10,7 @@ using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.ViewModels;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -19,13 +21,14 @@ namespace prjOniqueWebsite.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
+        private readonly IWebHostEnvironment _environment;
 
-
-        public HomeController(OniqueContext context, ILogger<HomeController> logger, UserInfoService userInfoService)
+        public HomeController(OniqueContext context, ILogger<HomeController> logger, UserInfoService userInfoService, IWebHostEnvironment environment)
         {
             _logger = logger;
             _context = context;
             _userInfoService = userInfoService;
+            _environment = environment;
         }
 
 
@@ -159,49 +162,62 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Register()
         {
-            //MemberVM vm = (from m in _context.Members
-            //               join c in _context.Citys
-            //               on m.Citys equals c.CityId
-            //               join a in _context.Areas
-            //               on m.Areas equals a.AreaId
-            //               join ml in _context.MemberLevel
-            //               on m.MemberLevel equals ml.MemberLevelId
-            //               select new MemberVM
-            //               {
-            //                   MemberLevel = ml.MemberLevelName,
-            //                   Citys = c.CityName,
-            //                   Areas = a.AreaName
-            //               }).FirstOrDefault();
-            //ViewBag.memberlevel = vm.MemberLevel;
-            //ViewBag.city = vm.Citys;
-            //ViewBag.area = vm.Areas;
             return View();
         }
 
         [HttpPost]
         public IActionResult Register(FMemberVM vm)
         {
-            var mem = new Members()
+            if(ModelState.IsValid)
             {
-                PhotoPath = vm.PhotoPath,
-                Name = vm.Name,
-                Password = vm.Password,
-                Email = vm.Email,
-                Phone = vm.Phone,
-                Gender = Convert.ToBoolean(vm.Gender),
-                Citys = Convert.ToInt32(vm.Citys),
-                Areas = Convert.ToInt32(vm.Areas),
-                Address = vm.Address,
-                MemberLevel = 1,
-                RegisterDate = DateTime.Now,
-                DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
-            };
 
+                var mem = new Members()
+                {
+                    Name = vm.Name,
+                    Password = vm.Password,
+                    Email = vm.Email,
+                    Phone = vm.Phone,
+                    Gender = Convert.ToBoolean(vm.Gender),
+                    Citys = Convert.ToInt32(vm.Citys),
+                    Areas = Convert.ToInt32(vm.Areas),
+                    Address = vm.Address,
+                    MemberLevel = 1,
+                    RegisterDate = DateTime.Now,
+                    DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
+                };
 
-            _context.Members.Add(mem);
-            _context.SaveChanges();
-            
-            return RedirectToAction("Login");
+                _context.Members.Add(mem);
+                _context.SaveChanges();
+                if (vm.Photo != null)
+                {
+                    string fileName = $"MemberId_{mem.MemberId}.jpg";
+                    mem.PhotoPath = fileName;
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        vm.Photo.CopyTo(fileStream);
+                    }
+
+                }
+                else
+                {
+                    // 如果沒有上傳新照片，使用預設的照片路徑和檔名
+                    string defaultFileName = $"MemberId_{mem.MemberId}.jpg";
+                    mem.PhotoPath = defaultFileName;
+
+                    // 取得預設照片的完整路徑
+                    string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
+
+                    // 複製預設照片到指定路徑
+                    string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
+                    System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
+
+                }
+                _context.Update(mem);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(vm);
         }
     }
 

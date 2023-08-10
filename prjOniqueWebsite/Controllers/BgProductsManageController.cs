@@ -29,7 +29,7 @@ namespace prjOniqueWebsite.Controllers
         }
 
         // GET: BgProductsManage
-        public async Task<IActionResult> Index(string txtKeyword)
+        public async Task<IActionResult> Index(string txtKeyword,int pageNumber = 1,int pageSize=10)
         {
             IQueryable<Products> query = _context.Products.Include(p => p.Discount).Include(p => p.ProductCategory).Include(p => p.Supplier);
             if (!string.IsNullOrEmpty(txtKeyword))
@@ -38,8 +38,25 @@ namespace prjOniqueWebsite.Controllers
                                     p.ProductCategory.CategoryName.Contains(txtKeyword) ||
                                     p.Price.ToString().Contains(txtKeyword));
             }
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+            int startIndex = (pageNumber - 1) * pageSize;
+            var products = await query.Skip(startIndex)
+                .Take(pageSize)
+                .ToListAsync();
+            var viewModel = new BgProductsPagingVM
+            {
+                Products = products,
+                PagingInfo = new PagingInfo
+                {
+                    CurrenPage = pageNumber,
+                    ItemsPerPage = pageSize,
+                    TotalItems = totalCount,
+                    TotalPages = totalPages
+                }
+            };
            
-            return View(await query.ToListAsync());
+            return View(viewModel);
         }       
 
         // GET: BgProductsManage/Create
@@ -56,7 +73,7 @@ namespace prjOniqueWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products,IFormFile photo)
+        public IActionResult Create([Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products,BgProductsVM vm,IFormFile photo)
         {
             if (ModelState.IsValid)
             {
@@ -76,7 +93,7 @@ namespace prjOniqueWebsite.Controllers
                     }
                 }
                 _context.Add(products);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
@@ -186,7 +203,7 @@ namespace prjOniqueWebsite.Controllers
             var products = await _context.Products.FindAsync(id);
             if (products != null)
             {
-                _context.Products.Remove(products);
+                _context.Products.Remove(products);               
             }
             
             await _context.SaveChangesAsync();
