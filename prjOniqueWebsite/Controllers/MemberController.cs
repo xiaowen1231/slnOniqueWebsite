@@ -57,9 +57,24 @@ namespace prjOniqueWebsite.Controllers
                     {
                         vm.Photo.CopyTo(fileStream);
                     }
-                    _context.Update(member);
-                    _context.SaveChanges();
+                   
                 }
+                else
+                {
+                    // 如果沒有上傳新照片，使用預設的照片路徑和檔名
+                    string defaultFileName = $"MemberId_{member.MemberId}.jpg";
+                    member.PhotoPath = defaultFileName;
+
+                    // 取得預設照片的完整路徑
+                    string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
+
+                    // 複製預設照片到指定路徑
+                    string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
+                    System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
+                  
+                }
+                _context.Update(member);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
            return View(vm);

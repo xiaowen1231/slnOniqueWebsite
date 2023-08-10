@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using NuGet.Common;
 using prjOniqueWebsite.Models;
 using prjOniqueWebsite.Models.EFModels;
@@ -9,6 +10,7 @@ using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.ViewModels;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -19,13 +21,14 @@ namespace prjOniqueWebsite.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
+        private readonly IWebHostEnvironment _environment;
 
-
-        public HomeController(OniqueContext context, ILogger<HomeController> logger, UserInfoService userInfoService)
+        public HomeController(OniqueContext context, ILogger<HomeController> logger, UserInfoService userInfoService, IWebHostEnvironment environment)
         {
             _logger = logger;
             _context = context;
             _userInfoService = userInfoService;
+            _environment = environment;
         }
 
 
@@ -163,14 +166,13 @@ namespace prjOniqueWebsite.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(FMemberVM vm,IFormFile Photo)
+        public IActionResult Register(FMemberVM vm)
         {
             if(ModelState.IsValid)
             {
 
                 var mem = new Members()
                 {
-                    PhotoPath = vm.PhotoPath,
                     Name = vm.Name,
                     Password = vm.Password,
                     Email = vm.Email,
@@ -184,11 +186,36 @@ namespace prjOniqueWebsite.Controllers
                     DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
                 };
 
-
                 _context.Members.Add(mem);
                 _context.SaveChanges();
-            
-                return RedirectToAction("Login");
+                if (vm.Photo != null)
+                {
+                    string fileName = $"MemberId_{mem.MemberId}.jpg";
+                    mem.PhotoPath = fileName;
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        vm.Photo.CopyTo(fileStream);
+                    }
+
+                }
+                else
+                {
+                    // 如果沒有上傳新照片，使用預設的照片路徑和檔名
+                    string defaultFileName = $"MemberId_{mem.MemberId}.jpg";
+                    mem.PhotoPath = defaultFileName;
+
+                    // 取得預設照片的完整路徑
+                    string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
+
+                    // 複製預設照片到指定路徑
+                    string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
+                    System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
+
+                }
+                _context.Update(mem);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(vm);
         }
