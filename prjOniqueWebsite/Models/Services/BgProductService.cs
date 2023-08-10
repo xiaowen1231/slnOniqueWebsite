@@ -30,5 +30,22 @@ namespace prjOniqueWebsite.Models.Services
                 new BgProductDao(_context,_environment).CreateDiscount(vm);
             }
         }
+
+        public void UpdataDiscount(BgDiscointCreateVM vm)
+        {
+            var discount = _context.Discounts.FirstOrDefault(d=>d.Title==vm.Title);
+            if (discount != null && discount.Id != vm.Id)
+            {
+                throw new Exception("已存在同名活動");
+            }
+            if (vm.BeginDate > vm.EndDate)
+            {
+                throw new Exception("開始日期大於結束日期");
+            }
+            else
+            {
+                new BgProductDao(_context, _environment).UpdataDiscount(vm);
+            }
+        }
     }
 }

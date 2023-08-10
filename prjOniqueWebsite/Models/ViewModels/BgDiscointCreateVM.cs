@@ -6,13 +6,14 @@ namespace prjOniqueWebsite.Models.ViewModels
 {
     public class BgDiscointCreateVM
     {
+        public int? Id { get; set; }
         [Display(Name = "活動名稱")]
         [Required(ErrorMessage = "活動名稱不可為空白")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Display(Name = "活動說明")]
         [Required(ErrorMessage = "活動說明不可為空白")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Display(Name = "折扣方式")]
         [Required(ErrorMessage = "折扣不可為空白")]
