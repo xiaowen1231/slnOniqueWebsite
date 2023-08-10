@@ -72,7 +72,7 @@ namespace prjOniqueWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products,BgProductsVM vm,IFormFile photo)
+        public IActionResult Create(Products products,BgProductsVM vm,IFormFile photo)
         {
             if (ModelState.IsValid)
             {
