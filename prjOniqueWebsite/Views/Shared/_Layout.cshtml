@@ -361,17 +361,19 @@
                     title: message,
                     confirmButtonColor: '#3C3C3C',
                     confirmButtonText: '確認'
+
                 })
+                GetCartItems()
+
             } else {
                 Swal.fire({
                     icon: 'error',
-                    text: message,
+                    title: message,
                     showConfirmButton: false,
                     timer: 1500
                 })
             }
 
-            GetCartItems()
         }
 
     </script>

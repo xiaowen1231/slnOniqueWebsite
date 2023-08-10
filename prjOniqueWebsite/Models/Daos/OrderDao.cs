@@ -182,7 +182,23 @@ namespace prjOniqueWebsite.Models.Daos
 
             return email;
         }
+        /// <summary>
+        /// 有foreign key的資料刪除要注意，
+        /// </summary>
+        /// <param name="orderId"></param>
+        public void DeleteOrder(int orderId)
+        {
+            var orderdetails = _context.OrderDetails.Where(o => o.OrderId == orderId);
+            var order = _context.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();
 
+            foreach (var o in orderdetails)
+            {
+                _context.OrderDetails.Remove(o);
+            }
+
+            _context.Orders.Remove(order);
+            _context.SaveChanges();
+        }
 
     }
 }

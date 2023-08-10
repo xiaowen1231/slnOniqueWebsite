@@ -31,21 +31,40 @@ namespace prjOniqueWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var member = new Members()
+                var member = new Members();
+                bool isPhoneUsed = _context.Members.Any(e => e.Phone == vm.Phone);
+                bool isEmailUsed = _context.Members.Any(e => e.Email == vm.Email);
+                
+                if (isPhoneUsed)
                 {
-                    Name = vm.Name,
-                    Password = vm.Password,
-                    Email = vm.Email,
-                    Phone = vm.Phone,
-                    Gender = Convert.ToBoolean(vm.Gender),
-                    Citys = Convert.ToInt32(vm.Citys),
-                    Areas = Convert.ToInt32(vm.Areas),
-                    Address = vm.Address,
-                    MemberLevel = Convert.ToInt32(vm.MemberLevel),
-                    RegisterDate = DateTime.Now,
-                    DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
-                };
-            
+                    ModelState.AddModelError("Phone", "手機號碼已被使用");
+                    return View(vm);
+                }
+
+                if (isEmailUsed)
+                {
+                    ModelState.AddModelError("Email", "信箱已被使用");
+                    return View(vm);
+                }
+                //todo日期判斷
+                if (Convert.ToDateTime(vm.DateOfBirth) >= DateTime.Today)
+                {
+                    ModelState.AddModelError("DateOfBirth", "日期輸入錯誤");
+                    return View(vm);
+                }
+
+                member.Name = vm.Name;
+                member.Password = vm.Password;
+                member.Email = vm.Email;
+                member.Phone = vm.Phone;
+                member.Gender = Convert.ToBoolean(vm.Gender);
+                member.Citys = Convert.ToInt32(vm.Citys);
+                member.Areas = Convert.ToInt32(vm.Areas);
+                member.Address = vm.Address;
+                member.MemberLevel = Convert.ToInt32(vm.MemberLevel);
+                member.RegisterDate = DateTime.Now;
+                member.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
+                
                 _context.Members.Add(member); 
                 _context.SaveChanges();
                 if (vm.Photo != null)
@@ -56,22 +75,18 @@ namespace prjOniqueWebsite.Controllers
                     using (var fileStream = new FileStream(photoPath, FileMode.Create))
                     {
                         vm.Photo.CopyTo(fileStream);
-                    }
-                   
+                    }   
                 }
                 else
                 {
                     // 如果沒有上傳新照片，使用預設的照片路徑和檔名
                     string defaultFileName = $"MemberId_{member.MemberId}.jpg";
                     member.PhotoPath = defaultFileName;
-
                     // 取得預設照片的完整路徑
                     string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
-
                     // 複製預設照片到指定路徑
                     string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
                     System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
-                  
                 }
                 _context.Update(member);
                 _context.SaveChanges();
@@ -144,7 +159,6 @@ namespace prjOniqueWebsite.Controllers
             if (member != null)
             {
                 _context.Members.Remove(member);
-                
             }
             _context.SaveChanges();
             return RedirectToAction("Index");
