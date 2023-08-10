@@ -73,40 +73,42 @@ namespace prjOniqueWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products,BgProductsVM vm,IFormFile photo)
+        public IActionResult Create(BgProductsVM vm,IFormFile photo)
         {
             if (ModelState.IsValid)
             {
-                if (!Regex.IsMatch(products.Price.ToString(), @"^[1-9]\d*$"))
+                var product = new Products
                 {
-                    ModelState.AddModelError("Price", "價格必須是正整數");                   
-                    return View(products);
-                }
+                    ProductName = vm.ProductName,
+                    ProductCategoryId = vm.ProductCategoryId,
+                    Price = vm.Price,
+                    AddedTime = vm.AddedTime,
+                    ShelfTime = vm.ShelfTime,
+                    Description = vm.Description,
+                    ProductId = vm.ProductId,
+                    SupplierId = vm.SupplierId,
+                };
                 if (photo != null)
                 {
-                    string fileName = products.ProductName + ".jpg";
-                    products.PhotoPath = fileName;
+                    string fileName = product.ProductName + ".jpg";
+                    product.PhotoPath = fileName;
                     string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
-                    using(var fileStream = new FileStream(photoPath, FileMode.Create))
+                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
                     {
                         photo.CopyTo(fileStream);
                     }
                 }
-                bool productNameCheck = _context.Products.Any(p => p.ProductName == products.ProductName);
+                bool productNameCheck = _context.Products.Any(p => p.ProductName == product.ProductName);
                 if (productNameCheck)
                 {
                     ModelState.AddModelError("ProductName", "已有相同的商品名稱存在，請確認後再試一次!");
                     return View(vm);
                 }
 
-                _context.Add(products);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                _context.Products.Add(product);
+                _context.SaveChanges();                
             }
-            ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
-            ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
-            return View(products);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: BgProductsManage/Edit/5

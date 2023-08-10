@@ -28,14 +28,14 @@
                 <div class="p-2 col-5">
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ProductName" class="width-120px">商品名稱:</label>
-                        <input type="text" asp-for="ProductName" class="form-control" />                        
+                        <input type="text" asp-for="@Model.ProductName" class="form-control" />                        
                     </div>
-                    <div class="text-end"><span asp-validation-for="ProductName" class="text-danger fw-bold"></span></div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ProductName)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="Price" class="form-control" type="number" min="0" step="1" />
+                        <input asp-for="@Model.Price" class="form-control" min="0"/>
                     </div>
-                    <div class="text-end"><span asp-validation-for="Price" class="text-danger fw-bold"></span></div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.Price)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ProductCategoryId" class="width-120px">商品分類:</label>
                         <select asp-for="ProductCategoryId" class="form-control" asp-items="ViewBag.ProductCategoryId"></select>
@@ -46,14 +46,14 @@
                     </div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="AddedTime" class="width-120px">上架時間:</label>
-                        <input asp-for="AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                        <input asp-for="@Model.AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
                     </div>
-                    <div class="text-end"><span asp-validation-for="AddedTime" class="text-danger fw-bold"></span></div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.AddedTime)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
-                        <input asp-for="ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                        <input asp-for="@Model.ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
                     </div>
-                    <div class="text-end"><span asp-validation-for="ShelfTime" class="text-danger fw-bold"></span></div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
                         <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;"></textarea>
