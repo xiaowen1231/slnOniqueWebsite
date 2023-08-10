@@ -12,13 +12,14 @@
             <div class=" p-2 d-flex justify-content-center">
                 @if (string.IsNullOrEmpty(Model.PhotoPath))
                 {
-                    <img src="~/images/uploads/Employee/default.jpg" id="imageEmployee"
+                    <img src="~/images/uploads/Employee/defaults.jpg?cache=@Guid.NewGuid()" id="imageEmployee"
                          class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
                 }
                 else
                 {
-                    <img src="~/images/uploads/Employee/@Model.PhotoPath" id="imageEmployee"
-                         class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                    <img src="~/images/uploads/Employee/@Model.PhotoPath?cache=@Guid.NewGuid()" id="imageEmployee" 
+                    class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                         
                 }
             </div>
             <div>
@@ -59,7 +60,7 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">信箱</div>
                         <div class="mx-3">
-                            <div class="form-control" name="Email" id="Email">@Model.Email</div>
+                            <div name="Email" id="Email">@Model.Email</div>
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
@@ -192,8 +193,19 @@
             $("#area").append(selectOptions);
         }
 
-        
 
+        const photo = document.querySelector('#Photo')
+        photo.addEventListener('change', () => {
+            const file = photo.files
+            if (file.length == 0) {
+                let imgDefault = '@Url.Content("~/images/uploads/Employee/defaults.jpg")'
+                $('#imageEmployee').attr('src', imgDefault)
+            }
+            else {
+                const url = URL.createObjectURL(file[0]);
+                $('#imageEmployee').attr('src', url)
+            }
+        })
 
     </script>
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
@@ -8,20 +9,22 @@ using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
+    [Authorize (Roles = "Member")]
     public class FMemberController : Controller
     {
         private readonly OniqueContext _context;
-        public FMemberController(OniqueContext context)
+        private readonly UserInfoService _userInfoService;
+        public FMemberController(OniqueContext context,UserInfoService userInfoService)
         {
             _context = context;
+            _userInfoService = userInfoService;
         }
 
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult Index( string display)
         {
             ViewBag.Display = display;
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             var photo = (from m in _context.Members
                          where m.MemberId == member.MemberId
                          select new FMemberDto{
@@ -30,11 +33,10 @@ namespace prjOniqueWebsite.Controllers
                          }).FirstOrDefault();
             return View(photo);
         }
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult MemberInfo( )
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             var mem = (from m in _context.Members
                        join c in _context.Citys
                        on m.Citys equals c.CityId
@@ -56,32 +58,43 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult MemberInfoEdit(int id)
         {
-            //var member = (from m in _context.Members
-            //              join c in _context.Citys
-            //              on m.Citys equals c.CityId
-            //              join a in _context.Areas
-            //              on m.Areas equals a.AreaId
-            //              where m.MemberId == id
-            //              select new FMemberDto
-            //              {
-            //                  MemberId = id,
-            //                  Name = m.Name,
-            //                  DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd"),
-            //                  Email = m.Email,
-            //                  Phone = m.Phone,
-            //                  Gender = m.Gender ? "女" : "男",
-            //                  Citys = c.CityName,
-            //                  Areas = a.AreaName,
-            //                  Address = m.Address
-            //              }).FirstOrDefault();
-            var member = _context.Members.FirstOrDefault(m => m.MemberId == id);
+            var member = (from m in _context.Members
+                          join c in _context.Citys
+                          on m.Citys equals c.CityId
+                          join a in _context.Areas
+                          on m.Areas equals a.AreaId
+                          where m.MemberId == id
+                          select new FMemberDto
+                          {
+                              MemberId = id,
+                              Name = m.Name,
+                              DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd"),
+                              Email = m.Email,
+                              Phone = m.Phone,
+                              Gender = m.Gender ? "女" : "男",
+                              Citys = c.CityName,
+                              Areas = a.AreaName,
+                              Address = m.Address
+                          }).FirstOrDefault();
             return PartialView(member);
         }
-        [TypeFilter(typeof(MemberVerify))]
+        [HttpPost]
+        public IActionResult MemberInfoEdit(FMemberDto fMemberDto)
+        {
+            var member = _context.Members.FirstOrDefault(m => m.MemberId == fMemberDto.MemberId);
+
+                member.Name = fMemberDto.Name;
+                member.Phone = fMemberDto.Phone;
+                member.Citys = Convert.ToInt32(fMemberDto.Citys);
+                member.Areas = Convert.ToInt32(fMemberDto.Areas);
+                member.Address = fMemberDto.Address;
+            _context.SaveChanges();
+            return PartialView("MemberInfo");
+        }
+        
         public IActionResult MemberOrder()
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             var order = (from m in _context.Members
                          join o in _context.Orders
                          on m.MemberId equals o.MemberId
@@ -100,12 +113,12 @@ namespace prjOniqueWebsite.Controllers
                          }).ToList();
             return PartialView(order);
         }
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult MemberMyKeep()
         {
             return PartialView();
         }
-        [TypeFilter(typeof(MemberVerify))]
+        
         public IActionResult MemberPassword()
         {
             return PartialView();

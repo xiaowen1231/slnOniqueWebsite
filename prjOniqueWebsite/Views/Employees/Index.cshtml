@@ -165,7 +165,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">確認刪除</h5>
+                    <h5 class="modal-title">刪除確認</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="confirmMessage">
@@ -252,14 +252,14 @@
 
                 //true顯示上傳的圖片 false顯示default
                 const imgSrc = hasPhoto ? '@Url.Content("~/images/uploads/Employee/")' + photoPath : 
-                '@Url.Content("~/images/uploads/employee/default.jpg")';
+                '@Url.Content("~/images/uploads/employee/defaults.jpg")';
 
                 return (`
                     <tr>
 
                         <td>
                             <div class="d-flex gap-2 imgbox">
-                               <img src="${imgSrc}" alt="" />
+                                 <img src="${imgSrc}?timestamp=${new Date().getTime()}" alt="" />
                             </div>
                         </td>
                         <td>
@@ -279,7 +279,7 @@
                         </td>
                         <td>
                             <div class="circle-size-25">
-                                <a href="javascript:void(0);" onclick="openDelete(${employeeId})">
+                                        <a href="javascript:void(0);" onclick="openDelete(${employeeId}, '${employeeName}')">
                                     <img src="@Url.Content("~/images/uploads/Employee/delete.png")" alt="">
                                 </a>
                             </div>
@@ -378,12 +378,12 @@
             return `${year}-${month}-${day}`;
         }
 
-        function openDelete(employeeId) {
+        function openDelete(employeeId, employeeName) {
             const confirmDialog = new bootstrap.Modal(document.getElementById("confirmDialog"));
             const confirmMessageElement = document.getElementById("confirmMessage");
             const confirmButton = document.getElementById("confirmButton");
 
-            confirmMessageElement.textContent = `確定要刪除 員工編號${employeeId} 的員工嗎？`;
+            confirmMessageElement.textContent = `確定要刪除 員工姓名：${employeeName} 的員工嗎？`;
 
             confirmButton.onclick = function () {
                 const url = '@Url.Action("Delete", "Employees")' + '?employeeId=' + employeeId;

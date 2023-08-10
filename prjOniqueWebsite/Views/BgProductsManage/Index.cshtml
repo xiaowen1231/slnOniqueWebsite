@@ -90,8 +90,7 @@
                             @Html.DisplayFor(modelItem => item.ProductName)
                         </td>
                         <td id="price">
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
+                            @Math.Floor(item.Price)
                         <td>
                             @Html.DisplayFor(modelItem => item.ProductCategory.CategoryName)
                         </td>

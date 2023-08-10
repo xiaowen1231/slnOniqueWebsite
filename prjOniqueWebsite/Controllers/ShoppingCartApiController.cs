@@ -13,10 +13,12 @@ namespace prjOniqueWebsite.Controllers
     {
         private readonly OniqueContext _context;
         private readonly ProductDao _dao;
-        public ShoppingCartApiController(OniqueContext context)
+        private readonly UserInfoService _userInfoService;
+        public ShoppingCartApiController(OniqueContext context, UserInfoService userInfoService)
         {
             _context = context;
             _dao = new ProductDao(_context);
+            _userInfoService = userInfoService;
         }
 
         public IActionResult UpdateOrderQty(int stockId, int originalQty, int updateQty, int shoppingCartId)
@@ -50,8 +52,7 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult CartItems()
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             var cartList = _dao.CartItems(member);
             return Json(cartList);
         }
@@ -70,8 +71,7 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult GetMemberInfo()
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
 
             OrderConfirmationDto dto = new OrderConfirmationDto();
             dto.Name = member.Name;

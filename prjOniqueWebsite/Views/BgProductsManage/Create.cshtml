@@ -33,7 +33,7 @@
                     <span asp-validation-for="ProductName" class="text-danger fw-bold"></span>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="Price" class="form-control" />                        
+                        <input asp-for="Price" class="form-control" type="number" min="0" step="1" />
                     </div>
                     <span asp-validation-for="Price" class="text-danger fw-bold"></span>
                     <div class="d-flex align-items-center my-3">
@@ -81,6 +81,19 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+       document.addEventListener('DOMContentLoaded', function() {
+        const priceInput = document.querySelector("#Price");
+
+        priceInput.addEventListener('input', function() {
+            const inputValue = priceInput.value.trim();
+            
+            if (!/^[1-9]\d*$/.test(inputValue)) {
+                priceInput.setCustomValidity("請輸入正整數價格值");
+            } else {
+                priceInput.setCustomValidity("");
+            }
+        });
+    });
         const photo = document.querySelector("#inputPhoto");
         photo.addEventListener('change',function(){
             const files = photo.files

@@ -1,10 +1,10 @@
-﻿
+﻿@model prjOniqueWebsite.Models.ViewModels.MemberVM
 @{
     ViewData["Title"] = "Create";
     Layout = @Url.Content("~/Views/Shared/_Layout_Background.cshtml");
 }
 
-<form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post">
+<form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post" enctype="multipart/form-data">
     <div class="m-3 fs-3 fw-bold text-center border-bottom py-4 border-dark-subtle">新增會員</div>
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
