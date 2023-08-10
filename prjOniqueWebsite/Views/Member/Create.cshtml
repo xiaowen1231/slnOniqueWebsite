@@ -22,12 +22,14 @@
                         <div class=" width-90px text-end fw-bold">姓名</div>
                         <div class="mx-2">
                             <input type="text" class="form-control " value="" name="Name" />
+                            @Html.ValidationMessageFor(mem=>mem.Name,"",new{@class = "text-danger"})
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">生日</div>
                         <div class="mx-2">
                             <input type="date" class="form-control" value="" name="DateOfBirth" id="memberDateOfBirth" />
+                            @Html.ValidationMessageFor(mem=>mem.DateOfBirth,"",new{@class = "text-danger"})
                         </div>
                     </div>
                 </div>
@@ -36,7 +38,7 @@
                         <div class=" width-90px text-end fw-bold">性別</div>
                         <div class="mx-3 d-flex">
                                     <div class="form-check ">
-                                        <input class="form-check-input" type="radio" name="Gender" id="genderTrue" value="False">
+                                        <input class="form-check-input" type="radio" name="Gender" id="genderTrue" value="False" checked>
                                         <label class="form-check-label" for="genderTrue">
                                             男
                                         </label>
@@ -53,6 +55,7 @@
                         <div class=" width-90px text-end fw-bold">電話</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" value="" name="Phone" />
+                            @Html.ValidationMessageFor(mem=>mem.Phone,"",new{@class = "text-danger"})
                         </div>
                     </div>
                 </div>
@@ -61,12 +64,14 @@
                         <div class=" width-90px text-end fw-bold">信箱</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" value="" name="Email" />
+                            @Html.ValidationMessageFor(mem=>mem.Email,"",new{@class = "text-danger"})
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">密碼</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" value="" name="Password" />
+                            @Html.ValidationMessageFor(mem=>mem.Password,"",new{@class = "text-danger"})
                         </div>
                     </div>
                 </div>

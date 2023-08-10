@@ -94,8 +94,7 @@ namespace prjOniqueWebsite.Controllers
         
         public IActionResult MemberOrder()
         {
-            string json = HttpContext.Session.GetString("Login");
-            Members member = JsonSerializer.Deserialize<Members>(json);
+            Members member = _userInfoService.GetMemberInfo();
             var order = (from m in _context.Members
                          join o in _context.Orders
                          on m.MemberId equals o.MemberId

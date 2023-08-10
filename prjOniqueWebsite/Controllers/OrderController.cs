@@ -38,6 +38,7 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult Details(int orderId)
         {
             ViewBag.OrderId = orderId;
+            ViewBag.Email = dao.GetEmailByOrderId(orderId);
             return View();
         }
         [HttpPost]
@@ -54,7 +55,7 @@ namespace prjOniqueWebsite.Controllers
             vm.StatusName = _context.OrderStatus.Where(os => os.StatusId == vm.StatusId).Select(vm => vm.StatusName).FirstOrDefault();
 
 
-
+            
 
             if (vm != null)
             {
@@ -90,12 +91,25 @@ namespace prjOniqueWebsite.Controllers
                         _context.SaveChanges();
                     }
                 }
-
+                
                 _context.SaveChanges();
             }
+
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// 寄給會員的order頁面
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        public IActionResult OrderEmailContent(int orderId)
+        {
+            ViewBag.OrderId = orderId;
+            //ViewBag.email=dao.GetEmailByOrderId(orderId);
+            //要登入才能看，且只能看自己的訂單,
+            return View();
+        }
 
 
     }
