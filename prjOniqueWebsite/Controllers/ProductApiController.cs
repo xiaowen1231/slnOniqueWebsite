@@ -6,13 +6,14 @@ using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.Repositories;
 using prjOniqueWebsite.Models.Services;
+using prjOniqueWebsite.Models.ViewModels;
 using System.Collections.Generic;
 using System.Data;
 using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
 {
-    
+
 
     public class ProductApiController : Controller
     {
@@ -59,13 +60,23 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult AddToCart(int stockId, int qty)
         {
-            Members member = _userInfoService.GetMemberInfo();
+            try
+            {
+                Members member = _userInfoService.GetMemberInfo();
 
-            var service = new ProductService(_context);
+                var service = new ProductService(_context);
 
-            var vm = service.AddToCart(stockId, qty, member);
+                var vm = service.AddToCart(stockId, qty, member);
 
-            return Json(vm);
+                return Json(vm);
+            }
+            catch (Exception ex)
+            {
+                var vm = new UpdateShoppingQtyVM();
+                vm.StatusCode = 500;
+                vm.Message = ex.Message;
+                return Json(vm);
+            }
         }
         public IActionResult CartItems()
         {
@@ -84,7 +95,7 @@ namespace prjOniqueWebsite.Controllers
             return Json(cart);
         }
 
-        public IActionResult ProductList(string keyword, string categoryName, string rank,int pageNumber)
+        public IActionResult ProductList(string keyword, string categoryName, string rank, int pageNumber)
         {
             var dtos = dao.SearchProductList(keyword, categoryName, rank);
             var datas = ProductListIndex(dtos, pageNumber);
@@ -199,7 +210,7 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult ShowProductInfo(int id)
         {
-            var dto =  new ProductService(_context).ShowProductInfo(id);
+            var dto = new ProductService(_context).ShowProductInfo(id);
 
             return Json(dto);
         }

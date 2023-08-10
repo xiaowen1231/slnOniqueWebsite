@@ -19,6 +19,8 @@ namespace prjOniqueWebsite.Models.Services
         }
         public UpdateShoppingQtyVM AddToCart(int stockId, int qty, Members? member)
         {
+            if(member == null) throw new Exception("員工無法使用購物車功能");
+
             var cartInDb = _dao.GetCartItems(member.MemberId, qty, stockId);
             if (cartInDb != null)
             {

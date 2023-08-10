@@ -12,6 +12,7 @@ using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
+using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Controllers
@@ -342,7 +343,16 @@ namespace prjOniqueWebsite.Controllers
             {
                 return View(vm);
             }
-            return RedirectToAction("BgDiscountManage");
+            try
+            {
+                new BgProductService(_context,_environment).CreateDiscont(vm);
+                return RedirectToAction("BgDiscountManage");
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("","新增優惠失敗!" + ex.Message);
+                return View(vm);
+            }
         }
         
         public IActionResult BgDiscountManage()

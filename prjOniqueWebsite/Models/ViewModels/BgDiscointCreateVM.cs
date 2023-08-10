@@ -28,7 +28,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         [Required(ErrorMessage = "結束日期不可為空白")]
         public DateTime EndDate { get; set; }
 
-        public string PhotoPath { get; set; }
-        public IFormFile Photo { get; set; }
+        public string? PhotoPath { get; set; }
+        public IFormFile? Photo { get; set; }
     }
 }
