@@ -22,13 +22,16 @@ namespace prjOniqueWebsite.Controllers
             dao = new OrderDao(_context);
             _userInfoService = userInfoService;
         }
+
+        [Authorize(Roles = "一般員工")]
         /// <summary>
         /// orderList的展示頁面
         /// </summary>
         /// <returns></returns>
         public IActionResult Index(string keyword, string sort, int pagenumber, int pagesize)
         {
-            ViewBag.Keyword = keyword;
+
+            ViewBag.Keyword = keyword;/*==null?"":keyword ;*/
             ViewBag.Sort = sort;
             ViewBag.Pagenumber = pagenumber;
             ViewBag.PageSize = pagesize;
@@ -39,7 +42,7 @@ namespace prjOniqueWebsite.Controllers
 
 
 
-
+        [Authorize(Roles = "一般員工")]
         public IActionResult Details(int orderId)
         {
             ViewBag.OrderId = orderId;
@@ -52,16 +55,9 @@ namespace prjOniqueWebsite.Controllers
         {
             var query = _context.Orders.Where(O => O.OrderId == vm.OrderId).FirstOrDefault();
             var orderDetails = _context.OrderDetails.Where(o => o.OrderId == vm.OrderId).ToList();
-
-
-
-
             query.OrderStatusId = vm.StatusId;
 
             vm.StatusName = _context.OrderStatus.Where(os => os.StatusId == vm.StatusId).Select(vm => vm.StatusName).FirstOrDefault();
-
-
-
 
             if (vm != null)
             {
@@ -81,7 +77,7 @@ namespace prjOniqueWebsite.Controllers
                 }
                 else if (vm.StatusName == "未取貨")
                 {
-                    foreach (var item in orderDetails)
+                    foreach (var item in orderDetails)//一張訂單可能有複數商品,單一件商品的資訊要去psd找
                     {
                         var productStockDetail = _context.ProductStockDetails.Where(psd => psd.StockId == item.StockId).FirstOrDefault();
                         productStockDetail.Quantity = productStockDetail.Quantity + item.OrderQuantity;
@@ -97,8 +93,8 @@ namespace prjOniqueWebsite.Controllers
                         _context.SaveChanges();
                     }
                 }
-
                 _context.SaveChanges();
+               
             }
 
             return RedirectToAction("Index");
@@ -111,9 +107,8 @@ namespace prjOniqueWebsite.Controllers
         /// <returns></returns>
         public IActionResult OrderEmailContent(int orderId)
         {
+            //要會員登入才能看，且只能看自己的訂單,
             ViewBag.OrderId = orderId;
-            //ViewBag.email=dao.GetEmailByOrderId(orderId);
-            //要登入才能看，且只能看自己的訂單,
             var Loginmember = _userInfoService.GetMemberInfo().Email;
             var Ordermember = dao.GetEmailByOrderId(orderId);
             if (Loginmember == Ordermember)

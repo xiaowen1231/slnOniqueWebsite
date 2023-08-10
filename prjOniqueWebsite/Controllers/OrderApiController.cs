@@ -288,5 +288,22 @@ namespace prjOniqueWebsite.Controllers
 
             return Content("寄送成功");
         }
+
+        public IActionResult DeleteOrder(int OrderId)
+        {
+            ApiResult result = new ApiResult();
+            try
+            {
+                dao.DeleteOrder(OrderId);
+                result.StatusCode = 200;
+                result.StatusMessage = "刪除訂單成功";
+            }
+            catch (Exception ex)
+            {
+                result.StatusCode = 500;
+                result.StatusMessage = "刪除訂單失敗";
+            }
+            return Json(result);
+        }
     }
 }
