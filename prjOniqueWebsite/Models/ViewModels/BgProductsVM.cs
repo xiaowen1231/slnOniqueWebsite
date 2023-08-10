@@ -7,19 +7,22 @@ namespace prjOniqueWebsite.Models.ViewModels
     public class BgProductsVM
     {
         public int ProductId { get; set; }
+
         [Display(Name = "商品名稱")]
         [Required(ErrorMessage = "商品名稱不可空白")]
         public string ProductName { get; set; }
         public int ProductCategoryId { get; set; }
+
         [Display(Name = "商品價格")]
         [Required(ErrorMessage = "商品價格不可空白")]
-        [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessage = "{0}必須為數字")]
-        [Range(0,9999999999, ErrorMessage = "價格必須為正整數")]
+        [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessage = "{0}必須為正整數")]
         public decimal Price { get; set; }
         public string? Description { get; set; }
+
         [Display(Name = "上架時間")]
         [Required(ErrorMessage = "上架時間不可空白")]
         public DateTime AddedTime { get; set; }
+
         [Display(Name = "下架時間")]
         [Required(ErrorMessage = "下架時間不可空白")]
         public DateTime ShelfTime { get; set; }
