@@ -139,7 +139,8 @@
         </div>
         <div class="p-2 mb-4 text-center">
             <input type="button" value="返回購物車" class="btn btn-outline-dark" style="width: 150px;" />
-            <input type="submit" id="btnSubmit" value="提交訂單" class="btn btn-dark" style="width: 150px;" />
+            <input type="submit" id="btnSubmit" value="提交訂單" class="btn btn-dark" style="width: 150px;"  />
+            <input type="hidden" id="findemail" value="@Model.Email" />
         </div>
     </form>
 </div>
@@ -172,21 +173,21 @@
                 quantumOfOutput += subTotal;
 
                 return (`<tr class="border">
-                            <td class="w-90-h-90">
-                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${product.productName}" class="w-90-h-90 rounded">
-                            </td>
-                            <td>
-                                ${product.productName}
-                            </td>
-                            <td>${productSizes.sizeName}</td>
-                            <td>${productColors.colorName}</td>
-                            <td>${shoppingCart.orderQuantity}</td>
-                            <td>
-                                <div class="price">
-                                    ${subTotal}
-                                </div>
-                            </td>
-                        </tr>`)
+                                    <td class="w-90-h-90">
+                                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${product.productName}" class="w-90-h-90 rounded">
+                                    </td>
+                                    <td>
+                                        ${product.productName}
+                                    </td>
+                                    <td>${productSizes.sizeName}</td>
+                                    <td>${productColors.colorName}</td>
+                                    <td>${shoppingCart.orderQuantity}</td>
+                                    <td>
+                                        <div class="price">
+                                            ${subTotal}
+                                        </div>
+                                    </td>
+                                </tr>`)
             })
             tableCartList.innerHTML = cartList.join("");
             $('#divProductsSubTotal').text(quantumOfOutput);
@@ -329,8 +330,23 @@
                     body: formData,
                     method: 'POST'
                 });
-
                 const datas = await response.json();
+
+                let email = $("#findemail").val()
+                let id=datas.orderId
+                console.log(email)
+                console.log(id)
+
+                $.ajax({
+                    method: "POST",
+                    url: `@Url.Content("~/orderapi/SendMail")`,
+                    data: {
+                        OrderId: id,
+                        Email: email,
+                    }
+                });
+
+
                 if (datas.result.statusCode == 200) {
                     Swal.fire({
                         title: datas.result.statusMessage,

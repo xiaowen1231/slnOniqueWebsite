@@ -286,7 +286,7 @@ namespace prjOniqueWebsite.Controllers
             mailMessage.To.Add(Email);
             smtpClient.Send(mailMessage);
 
-            return Content("寄送成功");
+            return Content("");
         }
 
         public IActionResult DeleteOrder(int OrderId)
