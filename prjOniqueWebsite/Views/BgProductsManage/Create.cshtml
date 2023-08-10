@@ -1,4 +1,4 @@
-﻿@model prjOniqueWebsite.Models.EFModels.Products
+﻿@model prjOniqueWebsite.Models.ViewModels.BgProductsVM
 
 @{
     ViewData["Title"] = "Create";
@@ -30,12 +30,12 @@
                         <label asp-for="ProductName" class="width-120px">商品名稱:</label>
                         <input type="text" asp-for="ProductName" class="form-control" />                        
                     </div>
-                    <span asp-validation-for="ProductName" class="text-danger fw-bold"></span>
+                    <div class="text-end"><span asp-validation-for="ProductName" class="text-danger fw-bold"></span></div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
                         <input asp-for="Price" class="form-control" type="number" min="0" step="1" />
                     </div>
-                    <span asp-validation-for="Price" class="text-danger fw-bold"></span>
+                    <div class="text-end"><span asp-validation-for="Price" class="text-danger fw-bold"></span></div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ProductCategoryId" class="width-120px">商品分類:</label>
                         <select asp-for="ProductCategoryId" class="form-control" asp-items="ViewBag.ProductCategoryId"></select>
@@ -48,16 +48,15 @@
                         <label asp-for="AddedTime" class="width-120px">上架時間:</label>
                         <input asp-for="AddedTime" class="form-control" />                        
                     </div>
-                    <span asp-validation-for="AddedTime" class="text-danger fw-bold"></span>
+                    <div class="text-end"><span asp-validation-for="AddedTime" class="text-danger fw-bold"></span></div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
                         <input asp-for="ShelfTime" class="form-control" />                        
                     </div>
-                    <span asp-validation-for="ShelfTime" class="text-danger fw-bold"></span>
+                    <div class="text-end"><span asp-validation-for="ShelfTime" class="text-danger fw-bold"></span></div>
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
                         <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-5 container">

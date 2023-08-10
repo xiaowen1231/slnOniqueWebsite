@@ -1,5 +1,5 @@
-﻿@model IEnumerable<prjOniqueWebsite.Models.EFModels.Products>
-
+﻿@*@model IEnumerable<prjOniqueWebsite.Models.EFModels.Products>*@
+@model prjOniqueWebsite.Models.ViewModels.BgProductsPagingVM
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
@@ -79,7 +79,7 @@
             </thead>
             <tbody id="ProductList">
 
-                @foreach (var item in Model)
+                @foreach (var item in Model.Products)
                 {
                     string path = Url.Content("~/images/uploads/products/") + item.PhotoPath;
                     <tr>
@@ -107,7 +107,13 @@
     </div>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center" id="pagination">
-            <li class="page-item">
+            @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+            {
+                <li class="page-item @(i==Model.PagingInfo.CurrenPage ? "active":"")">
+                    <a class="page-link" style="color:black;" href="?pageNumber=@i">@i</a>
+                </li>
+            }
+            @*<li class="page-item">
                 <a class="page-link" style="color: black;" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -119,7 +125,7 @@
                 <a class="page-link" href="#" style="color: black;" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
-            </li>
+            </li>*@
         </ul>
     </nav>
 

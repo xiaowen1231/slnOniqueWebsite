@@ -141,14 +141,10 @@
         <div class="d-flex align-items-center gap-2">
             <div class="width-70px">每頁顯示</div>
             <div>
-                <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">
-                  
-                        
+                <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">                  
                             <option value="10">10筆資料</option>
                             <option value="20">20筆資料</option>
-                            <option value="30">30筆資料</option>
-                      
-                    
+                            <option value="30">30筆資料</option>                    
                 </select>
             </div>
 
@@ -156,15 +152,15 @@
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數" id="selectOrder">
                     @{
-                        if (sort == "OrderDateDescending")
+                        if (sort == "OrderDateAscending")
                         {
-                            <option value="OrderDateDescending" selected>下單時間:晚至早</option>
-                            <option value="OrderDateAscending">下單時間:早至晚</option>
+                            <option value="OrderDateDescending">新訂單>>舊訂單</option>
+                            <option value="OrderDateAscending" selected>舊訂單>>新訂單</option>
                         }
                         else
                         {
-                            <option value="OrderDateDescending">下單時間:晚至早</option>
-                            <option value="OrderDateAscending" selected>下單時間:早至晚</option>
+                            <option value="OrderDateDescending" selected>新訂單>>舊訂單</option>
+                            <option value="OrderDateAscending">舊訂單>>新訂單</option>
                         }
                     }
                 </select>
@@ -388,7 +384,7 @@
 
         $("#selectOrder").on('change', function () {
             sort = $(this).val();
-            let keyword = $("#searchKeyword").val()
+            keyword = $("#searchKeyword").val()
 
             window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
         })

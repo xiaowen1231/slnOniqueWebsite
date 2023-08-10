@@ -24,72 +24,60 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult Create()
         {
-            //MemberVM vm = (from m in _context.Members
-            //               join c in _context.Citys
-            //               on m.Citys equals c.CityId
-            //               join a in _context.Areas
-            //               on m.Areas equals a.AreaId
-            //               join ml in _context.MemberLevel
-            //               on m.MemberLevel equals ml.MemberLevelId
-            //               select new MemberVM
-            //               {
-            //                   MemberLevel = ml.MemberLevelName,
-            //                   Citys = c.CityName,
-            //                   Areas = a.AreaName
-            //               }).FirstOrDefault();
-            //ViewBag.memberlevel = vm.MemberLevel;
-            //ViewBag.city = vm.Citys;
-            //ViewBag.area = vm.Areas;
             return View();
         }
         [HttpPost]
         public IActionResult Create(MemberVM vm)
         {
-            var mem = new Members()
+            if (ModelState.IsValid)
             {
-                //string fileName = $"MemberId_{member.MemberId}.jpg";
-                Name = vm.Name,
-                Password = vm.Password,
-                Email = vm.Email,
-                Phone = vm.Phone,
-                Gender = Convert.ToBoolean(vm.Gender),
-                Citys = Convert.ToInt32(vm.Citys),
-                Areas = Convert.ToInt32(vm.Areas),
-                Address = vm.Address,
-                MemberLevel = Convert.ToInt32(vm.MemberLevel),
-                RegisterDate = DateTime.Now,
-                DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
-            };
-            
-           
-            _context.Members.Add(mem); 
-            _context.SaveChanges();
-            if (vm.Photo != null)
-            {
-                string fileName = $"EmployeeId_{mem.MemberId}.jpg";
-                mem.PhotoPath = fileName;
-                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
-                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                var member = new Members()
                 {
-                    vm.Photo.CopyTo(fileStream);
-                }
-                _context.Update(mem);
+                    Name = vm.Name,
+                    Password = vm.Password,
+                    Email = vm.Email,
+                    Phone = vm.Phone,
+                    Gender = Convert.ToBoolean(vm.Gender),
+                    Citys = Convert.ToInt32(vm.Citys),
+                    Areas = Convert.ToInt32(vm.Areas),
+                    Address = vm.Address,
+                    MemberLevel = Convert.ToInt32(vm.MemberLevel),
+                    RegisterDate = DateTime.Now,
+                    DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
+                };
+            
+                _context.Members.Add(member); 
                 _context.SaveChanges();
+                if (vm.Photo != null)
+                {
+                    string fileName = $"MemberId_{member.MemberId}.jpg";
+                    member.PhotoPath = fileName;
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        vm.Photo.CopyTo(fileStream);
+                    }
+                   
+                }
+                else
+                {
+                    // 如果沒有上傳新照片，使用預設的照片路徑和檔名
+                    string defaultFileName = $"MemberId_{member.MemberId}.jpg";
+                    member.PhotoPath = defaultFileName;
+
+                    // 取得預設照片的完整路徑
+                    string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
+
+                    // 複製預設照片到指定路徑
+                    string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
+                    System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
+                  
+                }
+                _context.Update(member);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            //else
-            //{
-            //    mem.PhotoPath = "default.jpg";
-            //    string fileName = $"EmployeeId_{mem.MemberId}.jpg";
-            //    mem.PhotoPath = fileName;
-            //    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
-            //    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-            //    {
-            //        vm.Photo.CopyTo(fileStream);
-            //    }
-            //    _context.Update(mem);
-            //    _context.SaveChanges();
-            //}
-            return RedirectToAction("Index");
+           return View(vm);
         }
 
         public IActionResult Edit(int id)
