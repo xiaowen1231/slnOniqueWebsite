@@ -1,5 +1,4 @@
 ﻿@model prjOniqueWebsite.Models.EFModels.Products
-
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
@@ -54,12 +53,12 @@
                     </div>
                     <div class="align-items-center my-3 d-flex">
                         <label asp-for="AddedTime" class="width-120px">上架時間:</label>
-                        <input asp-for="AddedTime" class="form-control" />
+                        <input asp-for="AddedTime" class="form-control"  type="date" asp-format="{0:yyyy-MM-dd}" />
                         <span asp-validation-for="AddedTime" class="text-danger"></span>
                     </div>
                     <div class="align-items-center my-3 d-flex">
                         <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
-                        <input asp-for="ShelfTime" class="form-control" />
+                        <input asp-for="ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
                         <span asp-validation-for="ShelfTime" class="text-danger"></span>
                     </div>
                     <div class="align-items-center my-3 d-flex">
