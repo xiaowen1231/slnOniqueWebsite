@@ -116,11 +116,14 @@ namespace prjOniqueWebsite.Controllers
         
         public IActionResult MemberMyKeep()
         {
+            Members member = _userInfoService.GetMemberInfo();
             return PartialView();
         }
         
         public IActionResult MemberPassword()
         {
+            Members member = _userInfoService.GetMemberInfo();
+
             return PartialView();
         }
     }
