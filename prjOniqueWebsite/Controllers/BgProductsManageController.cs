@@ -54,8 +54,7 @@ namespace prjOniqueWebsite.Controllers
                     TotalItems = totalCount,
                     TotalPages = totalPages
                 }
-            };
-           
+            };           
             return View(viewModel);
         }       
 
@@ -92,6 +91,13 @@ namespace prjOniqueWebsite.Controllers
                         photo.CopyTo(fileStream);
                     }
                 }
+                bool productNameCheck = _context.Products.Any(p => p.ProductName == products.ProductName);
+                if (productNameCheck)
+                {
+                    ModelState.AddModelError("ProductName", "已有相同的商品名稱存在，請確認後再試一次!");
+                    return View(vm);
+                }
+
                 _context.Add(products);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
