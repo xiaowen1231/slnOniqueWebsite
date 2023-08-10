@@ -4,7 +4,6 @@ namespace prjOniqueWebsite.Models.ViewModels
 {
     public class MemberVM
     {
-        //[Required]
         public int MemberId { get; set; }
         public string? PhotoPath { get; set; }
         public IFormFile? Photo { get; set; }
@@ -29,7 +28,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string Areas { get; set; }
         public string? Address { get; set; }
         public string MemberLevel { get; set; }
-        public string RegisterDate { get; set; }
+        public string? RegisterDate { get; set; }
         [Display(Name ="生日")]
         [Required(ErrorMessage ="{0}是必填欄位!")]
         [DataType(DataType.Date)]

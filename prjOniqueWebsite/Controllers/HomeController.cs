@@ -159,49 +159,38 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Register()
         {
-            //MemberVM vm = (from m in _context.Members
-            //               join c in _context.Citys
-            //               on m.Citys equals c.CityId
-            //               join a in _context.Areas
-            //               on m.Areas equals a.AreaId
-            //               join ml in _context.MemberLevel
-            //               on m.MemberLevel equals ml.MemberLevelId
-            //               select new MemberVM
-            //               {
-            //                   MemberLevel = ml.MemberLevelName,
-            //                   Citys = c.CityName,
-            //                   Areas = a.AreaName
-            //               }).FirstOrDefault();
-            //ViewBag.memberlevel = vm.MemberLevel;
-            //ViewBag.city = vm.Citys;
-            //ViewBag.area = vm.Areas;
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register(FMemberVM vm)
+        public IActionResult Register(FMemberVM vm,IFormFile Photo)
         {
-            var mem = new Members()
+            if(ModelState.IsValid)
             {
-                PhotoPath = vm.PhotoPath,
-                Name = vm.Name,
-                Password = vm.Password,
-                Email = vm.Email,
-                Phone = vm.Phone,
-                Gender = Convert.ToBoolean(vm.Gender),
-                Citys = Convert.ToInt32(vm.Citys),
-                Areas = Convert.ToInt32(vm.Areas),
-                Address = vm.Address,
-                MemberLevel = 1,
-                RegisterDate = DateTime.Now,
-                DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
-            };
+
+                var mem = new Members()
+                {
+                    PhotoPath = vm.PhotoPath,
+                    Name = vm.Name,
+                    Password = vm.Password,
+                    Email = vm.Email,
+                    Phone = vm.Phone,
+                    Gender = Convert.ToBoolean(vm.Gender),
+                    Citys = Convert.ToInt32(vm.Citys),
+                    Areas = Convert.ToInt32(vm.Areas),
+                    Address = vm.Address,
+                    MemberLevel = 1,
+                    RegisterDate = DateTime.Now,
+                    DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
+                };
 
 
-            _context.Members.Add(mem);
-            _context.SaveChanges();
+                _context.Members.Add(mem);
+                _context.SaveChanges();
             
-            return RedirectToAction("Login");
+                return RedirectToAction("Login");
+            }
+            return View(vm);
         }
     }
 
