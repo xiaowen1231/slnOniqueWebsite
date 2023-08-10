@@ -1,85 +1,89 @@
-﻿@model prjOniqueWebsite.Models.EFModels.Discounts
+﻿@model prjOniqueWebsite.Models.ViewModels.BgDiscointCreateVM
 
 @{
-    ViewData["Title"] = "BgDiscountCreate";
+    ViewData["Title"] = "新增優惠";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
-<form asp-action="BgDiscountCreate" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="container my-2 p-2 border border-secondary rounded-4 shadow justify-content-center">
-        <div class="row text-center border-bottom mx-2 p-2">
-            <div class="fs-3 fw-bold">新增優惠活動</div>
-        </div>
-        <div class="p-2">
-            <div class="col-7 container text-center rounded-4">
-                <img asp-for="PhotoPath" src="@Url.Content("~/images/DiscountPhoto/優惠活動default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto" />
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <div class="fw-bold fs-4 border-bottom text-center p-3">新增優惠</div>
+    </div>
+    <div class="border m-2 p-2 rounded shadow width-1000px mx-auto d-flex justify-content-around">
+        <div>
+            <div class="border rounded my-4 mx-auto btnUpload cursor-pointer" style="width:400px; height:400px">
+                <img src="@Url.Content("~/images/DiscountPhoto/gallery.png")" />
             </div>
-            <div class="container col-7 p-2 border rounded-4 bg-light my-3">
-                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
-                    <label asp-for="PhotoPath" class="width-120px">優惠照片:</label>
-                    <input type="file" asp-for="PhotoPath" class="form-control width-120px" id="inputPhoto" name="photo" />
-                    <span asp-validation-for="PhotoPath" class="text-danger"></span>
+            <div class="width-400 mx-auto">
+                <input type="file" class="form-control" style="visibility:hidden" id="inputUpload" name="Photo"/>
+            </div>
+        </div>
+        <div class="mt-5">
+            <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
+                <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">活動名稱</div>
+                <div class="width-300px">
+                    <input asp-for="@Model.Title" class="form-control" name="Title" />
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                 </div>
-                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
-                    <label asp-for="Title" class="width-120px">活動名稱:</label>
-                    <input asp-for="Title" class="form-control" />                    
-                </div>                
-                <span asp-validation-for="Title" class="text-danger" style="margin-left:75%"></span>
-                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
-                    <label asp-for="DiscountMethod" class="width-120px">折扣方式:</label>
-                    <input asp-for="DiscountMethod" class="form-control" />                    
+            </div>
+            <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
+                <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">折扣方式</div>
+                <div class="width-300px">
+                    <input asp-for="@Model.DiscountMethod" class="form-control"/>
+                    @Html.ValidationMessageFor(model => model.DiscountMethod, "", new { @class = "text-danger" })
                 </div>
-                <span asp-validation-for="DiscountMethod" class="text-danger" style="margin-left:75%"></span>
-                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
-                    <label asp-for="BeginDate" class="width-120px">生效日期:</label>
-                    <input asp-for="BeginDate" class="form-control" />                    
+            </div>
+            <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
+                <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">開始時間</div>
+                <div class="width-300px">
+                    <input asp-for="BeginDate" class="form-control" name="BeginDate" />
+                    @Html.ValidationMessageFor(model => model.BeginDate, "", new { @class = "text-danger" })
                 </div>
-                <span asp-validation-for="BeginDate" class="text-danger" style="margin-left:75%"></span>
-                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
-                    <label asp-for="EndDate" class="width-120px">結束日期:</label>
-                    <input asp-for="EndDate" class="form-control" />                    
+            </div>            
+            <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
+                <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">結束時間</div>
+                <div class="width-300px">
+                    <input asp-for="@Model.EndDate" class="form-control" name="EndDate" />
+                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
                 </div>
-                <span asp-validation-for="EndDate" class="text-danger" style="margin-left:75%"></span>
-                <div class="my-3 d-flex align-items-center justify-content-center mx-4">
-                    <label asp-for="Description" class="width-120px">活動說明:</label>
-                    <input asp-for="Description" class="form-control" />                    
-                </div>                
-                <span asp-validation-for="Description" class="text-danger" style="margin-left:75%"></span>
-                <div class="container text-center my-4">
-                    <a class="btn btn-outline-dark" asp-action="BgDiscountManage">取消編輯</a>
-                    <input type="submit" value="新增優惠" class="btn btn-dark border fw-bold mx-2" />
+            </div>
+            <div class="d-flex gap-3 justify-content-center my-2">
+                <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">活動內容</div>
+                <div class="width-300px">
+                    <textarea asp-for="@Model.Description" class="form-control" name="Description" /></textarea>
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
     </div>
+    <div class="d-flex justify-content-center gap-3">
+        <input type="submit" value="新增" class="btn btn-dark" />
+    </div>
 </form>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        const photo = document.querySelector("#inputPhoto");
-        photo.addEventListener('change', function () {
-            const files = photo.files
-            if (files.length == 0) {
-                const defaultPath = "@Url.Content("~/images/DiscountPhoto/優惠活動default.jpg")"
-                $("#imgProductPhoto").attr("src", defaultPath)
-            }
-            else {
-                const url = URL.createObjectURL(files[0])
-                $("#imgProductPhoto").attr("src", url)
-            }
+        $('.btnUpload').on('click', function () {
+            $('#inputUpload').trigger('click');
         })
+        //const photo = document.querySelector("#inputPhoto");
+        //photo.addEventListener('change', function () {
+        //    const files = photo.files
+        //    if (files.length == 0) {
+        //        const defaultPath = "@Url.Content("~/images/DiscountPhoto/優惠活動default.jpg")"
+        //        $("#imgProductPhoto").attr("src", defaultPath)
+        //    }
+        //    else {
+        //        const url = URL.createObjectURL(files[0])
+        //        $("#imgProductPhoto").attr("src", url)
+        //    }
+        //})
     </script>
 }
 @section Styles{
     <style>
-        #imgProductPhoto {
-            width: 40%;
-            height: 40%;
-            object-fit: cover;
-            margin: auto;
-        }
+
     </style>
 }

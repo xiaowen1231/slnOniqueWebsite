@@ -12,6 +12,7 @@ using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
+using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Controllers
@@ -54,8 +55,7 @@ namespace prjOniqueWebsite.Controllers
                     TotalItems = totalCount,
                     TotalPages = totalPages
                 }
-            };
-           
+            };           
             return View(viewModel);
         }       
 
@@ -92,6 +92,13 @@ namespace prjOniqueWebsite.Controllers
                         photo.CopyTo(fileStream);
                     }
                 }
+                bool productNameCheck = _context.Products.Any(p => p.ProductName == products.ProductName);
+                if (productNameCheck)
+                {
+                    ModelState.AddModelError("ProductName", "已有相同的商品名稱存在，請確認後再試一次!");
+                    return View(vm);
+                }
+
                 _context.Add(products);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
@@ -336,20 +343,22 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         [HttpPost]
-        public  IActionResult BgDiscountCreate(Discounts model)
+        public  IActionResult BgDiscountCreate(BgDiscointCreateVM vm)
         {
-            var BgDiscount = new Discounts()
+            if (ModelState.IsValid == false)
             {
-                Id = model.Id,
-                Title = model.Title,
-                DiscountMethod = model.DiscountMethod,
-                BeginDate = model.BeginDate,
-                EndDate = model.EndDate,
-                Description = model.Description,
-            };
-            _context.Discounts.Add(BgDiscount);
-            _context.SaveChanges();
-            return RedirectToAction("BgDiscountManage");
+                return View(vm);
+            }
+            try
+            {
+                new BgProductService(_context,_environment).CreateDiscont(vm);
+                return RedirectToAction("BgDiscountManage");
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("","新增優惠失敗!" + ex.Message);
+                return View(vm);
+            }
         }
         
         public IActionResult BgDiscountManage()
