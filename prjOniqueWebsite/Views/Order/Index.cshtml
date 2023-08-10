@@ -384,7 +384,7 @@
 
         $("#selectOrder").on('change', function () {
             sort = $(this).val();
-            let keyword = $("#searchKeyword").val()
+            keyword = $("#searchKeyword").val()
 
             window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
         })
