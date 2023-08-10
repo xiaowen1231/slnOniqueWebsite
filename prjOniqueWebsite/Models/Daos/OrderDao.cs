@@ -171,5 +171,18 @@ namespace prjOniqueWebsite.Models.Daos
                          select o).Count();
             return count;
         }
+        public string GetEmailByOrderId(int orderId)
+        {
+            var query = from o in _context.Orders
+                        join m in _context.Members
+                        on o.MemberId equals m.MemberId
+                        where o.OrderId == orderId
+                        select m.Email;
+            string email = query.First().ToString();
+
+            return email;
+        }
+
+
     }
 }
