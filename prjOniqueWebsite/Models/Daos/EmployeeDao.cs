@@ -1,15 +1,18 @@
 ﻿using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
+using System;
 
 namespace prjOniqueWebsite.Models.Daos
 {
     public class EmployeeDao
     {
-        private readonly OniqueContext _context; 
+        private readonly OniqueContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public EmployeeDao(OniqueContext context)
+        public EmployeeDao(OniqueContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public EmployeeVM GetEmployeeById(int id)
@@ -41,19 +44,19 @@ namespace prjOniqueWebsite.Models.Daos
             return employee;
         }
 
-        public void UpdateEmployee(EmployeeVM employee)
+        public void UpdateEmployee(EmployeeVM vm)
         {
-            var Employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == employee.EmployeeId);
+            var Employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
 
             if (Employee != null)
             {
-                Employee.EmployeeName = employee.EmployeeName;
-                Employee.Password = employee.Password;
-                Employee.Phone = employee.Phone;
-                Employee.Citys = Convert.ToInt32(employee.Citys);
-                Employee.Areas = Convert.ToInt32(employee.Areas);
-                Employee.Address = employee.Address;
-                Employee.Position = Convert.ToInt32(employee.EmployeeLevel);
+                Employee.EmployeeName = vm.EmployeeName;
+                Employee.Password = vm.Password;
+                Employee.Phone = vm.Phone;
+                Employee.Citys = Convert.ToInt32(vm.Citys);
+                Employee.Areas = Convert.ToInt32(vm.Areas);
+                Employee.Address = vm.Address;
+                Employee.Position = Convert.ToInt32(vm.EmployeeLevel);
 
                 _context.SaveChanges();
             }
@@ -70,6 +73,40 @@ namespace prjOniqueWebsite.Models.Daos
             }
         }
 
+        public void CreatePhoto(Employees employee, EmployeeVM vm) 
+        {
+            if (vm.Photo != null)
+            {
+                string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
+                employee.PhotoPath = fileName;
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/employee", fileName);
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
 
+                _context.Update(employee);
+                _context.SaveChanges();
+            }
+        }
+
+        public void CreateEmployee(EmployeeVM vm) 
+        {
+            var employee = new Employees();
+            employee.EmployeeId = vm.EmployeeId;
+            employee.EmployeeName = vm.EmployeeName;
+            employee.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
+            employee.Gender = vm.Gender == "男" ? true : false;
+            employee.Position = Convert.ToInt32(vm.EmployeeLevel);
+            employee.Phone = vm.Phone;
+            employee.Email = vm.Email;
+            employee.Password = vm.Password;
+            employee.RegisterDate = Convert.ToDateTime(vm.RegisterDate);
+            employee.Citys = Convert.ToInt32(vm.Citys);
+            employee.Areas = Convert.ToInt32(vm.Areas);
+            employee.Address = vm.Address;
+            _context.Add(employee);
+            _context.SaveChanges();
+        }
     }
 }
