@@ -7,18 +7,26 @@ using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Data;
+using prjOniqueWebsite.Models.Infra;
 using static prjOniqueWebsite.Controllers.ProductApiController;
+using System.Security.Policy;
+using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
+using System.Net;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace prjOniqueWebsite.Controllers
 {
     public class OrderApiController : Controller
     {
+        private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly OniqueContext _context;
         OrderDao dao = null;
-        public OrderApiController(OniqueContext context)
+        public OrderApiController(OniqueContext context, IUrlHelperFactory urlHelperFactory)
         {
             _context = context;
             dao = new OrderDao(_context);
+            _urlHelperFactory = urlHelperFactory;
         }
         public IActionResult Index()
         {
@@ -250,6 +258,35 @@ namespace prjOniqueWebsite.Controllers
 
 
             return Json(data);
+        }
+        [HttpPost]
+        public IActionResult SendMail(int OrderId ,string Email)
+        {
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential("msit147onique@gmail.com", "piukwngszjdyzmov"),
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network
+            };
+
+
+            var urlHelper = _urlHelperFactory.GetUrlHelper(ControllerContext);
+
+
+            string orderDetailsUrl = urlHelper.Action("OrderEmailContent", "Order", new { OrderId }, HttpContext.Request.Scheme);
+
+            MailMessage mailMessage = new MailMessage
+            {
+                From = new MailAddress("msit147onique@gmail.com"),
+                Subject = "訂單內容",
+                Body = $"您的訂單處理中：<br/>{orderDetailsUrl}",
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(Email);
+            smtpClient.Send(mailMessage);
+
+            return Content("寄送成功");
         }
     }
 }
