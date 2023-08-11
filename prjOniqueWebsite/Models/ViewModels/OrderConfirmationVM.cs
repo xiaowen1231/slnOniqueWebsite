@@ -14,5 +14,6 @@ namespace prjOniqueWebsite.Models.ViewModels
         public int Area { get; set; }
         public string Address { get; set; }
         public string Remark { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

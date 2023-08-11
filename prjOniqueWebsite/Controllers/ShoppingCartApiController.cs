@@ -107,7 +107,8 @@ namespace prjOniqueWebsite.Controllers
                     PaymentMethodId = vm.PaymentMethodId,
                     Recipient = vm.Recipient,
                     Remark = vm.Remark,
-                    RecipientPhone = vm.RecipientPhone
+                    RecipientPhone = vm.RecipientPhone,
+                    TotalPrice = vm.TotalPrice,
                 };
                 var orderDetail = _dao.CartItems(member);
 
