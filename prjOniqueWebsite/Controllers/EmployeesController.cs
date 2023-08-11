@@ -51,6 +51,12 @@ namespace prjOniqueWebsite.Controllers
                     return View(vm);
                 }
 
+                if(vm.Photo.Length != 10) 
+                {
+                    ModelState.AddModelError("Email", "電話號碼為10位數字!");
+                    return View(vm);
+                }
+
                 if (vm.Gender != "男" && vm.Gender != "女")
                 {
                     ModelState.AddModelError("Gender", "請選擇性別");
@@ -62,7 +68,6 @@ namespace prjOniqueWebsite.Controllers
                     ModelState.AddModelError("Citys", "請選擇居住城市");
                     return View(vm);
                 }
-                //employee.Citys = parsedCitys;
 
                 if (Convert.ToDateTime(vm.DateOfBirth) >= DateTime.Today)
                 {
@@ -97,48 +102,49 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Edit(EmployeeVM vm)
         {
-            //var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
+            var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
 
-            var employee = dao.GetEmployeeById(vm.EmployeeId);
+            //var employee = dao.GetEmployeeById(vm.EmployeeId);
 
-            if (employee != null)
-            {
-                if (vm.Photo != null)
-                {
-                    string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
-                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
+            //if (employee != null)
+            //{
+            //    if (vm.Photo != null)
+            //    {
+            //        string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
+            //        string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
 
-                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                    {
-                        vm.Photo.CopyTo(fileStream);
+            //        using (var fileStream = new FileStream(photoPath, FileMode.Create))
+            //        {
+            //            vm.Photo.CopyTo(fileStream);
 
-                    }
-                    employee.PhotoPath = fileName;
-                }
-                employee.EmployeeName = vm.EmployeeName;
-                employee.Password = vm.Password;
-                employee.Phone = vm.Phone;
-                employee.Citys = vm.Citys;
-                employee.Areas = vm.Areas;
-                employee.Address = vm.Address;
-                employee.EmployeeLevel = vm.EmployeeLevel;
-            }
+            //        }
+            //        employee.PhotoPath = fileName;
+            //    }
+            //    employee.EmployeeName = vm.EmployeeName;
+            //    employee.Password = vm.Password;
+            //    employee.Phone = vm.Phone;
+            //    employee.Citys = Convert.ToInt32(vm.Citys);
+            //    employee.Areas = Convert.ToInt32(vm.Areas);
+            //    employee.Address = vm.Address;
+            //    employee.Position = Convert.ToInt32(vm.EmployeeLevel);
+            //}
 
-            _context.SaveChanges();
-            //dao.EditEmployee(employee);
+            //_context.SaveChanges();
+            dao.EditEmployee(employee, vm);
 
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(EmployeeVM vm)
         {
-            var employee = dao.GetEmployeeById(vm.EmployeeId);
+            var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
 
             if (employee != null) 
             {
+                //_context.Remove(employee);
+                //_context.SaveChanges();
                 dao.DeleteEmployee(employee);
                 return RedirectToAction("Index");
-
             }
             return View();
         }
