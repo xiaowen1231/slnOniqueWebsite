@@ -124,7 +124,41 @@ namespace prjOniqueWebsite.Models.Daos
                 RegisterDate = DateTime.Now,
                 DateOfBirth = Convert.ToDateTime(vm.DateOfBirth)
             };
+            _context.Members.Add(mem);
+            _context.SaveChanges();
+            if (vm.Photo != null)
+            {
+                string fileName = $"MemberId_{mem.MemberId}.jpg";
+                mem.PhotoPath = fileName;
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
+            }
+            else
+            {
+                // 如果沒有上傳新照片，使用預設的照片路徑和檔名
+                string defaultFileName = $"MemberId_{mem.MemberId}.jpg";
+                mem.PhotoPath = defaultFileName;
+                // 取得預設照片的完整路徑
+                string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
+                // 複製預設照片到指定路徑
+                string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
+                System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
+            }
+            _context.Update(mem);
+            _context.SaveChanges();
         }  
+        public Members GetMemberByEmail(string email)
+        {
+            var memInDb = _context.Members.FirstOrDefault(m => m.Email == email);
+            if(memInDb == null)
+            {
+                return null;
+            }
+            return memInDb;
+        }
 
         public List<MemberOrderDto> GetMemberOrders(int MemberId)
         {
