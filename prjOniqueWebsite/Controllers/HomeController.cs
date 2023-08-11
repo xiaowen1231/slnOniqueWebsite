@@ -8,6 +8,7 @@ using prjOniqueWebsite.Models;
 using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
+using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
 using System;
 using System.Data.SqlTypes;
@@ -24,7 +25,8 @@ namespace prjOniqueWebsite.Controllers
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
         private readonly IWebHostEnvironment _environment;
-        MemberDao _dao = null;
+        MemberDao _dao;
+        MemberService _memberService;
 
         public HomeController(OniqueContext context, ILogger<HomeController> logger, UserInfoService userInfoService, IWebHostEnvironment environment)
         {
@@ -33,6 +35,7 @@ namespace prjOniqueWebsite.Controllers
             _userInfoService = userInfoService;
             _environment = environment;
             _dao = new MemberDao(_context, _environment);
+            _memberService = new MemberService(_context, _environment);
         }
 
 
@@ -50,7 +53,7 @@ namespace prjOniqueWebsite.Controllers
                 { "經理",()=>RedirectToAction("BackgroundIndex")}
             };
 
-            foreach(var role in roleActions.Keys)
+            foreach (var role in roleActions.Keys)
             {
                 if (HttpContext.User.IsInRole(role))
                 {
@@ -62,7 +65,7 @@ namespace prjOniqueWebsite.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginVM vm,string? returnUrl)
+        public IActionResult Login(LoginVM vm, string? returnUrl)
         {
             //VM表單驗證
             if (ModelState.IsValid == false)
@@ -93,9 +96,9 @@ namespace prjOniqueWebsite.Controllers
                     new Claim(ClaimTypes.Role,"Member")
                 };
 
-                ClaimsIdentity identity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
-                
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,new ClaimsPrincipal(identity));
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
                 TempData["AlertLogin"] = member.Name;
             }
@@ -107,8 +110,8 @@ namespace prjOniqueWebsite.Controllers
                     new Claim(ClaimTypes.Name,employee.EmployeeId.ToString()),
                 };
 
-                string EmployeeLevel = _context.Employees.Where(e=>e.EmployeeId==employee.EmployeeId)
-                    .Select(e=>e.PositionNavigation.EmployeeLevelName)
+                string EmployeeLevel = _context.Employees.Where(e => e.EmployeeId == employee.EmployeeId)
+                    .Select(e => e.PositionNavigation.EmployeeLevelName)
                     .FirstOrDefault();
 
                 claims.Add(new Claim(ClaimTypes.Role, EmployeeLevel));
@@ -152,7 +155,7 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
 
-        [Authorize(Roles ="一般員工,經理")]
+        [Authorize(Roles = "一般員工,經理")]
         public IActionResult BackgroundIndex()
         {
             return View();
@@ -172,34 +175,22 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Register(FMemberVM vm)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
-                
-                bool isPhoneUsed = _context.Members.Any(e => e.Phone == vm.Phone);
-                bool isEmailUsed = _context.Members.Any(e => e.Email == vm.Email);
-                if(vm.Password != vm.ComfirmPassword)
-                {
-                    ModelState.AddModelError("ComfirmPassword", "密碼不一致");
-                    return View(vm);
-                }
-                    
-                if (isPhoneUsed)
-                {
-                    ModelState.AddModelError("Phone", "手機號碼已被使用");
-                    return View(vm);
-                }
+                return View(vm);
 
-                if (isEmailUsed)
-                {
-                    ModelState.AddModelError("Email", "信箱已被使用");
-                    return View(vm);
-                }
-                //todo日期判斷
-
-                _dao.Register(vm);
-                return RedirectToAction("Index");
             }
-            return View(vm);
+            try
+            {
+                _memberService.MemberRegister(vm);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("","新增失敗，"+ex.Message);
+                return View(vm);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 

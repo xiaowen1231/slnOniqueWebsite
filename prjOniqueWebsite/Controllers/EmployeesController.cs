@@ -5,6 +5,7 @@ using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Data.SqlTypes;
 using System.Diagnostics.Metrics;
+using System.Net;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -51,6 +52,12 @@ namespace prjOniqueWebsite.Controllers
                     return View(vm);
                 }
 
+                if (vm.Phone.Length != 10)
+                {
+                    ModelState.AddModelError("Phone", "電話號碼為10位數字!");
+                    return View(vm);
+                }
+
                 if (vm.Gender != "男" && vm.Gender != "女")
                 {
                     ModelState.AddModelError("Gender", "請選擇性別");
@@ -62,7 +69,6 @@ namespace prjOniqueWebsite.Controllers
                     ModelState.AddModelError("Citys", "請選擇居住城市");
                     return View(vm);
                 }
-                //employee.Citys = parsedCitys;
 
                 if (Convert.ToDateTime(vm.DateOfBirth) >= DateTime.Today)
                 {
@@ -76,8 +82,6 @@ namespace prjOniqueWebsite.Controllers
                 }
 
                 dao.CreateEmployee(vm);
-                Employees employee = new Employees();
-                dao.CreatePhoto(employee, vm);
             
                 return RedirectToAction("Index");
             }
@@ -91,54 +95,42 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Edit(int id)
         {
-            EmployeeVM employee = dao.GetEmployeeById(id); 
-            return View(employee);
+            var dto = dao.GetEmployeeById(id);
+            EmployeeVM vm = new EmployeeVM
+            {
+                EmployeeId = dto.EmployeeId,
+                EmployeeName = dto.EmployeeName,
+                PhotoPath = dto.PhotoPath,
+                DateOfBirth = dto.DateOfBirth,
+                Gender = dto.Gender,
+                Phone = dto.Phone,
+                Email = dto.Email,
+                Password = dto.Password,
+                EmployeeLevel = dto.EmployeeLevel,
+                RegisterDate = dto.RegisterDate,
+                Citys = dto.Citys,
+                Areas = dto.Areas,
+                Address = dto.Address,
+            };
+            return View(vm);
         }
         [HttpPost]
         public IActionResult Edit(EmployeeVM vm)
         {
-            //var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
-
-            var employee = dao.GetEmployeeById(vm.EmployeeId);
-
-            if (employee != null)
-            {
-                if (vm.Photo != null)
-                {
-                    string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
-                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
-
-                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                    {
-                        vm.Photo.CopyTo(fileStream);
-
-                    }
-                    employee.PhotoPath = fileName;
-                }
-                employee.EmployeeName = vm.EmployeeName;
-                employee.Password = vm.Password;
-                employee.Phone = vm.Phone;
-                employee.Citys = vm.Citys;
-                employee.Areas = vm.Areas;
-                employee.Address = vm.Address;
-                employee.EmployeeLevel = vm.EmployeeLevel;
-            }
-
-            _context.SaveChanges();
-            //dao.EditEmployee(employee);
+            var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
+            dao.EditEmployee(employee, vm);
 
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(EmployeeVM vm)
         {
-            var employee = dao.GetEmployeeById(vm.EmployeeId);
+            var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
 
             if (employee != null) 
             {
                 dao.DeleteEmployee(employee);
                 return RedirectToAction("Index");
-
             }
             return View();
         }
