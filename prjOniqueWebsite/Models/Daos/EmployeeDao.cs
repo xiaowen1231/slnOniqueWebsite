@@ -44,22 +44,33 @@ namespace prjOniqueWebsite.Models.Daos
             return employee;
         }
 
-        public void UpdateEmployee(EmployeeVM vm)
+        public void EditEmployee(EmployeeVM vm)
         {
-            var Employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
-
-            if (Employee != null)
+            var employee = new EmployeeVM();
+            if (employee != null)
             {
-                Employee.EmployeeName = vm.EmployeeName;
-                Employee.Password = vm.Password;
-                Employee.Phone = vm.Phone;
-                Employee.Citys = Convert.ToInt32(vm.Citys);
-                Employee.Areas = Convert.ToInt32(vm.Areas);
-                Employee.Address = vm.Address;
-                Employee.Position = Convert.ToInt32(vm.EmployeeLevel);
+                if (vm.Photo != null)
+                {
+                    string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
 
-                _context.SaveChanges();
+                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        vm.Photo.CopyTo(fileStream);
+
+                    }
+                    employee.PhotoPath = fileName;
+                }
+                employee.EmployeeName = vm.EmployeeName;
+                employee.Password = vm.Password;
+                employee.Phone = vm.Phone;
+                employee.Citys = vm.Citys;
+                employee.Areas = vm.Areas;
+                employee.Address = vm.Address;
+                employee.EmployeeLevel = vm.EmployeeLevel;
             }
+
+            _context.SaveChanges();
         }
 
         public void DeleteEmployee(EmployeeVM employee)
