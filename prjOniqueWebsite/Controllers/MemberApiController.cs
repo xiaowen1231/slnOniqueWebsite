@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Diagnostics.Metrics;
 using System.Security.Cryptography;
 
 namespace prjOniqueWebsite.Controllers
@@ -9,9 +11,13 @@ namespace prjOniqueWebsite.Controllers
     public class MemberApiController : Controller
     {
         private readonly OniqueContext _context;
-        public MemberApiController(OniqueContext context)
+        private readonly IWebHostEnvironment _environment;
+        MemberDao dao = null;
+        public MemberApiController(OniqueContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
+            dao = new MemberDao(_context, _environment);
         }
         public IActionResult Index()
         {
@@ -56,6 +62,12 @@ namespace prjOniqueWebsite.Controllers
             var memberLevel = from m in _context.MemberLevel
                               select m;
             return Json(memberLevel);
+        }
+        public IActionResult memberOrder(int MemberId)
+        {
+            var memberorder=dao.GetMemberOrders(MemberId);
+            return Json(memberorder);
+
         }
     }
 }

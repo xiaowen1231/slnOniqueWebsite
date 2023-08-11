@@ -56,11 +56,27 @@ namespace prjOniqueWebsite.Models.Services
             }
             if (vm.AddedTime > vm.ShelfTime)
             {
-                throw new Exception("上架日期大於下架日期");
+                throw new Exception("上架日期不可大於下架日期");
             }
             else
             {
                 new BgProductDao(_context,_environment).CreateProducts(vm);
+            }
+        }
+        public void UpdataProducts(BgProductsVM vm)
+        {
+            var products = _context.Products.FirstOrDefault(p => p.ProductName == vm.ProductName);
+            if(products != null && products.ProductId != vm.ProductId)
+            {
+                throw new Exception("已存在同名商品");
+            }
+            if(vm.AddedTime > vm.ShelfTime)
+            {
+                throw new Exception("上架日期不可大於下架日期");
+            }
+            else
+            {
+                new BgProductDao(_context,_environment).UpdataProducts(vm);
             }
         }
     }

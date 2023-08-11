@@ -14,13 +14,17 @@ namespace prjOniqueWebsite.Controllers
     {
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
+        OrderDao dao = null;
+
         public FMemberController(OniqueContext context,UserInfoService userInfoService)
         {
             _context = context;
             _userInfoService = userInfoService;
+            dao = new OrderDao(_context);
+
         }
 
-        
+
         public IActionResult Index( string display)
         {
             ViewBag.Display = display;
@@ -95,23 +99,8 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult MemberOrder()
         {
             Members member = _userInfoService.GetMemberInfo();
-            var order = (from m in _context.Members
-                         join o in _context.Orders
-                         on m.MemberId equals o.MemberId
-                         join p in _context.PaymentMethods
-                         on o.PaymentMethodId equals p.PaymentMethodId
-                         join od in _context.OrderDetails
-                         on o.OrderId equals od.OrderId
-                         where m.MemberId == member.MemberId
-                         select new MemberOrderVM
-                         {
-                             MemberId = member.MemberId,
-                             OrderId = o.OrderId,
-                             OrderDate = Convert.ToDateTime(o.OrderDate).ToString("yyyy-MM-dd"),
-                             PaymentMethodName = p.PaymentMethodName,
-                             Price = od.Price,
-                         }).ToList();
-            return PartialView(order);
+            
+            return PartialView(member);
         }
         
         public IActionResult MemberMyKeep()
