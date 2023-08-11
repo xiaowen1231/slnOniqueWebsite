@@ -159,8 +159,16 @@ namespace prjOniqueWebsite.Models.Daos
             }
             return memInDb;
         }
-
+        public Members GetMemberByPhone(string phone)
+        {
+            var memInDb = _context.Members.FirstOrDefault(m => m.Phone == phone);
+            if (memInDb == null)
+            {
+                return null;
+            }
+            return memInDb;
         }
+    
             public List<MemberOrderDto> GetMemberOrders(int MemberId)
             {
 
