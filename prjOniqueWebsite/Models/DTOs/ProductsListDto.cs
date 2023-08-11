@@ -9,5 +9,6 @@
         public DateTime AddedTime { get; set; }
         public int SubQuantity { get; set; }
         public string catagoryName { get; set; }
+        public int? DiscountId { get; set; }
     }
 }

@@ -2,15 +2,18 @@
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
+using prjOniqueWebsite.Models.Repositories;
 
 namespace prjOniqueWebsite.Controllers
 {
     public class BgProductManageApiController : Controller
     {
         private readonly OniqueContext _context;
+        private readonly ProductDao _dao;
         public BgProductManageApiController(OniqueContext context)
         {
             _context = context;
+            _dao = new ProductDao(_context);
         }
         public IActionResult Index()/*vm*/
         {
@@ -132,6 +135,12 @@ namespace prjOniqueWebsite.Controllers
             }
 
 
+        }
+
+        public IActionResult DisplayProductList(string keyword)
+        {
+            var product = _dao.SearchProductList(keyword,"","");
+            return Json(product);
         }
     }
 }
