@@ -20,10 +20,15 @@ namespace prjOniqueWebsite.Models.Services
         }
         public void MemberRegister(FMemberVM vm)
         {
-            var memInDb = _dao.GetMemberByEmail(vm.Email);
-            if(memInDb != null)
+            var memInEmail = _dao.GetMemberByEmail(vm.Email);
+            var memInPhone = _dao.GetMemberByPhone(vm.Phone);
+            if (memInEmail != null)
             {
                 throw new Exception("已有此信箱!");
+            }
+            if(memInPhone != null)
+            {
+                throw new Exception("已有此電話號碼!");
             }
             _dao.Register(vm);
         }

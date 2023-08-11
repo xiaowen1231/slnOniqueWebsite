@@ -9,7 +9,7 @@
             <img src="@Url.Content("~/images/uploads/members/default.jpg")" class="circle-size-300" id="imgMember" />
             <input type="file" name="Photo" id="Photo" class="form-control my-5" />
         </div>
-        
+
         <div class="flex-fill p-2">
             <div class="fs-5 fw-bold border-bottom p-2">
                 註冊新會員
@@ -18,14 +18,14 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">姓名</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control " name="Name" placeholder="請輸入姓名" />
+                        <input type="text" class="form-control " name="Name" placeholder="請輸入姓名" id="inputName" />
                         @Html.ValidationMessageFor(member=>member.Name,"",new{@class="text-danger"})
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">帳號</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control " name="Email" placeholder="請輸入電子信箱" />
+                        <input type="text" class="form-control " name="Email" placeholder="請輸入電子信箱" id="inputEmail" />
                         @Html.ValidationMessageFor(member=>member.Email,"",new{@class="text-danger"})
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">電話</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" placeholder="請輸入電話" name="Phone" />
+                        <input type="text" class="form-control" placeholder="請輸入電話" name="Phone" id="inputPhone" />
                         @Html.ValidationMessageFor(member=>member.Phone,"",new{@class="text-danger"})
                     </div>
                 </div>
@@ -50,14 +50,14 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">密碼</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" placeholder="請輸入密碼" name="Password" />
+                        <input type="password" class="form-control" placeholder="請輸入密碼" name="Password" id="inputPassword" />
                         @Html.ValidationMessageFor(member=>member.Password,"",new{@class="text-danger"})
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-80px  fw-bold">確認密碼</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" placeholder="請重新輸入密碼" name="ComfirmPassword" />
+                        <input type="password" class="form-control" placeholder="請重新輸入密碼" name="ComfirmPassword" id="inputComfirmPassword" />
                         <span asp-validation-for="ComfirmPassword" class="text-danger"></span>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                         </select>
                     </div>
                     <div class="mx-3 ">
-                        <input type="text" class="form-control" placeholder="請輸入地址" name="Address" />
+                        <input type="text" class="form-control" placeholder="請輸入地址" name="Address" id="inputAddress" />
                     </div>
                 </div>
             </div>
@@ -110,6 +110,7 @@
                 <div class="p-2">
                 </div>
                 <div class="p-2">
+                    <input type="button" class="btn btn-outline-secondary" value="Demo" id="Demo" />
                     <input type="submit" value="註冊" id="Login" class="btn btn-dark fw-bold">
                     @Html.ActionLink("取消", "Login","Home", "",new {@class="btn btn-outline-dark fw-bold" })
                 </div>
@@ -157,7 +158,7 @@
             })
             $("#area").append(selectOptions);
         }
-        
+
         const photo = document.querySelector('#Photo')
         photo.addEventListener('change', () => {
             const file = photo.files
@@ -169,6 +170,21 @@
                 const url = URL.createObjectURL(file[0]);
                 $('#imgMember').attr('src', url)
             }
+        })
+        $('#Demo').on('click', function () {
+            let name = "Betty"
+            $('#inputName').val(name)
+            let email = "Betty@gmail.com"
+            $('#inputEmail').val(email)
+            let phone = "0945618947"
+            $('#inputPhone').val(phone)
+            let dateofbirth = "1998-11-05"
+            $('#memberDateOfBirth').val(dateofbirth)
+            $('#inputPassword').val("123")
+            $('#inputComfirmPassword').val("123")
+            $('#inputPhone').val(phone)
+            let address = "中山北路一段"
+            $('#inputAddress').val(address)
         })
     </script>
 }
