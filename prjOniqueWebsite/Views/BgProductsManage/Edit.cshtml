@@ -1,11 +1,10 @@
-﻿@model prjOniqueWebsite.Models.EFModels.Products
+﻿@model prjOniqueWebsite.Models.ViewModels.BgProductsVM
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
 
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="ProductId" />
     <div class="container d-flex justify-content-center">
         <div class="col-2" style="margin-left: 8%;">
@@ -38,14 +37,14 @@
                 <div class="col-5  p-2">
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ProductName" class="width-120px">商品名稱:</label>
-                        <input asp-for="ProductName" class="form-control" />
-                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                        <input asp-for="@Model.ProductName" class="form-control" name="ProductName" />
                     </div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ProductName)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="Price" class="form-control" />
-                        <span asp-validation-for="Price" class="text-danger"></span>
+                        <input asp-for="@Model.Price" class="form-control" name="Price" />
                     </div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.Price)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ProductCategoryId" class="width-120px">商品分類:</label>
                         <select asp-for="ProductCategoryId" class="form-control" asp-items="ViewBag.ProductCategoryId"></select>
@@ -53,14 +52,14 @@
                     </div>
                     <div class="align-items-center my-3 d-flex">
                         <label asp-for="AddedTime" class="width-120px">上架時間:</label>
-                        <input asp-for="AddedTime" class="form-control"  type="date" asp-format="{0:yyyy-MM-dd}" />
-                        <span asp-validation-for="AddedTime" class="text-danger"></span>
+                        <input asp-for="@Model.AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" />
                     </div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.AddedTime)</div>
                     <div class="align-items-center my-3 d-flex">
                         <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
-                        <input asp-for="ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
-                        <span asp-validation-for="ShelfTime" class="text-danger"></span>
+                        <input asp-for="@Model.ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" />
                     </div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>
                     <div class="align-items-center my-3 d-flex">
                         <label asp-for="SupplierId" class="width-120px">供應商:</label>
                         <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
@@ -69,8 +68,8 @@
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
                         <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
                 <div class="container col-5">
                     <div class="my-3 d-flex">

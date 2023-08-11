@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using prjOniqueWebsite.Models.DTOs;
+﻿using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
@@ -43,7 +42,7 @@ namespace prjOniqueWebsite.Models.Daos
                                  }).FirstOrDefault();
             return dto;
         }
-        public void EditMember(Members member,MemberVM vm)
+        public void EditMember(Members member, MemberVM vm)
         {
             if (member != null)
             {
@@ -111,7 +110,8 @@ namespace prjOniqueWebsite.Models.Daos
         }
         public void Register(FMemberVM vm)
         {
-            var mem = new Members { 
+            var mem = new Members
+            {
                 Name = vm.Name,
                 Password = vm.Password,
                 Email = vm.Email,
@@ -123,9 +123,7 @@ namespace prjOniqueWebsite.Models.Daos
                 MemberLevel = 1,
                 RegisterDate = DateTime.Now,
                 DateOfBirth = Convert.ToDateTime(vm.DateOfBirth)
-             };
-           
-
+            };
             _context.Members.Add(mem);
             _context.SaveChanges();
             if (vm.Photo != null)
@@ -151,7 +149,42 @@ namespace prjOniqueWebsite.Models.Daos
             }
             _context.Update(mem);
             _context.SaveChanges();
+        }  
+        public Members GetMemberByEmail(string email)
+        {
+            var memInDb = _context.Members.FirstOrDefault(m => m.Email == email);
+            if(memInDb == null)
+            {
+                return null;
+            }
+            return memInDb;
         }
-       
-    }
-}
+        public Members GetMemberByPhone(string phone)
+        {
+            var memInDb = _context.Members.FirstOrDefault(m => m.Phone == phone);
+            if (memInDb == null)
+            {
+                return null;
+            }
+            return memInDb;
+        }
+            public List<MemberOrderDto> GetMemberOrders(int MemberId)
+            {
+
+                var memberorder = (from m in _context.Members
+                                   join o in _context.Orders
+                                   on m.MemberId equals o.MemberId
+                                   join p in _context.PaymentMethods
+                                   on o.PaymentMethodId equals p.PaymentMethodId
+                                   where m.MemberId == MemberId
+                                   select (new MemberOrderDto
+                                   {
+                                       OrderId = o.OrderId,
+                                       OrderDate = Convert.ToDateTime(o.OrderDate).ToString("yyyy-MM-dd"),
+                                       PaymentMethodName = p.PaymentMethodName,
+                                       TotalPrice = o.TotalPrice
+                                   })).ToList();
+                return memberorder;
+            }
+        
+    } }

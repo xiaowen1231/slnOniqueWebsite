@@ -23,7 +23,7 @@ namespace prjOniqueWebsite.Models.Daos
                 EndDate = vm.EndDate,
                 DiscountMethod = vm.DiscountMethod
             };
-            if(vm.Photo!=null)
+            if (vm.Photo != null)
             {
                 discount.PhotoPath = discount.Title + ".jpg";
 
@@ -39,7 +39,7 @@ namespace prjOniqueWebsite.Models.Daos
 
         public void UpdataDiscount(BgDiscointCreateVM vm)
         {
-            var discount = _context.Discounts.FirstOrDefault(d=>d.Id == vm.Id);
+            var discount = _context.Discounts.FirstOrDefault(d => d.Id == vm.Id);
             discount.Title = vm.Title;
             discount.Description = vm.Description;
             discount.BeginDate = vm.BeginDate;
@@ -83,7 +83,7 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Products.Add(product);
             _context.SaveChanges();
         }
-        public void UpdateProducts(BgProductsVM vm)
+        public void UpdataProducts(BgProductsVM vm)
         {
             var products = _context.Products.FirstOrDefault(p => p.ProductId == vm.ProductId);
             products.ProductId = vm.ProductId;
@@ -109,10 +109,11 @@ namespace prjOniqueWebsite.Models.Daos
         public void AddToDiscount(int productId, int discountId)
         {
             var product = _context.Products.FirstOrDefault(x => x.ProductId == productId);
-            product.DiscountId= discountId;
+            product.DiscountId = discountId;
             _context.SaveChanges();
         }
 
-        
+
     }
 }
+

@@ -1,4 +1,5 @@
-﻿using prjOniqueWebsite.Models.EFModels;
+﻿using prjOniqueWebsite.Models.DTOs;
+using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System;
 
@@ -15,9 +16,9 @@ namespace prjOniqueWebsite.Models.Daos
             _environment = environment;
         }
 
-        public EmployeeVM GetEmployeeById(int id)
+        public EmployeeEditDto GetEmployeeById(int id)
         {
-            EmployeeVM employee = (from e in _context.Employees
+            EmployeeEditDto employee = (from e in _context.Employees
                                    join el in _context.EmployeeLevel
                                    on e.Position equals el.EmployeeLevelId
                                    join c in _context.Citys
@@ -25,7 +26,7 @@ namespace prjOniqueWebsite.Models.Daos
                                    join a in _context.Areas
                                    on e.Areas equals a.AreaId
                                    where e.EmployeeId == id
-                                   select new EmployeeVM
+                                   select new EmployeeEditDto
                                    {
                                        EmployeeId = e.EmployeeId,
                                        EmployeeName = e.EmployeeName,
@@ -44,9 +45,8 @@ namespace prjOniqueWebsite.Models.Daos
             return employee;
         }
 
-        public void EditEmployee(EmployeeVM vm)
+        public void EditEmployee(Employees employee, EmployeeVM vm)
         {
-            var employee = new EmployeeVM();
             if (employee != null)
             {
                 if (vm.Photo != null)
@@ -64,41 +64,13 @@ namespace prjOniqueWebsite.Models.Daos
                 employee.EmployeeName = vm.EmployeeName;
                 employee.Password = vm.Password;
                 employee.Phone = vm.Phone;
-                employee.Citys = vm.Citys;
-                employee.Areas = vm.Areas;
+                employee.Citys = Convert.ToInt32(vm.Citys);
+                employee.Areas = Convert.ToInt32(vm.Areas);
                 employee.Address = vm.Address;
-                employee.EmployeeLevel = vm.EmployeeLevel;
+                employee.Position = Convert.ToInt32(vm.EmployeeLevel);
             }
 
             _context.SaveChanges();
-        }
-
-        public void DeleteEmployee(EmployeeVM employee)
-        {
-            var Employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == employee.EmployeeId);
-
-            if (Employee != null)
-            {
-                _context.Remove(Employee);
-                _context.SaveChanges();
-            }
-        }
-
-        public void CreatePhoto(Employees employee, EmployeeVM vm) 
-        {
-            if (vm.Photo != null)
-            {
-                string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
-                employee.PhotoPath = fileName;
-                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/employee", fileName);
-                using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                {
-                    vm.Photo.CopyTo(fileStream);
-                }
-
-                _context.Update(employee);
-                _context.SaveChanges();
-            }
         }
 
         public void CreateEmployee(EmployeeVM vm) 
@@ -117,6 +89,26 @@ namespace prjOniqueWebsite.Models.Daos
             employee.Areas = Convert.ToInt32(vm.Areas);
             employee.Address = vm.Address;
             _context.Add(employee);
+            _context.SaveChanges();
+            if (vm.Photo != null)
+            {
+                string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
+                employee.PhotoPath = fileName;
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/employee", fileName);
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
+
+                _context.Update(employee);
+                _context.SaveChanges();
+            }
+
+        }
+
+        public void DeleteEmployee(Employees employee) 
+        {
+            _context.Remove(employee);
             _context.SaveChanges();
         }
     }
