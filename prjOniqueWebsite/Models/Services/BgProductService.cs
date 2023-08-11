@@ -47,5 +47,21 @@ namespace prjOniqueWebsite.Models.Services
                 new BgProductDao(_context, _environment).UpdataDiscount(vm);
             }
         }
+        public void CreateProducts(BgProductsVM vm)
+        {
+            var productNameCheck = _context.Products.FirstOrDefault(p => p.ProductName == vm.ProductName);
+            if (productNameCheck != null)
+            {
+                throw new Exception("已有相同的商品名稱存在，請確認後再試一次!");
+            }
+            if (vm.AddedTime > vm.ShelfTime)
+            {
+                throw new Exception("上架日期大於下架日期");
+            }
+            else
+            {
+                new BgProductDao(_context,_environment).CreateProducts(vm);
+            }
+        }
     }
 }
