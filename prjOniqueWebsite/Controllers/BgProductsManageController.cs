@@ -17,20 +17,20 @@ using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Controllers
 {
-    
+
     public class BgProductsManageController : Controller
     {
         private readonly OniqueContext _context;
         private readonly IWebHostEnvironment _environment;
 
-        public BgProductsManageController(OniqueContext context,IWebHostEnvironment environment)
+        public BgProductsManageController(OniqueContext context, IWebHostEnvironment environment)
         {
-            _context = context;            
+            _context = context;
             _environment = environment;
         }
 
         // GET: BgProductsManage
-        public async Task<IActionResult> Index(string txtKeyword,int pageNumber = 1,int pageSize=10)
+        public async Task<IActionResult> Index(string txtKeyword, int pageNumber = 1, int pageSize = 10)
         {
             IQueryable<Products> query = _context.Products.Include(p => p.Discount).Include(p => p.ProductCategory).Include(p => p.Supplier);
             if (!string.IsNullOrEmpty(txtKeyword))
@@ -55,9 +55,9 @@ namespace prjOniqueWebsite.Controllers
                     TotalItems = totalCount,
                     TotalPages = totalPages
                 }
-            };           
+            };
             return View(viewModel);
-        }       
+        }
 
         // GET: BgProductsManage/Create
         public IActionResult Create()
@@ -75,15 +75,15 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult Create(BgProductsVM vm)
         {
             if (ModelState.IsValid == false)
-            {   
+            {
                 return View(vm);
             }
             try
             {
                 new BgProductService(_context, _environment).CreateProducts(vm);
                 return RedirectToAction("Index");
-            }           
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", "新增商品失敗!" + ex.Message);
                 ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description");
@@ -91,25 +91,25 @@ namespace prjOniqueWebsite.Controllers
                 ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName");
                 return View(vm);
             }
-            
+
         }
 
         // GET: BgProductsManage/Edit/5
         public IActionResult Edit(int id)
         {
-            var products = _context.Products.Where(d => d.ProductId == id).Select(d => new BgProductsVM 
+            var products = _context.Products.Where(d => d.ProductId == id).Select(d => new BgProductsVM
             {
-            ProductId=d.ProductId,
-            ProductName=d.ProductName,
-            Price=d.Price,
-            AddedTime=d.AddedTime,
-            ShelfTime=d.ShelfTime,
-            Description=d.Description,
-            PhotoPath=d.PhotoPath,
-            ProductCategoryId=d.ProductCategoryId,
-            SupplierId=d.SupplierId
+                ProductId = d.ProductId,
+                ProductName = d.ProductName,
+                Price = d.Price,
+                AddedTime = d.AddedTime,
+                ShelfTime = d.ShelfTime,
+                Description = d.Description,
+                PhotoPath = d.PhotoPath,
+                ProductCategoryId = d.ProductCategoryId,
+                SupplierId = d.SupplierId
             }).FirstOrDefault();
-            
+
             ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
             ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
@@ -132,13 +132,13 @@ namespace prjOniqueWebsite.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("","修改失敗!" + ex.Message);
+                ModelState.AddModelError("", "修改失敗!" + ex.Message);
                 ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", vm.DiscountId);
                 ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", vm.ProductCategoryId);
                 ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", vm.SupplierId);
                 return View(vm);
-            }              
-                return RedirectToAction("index");          
+            }
+            return RedirectToAction("index");
         }
 
         // GET: BgProductsManage/Delete/5
@@ -167,18 +167,25 @@ namespace prjOniqueWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Products == null)
+            try
             {
-                return Problem("Entity set 'OniqueContext.Products'  is null.");
+                if (_context.Products == null)
+                {
+                    return Problem("Entity set 'OniqueContext.Products'  is null.");
+                }
+                var products = await _context.Products.FindAsync(id);
+                if (products != null)
+                {
+                    _context.Products.Remove(products);
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            var products = await _context.Products.FindAsync(id);
-            if (products != null)
+            catch(Exception ex)
             {
-                _context.Products.Remove(products);               
+                return StatusCode(500, "該商品還存有庫存資料，故無法刪除!");
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
         public IActionResult BgCreateColor()
         {
@@ -212,16 +219,16 @@ namespace prjOniqueWebsite.Controllers
                 ModelState.AddModelError("SizeName", "該尺寸已存在。");
                 return View();
             }
-            
+
             var size = new ProductSizes()
-            {                
+            {
                 SizeName = vm.SizeName
             };
             _context.ProductSizes.Add(size);
-            _context.SaveChanges();               
-            
-            return RedirectToAction("BgCreateSize");            
-        }        
+            _context.SaveChanges();
+
+            return RedirectToAction("BgCreateSize");
+        }
         public IActionResult BgColorSizeDetails(int id)
         {
             try
@@ -235,20 +242,20 @@ namespace prjOniqueWebsite.Controllers
             }
         }
         [HttpPost]
-        public IActionResult BgColorSizeDetails(BgColorSizeSettingVM vm )
+        public IActionResult BgColorSizeDetails(BgColorSizeSettingVM vm)
         {
             var productStockDetail = new ProductDao(_context).GetStockDetail(vm.ProductId, vm.ColorId, vm.SizeId);
 
             var query = _context.ProductStockDetails.Where(psd => psd.StockId == productStockDetail.StockId).FirstOrDefault();
 
-            if(vm.Photo!=null)
+            if (vm.Photo != null)
             {
                 string fileName = "StockId_" + productStockDetail.StockId + ".jpg";
 
                 query.PhotoPath = fileName;
 
                 string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
-                using(var fileStream = new FileStream(photoPath, FileMode.Create))
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
                 {
                     vm.Photo.CopyTo(fileStream);
                 }
@@ -257,28 +264,42 @@ namespace prjOniqueWebsite.Controllers
 
             query.Quantity = vm.Quantity;
             _context.SaveChanges();
-                       
 
-            return RedirectToAction("Edit", new {  id =vm.ProductId});
+
+            return RedirectToAction("Edit", new { id = vm.ProductId });
         }
         public IActionResult BgColorSizeSettingCreate(int id)
         {
-            var dto = _context.Products.Where(p=>p.ProductId==id).Select(p=>new BgProductColorSizeSettingDto {ProductId=id,ProductName=p.ProductName}).FirstOrDefault();
-            dto.ProductSizes=_context.ProductSizes.ToList();
-            dto.ProductColors=_context.ProductColors.ToList();
-            return View(dto);                    
+            var dto = _context.Products.Where(p => p.ProductId == id).Select(p => new BgProductColorSizeSettingDto { ProductId = id, ProductName = p.ProductName }).FirstOrDefault();
+            dto.ProductSizes = _context.ProductSizes.ToList();
+            dto.ProductColors = _context.ProductColors.ToList();
+            return View(dto);
         }
         [HttpPost]
         public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
-        {            
-            try { 
+        {
+            try
+            {
+                var existingRecord = _context.ProductStockDetails.FirstOrDefault(
+                    p => p.ProductId == vm.ProductId &&
+                    p.SizeId == vm.SizeId &&
+                    p.ColorId == vm.ColorId);
+                if (existingRecord != null)
+                {
+                    ModelState.AddModelError("", "此商品已存在相同顏色及尺寸的庫存紀錄");
+                    var dto = _context.Products.Where(p => p.ProductId == vm.ProductId)
+                        .Select(p => new BgProductColorSizeSettingDto { ProductId = vm.ProductId, ProductName = p.ProductName }).FirstOrDefault();
+                    dto.ProductSizes = _context.ProductSizes.ToList();
+                    dto.ProductColors = _context.ProductColors.ToList();
+                    return View("BgColorSizeSettingCreate", dto);
+                }
                 var BgCss = new ProductStockDetails()
                 {
                     ProductId = vm.ProductId,
                     ColorId = vm.ColorId,
                     SizeId = vm.SizeId,
                     Quantity = 0,
-                    PhotoPath= "default.jpg"
+                    PhotoPath = "default.jpg"
                 };
                 _context.ProductStockDetails.Add(BgCss);
                 _context.SaveChanges();
@@ -297,7 +318,10 @@ namespace prjOniqueWebsite.Controllers
                     }
                 }
             }
-            catch (Exception ex) { return Content(ex.Message); }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
             return RedirectToAction("Edit", new { id = vm.ProductId });
         }
         public IActionResult BgDiscountCreate()
@@ -305,7 +329,7 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         [HttpPost]
-        public  IActionResult BgDiscountCreate(BgDiscointCreateVM vm)
+        public IActionResult BgDiscountCreate(BgDiscointCreateVM vm)
         {
             if (ModelState.IsValid == false)
             {
@@ -313,16 +337,16 @@ namespace prjOniqueWebsite.Controllers
             }
             try
             {
-                new BgProductService(_context,_environment).CreateDiscont(vm);
+                new BgProductService(_context, _environment).CreateDiscont(vm);
                 return RedirectToAction("BgDiscountManage");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ModelState.AddModelError("","新增優惠失敗!" + ex.Message);
+                ModelState.AddModelError("", "新增優惠失敗!" + ex.Message);
                 return View(vm);
             }
         }
-        
+
         public IActionResult BgDiscountManage()
         {
             return View();
@@ -341,7 +365,7 @@ namespace prjOniqueWebsite.Controllers
                     PhotoPath = d.PhotoPath,
                     DiscountMethod = d.DiscountMethod
                 }).FirstOrDefault();
-            
+
             return View(discount);
         }
 
@@ -350,13 +374,13 @@ namespace prjOniqueWebsite.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                return View(vm); 
+                return View(vm);
             }
             try
             {
                 new BgProductService(_context, _environment).UpdataDiscount(vm);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", "修改失敗! " + ex.Message);
                 return View(vm);
@@ -364,8 +388,8 @@ namespace prjOniqueWebsite.Controllers
             return RedirectToAction("BgDiscountManage");
         }
         public IActionResult DeleteSize(ProductSizes size)
-        {            
-            if(size!=null)
+        {
+            if (size != null)
             {
                 _context.Remove(size);
                 _context.SaveChanges();
@@ -374,19 +398,19 @@ namespace prjOniqueWebsite.Controllers
             return View();
         }
         public IActionResult DeleteColor(ProductColors color)
-        {            
-            if(color!=null)
+        {
+            if (color != null)
             {
                 _context.Remove(color);
                 _context.SaveChanges();
                 return RedirectToAction("BgCreateColor");
             }
             return View();
-           
+
         }
         private bool ProductsExists(int id)
         {
-          return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
     }
 }
