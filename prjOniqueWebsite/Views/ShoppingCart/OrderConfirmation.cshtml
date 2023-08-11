@@ -138,6 +138,7 @@
             </div>
         </div>
         <div class="p-2 mb-4 text-center">
+            <input type="hidden" id="inputAmountOfOrder" name="TotalPrice" />
             <input type="button" value="返回購物車" class="btn btn-outline-dark" style="width: 150px;" />
             <input type="submit" id="btnSubmit" value="提交訂單" class="btn btn-dark" style="width: 150px;"  />
             <input type="hidden" id="findemail" value="@Model.Email" />
@@ -317,6 +318,7 @@
         function UpdateAmountOfOrder() {
             amountOfOrder = quantumOfOutput + shippingCost;
             $('#divAmountOfOrder').text(amountOfOrder)
+            $('#inputAmountOfOrder').val(amountOfOrder)
         }
 
         $('#btnSubmit').click(async function (event) {
