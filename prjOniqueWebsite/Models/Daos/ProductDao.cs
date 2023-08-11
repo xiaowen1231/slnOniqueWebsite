@@ -235,7 +235,7 @@ namespace prjOniqueWebsite.Models.Repositories
                         join od in _context.OrderDetails
                         on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
                         from od in odGroup.DefaultIfEmpty()
-                        group od by new { p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.AddedTime, p.ProductCategory.CategoryName,p.ShelfTime } into grouped
+                        group od by new { p.ProductId, p.ProductName, p.Price, p.PhotoPath,p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName,p.ShelfTime } into grouped
                         where grouped.Key.AddedTime < DateTime.Now && DateTime.Now < grouped.Key.ShelfTime
                         select new ProductsListDto
                         {
@@ -245,7 +245,9 @@ namespace prjOniqueWebsite.Models.Repositories
                             PhotoPath = grouped.Key.PhotoPath,
                             AddedTime = grouped.Key.AddedTime,
                             catagoryName = grouped.Key.CategoryName,
-                            SubQuantity = grouped.Sum(x => x != null ? x.OrderQuantity : 0)
+                            SubQuantity = grouped.Sum(x => x != null ? x.OrderQuantity : 0),
+                            DiscountId = grouped.Key.DiscountId==null?null:grouped.Key.DiscountId,
+                            
                         };
 
             if (!string.IsNullOrEmpty(keyword))
@@ -311,5 +313,7 @@ namespace prjOniqueWebsite.Models.Repositories
                 return dto;
             }
         }
+
+        
     }
 }

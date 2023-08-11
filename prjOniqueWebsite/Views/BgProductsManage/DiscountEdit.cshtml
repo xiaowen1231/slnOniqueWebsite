@@ -104,22 +104,22 @@
                         搜尋商品
                     </div>
                     <div>
-                        <input type="text" />
+                        <input type="text" class="form-control" id="inputKeyword"/>
                     </div>
-                    <input type="button" class="btn btn-outline-secondary" value="搜尋" />
+                    <input type="button" class="btn btn-outline-secondary" value="搜尋" id="btnSearch" />
                 </div>
                 <div class="p-3 border rounded">
-                    <table class="table">
+                    <table class="table table-borderless table-hover align-middle text-center my-0">
                         <thead>
-                            <tr>
-                                <th scope="col">商品圖片</th>
+                            <tr class="table-secondary">
+                                <th scope="col" style="width:120px">商品圖片</th>
                                 <th scope="col">名稱</th>
                                 <th scope="col">原價</th>
+                                <th scope="col">是否加入優惠</th>
                                 <th scope="col">加入</th>
                             </tr>
                         </thead>
-                        <tbody>
-
+                        <tbody id="tbodyAddToDiscountList">
                         </tbody>
                     </table>
                 </div>
@@ -131,6 +131,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
     <script>
         $('.btnUpload').on('click', function () {
             $('#inputUpload').trigger('click');
@@ -156,6 +157,73 @@
             modalAddDiscountProduct.show()
         })
 
+        DisplayProductList("")
+
+        async function DisplayProductList(keyword){
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/DisplayProductList?keyword=")${ keyword }`)
+            const datas = await response.json();
+
+            let htmlStr = ""
+
+            datas.map(item=>{
+                htmlStr += `<tr>
+                                <td>
+                                    <div class="w-120-h-120">
+                                        <img src="@Url.Content("~/images/uploads/products/")${item.photoPath}" />
+                                    </div>
+                                </td>
+                                <td class="text-center width-300px">
+                                ${item.productName}
+                                </td>
+                                <td>
+                                    <div class="price">
+                                        ${item.price}
+                                    </div>
+                                </td>`
+
+                if (item.discountId!=null){
+                htmlStr += `<td>
+                                是
+                            </td>
+                            <td>
+                                <div class="btn btn-outline-secondary disabled" >加入</div>
+                            </td>
+                        </tr>`
+                }else{
+                    htmlStr += `<td>
+                                    否
+                                </td>
+                                <td>
+                                    <div class="btn btn-secondary btnAddToDiscount" data-productid="${item.id}">加入</div>
+                                </td>
+                            </tr>`
+                }
+            })
+
+            $('#tbodyAddToDiscountList').html(htmlStr)
+        }
+
+        $('#inputKeyword').on('keypress', function (event) {
+            if (event.key === "Enter") {
+
+                let keyword = $(this).val()
+
+                DisplayProductList(keyword);
+            }
+        })
+
+        $("#btnSearch").on('click',function(){
+            let keyword = $('#inputKeyword').val()
+
+            DisplayProductList(keyword);
+        })
+
+        $('#tbodyAddToDiscountList').on('click', '.btnAddToDiscount', function () {
+            event.stopPropagation();
+
+            let productid = $(this).data("productid")
+            console.log("id = ", productid)
+        })
     </script>
 }
 
@@ -176,6 +244,9 @@
 
         div.modal-header {
             display: inline-block;
+        }
+        .price::before{
+            content:"$";
         }
     </style>
 }
