@@ -1,6 +1,6 @@
 ﻿namespace prjOniqueWebsite.Models.DTOs
 {
-    public class FMemberPassword
+    public class FMemberPasswordDto
     {
         public string OldPassword { get; set; }
         public string NewPassword { get; set; }

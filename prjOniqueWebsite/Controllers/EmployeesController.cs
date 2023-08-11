@@ -8,7 +8,7 @@ using System.Diagnostics.Metrics;
 
 namespace prjOniqueWebsite.Controllers
 {
-    //[Authorize(Roles = "經理")]
+    [Authorize(Roles = "經理")]
     public class EmployeesController : Controller
     {
         private readonly OniqueContext _context;
@@ -97,19 +97,21 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Edit(EmployeeVM vm)
         {
+            //var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
+
             var employee = dao.GetEmployeeById(vm.EmployeeId);
 
-            if (employee != null) 
+            if (employee != null)
             {
                 if (vm.Photo != null)
                 {
                     string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
                     string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
-                    
+
                     using (var fileStream = new FileStream(photoPath, FileMode.Create))
                     {
                         vm.Photo.CopyTo(fileStream);
-                        
+
                     }
                     employee.PhotoPath = fileName;
                 }
@@ -122,7 +124,8 @@ namespace prjOniqueWebsite.Controllers
                 employee.EmployeeLevel = vm.EmployeeLevel;
             }
 
-            dao.UpdateEmployee(employee);
+            _context.SaveChanges();
+            //dao.EditEmployee(employee);
 
             return RedirectToAction("Index");
         }

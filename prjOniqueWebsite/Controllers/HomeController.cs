@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using NuGet.Common;
 using prjOniqueWebsite.Models;
+using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.ViewModels;
@@ -23,6 +24,7 @@ namespace prjOniqueWebsite.Controllers
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
         private readonly IWebHostEnvironment _environment;
+        MemberDao _dao = null;
 
         public HomeController(OniqueContext context, ILogger<HomeController> logger, UserInfoService userInfoService, IWebHostEnvironment environment)
         {
@@ -30,6 +32,7 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
             _userInfoService = userInfoService;
             _environment = environment;
+            _dao = new MemberDao(_context, _environment);
         }
 
 
@@ -171,7 +174,6 @@ namespace prjOniqueWebsite.Controllers
         {
             if(ModelState.IsValid)
             {
-                var mem = new Members();
                 
                 bool isPhoneUsed = _context.Members.Any(e => e.Phone == vm.Phone);
                 bool isEmailUsed = _context.Members.Any(e => e.Email == vm.Email);
@@ -194,43 +196,7 @@ namespace prjOniqueWebsite.Controllers
                 }
                 //todo日期判斷
 
-                mem.Name = vm.Name;
-                mem.Password = vm.Password;
-                mem.Email = vm.Email;
-                mem.Phone = vm.Phone;
-                mem.Gender = Convert.ToBoolean(vm.Gender);
-                mem.Citys = Convert.ToInt32(vm.Citys);
-                mem.Areas = Convert.ToInt32(vm.Areas);
-                mem.Address = vm.Address;
-                mem.MemberLevel = 1;
-                mem.RegisterDate = DateTime.Now;
-                mem.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
-                
-                _context.Members.Add(mem);
-                _context.SaveChanges();
-                if (vm.Photo != null)
-                {
-                    string fileName = $"MemberId_{mem.MemberId}.jpg";
-                    mem.PhotoPath = fileName;
-                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
-                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                    {
-                        vm.Photo.CopyTo(fileStream);
-                    }
-                }
-                else
-                {
-                    // 如果沒有上傳新照片，使用預設的照片路徑和檔名
-                    string defaultFileName = $"MemberId_{mem.MemberId}.jpg";
-                    mem.PhotoPath = defaultFileName;
-                    // 取得預設照片的完整路徑
-                    string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
-                    // 複製預設照片到指定路徑
-                    string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
-                    System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
-                }
-                _context.Update(mem);
-                _context.SaveChanges();
+                _dao.Register(vm);
                 return RedirectToAction("Index");
             }
             return View(vm);
