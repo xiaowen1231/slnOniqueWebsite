@@ -81,8 +81,8 @@ namespace prjOniqueWebsite.Controllers
                 }
 
                 dao.CreateEmployee(vm);
-                Employees employee = new Employees();
-                dao.CreatePhoto(employee, vm);
+                //Employees employee = new Employees();
+                //dao.CreatePhoto(employee, vm);
             
                 return RedirectToAction("Index");
             }

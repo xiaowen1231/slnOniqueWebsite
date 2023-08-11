@@ -106,6 +106,20 @@ namespace prjOniqueWebsite.Models.Daos
             employee.Address = vm.Address;
             _context.Add(employee);
             _context.SaveChanges();
+            if (vm.Photo != null)
+            {
+                string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
+                employee.PhotoPath = fileName;
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/employee", fileName);
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
+
+                _context.Update(employee);
+                _context.SaveChanges();
+            }
+
         }
 
         public void DeleteEmployee(Employees employee) 
