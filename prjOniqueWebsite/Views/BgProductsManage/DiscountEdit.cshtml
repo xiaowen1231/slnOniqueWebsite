@@ -21,6 +21,7 @@
                 <div class="width-400 mx-auto">
                     <input type="file" class="form-control" style="visibility:hidden;" id="inputUpload" name="Photo" />
                     <input asp-for="@Model.PhotoPath" type="hidden" name="PhotoPath" />
+                    <input value="@fileName" type="hidden" id="inputFileName" />
                 </div>
             </div>
             <div>
@@ -74,13 +75,14 @@
             <table class="table table-borderless table-hover align-middle text-center my-0">
                 <thead>
                     <tr class="table-secondary">
-                        <th>商品圖片</th>
-                        <th style="width:300px">商品名稱</th>
-                        <th>編輯</th>
+                        <th style="width:120px;">商品圖片</th>
+                        <th style="width:300px;">商品名稱</th>
+                        <th>原價</th>
+                        <th>折扣價</th>
                         <th>刪除</th>
                     </tr>
                 </thead>
-                <tbody id="BgDiscountList">
+                <tbody id="">
                 </tbody>
             </table>
         </div>
@@ -104,7 +106,7 @@
                         搜尋商品
                     </div>
                     <div>
-                        <input type="text" class="form-control" id="inputKeyword"/>
+                        <input type="text" class="form-control" id="inputKeyword" />
                     </div>
                     <input type="button" class="btn btn-outline-secondary" value="搜尋" id="btnSearch" />
                 </div>
@@ -133,6 +135,10 @@
     }
 
     <script>
+
+        let keyword = ""
+        let discountId = @Model.Id
+
         $('.btnUpload').on('click', function () {
             $('#inputUpload').trigger('click');
         })
@@ -140,9 +146,12 @@
         const photo = document.querySelector("#inputUpload");
 
         photo.addEventListener('change', function () {
+            let fileName = $('#inputFileName').val();
+
             const files = photo.files
             if (files.length == 0) {
-                const defaultPath = "@Url.Content("~/images/DiscountPhoto/default.jpg")"
+
+                const defaultPath = `@Url.Content("~/images/DiscountPhoto/")${fileName}`
                 $("#imgDiscountPhoto").attr("src", defaultPath)
             }
             else {
@@ -159,13 +168,13 @@
 
         DisplayProductList("")
 
-        async function DisplayProductList(keyword){
-            const response = await fetch(`@Url.Content("~/BgProductManageApi/DisplayProductList?keyword=")${ keyword }`)
+        async function DisplayProductList(keyword) {
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/DisplayProductList?keyword=")${keyword}`)
             const datas = await response.json();
 
             let htmlStr = ""
 
-            datas.map(item=>{
+            datas.map(item => {
                 htmlStr += `<tr>
                                 <td>
                                     <div class="w-120-h-120">
@@ -181,15 +190,17 @@
                                     </div>
                                 </td>`
 
-                if (item.discountId!=null){
-                htmlStr += `<td>
-                                是
-                            </td>
-                            <td>
-                                <div class="btn btn-outline-secondary disabled" >加入</div>
-                            </td>
-                        </tr>`
-                }else{
+                if (item.discountId != null) {
+                    htmlStr += `<td>
+                                    是
+                                </td>
+                                <td class="" data-aos="flip-left" >
+                                    <div class="width-50px mx-auto">
+                                        <img src="@Url.Content("~/images/icon/checked.png")" />
+                                    </div>
+                                </td>
+                            </tr>`
+                } else {
                     htmlStr += `<td>
                                     否
                                 </td>
@@ -206,24 +217,60 @@
         $('#inputKeyword').on('keypress', function (event) {
             if (event.key === "Enter") {
 
-                let keyword = $(this).val()
+                keyword = $(this).val()
 
                 DisplayProductList(keyword);
             }
         })
 
-        $("#btnSearch").on('click',function(){
-            let keyword = $('#inputKeyword').val()
+        $("#btnSearch").on('click', function () {
+            keyword = $('#inputKeyword').val()
 
             DisplayProductList(keyword);
         })
 
-        $('#tbodyAddToDiscountList').on('click', '.btnAddToDiscount', function () {
+        $('#tbodyAddToDiscountList').on('click', '.btnAddToDiscount', async function () {
             event.stopPropagation();
 
             let productid = $(this).data("productid")
-            console.log("id = ", productid)
+
+            $.ajax({
+                url: '@Url.Content("~/BgProductManageApi/AddToDiscount")',
+                type: 'POST',
+                data: { 'productId': productid, 'discountId': discountId },
+                dataType: 'json'
+            }).done(datas=>{
+                console.log(datas);
+
+                const { statusCode, statusMessage } = datas;
+
+                if (statusCode) {
+                    Swal.fire({
+                        title: statusMessage,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                    setTimeout(() => {
+                        DisplayProductList(keyword)
+                    }, 1500)
+
+                } else {
+                    Swal.fire({
+                        title: statusMessage,
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+
         })
+
+        async function DisplayDiscountProducts(discountId) {
+            const response = await fetch(`@Url.Content("~/")`)
+        }
+
     </script>
 }
 
@@ -245,8 +292,9 @@
         div.modal-header {
             display: inline-block;
         }
-        .price::before{
-            content:"$";
+
+        .price::before {
+            content: "$";
         }
     </style>
 }

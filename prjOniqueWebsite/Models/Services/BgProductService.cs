@@ -1,5 +1,6 @@
 ﻿using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Models.Services
@@ -63,5 +64,22 @@ namespace prjOniqueWebsite.Models.Services
                 new BgProductDao(_context,_environment).CreateProducts(vm);
             }
         }
+
+        public void AddToDiscount(int productId, int discountId)
+        {
+            int? discountIdInDb = _context.Products
+                .Where(p => p.ProductId == productId)
+                .Select(p => p.DiscountId)
+                .FirstOrDefault();
+            if (discountIdInDb != null)
+            {
+                throw new Exception("此商品已被加入其他優惠!");
+            }
+            else
+            {
+                new BgProductDao(_context, _environment).AddToDiscount(productId, discountId);
+            }
+        }
+
     }
 }

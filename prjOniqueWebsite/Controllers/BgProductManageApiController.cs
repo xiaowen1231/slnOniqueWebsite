@@ -3,6 +3,7 @@ using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.Repositories;
+using prjOniqueWebsite.Models.Services;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -10,10 +11,12 @@ namespace prjOniqueWebsite.Controllers
     {
         private readonly OniqueContext _context;
         private readonly ProductDao _dao;
-        public BgProductManageApiController(OniqueContext context)
+        private readonly IWebHostEnvironment _environment;
+        public BgProductManageApiController(OniqueContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _dao = new ProductDao(_context);
+            _environment = environment;
         }
         public IActionResult Index()/*vm*/
         {
@@ -127,10 +130,11 @@ namespace prjOniqueWebsite.Controllers
                     result.StatusMessage = "刪除成功!";
                     return Json(result);
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.StatusCode = 500;
-                result.StatusMessage = ex.Message; 
+                result.StatusMessage = ex.Message;
                 return Json(result);
             }
 
@@ -139,8 +143,30 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult DisplayProductList(string keyword)
         {
-            var product = _dao.SearchProductList(keyword,"","");
+            var product = _dao.SearchProductList(keyword, "", "");
             return Json(product);
+        }
+        [HttpPost]
+        public IActionResult AddToDiscount(int productId, int discountId)
+        {
+            try
+            {
+                new BgProductService(_context, _environment).AddToDiscount(productId, discountId);
+                ApiResult result = new ApiResult
+                {
+                    StatusCode = 200,
+                    StatusMessage = "加入優惠商品成功!"
+                };
+                return Json(result);
+            }catch (Exception ex)
+            {
+                ApiResult result = new ApiResult
+                {
+                    StatusCode = 500,
+                    StatusMessage = "加入優惠商品失敗!" + ex.Message
+                };
+                return Json(result);
+            }
         }
     }
 }

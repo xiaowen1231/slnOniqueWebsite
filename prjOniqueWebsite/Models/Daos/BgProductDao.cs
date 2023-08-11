@@ -105,5 +105,14 @@ namespace prjOniqueWebsite.Models.Daos
             }
             _context.SaveChanges();
         }
+
+        public void AddToDiscount(int productId, int discountId)
+        {
+            var product = _context.Products.FirstOrDefault(x => x.ProductId == productId);
+            product.DiscountId= discountId;
+            _context.SaveChanges();
+        }
+
+        
     }
 }

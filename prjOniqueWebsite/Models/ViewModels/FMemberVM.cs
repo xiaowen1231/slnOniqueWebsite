@@ -17,6 +17,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         [Display(Name = "確認密碼")]
         [Required(ErrorMessage = "尚未{0}!")]
         [DataType(DataType.Password)]
+        [Compare("Password",ErrorMessage ="密碼必須一致")]
         public string ComfirmPassword { get; set; }
         [Display(Name = "電子郵件")]
         [Required(ErrorMessage = "{0}是必填欄位!")]
