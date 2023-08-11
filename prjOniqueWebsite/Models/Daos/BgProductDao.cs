@@ -83,7 +83,7 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Products.Add(product);
             _context.SaveChanges();
         }
-        public void UpdateProducts(BgProductsVM vm)
+        public void UpdataProducts(BgProductsVM vm)
         {
             var products = _context.Products.FirstOrDefault(p => p.ProductId == vm.ProductId);
             products.ProductId = vm.ProductId;
@@ -104,6 +104,6 @@ namespace prjOniqueWebsite.Models.Daos
                 }
             }
             _context.SaveChanges();
-        }
+        }        
     }
 }

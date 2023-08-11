@@ -86,13 +86,16 @@ namespace prjOniqueWebsite.Controllers
             catch(Exception ex)
             {
                 ModelState.AddModelError("", "新增商品失敗!" + ex.Message);
+                ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description");
+                ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+                ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName");
                 return View(vm);
             }
             
         }
 
         // GET: BgProductsManage/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
             var products = _context.Products.Where(d => d.ProductId == id).Select(d => new BgProductsVM 
             {
@@ -103,20 +106,13 @@ namespace prjOniqueWebsite.Controllers
             ShelfTime=d.ShelfTime,
             Description=d.Description,
             PhotoPath=d.PhotoPath,
+            ProductCategoryId=d.ProductCategoryId,
+            SupplierId=d.SupplierId
             }).FirstOrDefault();
-            //if (id == null || _context.Products == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var products = await _context.Products.FindAsync(id);
-            //if (products == null)
-            //{
-            //    return NotFound();
-            //}
-            //ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
-            //ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
-            //ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
+            
+            ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
+            ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
             return View(products);
         }
 
@@ -124,49 +120,25 @@ namespace prjOniqueWebsite.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductCategoryId,Price,Description,AddedTime,ShelfTime,SupplierId,DiscountId,PhotoPath")] Products products,IFormFile photo)
+        public IActionResult Edit(BgProductsVM vm)
         {
-            if (id != products.ProductId)
+            if (ModelState.IsValid == false)
             {
-                return NotFound();
-            }            
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(products);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductsExists(products.ProductId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                if (photo != null)
-                {
-                    string fileName = products.ProductName + ".jpg";
-                    products.PhotoPath = fileName;
-                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
-                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                    {
-                        photo.CopyTo(fileStream);
-                    }
-                }
-                _context.Update(products);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return View(vm);
             }
-            ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
-            ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
-            return View(products);
+            try
+            {
+                new BgProductService(_context, _environment).UpdataProducts(vm);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("","修改失敗!" + ex.Message);
+                ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", vm.DiscountId);
+                ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", vm.ProductCategoryId);
+                ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", vm.SupplierId);
+                return View(vm);
+            }              
+                return RedirectToAction("index");          
         }
 
         // GET: BgProductsManage/Delete/5
@@ -298,8 +270,7 @@ namespace prjOniqueWebsite.Controllers
         }
         [HttpPost]
         public IActionResult BgColorSizeSettingCreate(BgColorSizeSettingVM vm)
-        {
-            // to do 邏輯判斷是否有重複要新增的顏色 尺寸
+        {            
             try { 
                 var BgCss = new ProductStockDetails()
                 {
@@ -309,7 +280,6 @@ namespace prjOniqueWebsite.Controllers
                     Quantity = 0,
                     PhotoPath= "default.jpg"
                 };
-
                 _context.ProductStockDetails.Add(BgCss);
                 _context.SaveChanges();
 
@@ -328,7 +298,7 @@ namespace prjOniqueWebsite.Controllers
                 }
             }
             catch (Exception ex) { return Content(ex.Message); }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { id = vm.ProductId });
         }
         public IActionResult BgDiscountCreate()
         {
