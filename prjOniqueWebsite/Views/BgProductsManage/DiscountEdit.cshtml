@@ -16,7 +16,7 @@
         <div class=" mx-auto justify-content-around" style="width:450px">
             <div>
                 <div class="border rounded my-3 mx-auto btnUpload cursor-pointer" style="width:350px; height:350px">
-                    <img src="@Url.Content("~/images/DiscountPhoto/")@fileName" id="imgDiscountPhoto" class="rounded"/>
+                    <img src="@Url.Content("~/images/DiscountPhoto/")@fileName" id="imgDiscountPhoto" class="rounded" />
                 </div>
                 <div class="width-400 mx-auto">
                     <input type="file" class="form-control" style="visibility:hidden;" id="inputUpload" name="Photo" />
@@ -69,7 +69,7 @@
         </div>
     </form>
     <div class="p-2" style="width:800px">
-        <div class="btn btn-outline-secondary my-3">新增活動商品</div>
+        <div class="btn btn-outline-secondary my-3" id="divAddDiscountProduct">新增活動商品</div>
         <div class="border border-dark-subtle shadow rounded-3 p-2" data-aos="fade-up">
             <table class="table table-borderless table-hover align-middle text-center my-0">
                 <thead>
@@ -86,6 +86,47 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalAddDiscountProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header gap-3">
+                <div class="d-flex justify-content-between flex-fill align-items-center">
+                    <div>
+                        <div class="fw-bold fs-5">新增優惠商品</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center justify-content-center gap-3 my-3">
+                    <div class="fw-bold fs-5">
+                        搜尋商品
+                    </div>
+                    <div>
+                        <input type="text" />
+                    </div>
+                    <input type="button" class="btn btn-outline-secondary" value="搜尋" />
+                </div>
+                <div class="p-3 border rounded">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">商品圖片</th>
+                                <th scope="col">名稱</th>
+                                <th scope="col">原價</th>
+                                <th scope="col">加入</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -94,7 +135,9 @@
         $('.btnUpload').on('click', function () {
             $('#inputUpload').trigger('click');
         })
+
         const photo = document.querySelector("#inputUpload");
+
         photo.addEventListener('change', function () {
             const files = photo.files
             if (files.length == 0) {
@@ -106,6 +149,33 @@
                 $("#imgDiscountPhoto").attr("src", url)
             }
         })
+
+        $('#divAddDiscountProduct').on('click', function () {
+            const modalAddDiscountProduct = new bootstrap.Modal(document.getElementById('modalAddDiscountProduct'));
+
+            modalAddDiscountProduct.show()
+        })
+
     </script>
 }
 
+@section Styles{
+    <style>
+        div.modal-content {
+            width: 800px;
+            height: 600px;
+            position: fixed;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            left: 50%;
+        }
+
+        div.modal-body {
+            overflow: auto;
+        }
+
+        div.modal-header {
+            display: inline-block;
+        }
+    </style>
+}

@@ -24,6 +24,7 @@ namespace prjOniqueWebsite.Models.EFModels
         public string Recipient { get; set; }
         public string Remark { get; set; }
         public string RecipientPhone { get; set; }
+        public decimal TotalPrice { get; set; }
 
         public virtual Members Member { get; set; }
         public virtual ShippingMethods Method { get; set; }

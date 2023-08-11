@@ -269,6 +269,8 @@ namespace prjOniqueWebsite.Models.EFModels
 
                 entity.Property(e => e.ShippingDate).HasColumnType("datetime");
 
+                entity.Property(e => e.TotalPrice).HasColumnType("money");
+
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.MemberId)
