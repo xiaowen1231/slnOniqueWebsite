@@ -72,61 +72,51 @@ namespace prjOniqueWebsite.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(BgProductsVM vm,IFormFile photo)
+        public IActionResult Create(BgProductsVM vm)
         {
-            if (ModelState.IsValid)
-            {
-                var product = new Products
-                {
-                    ProductName = vm.ProductName,
-                    ProductCategoryId = vm.ProductCategoryId,
-                    Price = vm.Price,
-                    AddedTime = vm.AddedTime,
-                    ShelfTime = vm.ShelfTime,
-                    Description = vm.Description,
-                    ProductId = vm.ProductId,
-                    SupplierId = vm.SupplierId,
-                };
-                if (photo != null)
-                {
-                    string fileName = product.ProductName + ".jpg";
-                    product.PhotoPath = fileName;
-                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
-                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                    {
-                        photo.CopyTo(fileStream);
-                    }
-                }
-                bool productNameCheck = _context.Products.Any(p => p.ProductName == product.ProductName);
-                if (productNameCheck)
-                {
-                    ModelState.AddModelError("ProductName", "已有相同的商品名稱存在，請確認後再試一次!");
-                    return View(vm);
-                }
-
-                _context.Products.Add(product);
-                _context.SaveChanges();                
+            if (ModelState.IsValid == false)
+            {   
+                return View(vm);
             }
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                new BgProductService(_context, _environment).CreateProducts(vm);
+                return RedirectToAction("Index");
+            }           
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", "新增商品失敗!" + ex.Message);
+                return View(vm);
+            }
+            
         }
 
         // GET: BgProductsManage/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null || _context.Products == null)
+            var products = _context.Products.Where(d => d.ProductId == id).Select(d => new BgProductsVM 
             {
-                return NotFound();
-            }
+            ProductId=d.ProductId,
+            ProductName=d.ProductName,
+            Price=d.Price,
+            AddedTime=d.AddedTime,
+            ShelfTime=d.ShelfTime,
+            Description=d.Description,
+            PhotoPath=d.PhotoPath,
+            }).FirstOrDefault();
+            //if (id == null || _context.Products == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var products = await _context.Products.FindAsync(id);
-            if (products == null)
-            {
-                return NotFound();
-            }
-            ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
-            ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
+            //var products = await _context.Products.FindAsync(id);
+            //if (products == null)
+            //{
+            //    return NotFound();
+            //}
+            //ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
+            //ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
+            //ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
             return View(products);
         }
 

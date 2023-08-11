@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
 <form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="d-flex container">
         <div class="col-2 p" style="margin-left: 8%;">
             <div class="text-center my-2 p">                
@@ -28,12 +27,12 @@
                 <div class="p-2 col-5">
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ProductName" class="width-120px">商品名稱:</label>
-                        <input type="text" asp-for="@Model.ProductName" class="form-control" />                        
+                        <input type="text" asp-for="@Model.ProductName" class="form-control" name="ProductName" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ProductName)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="@Model.Price" class="form-control" min="0"/>
+                        <input asp-for="@Model.Price" class="form-control" min="0" name="Price" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.Price)</div>
                     <div class="d-flex align-items-center my-3">
@@ -46,18 +45,19 @@
                     </div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="AddedTime" class="width-120px">上架時間:</label>
-                        <input asp-for="@Model.AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                        <input asp-for="@Model.AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.AddedTime)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
-                        <input asp-for="@Model.ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                        <input asp-for="@Model.ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
                         <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;"></textarea>
                     </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-5 container">
                     <div class="my-3 d-flex">
