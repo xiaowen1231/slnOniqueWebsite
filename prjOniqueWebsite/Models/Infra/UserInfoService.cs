@@ -11,7 +11,16 @@ namespace prjOniqueWebsite.Models.Infra
         }
         public Members GetMemberInfo()
         {
-            int id = Convert.ToInt32(_contextAccessor.HttpContext.User.Identity.Name);
+            var claim = _contextAccessor.HttpContext.User.Claims.ToList();
+
+            var memberId = claim.Where(c => c.Type == "MemberId").FirstOrDefault();
+
+            if (memberId == null)
+            {
+                return null;
+            }
+
+            int id = Convert.ToInt32(memberId.Value);
 
             Members member = new OniqueContext().Members.FirstOrDefault(m => m.MemberId == id);
 
@@ -20,7 +29,16 @@ namespace prjOniqueWebsite.Models.Infra
 
         public Employees GetEmployeeInfo()
         {
-            int id = Convert.ToInt32(_contextAccessor.HttpContext.User.Identity.Name);
+            var claim = _contextAccessor.HttpContext.User.Claims.ToList();
+
+            var employeeId = claim.Where(c => c.Type == "EmployeeId").FirstOrDefault();
+
+            if (employeeId == null)
+            {
+                return null;
+            }
+
+            int id = Convert.ToInt32(employeeId.Value);
 
             Employees employee = new OniqueContext().Employees.FirstOrDefault(e => e.EmployeeId == id);
 
