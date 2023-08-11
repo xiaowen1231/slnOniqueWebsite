@@ -93,6 +93,7 @@ namespace prjOniqueWebsite.Controllers
                 List<Claim> claims = new List<Claim>
                 {
                     new Claim("MemberId",member.MemberId.ToString()),
+                    new Claim(ClaimTypes.Role,"Member"),
                 };
 
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
