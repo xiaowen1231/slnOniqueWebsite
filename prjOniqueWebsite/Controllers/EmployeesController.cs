@@ -5,6 +5,7 @@ using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Data.SqlTypes;
 using System.Diagnostics.Metrics;
+using System.Net;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -51,9 +52,9 @@ namespace prjOniqueWebsite.Controllers
                     return View(vm);
                 }
 
-                if(vm.Photo.Length != 10) 
+                if (vm.Phone.Length != 10)
                 {
-                    ModelState.AddModelError("Email", "電話號碼為10位數字!");
+                    ModelState.AddModelError("Phone", "電話號碼為10位數字!");
                     return View(vm);
                 }
 
@@ -81,8 +82,6 @@ namespace prjOniqueWebsite.Controllers
                 }
 
                 dao.CreateEmployee(vm);
-                //Employees employee = new Employees();
-                //dao.CreatePhoto(employee, vm);
             
                 return RedirectToAction("Index");
             }
@@ -96,40 +95,29 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Edit(int id)
         {
-            EmployeeVM employee = dao.GetEmployeeById(id); 
-            return View(employee);
+            var dto = dao.GetEmployeeById(id);
+            EmployeeVM vm = new EmployeeVM
+            {
+                EmployeeId = dto.EmployeeId,
+                EmployeeName = dto.EmployeeName,
+                PhotoPath = dto.PhotoPath,
+                DateOfBirth = dto.DateOfBirth,
+                Gender = dto.Gender,
+                Phone = dto.Phone,
+                Email = dto.Email,
+                Password = dto.Password,
+                EmployeeLevel = dto.EmployeeLevel,
+                RegisterDate = dto.RegisterDate,
+                Citys = dto.Citys,
+                Areas = dto.Areas,
+                Address = dto.Address,
+            };
+            return View(vm);
         }
         [HttpPost]
         public IActionResult Edit(EmployeeVM vm)
         {
             var employee = _context.Employees.FirstOrDefault(e => e.EmployeeId == vm.EmployeeId);
-
-            //var employee = dao.GetEmployeeById(vm.EmployeeId);
-
-            //if (employee != null)
-            //{
-            //    if (vm.Photo != null)
-            //    {
-            //        string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
-            //        string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
-
-            //        using (var fileStream = new FileStream(photoPath, FileMode.Create))
-            //        {
-            //            vm.Photo.CopyTo(fileStream);
-
-            //        }
-            //        employee.PhotoPath = fileName;
-            //    }
-            //    employee.EmployeeName = vm.EmployeeName;
-            //    employee.Password = vm.Password;
-            //    employee.Phone = vm.Phone;
-            //    employee.Citys = Convert.ToInt32(vm.Citys);
-            //    employee.Areas = Convert.ToInt32(vm.Areas);
-            //    employee.Address = vm.Address;
-            //    employee.Position = Convert.ToInt32(vm.EmployeeLevel);
-            //}
-
-            //_context.SaveChanges();
             dao.EditEmployee(employee, vm);
 
             return RedirectToAction("Index");
@@ -141,8 +129,6 @@ namespace prjOniqueWebsite.Controllers
 
             if (employee != null) 
             {
-                //_context.Remove(employee);
-                //_context.SaveChanges();
                 dao.DeleteEmployee(employee);
                 return RedirectToAction("Index");
             }
