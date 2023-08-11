@@ -110,7 +110,8 @@ namespace prjOniqueWebsite.Models.Daos
         }
         public void Register(FMemberVM vm)
         {
-            var mem = new Members { 
+            var mem = new Members
+            {
                 Name = vm.Name,
                 Password = vm.Password,
                 Email = vm.Email,
@@ -122,8 +123,8 @@ namespace prjOniqueWebsite.Models.Daos
                 MemberLevel = 1,
                 RegisterDate = DateTime.Now,
                 DateOfBirth = Convert.ToDateTime(vm.DateOfBirth)
-             };
-           
+            };
+        }  
 
         public List<MemberOrderDto> GetMemberOrders(int MemberId)
         {
