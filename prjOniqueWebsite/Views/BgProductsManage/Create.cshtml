@@ -32,7 +32,7 @@
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ProductName)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="@Model.Price" class="form-control" min="0" name="Price" />
+                        <input asp-for="@Model.Price" class="form-control" name="Price" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.Price)</div>
                     <div class="d-flex align-items-center my-3">
