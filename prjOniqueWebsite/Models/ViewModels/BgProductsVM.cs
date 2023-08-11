@@ -30,6 +30,6 @@ namespace prjOniqueWebsite.Models.ViewModels
         public int SupplierId { get; set; }
         public int? DiscountId { get; set; }
         public string? PhotoPath { get; set; }
-        public IFormFile Photo { get; set; }
+        public IFormFile? Photo { get; set; }
     }
 }
