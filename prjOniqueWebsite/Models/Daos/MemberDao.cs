@@ -1,4 +1,5 @@
-﻿using prjOniqueWebsite.Models.EFModels;
+﻿using prjOniqueWebsite.Models.DTOs;
+using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
 
@@ -41,7 +42,7 @@ namespace prjOniqueWebsite.Models.Daos
                            }).FirstOrDefault();
             return vm;
         }
-       
+
         public void CreateMember(MemberVM vm)
         {
             var member = new Members
@@ -85,6 +86,23 @@ namespace prjOniqueWebsite.Models.Daos
             _context.SaveChanges();
         }
 
+        public List<MemberOrderDto> GetMemberOrders(int MemberId)
+        {
 
+            var memberorder = (from m in _context.Members
+                               join o in _context.Orders
+                               on m.MemberId equals o.MemberId
+                               join p in _context.PaymentMethods
+                               on o.PaymentMethodId equals p.PaymentMethodId                              
+                               where m.MemberId == MemberId
+                               select ( new MemberOrderDto
+                               {                                 
+                                   OrderId = o.OrderId,
+                                   OrderDate = Convert.ToDateTime(o.OrderDate).ToString("yyyy-MM-dd"),
+                                   PaymentMethodName = p.PaymentMethodName,
+                                   TotalPrice = o.TotalPrice
+                               })).ToList();
+            return memberorder;
+        }
     }
 }
