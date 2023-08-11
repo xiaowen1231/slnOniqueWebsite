@@ -42,7 +42,7 @@ namespace prjOniqueWebsite.Models.Daos
                                  }).FirstOrDefault();
             return dto;
         }
-        public void EditMember(Members member,MemberVM vm)
+        public void EditMember(Members member, MemberVM vm)
         {
             if (member != null)
             {
@@ -124,25 +124,60 @@ namespace prjOniqueWebsite.Models.Daos
                 RegisterDate = DateTime.Now,
                 DateOfBirth = Convert.ToDateTime(vm.DateOfBirth)
             };
+            _context.Members.Add(mem);
+            _context.SaveChanges();
+            if (vm.Photo != null)
+            {
+                string fileName = $"MemberId_{mem.MemberId}.jpg";
+                mem.PhotoPath = fileName;
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
+            }
+            else
+            {
+                // 如果沒有上傳新照片，使用預設的照片路徑和檔名
+                string defaultFileName = $"MemberId_{mem.MemberId}.jpg";
+                mem.PhotoPath = defaultFileName;
+                // 取得預設照片的完整路徑
+                string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
+                // 複製預設照片到指定路徑
+                string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
+                System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
+            }
+            _context.Update(mem);
+            _context.SaveChanges();
         }  
-
-        public List<MemberOrderDto> GetMemberOrders(int MemberId)
+        public Members GetMemberByEmail(string email)
         {
-
-            var memberorder = (from m in _context.Members
-                               join o in _context.Orders
-                               on m.MemberId equals o.MemberId
-                               join p in _context.PaymentMethods
-                               on o.PaymentMethodId equals p.PaymentMethodId                              
-                               where m.MemberId == MemberId
-                               select ( new MemberOrderDto
-                               {                                 
-                                   OrderId = o.OrderId,
-                                   OrderDate = Convert.ToDateTime(o.OrderDate).ToString("yyyy-MM-dd"),
-                                   PaymentMethodName = p.PaymentMethodName,
-                                   TotalPrice = o.TotalPrice
-                               })).ToList();
-            return memberorder;
+            var memInDb = _context.Members.FirstOrDefault(m => m.Email == email);
+            if(memInDb == null)
+            {
+                return null;
+            }
+            return memInDb;
         }
-    }
-}
+
+        }
+            public List<MemberOrderDto> GetMemberOrders(int MemberId)
+            {
+
+                var memberorder = (from m in _context.Members
+                                   join o in _context.Orders
+                                   on m.MemberId equals o.MemberId
+                                   join p in _context.PaymentMethods
+                                   on o.PaymentMethodId equals p.PaymentMethodId
+                                   where m.MemberId == MemberId
+                                   select (new MemberOrderDto
+                                   {
+                                       OrderId = o.OrderId,
+                                       OrderDate = Convert.ToDateTime(o.OrderDate).ToString("yyyy-MM-dd"),
+                                       PaymentMethodName = p.PaymentMethodName,
+                                       TotalPrice = o.TotalPrice
+                                   })).ToList();
+                return memberorder;
+            }
+        
+    } }
