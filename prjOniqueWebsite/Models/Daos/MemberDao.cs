@@ -41,20 +41,25 @@ namespace prjOniqueWebsite.Models.Daos
                            }).FirstOrDefault();
             return vm;
         }
-        public void UpdatePhoto(Members member, MemberVM vm)
+       
+        public void CreateMember(MemberVM vm)
         {
-            if (vm.Photo != null)
+            var member = new Members
             {
-                string fileName = $"MemberId_{member.MemberId}.jpg";
-                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
-                using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                {
-                    vm.Photo.CopyTo(fileStream);
-                }
-            }
-        }
-        public void CreatePhoto(Members member, MemberVM vm)
-        {
+                Name = vm.Name,
+                Password = vm.Password,
+                Email = vm.Email,
+                Phone = vm.Phone,
+                Gender = Convert.ToBoolean(vm.Gender),
+                Citys = Convert.ToInt32(vm.Citys),
+                Areas = Convert.ToInt32(vm.Areas),
+                Address = vm.Address,
+                MemberLevel = Convert.ToInt32(vm.MemberLevel),
+                RegisterDate = DateTime.Now,
+                DateOfBirth = Convert.ToDateTime(vm.DateOfBirth)
+            };
+            _context.Members.Add(member);
+            _context.SaveChanges();
             if (vm.Photo != null)
             {
                 string fileName = $"MemberId_{member.MemberId}.jpg";
@@ -76,25 +81,6 @@ namespace prjOniqueWebsite.Models.Daos
                 string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
                 System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
             }
-            _context.Update(member);
-            _context.SaveChanges();
-        }
-        public void CreateMember(MemberVM vm)
-        {
-            var member = new Members
-            {
-                Name = vm.Name,
-                Password = vm.Password,
-                Email = vm.Email,
-                Phone = vm.Phone,
-                Gender = Convert.ToBoolean(vm.Gender),
-                Citys = Convert.ToInt32(vm.Citys),
-                Areas = Convert.ToInt32(vm.Areas),
-                Address = vm.Address,
-                MemberLevel = Convert.ToInt32(vm.MemberLevel),
-                RegisterDate = DateTime.Now,
-                DateOfBirth = Convert.ToDateTime(vm.DateOfBirth)
-            };
             _context.Update(member);
             _context.SaveChanges();
         }
