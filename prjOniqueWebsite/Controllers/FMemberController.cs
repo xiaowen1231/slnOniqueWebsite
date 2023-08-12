@@ -5,6 +5,7 @@ using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Drawing.Printing;
 using System.Text.Json;
 
 namespace prjOniqueWebsite.Controllers
@@ -99,7 +100,7 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult MemberOrder()
         {
             Members member = _userInfoService.GetMemberInfo();
-            
+           
             return PartialView(member);
         }
         

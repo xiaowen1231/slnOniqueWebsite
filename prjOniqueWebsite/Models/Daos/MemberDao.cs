@@ -149,11 +149,11 @@ namespace prjOniqueWebsite.Models.Daos
             }
             _context.Update(mem);
             _context.SaveChanges();
-        }  
+        }
         public Members GetMemberByEmail(string email)
         {
             var memInDb = _context.Members.FirstOrDefault(m => m.Email == email);
-            if(memInDb == null)
+            if (memInDb == null)
             {
                 return null;
             }
@@ -168,23 +168,29 @@ namespace prjOniqueWebsite.Models.Daos
             }
             return memInDb;
         }
-            public List<MemberOrderDto> GetMemberOrders(int MemberId)
-            {
+        public List<MemberOrderDto> GetMemberOrders(int MemberId)
+        {
 
-                var memberorder = (from m in _context.Members
-                                   join o in _context.Orders
-                                   on m.MemberId equals o.MemberId
-                                   join p in _context.PaymentMethods
-                                   on o.PaymentMethodId equals p.PaymentMethodId
-                                   where m.MemberId == MemberId
-                                   select (new MemberOrderDto
-                                   {
-                                       OrderId = o.OrderId,
-                                       OrderDate = Convert.ToDateTime(o.OrderDate).ToString("yyyy-MM-dd"),
-                                       PaymentMethodName = p.PaymentMethodName,
-                                       TotalPrice = o.TotalPrice
-                                   })).ToList();
-                return memberorder;
-            }
-        
-    } }
+
+            var memberorder = (from m in _context.Members
+                               join o in _context.Orders
+                               on m.MemberId equals o.MemberId
+                               join p in _context.PaymentMethods
+                               on o.PaymentMethodId equals p.PaymentMethodId
+                               where m.MemberId == MemberId
+                               
+                               select (new MemberOrderDto
+                               {
+                                   OrderId = o.OrderId,
+                                   OrderDate = o.OrderDate,
+                                   PaymentMethodName = p.PaymentMethodName,
+                                   TotalPrice = o.TotalPrice
+                               })).OrderByDescending(o=>o.OrderDate).ToList();
+
+
+            return memberorder;
+
+        }
+
+    }
+}

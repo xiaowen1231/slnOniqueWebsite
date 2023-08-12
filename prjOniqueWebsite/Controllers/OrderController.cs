@@ -31,7 +31,7 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult Index(string keyword, string sort, int pagenumber, int pagesize)
         {
 
-            ViewBag.Keyword = keyword;/*==null?"":keyword ;*/
+            ViewBag.Keyword = keyword;
             ViewBag.Sort = sort;
             ViewBag.Pagenumber = pagenumber;
             ViewBag.PageSize = pagesize;
@@ -53,6 +53,7 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Details(OrderStatusVM vm)
         {
+
             var query = _context.Orders.Where(O => O.OrderId == vm.OrderId).FirstOrDefault();
             var orderDetails = _context.OrderDetails.Where(o => o.OrderId == vm.OrderId).ToList();
             query.OrderStatusId = vm.StatusId;
@@ -101,7 +102,7 @@ namespace prjOniqueWebsite.Controllers
         }
         [Authorize(Roles = "Member")]
         /// <summary>
-        /// 寄給會員的order頁面
+        /// 寄給會員的order頁面,太長了 要丟進service判斷才對
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
@@ -109,9 +110,9 @@ namespace prjOniqueWebsite.Controllers
         {
             //要會員登入才能看，且只能看自己的訂單,
             ViewBag.OrderId = orderId;
-            var Loginmember = _userInfoService.GetMemberInfo().Email;
-            var Ordermember = dao.GetEmailByOrderId(orderId);
-            if (Loginmember == Ordermember)
+            var Loginmember = _userInfoService.GetMemberInfo().Email;//目前登入者的資料
+            var Ordermember = dao.GetEmailByOrderId(orderId);//此訂單對應客戶帳號
+            if (Loginmember == Ordermember)//比對兩者
             {
                 return View();
             }

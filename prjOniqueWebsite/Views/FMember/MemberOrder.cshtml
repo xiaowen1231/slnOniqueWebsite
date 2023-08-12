@@ -1,56 +1,63 @@
 ﻿@model prjOniqueWebsite.Models.EFModels.Members
-
+@{
+    int pagesize = 0;
+    int pagenumber = 0;
+   
+}
 <form method="post">
     <div class="container">
-
+        <div>
+            <input type="hidden" value="@pagenumber" id="searchPagenumber" />
+            <input type="hidden" value="@pagesize" id="searchpageSize" />
+        </div>
         <div class="m-3 fs-3 fw-bold py-4 border-bottom border-dark-subtle">訂單查詢</div>
         <div class="d-flex justify-content-between px-4">
             <div class="d-flex align-items-center gap-2">
-                <div class="width-90px  ">每頁顯示 : </div>
+                <div class="width-70px  ">每頁顯示 </div>
                 <div>
-                    <select class="form-select d-inline" aria-label="資料筆數">
-                        <option value="">10</option>
-                        <option value="">20</option>
-                        <option value="">30</option>
+                    <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
                     </select>
                 </div>
                 <div class="width-50px ">筆資料</div>
             </div>
             <div class="d-flex align-items-center">
-                <div class="mx-3"><span>關鍵字搜尋</span></div>
+               @* <div class="mx-3"><span>關鍵字搜尋</span></div>
 
                 <div>
                     <input type="text" name="" id="" placeholder="請輸入訂單關鍵字" class="form-control">
-                </div>
+                </div>*@
             </div>
         </div>
         <div class="container">
             <div class="p-2 my-4 border border-dark-subtle rounded-4 ">
                 <table class="table table-striped align-middle">
                     <thead>
-                    <tr>
-                    <th>訂單編號</th>
-                    <th>訂單日期</th>
-                    <th>付款方式</th>
-                    <th>訂單金額</th>
-                    <th>詳情</th>
-                    </tr>
+                        <tr>
+                            @*<th>訂單編號</th>*@
+                            <th>訂單日期</th>
+                            <th>付款方式</th>
+                            <th>訂單金額</th>
+                            <th>詳情</th>
+                        </tr>
                     </thead>
                     <tbody id="fmemberTable">
 
-                    @*<tr>
-                    <td>
-                    <span>Order001</span>
-                    </td>
-                    <td>2023/07/16</td>
-                    <td>貨到付款</td>
-                    <td>
-                    <div class="text-danger">2000</div>
-                    </td>
-                    <td>
-                    <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                    </td>
-                    </tr>*@
+                        @*<tr>
+                        <td>
+                        <span>Order001</span>
+                        </td>
+                        <td>2023/07/16</td>
+                        <td>貨到付款</td>
+                        <td>
+                        <div class="text-danger">2000</div>
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                        </td>
+                        </tr>*@
 
                     </tbody>
                 </table>
@@ -59,7 +66,7 @@
         <div class="container">
             <nav class="d-flex justify-content-center" aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item">
+                   @* <li class="page-item">
                         <a class="page-link" href="#" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
@@ -71,7 +78,7 @@
                         <a class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
-                    </li>
+                    </li>*@
                 </ul>
             </nav>
         </div>
@@ -79,39 +86,84 @@
 </form>
 <input type="hidden" value="@Model.MemberId" id="memberId" />
 <script>
+    let pagenumber = Number($("#searchPagenumber").val())
+    let pagesize = Number($("#searchpageSize").val())
 
-    loadorder()
-    async function loadorder() {
+
+    loadorder(pagenumber, pagesize)
+    async function loadorder(pagenumber, pagesize) {
         let memberId = $("#memberId").val()
-        const response = await fetch(`@Url.Content("~/memberapi/memberOrder?MemberId")=${memberId}`)
+        const response = await fetch(`@Url.Content("~/memberapi/memberOrder?MemberId")=${memberId}&pageNumber=${pagenumber}&pagesize=${pagesize}`)
         const data = await response.json();
         console.log(data)
+        const { criteria, memberOrderPaginationInfo, memberOrders }=data.value;
         let memberorderList = "";
 
-        const ordercontent = data.map(item => {
-            const { orderId, orderDate, paymentMethodName, totalPrice } = item
+        memberOrders.map(item => {
+            const { orderId, orderDate, paymentMethodName, totalPrice } = item;
+            let displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
             //console.log(orderId, orderDate, paymentMethodName, totalPrice);
             //console.log(item)
-            memberorderList += 
-`<tr>
-<td>
-<span>${orderId}</span>
-</td>
-<td>${orderDate}</td>
-<td>${paymentMethodName}</td>
-<td>
-<div class="text-danger">${totalPrice}</div>
-</td>
-<td>
-<button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-</td>
-</tr>
+            memberorderList +=
+                `<tr>
 
-`
+        <td>${displayorderDate}</td>
+    <td>${paymentMethodName}</td>
+    <td>
+    <div class="text-danger fw-bold">$${totalPrice}</div>
+    </td>
+    <td>
+    <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+    </td>
+    </tr>
+
+    `
         })
         $("#fmemberTable").html(memberorderList);
-        console.log(memberorderList)
+       
+        let liPagination = ""
 
+        if (memberOrderPaginationInfo.pageNumber >= 1) {
+            liPagination += `<li  class="page-item ">
+                                                            <a class="page-link pageItemPrevNumber" data-pagenumber="${memberOrderPaginationInfo.pageItemPrevNumber}" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>`
+        }
+        for (let i = 0; i < memberOrderPaginationInfo.pageBarItemCount; i++) {
+            let active = memberOrderPaginationInfo.pageBarStartNumber + i == memberOrderPaginationInfo.pageNumber ? "active" : "";
+            let clickPageNumber = memberOrderPaginationInfo.pageBarStartNumber + i;
+            liPagination += `<li class="${active} page-item"><a class="page-link pageItemPrevNumber" data-pagenumber="${clickPageNumber}">${clickPageNumber}</a></li>`
+        }
+
+        if (memberOrderPaginationInfo.pageNumber < memberOrderPaginationInfo.pages) {
+            liPagination += `<li class="page-item">
+                                                                <a class="page-link pageItemPrevNumber" data-pagenumber="${memberOrderPaginationInfo.pageItemNextNumber}" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>`
+        }
+        $(".pagination").html(liPagination);
+    }
+    //改變pagesize
+    $("#pageSize").on('change', function () {
+
+        pagesize = Number($(this).val())
+
+        loadorder(1, pagesize)
+    })
+    //click分頁籤
+    $(".pagination").on("click", ".pageItemPrevNumber", function () {
+        pagenumber = $(this).data("pagenumber")
+
+        loadorder(pagenumber, pagesize)
+    })
+
+    //memberorderdetail_url
+    function openOrderDetails(orderId) {
+        console.log(orderId)
+        const url = '@Url.Action("OrderEmailContent", "Order")' + '?orderId=' + orderId; // 構造URL
+        window.location.href = url; // 導航到詳細頁面
     }
 
 </script>

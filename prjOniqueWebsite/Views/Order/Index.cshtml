@@ -1,4 +1,4 @@
-﻿@model prjOniqueWebsite.Models.ViewModels.OrderPagination
+﻿@*@model prjOniqueWebsite.Models.ViewModels.OrderPagination*@
 @{
     ViewData["Title"] = "訂單總覽";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
@@ -330,7 +330,7 @@
             event.preventDefault();
 
             keyword = $('#txtKeyWord').val();
-            console.log("123")
+            //console.log("123")
             DisplayOrders(keyword, sort, 1, pagesize)
         })
 
