@@ -92,8 +92,8 @@ namespace prjOniqueWebsite.Controllers
             {
                 List<Claim> claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,member.MemberId.ToString()),
-                    new Claim(ClaimTypes.Role,"Member")
+                    new Claim("MemberId",member.MemberId.ToString()),
+                    new Claim(ClaimTypes.Role,"Member"),
                 };
 
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -107,7 +107,7 @@ namespace prjOniqueWebsite.Controllers
             {
                 List<Claim> claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,employee.EmployeeId.ToString()),
+                    new Claim("EmployeeId",employee.EmployeeId.ToString()),
                 };
 
                 string EmployeeLevel = _context.Employees.Where(e => e.EmployeeId == employee.EmployeeId)
