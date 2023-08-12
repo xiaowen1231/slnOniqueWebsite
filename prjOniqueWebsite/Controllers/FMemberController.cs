@@ -37,11 +37,11 @@ namespace prjOniqueWebsite.Controllers
                          }).FirstOrDefault();
             return View(photo);
         }
-        
+
         public IActionResult MemberInfo( )
         {
             Members member = _userInfoService.GetMemberInfo();
-            var mem = (from m in _context.Members
+            FMemberDto mem = (from m in _context.Members
                        join c in _context.Citys
                        on m.Citys equals c.CityId
                        join a in _context.Areas
@@ -62,7 +62,7 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult MemberInfoEdit(int id)
         {
-            var member = (from m in _context.Members
+            var mem = (from m in _context.Members
                           join c in _context.Citys
                           on m.Citys equals c.CityId
                           join a in _context.Areas
@@ -80,7 +80,7 @@ namespace prjOniqueWebsite.Controllers
                               Areas = a.AreaName,
                               Address = m.Address
                           }).FirstOrDefault();
-            return PartialView(member);
+            return PartialView(mem);
         }
         [HttpPost]
         public IActionResult MemberInfoEdit(FMemberDto fMemberDto)
