@@ -16,9 +16,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         [Required(ErrorMessage = "{0}是必填欄位!")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Display(Name = "電子郵件")]
-        [Required(ErrorMessage = "{0}是必填欄位!")]
-        [DataType(DataType.EmailAddress)]
+
         public string? Email { get; set; }
         [Display(Name = "電話")]
         [Required(ErrorMessage = "{0}是必填欄位!")]
