@@ -45,30 +45,29 @@ namespace prjOniqueWebsite.Models.Daos
             return employee;
         }
 
-        public void EditEmployee(Employees employee, EmployeeVM vm)
+        public void EditEmployee(EmployeeEditVM vm)
         {
-            if (employee != null)
+            var employee = _context.Employees.Where(e => e.EmployeeId == vm.EmployeeId).FirstOrDefault();
+            if (vm.Photo != null)
             {
-                if (vm.Photo != null)
-                {
-                    string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
-                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
+                string fileName = $"EmployeeId_{employee.EmployeeId}.jpg";
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/Employee", fileName);
 
-                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                    {
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
                         vm.Photo.CopyTo(fileStream);
 
-                    }
-                    employee.PhotoPath = fileName;
                 }
-                employee.EmployeeName = vm.EmployeeName;
-                employee.Password = vm.Password;
-                employee.Phone = vm.Phone;
-                employee.Citys = Convert.ToInt32(vm.Citys);
-                employee.Areas = Convert.ToInt32(vm.Areas);
-                employee.Address = vm.Address;
-                employee.Position = Convert.ToInt32(vm.EmployeeLevel);
+                employee.PhotoPath = fileName;
             }
+            employee.EmployeeName = vm.EmployeeName;
+            employee.Password = vm.Password;
+            employee.Phone = vm.Phone;
+            employee.Citys = Convert.ToInt32(vm.Citys);
+            employee.Areas = Convert.ToInt32(vm.Areas);
+            employee.Address = vm.Address;
+            employee.Position = Convert.ToInt32(vm.EmployeeLevel);
+            
 
             _context.SaveChanges();
         }
@@ -104,6 +103,25 @@ namespace prjOniqueWebsite.Models.Daos
                 _context.SaveChanges();
             }
 
+        }
+
+        public Employees GetEmployeeByEmail(string email)
+        {               
+            var employee = _context.Employees.FirstOrDefault(e => e.Email == email);
+            if (employee == null)
+            {
+                return null;
+            }
+            return employee;
+        }
+        public Employees GetEmployeeByPhone(string phone)
+        {
+            var employee = _context.Employees.FirstOrDefault(e => e.Phone == phone);
+            if (employee == null)
+            {
+                return null;
+            }
+            return employee;
         }
 
         public void DeleteEmployee(Employees employee) 
