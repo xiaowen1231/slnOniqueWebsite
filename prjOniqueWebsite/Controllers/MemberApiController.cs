@@ -55,7 +55,7 @@ namespace prjOniqueWebsite.Controllers
         {
             try
             {
-                var dto = dao.GetMemberOrders(MemberId);
+                var dto = _dao.GetMemberOrders(MemberId);
                 var index = memberOrderIndex(dto, pageNumber, pageSize);
                 return Json(index);
 

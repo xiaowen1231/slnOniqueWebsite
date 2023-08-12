@@ -41,6 +41,7 @@ namespace prjOniqueWebsite.Models.Daos
             }
             return memInDb;
         }
+
         public Members GetMemberByPhone(string phone)
         {
             var memInDb = _context.Members.FirstOrDefault(m => m.Phone == phone);
@@ -134,15 +135,7 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Update(mem);
             _context.SaveChanges();
         }
-        public Members GetMemberByEmail(string email)
-        {
-            var memInDb = _context.Members.FirstOrDefault(m => m.Email == email);
-            if (memInDb == null)
-            {
-                return null;
-            }
-            return memInDb;
-        }
+       
         public MemberEditDto GetMemberById(int id)
         {
             MemberEditDto dto = (from m in _context.Members
@@ -171,8 +164,7 @@ namespace prjOniqueWebsite.Models.Daos
                                  }).FirstOrDefault();
             return dto;
         }
-        public List<MemberOrderDto> GetMemberOrders(int MemberId)
-        {
+        
 
 
         public void EditMember(MemberEditVM vm)
