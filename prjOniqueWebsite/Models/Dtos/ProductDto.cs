@@ -17,7 +17,7 @@
             {
                 if (DiscountMethod!.HasValue)
                 {
-                    return this.Price * this.DiscountMethod;
+                    return Math.Round((decimal)(this.Price * this.DiscountMethod));
                 }
                 else { return null; }
             }

@@ -118,8 +118,8 @@ namespace prjOniqueWebsite.Controllers
                     {
                         StockId = item.StockId,
                         OrderQuantity = item.ShoppingCart.OrderQuantity,
-                        Price = item.Product.Price
-                    });
+                        Price = item.DiscountMethod==null?item.Product.Price:Convert.ToDecimal(item.DiscountPrice)
+                    });;
                 }
                 
                 List<ShoppingCart> cartItems = new List<ShoppingCart>();

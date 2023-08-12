@@ -32,7 +32,7 @@
                         <th>尺寸</th>
                         <th>顏色</th>
                         <th>數量</th>
-                        <th>小計</th>
+                        <th style="width:153px">小計</th>
                     </tr>
                 </thead>
                 <tbody id="tableCartList">
@@ -139,8 +139,8 @@
         </div>
         <div class="p-2 mb-4 text-center">
             <input type="hidden" id="inputAmountOfOrder" name="TotalPrice" />
-            <input type="button" value="返回購物車" class="btn btn-outline-dark" style="width: 150px;" />
-            <input type="submit" id="btnSubmit" value="提交訂單" class="btn btn-dark" style="width: 150px;"  />
+            <input type="button" value="返回購物車" class="btn btn-outline-dark btnBackToCart" style="width: 150px;" />
+            <input type="submit" id="btnSubmit" value="提交訂單" class="btn btn-dark" style="width: 150px;" />
             <input type="hidden" id="findemail" value="@Model.Email" />
         </div>
     </form>
@@ -167,31 +167,55 @@
             const response = await fetch(`@Url.Content("~/ShoppingCartApi/CartItems")`);
             const datas = await response.json();
 
-            const cartList = datas.map(item => {
-                const { photoPath, product, productSizes, productColors, shoppingCart } = item;
 
-                let subTotal = product.price * shoppingCart.orderQuantity;
+            let htmlStr = ""
+            datas.map(item => {
+                console.log(item)
+                const { photoPath, product, productSizes, productColors, shoppingCart, discountMethod, discountPrice } = item;
+
+                let displayPrice = product.price
+
+                if (discountMethod != null) {
+                    displayPrice = discountPrice
+                }
+
+                let subTotal = displayPrice * shoppingCart.orderQuantity;
+
                 quantumOfOutput += subTotal;
 
-                return (`<tr class="border">
-                                    <td class="w-90-h-90">
-                                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${product.productName}" class="w-90-h-90 rounded">
-                                    </td>
-                                    <td>
-                                        ${product.productName}
-                                    </td>
-                                    <td>${productSizes.sizeName}</td>
-                                    <td>${productColors.colorName}</td>
-                                    <td>${shoppingCart.orderQuantity}</td>
-                                    <td>
-                                        <div class="price">
-                                            ${subTotal}
-                                        </div>
-                                    </td>
-                                </tr>`)
+                htmlStr += `<tr class="border">
+                                <td class="w-90-h-90">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${product.productName}" class="w-90-h-90 rounded">
+                                </td>
+                                <td>
+                                    ${product.productName}
+                                </td>
+                                <td>${productSizes.sizeName}</td>
+                                <td>${productColors.colorName}</td>
+                                <td>${shoppingCart.orderQuantity}</td>
+                                <td class="position-relative">`;
+                if (discountMethod != null)
+                {
+                    htmlStr += `<div class="price text-danger" >
+                                    ${subTotal}
+                                </div>
+                                <div class="saleImg">
+                                    <img src="@Url.Content("~/images/icon/sale-tag.png")"/>
+                                </div>`;
+                }
+                else
+                {
+                    htmlStr += `<div class="price">
+                                    ${subTotal}
+                                </div>`;
+                }
+                htmlStr += `</td>
+                        </tr>`;
             })
-            tableCartList.innerHTML = cartList.join("");
+            tableCartList.innerHTML = htmlStr;
+
             $('#divProductsSubTotal').text(quantumOfOutput);
+
             DisplayShippingMethod();
         }
 
@@ -335,7 +359,7 @@
                 const datas = await response.json();
 
                 let email = $("#findemail").val()
-                let id=datas.orderId
+                let id = datas.orderId
                 console.log(email)
                 console.log(id)
 
@@ -414,6 +438,7 @@
                 return true
             }
         }
+
         function setMessage(result) {
             let message;
             let nameList = Object.keys(result);
@@ -429,6 +454,13 @@
                 label.innerHTML = ''
             });
         }
+
+        $('.btnBackToCart').on('click',function(event){
+            event.preventDefault();
+
+            window.location.href = `@Url.Content("~/ShoppingCart/Index")`
+        })
+
     </script>
 }
 @section Styles{
@@ -436,6 +468,15 @@
     <style>
         .price::before {
             content: "$";
+        }
+
+        .saleImg {
+            width: 30px;
+            position: absolute;
+            left: 0;
+            height: 30px;
+            top: 50%;
+            transform: translateY(-50%);
         }
     </style>
 }

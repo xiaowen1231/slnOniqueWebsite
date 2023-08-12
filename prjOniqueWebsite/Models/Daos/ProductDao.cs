@@ -91,6 +91,7 @@ namespace prjOniqueWebsite.Models.Repositories
                     DiscountMethod = p.Discount.DiscountMethod,
                     PhotoPath= p.PhotoPath
                 });
+            
             return dto.FirstOrDefault();
         }
 
@@ -189,6 +190,9 @@ namespace prjOniqueWebsite.Models.Repositories
                        on psd.ColorId equals pc.ColorId
                        join ps in _context.ProductSizes
                        on psd.SizeId equals ps.SizeId
+                       join d in _context.Discounts
+                       on p.DiscountId equals d.Id into discountGroup
+                       from d in discountGroup.DefaultIfEmpty()  
                        where s.MemberId == member.MemberId
                        select new ShoppingCartDto
                        {
@@ -198,6 +202,7 @@ namespace prjOniqueWebsite.Models.Repositories
                            PhotoPath = psd.PhotoPath,
                            ProductColors = pc,
                            ProductSizes = ps,
+                           DiscountMethod = d != null ? d.DiscountMethod : null,  
                        };
 
             return cart.ToList();

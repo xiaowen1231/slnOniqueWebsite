@@ -2,6 +2,7 @@
 using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Repositories;
+using prjOniqueWebsite.Models.Services;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -26,7 +27,7 @@ namespace prjOniqueWebsite.Controllers
         {
             try
             {
-                var dto = new ProductDao(_context).ProductInfo(id);
+                var dto = new ProductService(_context).ProductInfo(id);
                 return View(dto);
             }
             catch
