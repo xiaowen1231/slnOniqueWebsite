@@ -15,39 +15,7 @@ namespace prjOniqueWebsite.Models.Services
             _environment = environment;
 
         }
-        public void CreateDiscont(BgDiscointCreateVM vm)
-        {
-            var discountName = _context.Discounts.FirstOrDefault(d=>d.Title == vm.Title);
-            if(discountName != null)
-            {
-                throw new Exception("已存在同名活動");
-            }
-            if (vm.BeginDate > vm.EndDate)
-            {
-                throw new Exception("開始日期大於結束日期");
-            }
-            else
-            {
-                new BgProductDao(_context,_environment).CreateDiscount(vm);
-            }
-        }
 
-        public void UpdataDiscount(BgDiscointCreateVM vm)
-        {
-            var discount = _context.Discounts.FirstOrDefault(d=>d.Title==vm.Title);
-            if (discount != null && discount.Id != vm.Id)
-            {
-                throw new Exception("已存在同名活動");
-            }
-            if (vm.BeginDate > vm.EndDate)
-            {
-                throw new Exception("開始日期大於結束日期");
-            }
-            else
-            {
-                new BgProductDao(_context, _environment).UpdataDiscount(vm);
-            }
-        }
         public void CreateProducts(BgProductsVM vm)
         {
             var productNameCheck = _context.Products.FirstOrDefault(p => p.ProductName == vm.ProductName);
@@ -65,21 +33,6 @@ namespace prjOniqueWebsite.Models.Services
             }
         }
 
-        public void AddToDiscount(int productId, int discountId)
-        {
-            int? discountIdInDb = _context.Products
-                .Where(p => p.ProductId == productId)
-                .Select(p => p.DiscountId)
-                .FirstOrDefault();
-            if (discountIdInDb != null)
-            {
-                throw new Exception("此商品已被加入其他優惠!");
-            }
-            else
-            {
-                new BgProductDao(_context, _environment).AddToDiscount(productId, discountId);
-            }
-        }
 
         public void UpdataProducts(BgProductsVM vm)
         {
