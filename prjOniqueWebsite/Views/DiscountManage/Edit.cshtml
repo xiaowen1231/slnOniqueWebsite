@@ -11,9 +11,9 @@
 <div>
     <div class="fw-bold fs-4 border-bottom text-center p-3">編輯優惠</div>
 </div>
-<div class="d-flex border m-2 p-2 rounded shadow justify-content-sm-between">
+<div class="m-2 p-2">
     <form method="post" enctype="multipart/form-data">
-        <div class=" mx-auto justify-content-around" style="width:450px">
+        <div class=" mx-auto justify-content-around border rounded shadow d-flex" style="width:1000px">
             <div>
                 <div class="border rounded my-3 mx-auto btnUpload cursor-pointer" style="width:350px; height:350px">
                     <img src="@Url.Content("~/images/DiscountPhoto/")@fileName" id="imgDiscountPhoto" class="rounded" />
@@ -63,13 +63,14 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-center gap-3 my-4">
-                <a type="button" class="btn btn-outline-dark" href="@Url.Content("~/DiscountManage/Index")">取消</a>
-                <input type="submit" value="修改" class="btn btn-dark" />
-            </div>
+    
+        </div>
+        <div class="d-flex justify-content-center gap-3 my-4">
+            <a type="button" class="btn btn-outline-dark" href="@Url.Content("~/DiscountManage/Index")">取消</a>
+            <input type="submit" value="修改" class="btn btn-dark" />
         </div>
     </form>
-    <div class="p-2" style="width:800px">
+    <div class="p-2 mx-auto" style="width:1000px">
         <div class="btn btn-outline-secondary my-3" id="divAddDiscountProduct">新增活動商品</div>
         <div class="border border-dark-subtle shadow rounded-3 p-2" data-aos="fade-up">
             <table class="table table-borderless table-hover align-middle text-center my-0">
@@ -82,7 +83,7 @@
                         <th>刪除</th>
                     </tr>
                 </thead>
-                <tbody id="">
+                <tbody id="tbodyDiscountProductList">
                 </tbody>
             </table>
         </div>
@@ -176,38 +177,38 @@
 
             datas.map(item => {
                 htmlStr += `<tr>
-                                <td>
-                                    <div class="w-120-h-120">
-                                        <img src="@Url.Content("~/images/uploads/products/")${item.photoPath}" />
-                                    </div>
-                                </td>
-                                <td class="text-center width-300px">
-                                ${item.productName}
-                                </td>
-                                <td>
-                                    <div class="price">
-                                        ${item.price}
-                                    </div>
-                                </td>`
+                                        <td>
+                                            <div class="w-120-h-120">
+                                                <img src="@Url.Content("~/images/uploads/products/")${item.photoPath}" />
+                                            </div>
+                                        </td>
+                                        <td class="text-center width-300px">
+                                        ${item.productName}
+                                        </td>
+                                        <td>
+                                            <div class="price">
+                                                ${item.price}
+                                            </div>
+                                        </td>`
 
                 if (item.discountId != null) {
                     htmlStr += `<td>
-                                    是
-                                </td>
-                                <td class="" data-aos="flip-left" >
-                                    <div class="width-50px mx-auto">
-                                        <img src="@Url.Content("~/images/icon/checked.png")" />
-                                    </div>
-                                </td>
-                            </tr>`
+                                            是
+                                        </td>
+                                        <td class="" data-aos="flip-left" >
+                                            <div class="width-50px mx-auto">
+                                                <img src="@Url.Content("~/images/icon/checked.png")" />
+                                            </div>
+                                        </td>
+                                    </tr>`
                 } else {
                     htmlStr += `<td>
-                                    否
-                                </td>
-                                <td>
-                                    <div class="btn btn-secondary btnAddToDiscount" data-productid="${item.id}">加入</div>
-                                </td>
-                            </tr>`
+                                            否
+                                        </td>
+                                        <td>
+                                            <div class="btn btn-secondary btnAddToDiscount" data-productid="${item.id}">加入</div>
+                                        </td>
+                                    </tr>`
                 }
             })
 
@@ -253,9 +254,11 @@
                     })
                     setTimeout(() => {
                         DisplayProductList(keyword)
+                        DisplayDiscountProducts(discountId)
                     }, 1500)
 
-                } else {
+                } 
+                else {
                     Swal.fire({
                         title: statusMessage,
                         icon: 'error',
@@ -268,8 +271,73 @@
         })
 
         async function DisplayDiscountProducts(discountId) {
-            const response = await fetch(`@Url.Content("~/")`)
+            const response = await fetch(`@Url.Content("~/DiscountManageApi/DisplayDiscountProductList")?discountId=${discountId}`)
+            const datas = await response.json();
+
+            let htmlContext = datas.map(item => {
+                const { discountPrice, photoPath, price, productId, productName } = item;
+
+                return (`<tr>
+                                <td>
+                                    <div class="w-120-h-120">
+                                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" />
+                                    </div>
+                                </td>
+                                <td>
+                                    ${productName}
+                                </td>
+                                <td class="price">
+                                    ${price}
+                                </td>
+                                <td class="price">
+                                    ${discountPrice}
+                                </td>
+                                <td>
+                                    <div class="mx-auto cursor-pointer divDeleteDiscount" data-id=${productId} style="height:30px;width:30px;">
+                                        <img src="@Url.Content("~/images/icon/delete.png")" />
+                                    </div>
+                                </td>
+                            </tr>`)
+
+            })
+
+            $('#tbodyDiscountProductList').html(htmlContext.join(""))
         }
+
+        DisplayDiscountProducts(discountId)
+
+        $('#tbodyDiscountProductList').on('click', '.divDeleteDiscount',async function (event) {
+            event.stopPropagation();
+
+            let id = $(this).data("id")
+            
+            const response = await fetch(`@Url.Content("~/DiscountManageApi/DeleteDiscountProduct/")${id}`)
+            const datas = await response.json();
+            
+            const { statusCode, statusMessage } = datas;
+
+                if (statusCode) {
+                    Swal.fire({
+                        title: statusMessage,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    })
+                    setTimeout(() => {
+                        DisplayProductList(keyword);
+                        DisplayDiscountProducts(discountId);
+                    }, 1500)
+
+                } 
+                else {
+                    Swal.fire({
+                        title: statusMessage,
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+        })
 
     </script>
 }

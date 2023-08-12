@@ -34,7 +34,7 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <li class="page-item">
-                    <a class="page-link" style="color: black;" href="#" aria-label="Previous">
+                    <a class="page-link " style="color: black;" href="#" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -58,8 +58,6 @@
         async function load() {
             const response = await fetch(`@Url.Content("~/BgProductManageApi/LoadDiscountList")`)
             const data = await response.json();
-            console.log(data)
-
 
             const TableBgDiscount = data.map(item => {
                 let { id, title, discountMethod, beginDate, endDate, photoPath } = item
@@ -78,7 +76,9 @@
                                     <a href="@Url.Content("~/DiscountManage/Edit/")${id}"><img src="@Url.Content("~/images/BgProductManage/edit.png")" class="width-30px" alt=""></a>
                                 </td>
                                 <td>
-                                    <a href=""><img src="@Url.Content("~/images/BgProductManage/trash.png")" class="width-30px" alt=""></a>
+                                    <div class="mx-auto cursor-pointer divDeleteDiscount" data-id="${id}" style="height:30px;width:30px">
+                                        <img src="@Url.Content("~/images/BgProductManage/trash.png")" alt="">
+                                    </div>
                                 </td>
                             </tr>`)
             })
@@ -90,6 +90,58 @@
             const month = String(date.getMonth() + 1).padStart(2, '0'); // 補零至兩位數
             const day = String(date.getDate()).padStart(2, '0'); // 補零至兩位數
             return `${year}-${month}-${day}`;
+        }
+
+        $("#BgDiscountList").on('click', '.divDeleteDiscount',async function(event){
+            event.stopPropagation();
+
+            Swal.fire({
+                text: "確定要刪除優惠活動?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#000000',
+                cancelButtonColor: '#9D9D9D	',
+                cancelButtonText: '取消',
+                confirmButtonText: '確定刪除'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    let id = $(this).data("id")
+
+                    DeleteDiscount(id)
+
+                }
+            })
+        })
+
+        async function DeleteDiscount(id){
+
+            const response = await fetch(`@Url.Content("~/DiscountManageApi/DeleteDiscount/")${id}`)
+            const data = await response.json();
+
+            const { statusCode, statusMessage } = data;
+
+            if (statusCode) {
+                Swal.fire({
+                    title: statusMessage,
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+                setTimeout(() => {
+                    load()
+                }, 1500)
+
+            }
+            else {
+                Swal.fire({
+                    title: statusMessage,
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+
         }
     </script>
 }

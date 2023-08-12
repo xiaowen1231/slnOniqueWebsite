@@ -41,7 +41,7 @@
     </div>
     <div class="text-end my-4">
         <input type="button" value="查看訂單" class="btn btn-outline-dark" id="checkOrder" style="width: 150px;" data-orderid="@Model.OrderId">
-        <input type="submit" value="繼續購物" class="btn btn-dark" style="width: 150px;">
+        <input type="button" value="繼續購物" class="btn btn-dark btnGoToList" style="width: 150px;">
     </div>
 </div>
 
@@ -50,4 +50,12 @@
     <link href="~/css/shoppingcart.css" rel="stylesheet" />
     <style>
     </style>
+}
+@section Scripts{
+    <script>
+        $('.btnGoToList').on('click',function(){
+            event.preventDefault();
+            window.location.href = `@Url.Content("~/Product/List")`;
+        })
+    </script>
 }

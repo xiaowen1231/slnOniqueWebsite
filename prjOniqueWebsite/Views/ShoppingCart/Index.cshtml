@@ -34,16 +34,22 @@
                             <th>顏色</th>
                             <th>尺寸</th>
                             <th>數量</th>
-                            <th>小計</th>
+                            <th style="width:153px">小計</th>
                             <th>刪除</th>
                         </tr>
                     </thead>
                     <tbody>
                         @{
+
                             decimal total = 0;
                             foreach (var item in Model)
                             {
-                                decimal subtotal = item.Product.Price * item.ShoppingCart.OrderQuantity;
+                                decimal displayPrice = item.Product.Price;
+                                if (item.DiscountMethod != null)
+                                {
+                                    displayPrice = Convert.ToDecimal(item.DiscountPrice);
+                                }
+                                decimal subtotal = displayPrice * item.ShoppingCart.OrderQuantity;
                                 total += subtotal;
                                 <tr>
                                     <td>
@@ -78,12 +84,27 @@
                                             <div class="border border-dark-subtle text-center cursor-pointer btnIncrease" style="width: 25px;">+</div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="price">
-                                            @subtotal.ToString("0")
-                                        </div>
-                                    </td>
+                                    <td class="position-relative">
 
+                                        @{
+                                            if (item.DiscountMethod != null)
+                                            {
+                                                <div class="price text-danger" >
+                                                    @subtotal.ToString("0")
+
+                                                </div>
+                                                <div class="saleImg">
+                                                    <img src="@Url.Content("~/images/icon/sale-tag.png")"/>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="price">
+                                                    @subtotal.ToString("0")
+                                                </div>
+                                            }
+                                        }
+                                    </td>
                                     <td>
                                         <div class="d-flex justify-content-center btnDelete">
                                             <input type="hidden" name="shoppingCartId" value="@item.ShoppingCart.Id" />
@@ -104,7 +125,7 @@
                     <div class="price text-danger fw-bold fs-5">@total.ToString("0")</div>
                 </div>
                 <div class="mt-5">
-                    <input type="button" value="繼續購物" class="btn btn-outline-dark" style="width: 150px;">
+                    <input type="button" value="繼續購物" class="btn btn-outline-dark btnBackToProductList" style="width: 150px;">
                     <a href="@Url.Content("~/ShoppingCart/OrderConfirmation")">
                         <div class="btn btn-dark" style="width: 150px;">結帳</div>
                     </a>
@@ -148,6 +169,15 @@
         .btnDelete {
             cursor: pointer;
         }
+
+        .saleImg {
+            width: 30px;
+            position: absolute;
+            left: 0;
+            height: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
     </style>
 
 }
@@ -171,6 +201,7 @@
                 }
             })
         })
+
         async function DeleteCart(shoppingCartId) {
             const response = await fetch(`@Url.Content("~/ShoppingCartApi/DeleteCart?")shoppingCartId=${shoppingCartId}`)
             const result = await response.json();
@@ -207,6 +238,7 @@
 
             UpdateOrderQty(stockId, originalQty, updateQty, shoppingCartId);
         })
+
         $(".btnReduce").click(async function () {
             let stockId = Number($(this).parent().find('input').eq(0).val());
             let originalQty = Number($(this).parent().find('input').eq(1).val());
@@ -224,7 +256,7 @@
             const data = await response.json()
 
             const { statusCode, message } = data;
-            console.log(data)
+
             if (statusCode == 200) {
                 Swal.fire({
                     title: message,
@@ -247,5 +279,11 @@
                 })
             }
         }
+
+        $('.btnBackToProductList').on('click',function(event){
+            event.preventDefault();
+            window.location.href = `@Url.Content("~/Product/List")`;
+        })
+
     </script>
 }

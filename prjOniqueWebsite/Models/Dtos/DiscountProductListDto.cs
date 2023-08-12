@@ -7,11 +7,11 @@
         public string ProductName { get; set; }
         public decimal Price { get; set; }
         public decimal DiscountMethod { get; set; }
-        public decimal DiscountPrice
+        public string DiscountPrice
         {
             get
             {
-                return this.Price * this.DiscountMethod;
+                return (this.Price * this.DiscountMethod).ToString("0");
             }
         }
     }

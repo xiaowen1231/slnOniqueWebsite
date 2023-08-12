@@ -1,6 +1,6 @@
 ﻿namespace prjOniqueWebsite.Models.DTOs
 {
-    public class ProductsListDto
+    public class ProductDto
     {
         public int Id { get; set; }
         public string ProductName { get; set; }
@@ -10,5 +10,19 @@
         public int SubQuantity { get; set; }
         public string catagoryName { get; set; }
         public int? DiscountId { get; set; }
+        public decimal? DiscountMethod { get; set; }
+        public decimal? DiscountPrice
+        {
+            get
+            {
+                if (DiscountMethod!.HasValue)
+                {
+                    return Math.Round((decimal)(this.Price * this.DiscountMethod));
+                }
+                else { return null; }
+            }
+            
+        }
+
     }
 }

@@ -90,25 +90,45 @@
             const { products, pagination } = datas.value;
             
             if (products.length != 0) {
-                const cards = products.map(item => {
+                const cards = products.map(theCard => {
 
-                    const { id, productName, price, photoPath } = item;
-
+                const { id, productName, price, photoPath, discountMethod, discountPrice } = theCard
+                if (discountMethod == null) {
                     return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
-                                        <div class="w-240-h-240 m-2">
-                                            <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-                                        </div>
-                                        <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-                                                <div class="price text-center">${price}</div>
-                                        <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                            <div class="w-25-h-25 divShopping" data-productid="${id}">
-                                                <img src="@Url.Content("~/images/icon/shopping_black.png")" />
-                                            </div>
-                                            <div class="w-25-h-25 divCollection">
-                                                <img src="@Url.Content("~/images/icon/love.png")" />
-                                            </div>
-                                        </div>
-                                    </div>`)
+                                <div class="w-240-h-240 m-2">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                </div>
+                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                        <div class="price text-center">${price}</div>
+                                <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                    <div class="w-25-h-25 divShopping" data-productid=${id} >
+                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divCollection">
+                                        <img src="@Url.Content("~/images/icon/love.png")" />
+                                    </div>
+                                </div>
+                            </div>`)
+                } 
+                else {
+                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                <div class="w-240-h-240 m-2">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                </div>
+                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                <div class="text-center text-danger price">${discountPrice}</div>
+                                <div class="d-flex gap-3 mx-2 mb-2  align-items-center">
+                                    <div class="w-25-h-25 divShopping mx-2 me-auto" data-productid=${id}>
+                                        <img src="@Url.Content("~/images/icon/sale-tag.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divShopping" data-productid=${id}>
+                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divCollection">
+                                        <img src="@Url.Content("~/images/icon/love.png")" />
+                                    </div>
+                                </div>
+                            </div>`)}
 
                 })
 

@@ -71,5 +71,17 @@ namespace prjOniqueWebsite.Models.Services
             }
         }
 
+        public void RemoveDiscountProuct(int id)
+        {
+            var discountId = _context.Products.Where(p=>p.ProductId==id).Select(p => p.DiscountId).FirstOrDefault();
+            if (discountId == null)
+            {
+                throw new Exception("此商品尚未有優惠活動!");
+            }
+            else
+            {
+                _dao.RemoveDiscountProuct(id);
+            }
+        }
     }
 }

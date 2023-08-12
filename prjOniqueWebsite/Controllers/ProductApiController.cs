@@ -30,13 +30,13 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult NewArrivalsTop4()
         {
-            List<ProductsListDto> dto = dao.NewArrivalsTop4();
+            List<ProductDto> dto = dao.NewArrivalsTop4();
             return Json(dto);
         }
 
         public IActionResult HotTop4()
         {
-            List<ProductsListDto> dto = dao.HotTop4();
+            List<ProductDto> dto = dao.HotTop4();
             return Json(dto);
         }
 
@@ -108,7 +108,7 @@ namespace prjOniqueWebsite.Controllers
             return Json(datas);
         }
 
-        public IActionResult ProductListIndex(List<ProductsListDto> products, int pageNumber)
+        public IActionResult ProductListIndex(List<ProductDto> products, int pageNumber)
         {
             var data = new GUIdto();
 
@@ -162,7 +162,7 @@ namespace prjOniqueWebsite.Controllers
             public Criteria Criteria { get; set; }
             public PaginationInfo Pagination { get; set; }
 
-            public List<ProductsListDto> Products { get; set; }
+            public List<ProductDto> Products { get; set; }
 
         }
 
