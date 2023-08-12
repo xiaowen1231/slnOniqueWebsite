@@ -26,7 +26,7 @@ namespace prjOniqueWebsite.Controllers
         {
             try
             {
-                ProductDetailDto dto = new ProductDao(_context).GetProductDetail(id);
+                var dto = new ProductDao(_context).ProductInfo(id);
                 return View(dto);
             }
             catch

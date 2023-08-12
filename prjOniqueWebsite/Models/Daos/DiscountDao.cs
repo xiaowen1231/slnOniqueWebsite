@@ -1,4 +1,5 @@
-﻿using prjOniqueWebsite.Models.EFModels;
+﻿using prjOniqueWebsite.Models.Dtos;
+using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Models.Daos
@@ -68,5 +69,45 @@ namespace prjOniqueWebsite.Models.Daos
             _context.SaveChanges();
         }
 
+        public List<DiscountProductListDto> GetDiscountProducts(int discountId)
+        {
+            var dto = from p in _context.Products
+                      join d in _context.Discounts
+                      on p.DiscountId equals d.Id
+                      where p.DiscountId == discountId
+                      orderby  p.AddedTime descending
+                      select new DiscountProductListDto
+                      {
+                          ProductId = p.ProductId,
+                          PhotoPath = p.PhotoPath,
+                          ProductName = p.ProductName,
+                          Price = p.Price,
+                          DiscountMethod = d.DiscountMethod
+                      };
+
+            return dto.ToList();
+        }
+
+        public void RemoveDiscountProuct(int id)
+        {
+            var product = _context.Products.First(p=>p.ProductId == id);
+            product.DiscountId = null;
+            _context.SaveChanges();
+        }
+
+        public void DeleteDiscount(int id)
+        {
+            var discount = _context.Discounts.FirstOrDefault(x => x.Id == id);
+            var products = _context.Products.Where(p => p.DiscountId == discount.Id);
+
+            foreach(var item in products)
+            {
+                item.DiscountId = null;
+            }
+            
+            _context.SaveChanges();
+            _context.Discounts.Remove(discount);
+            _context.SaveChanges();
+        }
     }
 }

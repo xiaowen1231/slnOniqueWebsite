@@ -2,12 +2,9 @@
     ViewData["Title"] = "首頁";
 }
 
-<div >
+<div>
     <div class="myCarousel">
         <div class="myContainer">
-            <img src="/Images/Carousel/Carousel_1.jpg">
-            <img src="/Images/Carousel/Carousel_2.jpg">
-            <img src="/Images/Carousel/Carousel_3.jpg">
         </div>
         <div class="shift">
             <div class="btn left" onclick="leftShift()">
@@ -39,7 +36,25 @@
         </p>
     </div>
     <div class="ProductWall d-flex flex-wrap justify-content-center" id="divHot">
-        
+        @*        <div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+        <div class="w-240-h-240 m-2">
+        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+        </div>
+        <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+        <div class="text-center text-danger price">${price}</div>
+        <div class="d-flex gap-3 mx-2 mb-2  align-items-center">
+        <div class="w-25-h-25 divShopping mx-2 me-auto" data-productid=${id}>
+        <img src="@Url.Content("~/images/icon/sale-tag.png")" />
+        </div>
+        <div class="w-25-h-25 divShopping" data-productid=${id}>
+        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+        </div>
+        <div class="w-25-h-25 divCollection">
+        <img src="@Url.Content("~/images/icon/love.png")" />
+        </div>
+        </div>
+        </div>
+        *@
     </div>
 </div>
 @section Styles{
@@ -49,6 +64,10 @@
             width: 245px;
             height: 245px;
             transition: all 0.4s;
+        }
+
+        .price::before {
+            content: "$";
         }
     </style>
 }
@@ -67,51 +86,97 @@
             const response = await fetch('@Url.Content("~/ProductApi/HotTop4")');
             const datas = await response.json();
 
+
+
             const cards = datas.map(theCard => {
-                const { id, productName, price, photoPath } = theCard
-                return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
-                            <div class="w-240-h-240 m-2">
-                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-                            </div>
-                            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-                                    <div class="price text-center">${price}</div>
-                            <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                <div class="w-25-h-25 divShopping" data-productid=${id} >
-                                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                const { id, productName, price, photoPath, discountMethod, discountPrice } = theCard
+                console.log(id, productName, price, photoPath, discountMethod, discountPrice)
+                if (discountMethod == null) {
+                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                <div class="w-240-h-240 m-2">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
                                 </div>
-                                <div class="w-25-h-25 divCollection">
-                                    <img src="@Url.Content("~/images/icon/love.png")" />
+                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                        <div class="price text-center">${price}</div>
+                                <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                    <div class="w-25-h-25 divShopping" data-productid=${id} >
+                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divCollection">
+                                        <img src="@Url.Content("~/images/icon/love.png")" />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`)
+                            </div>`)
+                } 
+                else {
+                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                <div class="w-240-h-240 m-2">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                </div>
+                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                <div class="text-center text-danger price">${discountPrice}</div>
+                                <div class="d-flex gap-3 mx-2 mb-2  align-items-center">
+                                    <div class="w-25-h-25 divShopping mx-2 me-auto" data-productid=${id}>
+                                        <img src="@Url.Content("~/images/icon/sale-tag.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divShopping" data-productid=${id}>
+                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divCollection">
+                                        <img src="@Url.Content("~/images/icon/love.png")" />
+                                    </div>
+                                </div>
+                            </div>`)}
             })
 
-            divHot.innerHTML += cards.join("");
-        }
-
+        divHot.innerHTML += cards.join("");
+                                }
 
         async function NewArrivals() {
 
             const response = await fetch('@Url.Content("/ProductApi/NewArrivalsTop4")');
             const datas = await response.json();
 
+            console.log(datas)
+            
             const cards = datas.map(theCard => {
-                const { id, productName, price, photoPath } = theCard
-                return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
-                            <div class="w-240-h-240 m-2">
-                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-                            </div>
-                            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-                                    <div class="price text-center">${price}</div>
-                            <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                <div class="w-25-h-25 divShopping" data-productid=${id} >
-                                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                const { id, productName, price, photoPath, discountMethod, discountPrice } = theCard
+                if (discountMethod == null) {
+                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                <div class="w-240-h-240 m-2">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
                                 </div>
-                                <div class="w-25-h-25 divCollection">
-                                    <img src="@Url.Content("~/images/icon/love.png")" />
+                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                        <div class="price text-center">${price}</div>
+                                <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                    <div class="w-25-h-25 divShopping" data-productid=${id} >
+                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divCollection">
+                                        <img src="@Url.Content("~/images/icon/love.png")" />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`)
+                            </div>`)
+                } 
+                else {
+                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                <div class="w-240-h-240 m-2">
+                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                </div>
+                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                <div class="text-center text-danger price">${discountPrice}</div>
+                                <div class="d-flex gap-3 mx-2 mb-2  align-items-center">
+                                    <div class="w-25-h-25 divShopping mx-2 me-auto" data-productid=${id}>
+                                        <img src="@Url.Content("~/images/icon/sale-tag.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divShopping" data-productid=${id}>
+                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                    </div>
+                                    <div class="w-25-h-25 divCollection">
+                                        <img src="@Url.Content("~/images/icon/love.png")" />
+                                    </div>
+                                </div>
+                            </div>`)}
             })
 
             divNewArrivals.innerHTML = cards.join("")
@@ -241,6 +306,22 @@
 
             AddToCart(stockId, qty)
         })
+
+        GetCarouselInfo()
+
+        async function GetCarouselInfo() {
+            const response = await fetch(`@Url.Content("~/HomeApi/GetCarouselInfo")`)
+            const datas = await response.json()
+
+            let htmlCarouselImg = datas.map(item => {
+                const { photoPath, discountId } = item;
+
+                return (`<img src="@Url.Content("~/images/DiscountPhoto/")${photoPath}">`)
+            })
+
+            $('.myContainer').html(htmlCarouselImg.join(""))
+            LoadCarousel()
+        }
 
     </script>
 }

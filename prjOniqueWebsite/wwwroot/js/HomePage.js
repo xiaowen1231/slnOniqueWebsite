@@ -1,33 +1,39 @@
-let index = 0
+function LoadCarousel() {
+    imageCount = document.querySelectorAll(
+        ".myCarousel .myContainer img"
+    ).length
 
-let imageCount = document.querySelectorAll(
-    ".myCarousel .myContainer img"
-).length
+    const bottom = document.querySelector(".myCarousel .bottom")
 
-const bottom = document.querySelector(".myCarousel .bottom")
-for (let i = 0; i < imageCount; i++) {
-    const indicator = document.createElement("div")
-    indicator.classList.add("indicator")
-    indicator.onclick = () => setIndex(i)
+    for (let i = 0; i < imageCount; i++) {
+        const indicator = document.createElement("div")
+        indicator.classList.add("indicator")
+        indicator.onclick = () => setIndex(i)
 
-    bottom.append(indicator)
+        bottom.append(indicator)
+    }
 }
+
+let imgIndex = 0
+
+let imageCount = 0
+
+
 
 function createAuto() {
     return setInterval(() => {
-        index++
+        imgIndex++
         refresh()
     }, 3000)
 }
 
 let autoTimer = createAuto()
-
 function refresh() {
-    if (index < 0) {
-        index = imageCount - 1
+    if (imgIndex < 0) {
+        imgIndex = imageCount - 1
     }
-    else if (index > imageCount - 1) {
-        index = 0
+    else if (imgIndex > imageCount - 1) {
+        imgIndex = 0
     }
 
     let myCarousel = document.querySelector('.myCarousel')
@@ -37,9 +43,8 @@ function refresh() {
     width = Number(width.slice(0, -2))
 
     myCarousel.querySelector(".myContainer").style.left =
-        index * width * -1 + "px"
+        imgIndex * width * -1 + "px"
 }
-
 let refreshWrapper = (func) => {
     return function (...args) {
         let result = func(...args)
@@ -50,17 +55,16 @@ let refreshWrapper = (func) => {
         return result
     }
 }
-
 let leftShift = refreshWrapper(() => {
-    index--
+    imgIndex--
 })
 
 let rightShift = refreshWrapper(() => {
-    index++
+    imgIndex++
 })
 
 let setIndex = refreshWrapper((idx) => {
-    index = idx
+    imgIndex = idx
 })
 
 refresh()

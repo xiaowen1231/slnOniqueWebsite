@@ -7,6 +7,8 @@ using prjOniqueWebsite.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace prjOniqueWebsite.Models.Repositories
 {
@@ -19,40 +21,51 @@ namespace prjOniqueWebsite.Models.Repositories
             _context = context;
         }
 
-        public List<ProductsListDto> NewArrivalsTop4()
+        public List<ProductDto> NewArrivalsTop4()
         {
-            var query = _context.Products
-                .OrderByDescending(p => p.AddedTime)
-                .Take(4)
-                .Select(p => new ProductsListDto
-                {
-                    Id = p.ProductId,
-                    ProductName = p.ProductName,
-                    Price = p.Price,
-                    PhotoPath = p.PhotoPath
-                });
+            var query = (from p in _context.Products
+                         join d in _context.Discounts on p.DiscountId equals d.Id into discounts
+                         from discount in discounts.DefaultIfEmpty()
+                         orderby p.AddedTime descending
+                         select new ProductDto
+                         {
+                             Id = p.ProductId,
+                             ProductName = p.ProductName,
+                             Price = p.Price,
+                             PhotoPath = p.PhotoPath,
+                             DiscountMethod = discount.DiscountMethod
+                         }).Take(4);
+
 
             return query.ToList();
         }
 
-        public List<ProductsListDto> HotTop4()
+        public List<ProductDto> HotTop4()
         {
-            var query = (from p in _context.Products
-                         join psd in _context.ProductStockDetails
-                         on p.ProductId equals psd.ProductId
-                         join od in _context.OrderDetails
-                         on psd.StockId equals od.StockId
-                         group od by new { p.Price, p.ProductName, p.PhotoPath, p.ProductId } into grouped
-                         orderby grouped.Sum(od => od.OrderQuantity) descending
-                         select new ProductsListDto
-                         {
-                             Id = grouped.Key.ProductId,
-                             ProductName = grouped.Key.ProductName,
-                             Price = grouped.Key.Price,
-                             PhotoPath = grouped.Key.PhotoPath
-                         }).Take(4);
+            var query = from p in _context.Products
+                        join psd in _context.ProductStockDetails
+                        on p.ProductId equals psd.ProductId into psdGroup
+                        from psd in psdGroup.DefaultIfEmpty()
+                        join od in _context.OrderDetails
+                        on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
+                        from od in odGroup.DefaultIfEmpty()
+                        group od by new { p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName, p.ShelfTime ,p.Discount.DiscountMethod} into grouped
+                        where grouped.Key.AddedTime < DateTime.Now && DateTime.Now < grouped.Key.ShelfTime
+                        select new ProductDto
+                        {
+                            Id = grouped.Key.ProductId,
+                            ProductName = grouped.Key.ProductName,
+                            Price = grouped.Key.Price,
+                            PhotoPath = grouped.Key.PhotoPath,
+                            AddedTime = grouped.Key.AddedTime,
+                            catagoryName = grouped.Key.CategoryName,
+                            SubQuantity = grouped.Sum(x => x != null ? x.OrderQuantity : 0),
+                            DiscountId = grouped.Key.DiscountId == null ? null : grouped.Key.DiscountId,
+                            DiscountMethod = grouped.Key.DiscountMethod,
+                        };
+            
 
-            return query.ToList();
+            return query.Take(4).ToList();
         }
 
         public AddToCartDto ShowProductInfo(int id)
@@ -66,6 +79,21 @@ namespace prjOniqueWebsite.Models.Repositories
             });
             return dto.FirstOrDefault();
         }
+
+        public ProductDto ProductInfo(int id)
+        {
+            var dto = _context.Products.Where(p => p.ProductId == id)
+                .Select(p => new ProductDto
+                {
+                    Id = p.ProductId,
+                    ProductName = p.ProductName,
+                    Price = p.Price,
+                    DiscountMethod = p.Discount.DiscountMethod,
+                    PhotoPath= p.PhotoPath
+                });
+            return dto.FirstOrDefault();
+        }
+
         public ProductDetailDto GetProductDetail(int id)
         {
 
@@ -226,7 +254,7 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
-        public List<ProductsListDto> SearchProductList(string keyword, string categoryName, string rank)
+        public List<ProductDto> SearchProductList(string keyword, string categoryName, string rank)
         {
             var query = from p in _context.Products
                         join psd in _context.ProductStockDetails
@@ -235,9 +263,9 @@ namespace prjOniqueWebsite.Models.Repositories
                         join od in _context.OrderDetails
                         on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
                         from od in odGroup.DefaultIfEmpty()
-                        group od by new { p.ProductId, p.ProductName, p.Price, p.PhotoPath,p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName,p.ShelfTime } into grouped
+                        group od by new {p.Discount.DiscountMethod, p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName, p.ShelfTime } into grouped
                         where grouped.Key.AddedTime < DateTime.Now && DateTime.Now < grouped.Key.ShelfTime
-                        select new ProductsListDto
+                        select new ProductDto
                         {
                             Id = grouped.Key.ProductId,
                             ProductName = grouped.Key.ProductName,
@@ -246,8 +274,8 @@ namespace prjOniqueWebsite.Models.Repositories
                             AddedTime = grouped.Key.AddedTime,
                             catagoryName = grouped.Key.CategoryName,
                             SubQuantity = grouped.Sum(x => x != null ? x.OrderQuantity : 0),
-                            DiscountId = grouped.Key.DiscountId==null?null:grouped.Key.DiscountId,
-                            
+                            DiscountId = grouped.Key.DiscountId == null ? null : grouped.Key.DiscountId,
+                            DiscountMethod = grouped.Key.DiscountMethod,
                         };
 
             if (!string.IsNullOrEmpty(keyword))
@@ -259,12 +287,12 @@ namespace prjOniqueWebsite.Models.Repositories
                 query = query.Where(p => p.catagoryName.Contains(categoryName));
             }
 
-            List<ProductsListDto> datas = query.ToList();
+            List<ProductDto> datas = query.ToList();
 
             return SortProductList(datas, rank);
         }
 
-        public List<ProductsListDto> SortProductList(List<ProductsListDto> datas, string rank)
+        public List<ProductDto> SortProductList(List<ProductDto> datas, string rank)
         {
             if (rank == "newest" || string.IsNullOrEmpty(rank))
             {
@@ -314,6 +342,6 @@ namespace prjOniqueWebsite.Models.Repositories
             }
         }
 
-        
+
     }
 }

@@ -10,13 +10,11 @@ namespace prjOniqueWebsite.Controllers
     public class HomeApiController : Controller
     {
         private readonly UserInfoService _userInfoService;
-
-
-        public HomeApiController(UserInfoService userInfoService)
+        private readonly OniqueContext _context;
+        public HomeApiController(UserInfoService userInfoService,OniqueContext context)
         {
-
             _userInfoService = userInfoService;
-
+            _context = context;
         }
         public IActionResult IsLogin()
         {
@@ -52,6 +50,17 @@ namespace prjOniqueWebsite.Controllers
                 return Json(dto);
             }
 
+        }
+
+        public IActionResult GetCarouselInfo()
+        {
+            var data = _context.Discounts.Select(d => new
+            {
+                photoPath = d.PhotoPath,
+                discountId = d.Id
+            });
+
+            return Json(data.ToList());
         }
     }
 }
