@@ -16,15 +16,15 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-90px text-end fw-bold">生日</div>
                     <div class="mx-2">
-                        <input type="date" class="form-control" value="@Model.DateOfBirth" />
+                        <div class="mx-2" name="DateOfBirth" id="DateOfBirth">@Model.DateOfBirth</div>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-around p-3">
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-90px text-end fw-bold">信箱</div>
-                    <div class="mx-3">
-                        @Model.Email
+                    <div class="mx-2">
+                        <input type="text" class="form-control" value="@Model.Email">
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">

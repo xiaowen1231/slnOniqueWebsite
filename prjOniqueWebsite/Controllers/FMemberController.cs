@@ -41,7 +41,7 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult MemberInfo( )
         {
             Members member = _userInfoService.GetMemberInfo();
-            var mem = (from m in _context.Members
+            FMemberDto mem = (from m in _context.Members
                        join c in _context.Citys
                        on m.Citys equals c.CityId
                        join a in _context.Areas

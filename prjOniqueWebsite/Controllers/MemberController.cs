@@ -54,7 +54,7 @@ namespace prjOniqueWebsite.Controllers
         {
             var dto = _dao.GetMemberById(id);
            
-            MemberVM vm = new MemberVM
+            MemberEditVM vm = new MemberEditVM
             {
                 MemberId = dto.MemberId,
                 PhotoPath = dto.PhotoPath,
@@ -74,16 +74,15 @@ namespace prjOniqueWebsite.Controllers
             return View(vm);
         }
         [HttpPost]
-        public IActionResult Edit(MemberVM vm)
+        public IActionResult Edit(MemberEditVM vm)
         {
-            var member = _context.Members.FirstOrDefault(m => m.MemberId == vm.MemberId);
             if(ModelState.IsValid == false)
             {
                 return View(vm);
             }
             try
             {
-                _service.MemberEdit(vm, member);
+                _service.MemberEdit(vm);
             }
             catch (Exception ex)
             {

@@ -14,57 +14,41 @@ namespace prjOniqueWebsite.Models.Daos
             _context = context;
             _environment = environment;
         }
-        public MemberEditDto GetMemberById(int id)
+        public List<MemberListDto> GetMembers()
         {
-            MemberEditDto dto = (from m in _context.Members
-                                 join c in _context.Citys
-                                 on m.Citys equals c.CityId
-                                 join a in _context.Areas
-                                 on m.Areas equals a.AreaId
-                                 join ml in _context.MemberLevel
-                                 on m.MemberLevel equals ml.MemberLevelId
-                                 where m.MemberId == id
-                                 select new MemberEditDto
-                                 {
-                                     MemberId = m.MemberId,
-                                     PhotoPath = m.PhotoPath,
-                                     Name = m.Name,
-                                     Password = m.Password,
-                                     Email = m.Email,
-                                     Phone = m.Phone,
-                                     Gender = m.Gender ? "女" : "男",
-                                     Citys = c.CityName,
-                                     Areas = a.AreaName,
-                                     Address = m.Address,
-                                     MemberLevel = ml.MemberLevelName,
-                                     RegisterDate = Convert.ToDateTime(m.RegisterDate).ToString("yyyy-MM-dd"),
-                                     DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd")
-                                 }).FirstOrDefault();
-            return dto;
+            var query = from m in _context.Members
+                         join ml in _context.MemberLevel
+                         on m.MemberLevel equals ml.MemberLevelId
+                         select new MemberListDto
+                         {
+                             MemberId = m.MemberId,
+                             PhotoPath = m.PhotoPath,
+                             Name = m.Name,
+                             Phone = m.Phone,
+                             Email = m.Email,
+                             DateOfBirth = m.DateOfBirth,
+                             Gender = m.Gender ? "女" : "男",
+                             MemberLevelName = ml.MemberLevelName,
+                         };
+            return query.ToList();
         }
-        public void EditMember(Members member, MemberVM vm)
+        public Members GetMemberByEmail(string email)
         {
-            if (member != null)
+            var memInDb = _context.Members.FirstOrDefault(m => m.Email == email);
+            if (memInDb == null)
             {
-                if (vm.Photo != null)
-                {
-                    string fileName = $"MemberId_{member.MemberId}.jpg";
-                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
-                    using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                    {
-                        vm.Photo.CopyTo(fileStream);
-                    }
-                }
-                member.Name = vm.Name;
-                member.Password = vm.Password;
-                member.Phone = vm.Phone;
-                member.Citys = Convert.ToInt32(vm.Citys);
-                member.Areas = Convert.ToInt32(vm.Areas);
-                member.Address = vm.Address;
-                member.MemberLevel = Convert.ToInt32(vm.MemberLevel);
-
+                return null;
             }
-            _context.SaveChanges();
+            return memInDb;
+        }
+        public Members GetMemberByPhone(string phone)
+        {
+            var memInDb = _context.Members.FirstOrDefault(m => m.Phone == phone);
+            if (memInDb == null)
+            {
+                return null;
+            }
+            return memInDb;
         }
         public void CreateMember(MemberVM vm)
         {
@@ -150,24 +134,57 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Update(mem);
             _context.SaveChanges();
         }
-        public Members GetMemberByEmail(string email)
+        public MemberEditDto GetMemberById(int id)
         {
-            var memInDb = _context.Members.FirstOrDefault(m => m.Email == email);
-            if (memInDb == null)
-            {
-                return null;
-            }
-            return memInDb;
+            MemberEditDto dto = (from m in _context.Members
+                                 join c in _context.Citys
+                                 on m.Citys equals c.CityId
+                                 join a in _context.Areas
+                                 on m.Areas equals a.AreaId
+                                 join ml in _context.MemberLevel
+                                 on m.MemberLevel equals ml.MemberLevelId
+                                 where m.MemberId == id
+                                 select new MemberEditDto
+                                 {
+                                     MemberId = m.MemberId,
+                                     PhotoPath = m.PhotoPath,
+                                     Name = m.Name,
+                                     Password = m.Password,
+                                     Email = m.Email,
+                                     Phone = m.Phone,
+                                     Gender = m.Gender ? "女" : "男",
+                                     Citys = c.CityName,
+                                     Areas = a.AreaName,
+                                     Address = m.Address,
+                                     MemberLevel = ml.MemberLevelName,
+                                     RegisterDate = Convert.ToDateTime(m.RegisterDate).ToString("yyyy-MM-dd"),
+                                     DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd")
+                                 }).FirstOrDefault();
+            return dto;
         }
-        public Members GetMemberByPhone(string phone)
+        public void EditMember(MemberEditVM vm)
         {
-            var memInDb = _context.Members.FirstOrDefault(m => m.Phone == phone);
-            if (memInDb == null)
+            var member = _context.Members.Where(m => m.MemberId == vm.MemberId).FirstOrDefault();
+            if (vm.Photo != null)
             {
-                return null;
+                string fileName = $"MemberId_{member.MemberId}.jpg";
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    vm.Photo.CopyTo(fileStream);
+                }
             }
-            return memInDb;
+            member.Name = vm.Name;
+            member.Password = vm.Password;
+            member.Phone = vm.Phone;
+            member.Email = vm.Email;
+            member.Citys = Convert.ToInt32(vm.Citys);
+            member.Areas = Convert.ToInt32(vm.Areas);
+            member.Address = vm.Address;
+            member.MemberLevel = Convert.ToInt32(vm.MemberLevel);
+            _context.SaveChanges();
         }
+
 
         public List<MemberOrderDto> GetMemberOrders(int MemberId)
         {
