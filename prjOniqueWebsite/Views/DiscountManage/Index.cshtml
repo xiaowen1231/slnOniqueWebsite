@@ -10,7 +10,7 @@
             <div class="fs-3 fw-bold">優惠管理</div>
         </div>
         <div class="col-2 mx-4 my-3">
-            <a asp-action="BgDiscountCreate" class="btn btn-dark">新增優惠</a>
+            <a asp-action="Create" class="btn btn-dark">新增優惠</a>
         </div>
     </div>
     <div class="container justify-content-center d-flex">
@@ -27,26 +27,6 @@
                 </tr>
             </thead>
             <tbody id="BgDiscountList">
-                @*<tr>
-                <td>1</td>
-                <td>夏日特賣</td>
-                <td>2023/7/12</td>
-                <td>2023/8/25</td>
-                <td>9折</td>
-                <td><img src="~/images/DiscountPhoto/夏日特賣.jpg" style="width:30%"></td>
-                <td><img src="~/images/BgProductManage/edit.png" class="width-30px" alt=""></td>
-                <td><img src="~/Images/BgProductManage/trash.png" class="width-30px" alt=""></td>
-                </tr>
-                <tr>
-                <td>2</td>
-                <td>熱銷優惠</td>
-                <td>2023/6/30</td>
-                <td>2023/8/25</td>
-                <td>85折</td>
-                <td><img src="~/images/DiscountPhoto/熱銷優惠.jpg" style="width:30%"></td>
-                <td><img src="~/images/BgProductManage/edit.png" class="width-30px" alt=""></td>
-                <td><img src="~/Images/BgProductManage/trash.png" class="width-30px" alt=""></td>
-                </tr>*@
             </tbody>
         </table>
     </div>
@@ -73,6 +53,7 @@
 @section Scripts{
     <script>
         const BgDiscountList = document.querySelector("#BgDiscountList")
+
         load()
         async function load() {
             const response = await fetch(`@Url.Content("~/BgProductManageApi/LoadDiscountList")`)
@@ -87,19 +68,19 @@
                 discountMethod = (discountMethod * 100) + "%Off";
 
                 return (`
-                    <tr>
-                        <td>${title}</td>
-                        <td>${formatdatebeginDate}</td>
-                        <td>${formatdateEndDate}</td>
-                        <td>${discountMethod}</td>
-                        <td><img src="@Url.Content("~/images/DiscountPhoto/")${photoPath}"  style="width:180px;"/></td>
-                        <td>
-                            <a href="@Url.Content("~/BgProductsManage/DiscountEdit/")${id}"><img src="@Url.Content("~/images/BgProductManage/edit.png")" class="width-30px" alt=""></a>
-                        </td>
-                        <td>
-                            <a href=""><img src="@Url.Content("~/images/BgProductManage/trash.png")" class="width-30px" alt=""></a>
-                        </td>
-                    </tr>`)
+                            <tr>
+                                <td>${title}</td>
+                                <td>${formatdatebeginDate}</td>
+                                <td>${formatdateEndDate}</td>
+                                <td>${discountMethod}</td>
+                                <td><img src="@Url.Content("~/images/DiscountPhoto/")${photoPath}"  style="width:180px;"/></td>
+                                <td>
+                                    <a href="@Url.Content("~/DiscountManage/Edit/")${id}"><img src="@Url.Content("~/images/BgProductManage/edit.png")" class="width-30px" alt=""></a>
+                                </td>
+                                <td>
+                                    <a href=""><img src="@Url.Content("~/images/BgProductManage/trash.png")" class="width-30px" alt=""></a>
+                                </td>
+                            </tr>`)
             })
             BgDiscountList.innerHTML = TableBgDiscount.join("");
         }

@@ -324,69 +324,6 @@ namespace prjOniqueWebsite.Controllers
             }
             return RedirectToAction("Edit", new { id = vm.ProductId });
         }
-        public IActionResult BgDiscountCreate()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult BgDiscountCreate(BgDiscointCreateVM vm)
-        {
-            if (ModelState.IsValid == false)
-            {
-                return View(vm);
-            }
-            try
-            {
-                new BgProductService(_context, _environment).CreateDiscont(vm);
-                return RedirectToAction("BgDiscountManage");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "新增優惠失敗!" + ex.Message);
-                return View(vm);
-            }
-        }
-
-        public IActionResult BgDiscountManage()
-        {
-            return View();
-        }
-
-        public IActionResult DiscountEdit(int id)
-        {
-            var discount = _context.Discounts.Where(d => d.Id == id)
-                .Select(d => new BgDiscointCreateVM
-                {
-                    Id = d.Id,
-                    Title = d.Title,
-                    Description = d.Description,
-                    BeginDate = d.BeginDate,
-                    EndDate = d.EndDate,
-                    PhotoPath = d.PhotoPath,
-                    DiscountMethod = d.DiscountMethod
-                }).FirstOrDefault();
-
-            return View(discount);
-        }
-
-        [HttpPost]
-        public IActionResult DiscountEdit(BgDiscointCreateVM vm)
-        {
-            if (ModelState.IsValid == false)
-            {
-                return View(vm);
-            }
-            try
-            {
-                new BgProductService(_context, _environment).UpdataDiscount(vm);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "修改失敗! " + ex.Message);
-                return View(vm);
-            }
-            return RedirectToAction("BgDiscountManage");
-        }
         public IActionResult DeleteSize(ProductSizes size)
         {
             if (size != null)

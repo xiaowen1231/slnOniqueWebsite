@@ -141,32 +141,5 @@ namespace prjOniqueWebsite.Controllers
 
         }
 
-        public IActionResult DisplayProductList(string keyword)
-        {
-            var product = _dao.SearchProductList(keyword, "", "");
-            return Json(product);
-        }
-        [HttpPost]
-        public IActionResult AddToDiscount(int productId, int discountId)
-        {
-            try
-            {
-                new BgProductService(_context, _environment).AddToDiscount(productId, discountId);
-                ApiResult result = new ApiResult
-                {
-                    StatusCode = 200,
-                    StatusMessage = "加入優惠商品成功!"
-                };
-                return Json(result);
-            }catch (Exception ex)
-            {
-                ApiResult result = new ApiResult
-                {
-                    StatusCode = 500,
-                    StatusMessage = "加入優惠商品失敗!" + ex.Message
-                };
-                return Json(result);
-            }
-        }
     }
 }
