@@ -4,13 +4,14 @@
 *@
 <form method="post" action="MemberInfoEdit">
     <div class="container ">
+        <input type="hidden" class="form-control" name="MemberId" value="@Model.MemberId" />
         <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">修改個人資料</div>
         <div class="p-2 ">
             <div class="row justify-content-around  p-3 ">
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-90px text-end fw-bold">姓名</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control " value="@Model.Name" />
+                        <input type="text" class="form-control" name="Name" value="@Model.Name" />
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">
@@ -24,13 +25,13 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-90px text-end fw-bold">信箱</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" value="@Model.Email">
+                        <input type="text" class="form-control" name="Email" value="@Model.Email">
                     </div>
                 </div>
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-90px text-end fw-bold">電話</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" value="@Model.Phone">
+                        <input type="text" class="form-control" name="Phone" value="@Model.Phone">
                     </div>
                 </div>
             </div>
