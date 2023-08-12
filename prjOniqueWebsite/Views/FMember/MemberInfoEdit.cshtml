@@ -2,81 +2,82 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<div class="container ">
-    <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">修改個人資料</div>
-    <div class="p-2 ">
-        <div class="row justify-content-around  p-3 ">
-            <div class="pt-2 d-flex col-6 align-items-center">
-                <div class=" width-90px text-end fw-bold">姓名</div>
-                <div class="mx-2">
-                    <input type="text" class="form-control " value="@Model.Name" />
+<form method="post" action="MemberInfoEdit">
+    <div class="container ">
+        <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">修改個人資料</div>
+        <div class="p-2 ">
+            <div class="row justify-content-around  p-3 ">
+                <div class="pt-2 d-flex col-6 align-items-center">
+                    <div class=" width-90px text-end fw-bold">姓名</div>
+                    <div class="mx-2">
+                        <input type="text" class="form-control " value="@Model.Name" />
+                    </div>
+                </div>
+                <div class="pt-2 d-flex col-6 align-items-center">
+                    <div class=" width-90px text-end fw-bold">生日</div>
+                    <div class="mx-2">
+                        <input type="date" class="form-control" value="@Model.DateOfBirth" />
+                    </div>
                 </div>
             </div>
-            <div class="pt-2 d-flex col-6 align-items-center">
-                <div class=" width-90px text-end fw-bold">生日</div>
-                <div class="mx-2">
-                    <input type="date" class="form-control" value="@Model.DateOfBirth" />
+            <div class="row justify-content-around p-3">
+                <div class="pt-2 d-flex col-6 align-items-center">
+                    <div class=" width-90px text-end fw-bold">信箱</div>
+                    <div class="mx-3">
+                        @Model.Email
+                    </div>
+                </div>
+                <div class="pt-2 d-flex col-6 align-items-center">
+                    <div class=" width-90px text-end fw-bold">電話</div>
+                    <div class="mx-2">
+                        <input type="text" class="form-control" value="@Model.Phone">
+                    </div>
+                </div>
+            </div>
+            <div class="pt-2 d-flex col-6 align-items-center p-3 mt-2">
+                <div class=" width-90px text-end fw-bold">性別</div>
+                <div class="mx-3">
+                    <div>
+                        @Model.Gender
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-around p-3">
+                <div class="col-12  mt-2 d-flex justify-content-start ">
+                    <div class=" width-90px text-end fw-bold">地址</div>
+                    <div class="mx-3">
+                        <input type="hidden" value="@Model.Citys" id="memberCity" />
+                        <select class="form-select" name="Citys" id="city">
+                            @*<option selected>-請選擇縣市-</option>
+                            <option value="1">台北市</option>
+                            <option value="2">新北市</option>
+                            <option value="3">桃園市</option>*@
+                        </select>
+                    </div>
+                    <div class="mx-3">
+                        <input type="hidden" value="@Model.Areas" id="memberArea" />
+                        <select class="form-select" name="Areas" id="area">
+                            @* <option selected>-請選擇地區-</option>
+                            <option value="1">大安區</option>
+                            <option value="2">中山區</option>
+                            <option value="3">中正區</option>*@
+                        </select>
+                    </div>
+                    <div class="mx-3 ">
+                        <input type="text" class="form-control" value="@Model.Address">
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-around p-3">
-            <div class="pt-2 d-flex col-6 align-items-center">
-                <div class=" width-90px text-end fw-bold">信箱</div>
-                <div class="mx-3">
-                    @Model.Email
-                </div>
-            </div>
-            <div class="pt-2 d-flex col-6 align-items-center">
-                <div class=" width-90px text-end fw-bold">電話</div>
-                <div class="mx-2">
-                    <input type="text" class="form-control" value="@Model.Phone">
-                </div>
-            </div>
-        </div>
-        <div class="pt-2 d-flex col-6 align-items-center p-3 mt-2">
-            <div class=" width-90px text-end fw-bold">性別</div>
-            <div class="mx-3">
-                <div>
-                    @Model.Gender
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-around p-3">
-            <div class="col-12  mt-2 d-flex justify-content-start ">
-                <div class=" width-90px text-end fw-bold">地址</div>
-                <div class="mx-3">
-                    <input type="hidden" value="@Model.Citys" id="memberCity" />
-                    <select class="form-select" name="Citys" id="city">
-                        @*<option selected>-請選擇縣市-</option>
-                        <option value="1">台北市</option>
-                        <option value="2">新北市</option>
-                        <option value="3">桃園市</option>*@
-                    </select>
-                </div>
-                <div class="mx-3">
-                    <input type="hidden" value="@Model.Areas" id="memberArea" />
-                    <select class="form-select" name="Areas" id="area">
-                       @* <option selected>-請選擇地區-</option>
-                        <option value="1">大安區</option>
-                        <option value="2">中山區</option>
-                        <option value="3">中正區</option>*@
-                    </select>
-                </div>
-                <div class="mx-3 ">
-                    <input type="text" class="form-control" value="@Model.Address">
-                </div>
+        <div class="row justify-content-around p-5">
+            <div class="text-center">
+                <input type="submit" value="確定修改" class="btnEditConfirm btn btn-dark p-2 px-4">
+                <input type="button" value="取消" class="btnEditCancel btn btn-light p-2 px-4">
             </div>
         </div>
     </div>
-    <div class="row justify-content-around p-5">
-        <div class="text-center">
-            <input type="submit" value="確定修改" class="btnEditConfirm btn btn-dark p-2 px-4">
-            <input type="submit" value="取消" class="btnEditCancel btn btn-light p-2 px-4">
-        </div>
-    </div>
-</div>
-
-    <script>
+</form>
+<script>
     loadCity()
     async function loadMemberLevel() {
         const response = await fetch(`@Url.Content("~/memberapi/LoadMemberLevel")`)
@@ -140,4 +141,4 @@
 
         $("#area").append(selectOptions);
     }
-    </script>
+</script>

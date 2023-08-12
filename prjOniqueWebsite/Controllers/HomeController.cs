@@ -26,7 +26,7 @@ namespace prjOniqueWebsite.Controllers
         private readonly UserInfoService _userInfoService;
         private readonly IWebHostEnvironment _environment;
         MemberDao _dao;
-        MemberService _memberService;
+        MemberService _service;
 
         public HomeController(OniqueContext context, ILogger<HomeController> logger, UserInfoService userInfoService, IWebHostEnvironment environment)
         {
@@ -35,7 +35,7 @@ namespace prjOniqueWebsite.Controllers
             _userInfoService = userInfoService;
             _environment = environment;
             _dao = new MemberDao(_context, _environment);
-            _memberService = new MemberService(_context, _environment);
+            _service = new MemberService(_context, _environment);
         }
 
 
@@ -181,7 +181,7 @@ namespace prjOniqueWebsite.Controllers
             }
             try
             {
-                _memberService.MemberRegister(vm);
+                _service.MemberRegister(vm);
             }
             catch (Exception ex)
             {
