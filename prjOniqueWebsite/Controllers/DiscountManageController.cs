@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
+using System.Data;
 
 namespace prjOniqueWebsite.Controllers
 {
+    [Authorize(Roles = "一般員工,經理")]
     public class DiscountManageController : Controller
     {
         private readonly OniqueContext _context;
