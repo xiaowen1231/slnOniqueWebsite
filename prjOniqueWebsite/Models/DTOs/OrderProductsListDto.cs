@@ -8,5 +8,8 @@
         public string SizeName { get; set; }
         public string ColorName { get; set; }
         public string PhotoPath { get;set; }
+        public decimal TotalPrice { get; set; }
+        public string MethodName { get; set; }
+
     }
 }
