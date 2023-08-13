@@ -36,25 +36,6 @@
         </p>
     </div>
     <div class="ProductWall d-flex flex-wrap justify-content-center" id="divHot">
-        @*        <div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
-        <div class="w-240-h-240 m-2">
-        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-        </div>
-        <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-        <div class="text-center text-danger price">${price}</div>
-        <div class="d-flex gap-3 mx-2 mb-2  align-items-center">
-        <div class="w-25-h-25 divShopping mx-2 me-auto" data-productid=${id}>
-        <img src="@Url.Content("~/images/icon/sale-tag.png")" />
-        </div>
-        <div class="w-25-h-25 divShopping" data-productid=${id}>
-        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
-        </div>
-        <div class="w-25-h-25 divCollection">
-        <img src="@Url.Content("~/images/icon/love.png")" />
-        </div>
-        </div>
-        </div>
-        *@
     </div>
 </div>
 @section Styles{
@@ -68,6 +49,18 @@
 
         .price::before {
             content: "$";
+        }
+
+        .imgCarousel{
+            cursor:pointer
+        }
+
+        .modal-content {
+            width: 750px;
+            position: fixed;
+            top: 50%;
+            transform: translate(-50%,-55%);
+            left: 50%;
         }
     </style>
 }
@@ -384,12 +377,20 @@
             let htmlCarouselImg = datas.map(item => {
                 const { photoPath, discountId } = item;
 
-                return (`<img src="@Url.Content("~/images/DiscountPhoto/")${photoPath}">`)
+                return (`<img src="@Url.Content("~/images/DiscountPhoto/")${photoPath}" data-discountid="${discountId}" class="imgCarousel"/>`)
             })
 
             $('.myContainer').html(htmlCarouselImg.join(""))
             LoadCarousel()
         }
+
+        $('.myContainer').on('click', '.imgCarousel', function (event) {
+            event.stopPropagation();
+
+            let discountId = $(this).data("discountid");
+
+            window.location.href = `@Url.Content("~/Product/List?discountId=")${discountId}`
+        })
 
     </script>
 }

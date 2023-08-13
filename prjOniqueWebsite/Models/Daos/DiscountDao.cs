@@ -21,9 +21,9 @@ namespace prjOniqueWebsite.Models.Daos
             {
                 Title = vm.Title,
                 Description = vm.Description,
-                BeginDate = vm.BeginDate,
-                EndDate = vm.EndDate,
-                DiscountMethod = vm.DiscountMethod
+                BeginDate = (DateTime)vm.BeginDate,
+                EndDate = (DateTime)vm.EndDate,
+                DiscountMethod = (decimal)vm.DiscountMethod
             };
             if (vm.Photo != null)
             {
@@ -44,9 +44,9 @@ namespace prjOniqueWebsite.Models.Daos
             var discount = _context.Discounts.FirstOrDefault(d => d.Id == vm.Id);
             discount.Title = vm.Title;
             discount.Description = vm.Description;
-            discount.BeginDate = vm.BeginDate;
-            discount.EndDate = vm.EndDate;
-            discount.DiscountMethod = vm.DiscountMethod;
+            discount.BeginDate = (DateTime)vm.BeginDate;
+            discount.EndDate = (DateTime)vm.EndDate;
+            discount.DiscountMethod = (decimal)vm.DiscountMethod;
             if (vm.Photo != null)
             {
                 discount.PhotoPath = discount.Title + ".jpg";
