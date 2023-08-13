@@ -8,7 +8,7 @@
         public string MethodName { get; set; }
         public string StatusName { get; set; }
         public string ShippingAddress { get; set; }
-        
+        public decimal TotalPrice { get; set; }
         public string Recipient { get; set; }
         public string Remark { get; set; }
         public string RecipientPhone { get; set; }
