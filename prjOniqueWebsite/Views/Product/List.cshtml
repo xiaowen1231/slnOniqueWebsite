@@ -3,7 +3,9 @@
     string categoryName = string.Empty;
     string keyword = string.Empty;
     string pageTitle = title;
+    int discountId = 0;
     int pageNumber = 1;
+    string rank = "newest";
     if (ViewBag.PageNumber != 0)
     {
         pageNumber = ViewBag.PageNumber;
@@ -19,6 +21,15 @@
         categoryName = ViewBag.CategoryName;
         pageTitle += " > " + categoryName;
     }
+    if (ViewBag.DiscountId != 0)
+    {
+        discountId = ViewBag.DiscountId;
+        pageTitle += " > " + ViewBag.DiscountName;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Rank))
+    {
+        rank = ViewBag.Rank;
+    }
 
     ViewData["Title"] = pageTitle;
 
@@ -33,15 +44,23 @@
         <input type="hidden" value="@keyword" id="searchKeyword" />
         <input type="hidden" value="@categoryName" id="searchCategoryName" />
         <input type="hidden" value="@pageNumber" id="searchPageNumber" />
+        <input type="hidden" value="@discountId" id="searchDiscount" />
+        <input type="hidden" value="@rank" id="searchRank" />
     </div>
+    @if(discountId != 0)
+    {
+        <div class="divDiscountImg">
+            <img src="@Url.Content("~/images/DiscountPhoto/")@ViewBag.PhotoPath" />
+        </div>
+    }
     <div class="d-flex m-2 gap-3 align-items-center ">
         <div>排序方式: </div>
         <div>
             <select class="form-select form-select-sm" id="selectOrderBy">
-                <option value="newest">最新上架</option>
-                <option value="sales">熱賣商品</option>
-                <option value="priceDesc">價格高到低</option>
-                <option value="priceAsc">價格低到高</option>
+                    <option value="newest">最新上架</option>
+                    <option value="sales">熱賣商品</option>
+                    <option value="priceDesc">價格高到低</option>
+                    <option value="priceAsc">價格低到高</option>
             </select>
         </div>
     </div>
@@ -72,6 +91,12 @@
             height: 245px;
             transition: all 0.4s;
         }
+
+        .divDiscountImg {
+            height: 400px;
+            width: 100%;
+            padding: 10px;
+        }
     </style>
 }
 @section Scripts{
@@ -79,13 +104,15 @@
         let keyword = $('#searchKeyword').val()
         let categoryName = $('#searchCategoryName').val()
         let pageNumber = $("#searchPageNumber").val()
+        let discountId = Number($("#searchDiscount").val())
+        let rank = $("#searchRank").val()
 
-        Display(keyword, categoryName, "", pageNumber)
 
-        async function Display(keyword, categoryName, rank, pageNumber) {
-            const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pageNumber}`)
+        Display(keyword, categoryName, rank, pageNumber, discountId)
+
+        async function Display(keyword, categoryName, rank, pageNumber, discountId) {
+            const response = await fetch(`@Url.Content("~/ProductApi/ProductList?keyword=")${keyword}&categoryName=${categoryName}&rank=${rank}&pageNumber=${pageNumber}&discountId=${discountId}`)
             const datas = await response.json()
-            console.log(datas)
 
             const { products, pagination } = datas.value;
             
@@ -130,6 +157,7 @@
                                 </div>
                             </div>`)}
 
+
                 })
 
                 let liPagination = ""
@@ -160,6 +188,7 @@
 
                 $('.ulGUI').html(liPagination)
 
+                $('#selectOrderBy').val(rank)
             }
             else {
                 let searchHint = `<div class="flex-fill divNotFound">
@@ -180,11 +209,9 @@
 
         $("#selectOrderBy").on('change', function () {
             console.log(pageNumber)
-            let rank = $(this).val();
-            let catagoryName = $("#searchCategoryName").val();
-            let keyword = $('#searchKeyword').val()
+            rank = $(this).val();
 
-            Display(keyword, categoryName, rank, pageNumber)
+            Display(keyword, categoryName, rank, pageNumber, discountId)
         })
 
         $('#divProductList').on('click', '.divProductDetail', function (event) {
@@ -275,7 +302,7 @@
             let rank = $("#selectOrderBy").val();
             pageNumber = $(this).data("pagenumber");
 
-            Display(keyword, categoryName, rank, pageNumber)
+            Display(keyword, categoryName, rank, pageNumber, discountId)
         })
 
         async function loadColor(productId) {

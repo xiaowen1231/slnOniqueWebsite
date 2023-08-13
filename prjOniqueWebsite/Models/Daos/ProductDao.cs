@@ -259,7 +259,7 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
-        public List<ProductDto> SearchProductList(string keyword, string categoryName, string rank)
+        public List<ProductDto> SearchProductList(string keyword, string categoryName, string rank,int discountId)
         {
             var query = from p in _context.Products
                         join psd in _context.ProductStockDetails
@@ -290,6 +290,10 @@ namespace prjOniqueWebsite.Models.Repositories
             else if (!string.IsNullOrEmpty(categoryName))
             {
                 query = query.Where(p => p.catagoryName.Contains(categoryName));
+            }
+            else if (discountId != 0)
+            {
+                query = query.Where(p => p.DiscountId == discountId);
             }
 
             List<ProductDto> datas = query.ToList();

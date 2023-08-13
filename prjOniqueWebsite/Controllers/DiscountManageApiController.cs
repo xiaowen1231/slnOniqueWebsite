@@ -27,7 +27,7 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult DisplayProductList(string keyword)
         {
-            var product = _productDao.SearchProductList(keyword, "", "");
+            var product = _productDao.SearchProductList(keyword, "", "",0);
             return Json(product);
         }
 
