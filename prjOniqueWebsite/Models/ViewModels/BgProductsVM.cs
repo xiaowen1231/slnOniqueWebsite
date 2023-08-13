@@ -23,11 +23,11 @@ namespace prjOniqueWebsite.Models.ViewModels
 
         [Display(Name = "上架時間")]
         [Required(ErrorMessage = "上架時間不可空白")]
-        public DateTime AddedTime { get; set; }
+        public DateTime? AddedTime { get; set; }
 
         [Display(Name = "下架時間")]
         [Required(ErrorMessage = "下架時間不可空白")]
-        public DateTime ShelfTime { get; set; }
+        public DateTime? ShelfTime { get; set; }
         public int SupplierId { get; set; }
         public int? DiscountId { get; set; }
         public string? PhotoPath { get; set; }

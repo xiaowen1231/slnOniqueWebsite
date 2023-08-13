@@ -26,9 +26,6 @@
                 下架時間: @Html.DisplayFor(model => model.ShelfTime)
             </div>
             <div class="d-flex align-items-center my-4">
-                優惠活動:@Html.DisplayFor(model => model.Discount.Description)
-            </div>
-            <div class="d-flex align-items-center my-4">
                 <div class="mx-3">供應商: @Html.DisplayFor(model => model.Supplier.SupplierName)</div>
             </div>
             <div class="d-flex my-4">
@@ -43,9 +40,11 @@
             </div>
         </div>
     </div>
+    <div class="text-danger">
+        @ViewBag.DeleteErrorMessage
+    </div>
     <div>
         <form asp-action="Delete">
-            <input type="hidden" asp-for="ProductId" />
             <div class="container text-center mb-4">
                 <a class="btn btn-outline-dark" asp-action="Index">取消刪除</a>
                 <input type="submit" value="確認刪除" class="btn btn-dark" />
