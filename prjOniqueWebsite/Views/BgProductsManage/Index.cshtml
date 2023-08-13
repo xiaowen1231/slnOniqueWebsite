@@ -16,43 +16,31 @@
             <div class="col-1" style="margin-left: 2%;">
                 <a class="btn btn-dark" asp-action="Create">新增商品</a>
             </div>
-            <div class="col-4 d-flex align-items-center">
+            <div class="d-flex align-items-center" style="margin-left:37%">
                 <div class="fw-bold mx-2">關鍵字搜尋:</div>
                 <div>
-                    <input type="text" name="txtKeyword" id="txtKeyword" placeholder="請輸入關鍵字" class="form-control">
+                    <input type="text" name="txtKeyword" id="txtKeyword" placeholder="可輸入名稱、價格、分類進行搜尋" class="form-control" style="width:300px">
+                </div> 
+                <div>
+                    <input type="submit" class="btn btn-dark mx-4 fw-bold" value="查詢" />
+                    <button class="btn btn-outline-dark fw-bold">取消查詢</button>
                 </div>
             </div>
-            <div class="col-2 d-flex align-items-center">
+            @*<div class="col-2 d-flex align-items-center">
                 <div class="fw-bold mx-2">商品分類:</div>
                 <div>
-                    <select class="form-select" id="selectCategory">
-                       @* <option>請選擇</option>
-                        <option>T恤</option>
-                        <option>襯衫</option>
-                        <option>毛衣</option>
-                        <option>外套</option>
-                        <option>背心</option>
-                        <option>牛仔褲</option>
-                        <option>休閒褲</option>
-                        <option>短褲</option>
-                        <option>飾品</option>*@
+                    <select class="form-select" id="selectCategory">                      
                     </select>
                 </div>
             </div>
             <div class="col-3 d-flex align-items-center">
                 <div class="fw-bold mx-2">優惠活動:</div>
                 <div>
-                    <select class="form-select" id="selectDiscount">
-                        <option>請選擇</option>
-                        <option>夏日特賣</option>
-                        <option>熱銷優惠</option>
+                    <select class="form-select" id="selectDiscount">                        
                     </select>
                 </div>
-            </div>
-            <div class="text-end">
-                <input type="submit" class="btn btn-dark fw-bold" value="查詢" />
-                <button class="btn btn-outline-dark fw-bold mx-2">取消查詢</button>
-            </div>
+            </div>*@
+           
         </div>
         <table class="table align-middle text-center table-striped table-hover">
             <thead class="table-dark">
@@ -105,6 +93,12 @@
             </tbody>
         </table>
     </div>
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-warning text-center" style="width:98%;margin:auto">
+            @ViewBag.Message
+        </div>
+    }
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center" id="pagination">
             @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)

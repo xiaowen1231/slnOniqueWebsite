@@ -4,6 +4,7 @@ using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
+using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Drawing.Printing;
 using System.Text.Json;
@@ -15,14 +16,20 @@ namespace prjOniqueWebsite.Controllers
     {
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
-        OrderDao dao = null;
+        private readonly IWebHostEnvironment _environment;
+        MemberService _service;
+        MemberDao _memDao;
+        OrderDao _orderDao = null;
 
-        public FMemberController(OniqueContext context,UserInfoService userInfoService)
+        public FMemberController(OniqueContext context,UserInfoService userInfoService, IWebHostEnvironment environment)
         {
             _context = context;
             _userInfoService = userInfoService;
-            dao = new OrderDao(_context);
-
+            _environment = environment;
+            _service = new MemberService(_context,_environment);
+            _memDao = new MemberDao(_context,_environment);
+            _orderDao = new OrderDao(_context);
+            
         }
 
 
@@ -49,7 +56,7 @@ namespace prjOniqueWebsite.Controllers
                        on m.Areas equals a.AreaId
                        where m.MemberId == member.MemberId
                        select new FMemberDto{
-                           MemberId = member.MemberId,
+                           MemberId = m.MemberId,
                            Name = m.Name,
                            DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd"),
                            Email = m.Email,
@@ -63,38 +70,34 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult MemberInfoEdit(int id)
         {
-            var mem = (from m in _context.Members
-                          join c in _context.Citys
-                          on m.Citys equals c.CityId
-                          join a in _context.Areas
-                          on m.Areas equals a.AreaId
-                          where m.MemberId == id
-                          select new FMemberDto
-                          {
-                              MemberId = id,
-                              Name = m.Name,
-                              DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd"),
-                              Email = m.Email,
-                              Phone = m.Phone,
-                              Gender = m.Gender ? "女" : "男",
-                              Citys = c.CityName,
-                              Areas = a.AreaName,
-                              Address = m.Address
-                          }).FirstOrDefault();
-            return PartialView(mem);
+            var dto = _memDao.GetFMemberById(id);
+            FMemberEditVM vm = new FMemberEditVM()
+            {
+                MemberId = dto.MemberId,
+                Name = dto.Name,
+                DateOfBirth = dto.DateOfBirth,
+                Email = dto.Email,
+                Phone = dto.Phone,
+                Gender = dto.Gender,
+                Citys = dto.Citys,
+                Areas = dto.Areas,
+                Address = dto.Address
+            };
+
+            return PartialView(vm);
         }
         [HttpPost]
-        public IActionResult MemberInfoEdit(FMemberDto fMemberDto)
+        public IActionResult MemberInfoEdit(FMemberEditVM vm)
         {
-            var member = _context.Members.FirstOrDefault(m => m.MemberId == fMemberDto.MemberId);
+            var member = _context.Members.FirstOrDefault(m => m.MemberId == vm.MemberId);
 
-                member.Name = fMemberDto.Name;
-                member.Phone = fMemberDto.Phone;
-                member.Citys = Convert.ToInt32(fMemberDto.Citys);
-                member.Areas = Convert.ToInt32(fMemberDto.Areas);
-                member.Address = fMemberDto.Address;
+                member.Name = vm.Name;
+                member.Phone = vm.Phone;
+                member.Citys = Convert.ToInt32(vm.Citys);
+                member.Areas = Convert.ToInt32(vm.Areas);
+                member.Address = vm.Address;
             _context.SaveChanges();
-            return PartialView("MemberInfo");
+            return RedirectToAction("Index");
         }
         
         public IActionResult MemberOrder()
