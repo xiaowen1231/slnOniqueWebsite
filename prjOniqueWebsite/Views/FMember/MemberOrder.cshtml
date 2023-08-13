@@ -7,8 +7,8 @@
 <form method="post">
     <div class="container">
         <div>
-            <input type="hidden" value="@pagenumber" id="searchPagenumber" />
             <input type="hidden" value="@pagesize" id="searchpageSize" />
+            <input type="hidden" value="@pagenumber" id="searchPagenumber" />
         </div>
         <div class="m-3 fs-3 fw-bold py-4 border-bottom border-dark-subtle">訂單查詢</div>
         <div class="d-flex justify-content-between px-4">
@@ -86,9 +86,7 @@
 </form>
 <input type="hidden" value="@Model.MemberId" id="memberId" />
 <script>
-    let pagenumber = Number($("#searchPagenumber").val())
-    let pagesize = Number($("#searchpageSize").val())
-
+   
 
     loadorder(pagenumber, pagesize)
     async function loadorder(pagenumber, pagesize) {
@@ -154,8 +152,8 @@
     })
     //click分頁籤
     $(".pagination").on("click", ".pageItemPrevNumber", function () {
-        pagenumber = $(this).data("pagenumber")
-
+        let pagenumber = $(this).data("pagenumber")
+        console.log(pagenumber)
         loadorder(pagenumber, pagesize)
     })
 

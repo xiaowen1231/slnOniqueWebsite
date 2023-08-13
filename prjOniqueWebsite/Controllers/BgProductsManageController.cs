@@ -45,6 +45,10 @@ namespace prjOniqueWebsite.Controllers
             var products = await query.Skip(startIndex)
                 .Take(pageSize)
                 .ToListAsync();
+            if (products.Count == 0)
+            {
+                ViewBag.Message = "查無此商品";
+            }
             var viewModel = new BgProductsPagingVM
             {
                 Products = products,
@@ -130,9 +134,9 @@ namespace prjOniqueWebsite.Controllers
             {
                 new BgProductService(_context, _environment).UpdataProducts(vm);
             }
-            catch (Exception ex)
+            catch
             {
-                ModelState.AddModelError("", "修改失敗!" + ex.Message);
+                ModelState.AddModelError("", "修改失敗!請重新上傳商品照片!");
                 ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", vm.DiscountId);
                 ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", vm.ProductCategoryId);
                 ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", vm.SupplierId);

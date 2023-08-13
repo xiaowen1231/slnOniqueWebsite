@@ -27,12 +27,12 @@
                 <div class="p-2 col-5">
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="ProductName" class="width-120px">商品名稱:</label>
-                        <input type="text" asp-for="@Model.ProductName" class="form-control" name="ProductName" />
+                        <input type="text" asp-for="@Model.ProductName" class="form-control" name="ProductName" id="inputName" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ProductName)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="@Model.Price" class="form-control" name="Price" />
+                        <input asp-for="@Model.Price" class="form-control" name="Price" id="inputPrice" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.Price)</div>
                     <div class="d-flex align-items-center my-3">
@@ -55,7 +55,7 @@
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
-                        <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;"></textarea>
+                        <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;" id="inputDescription"></textarea>
                     </div>
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
@@ -68,6 +68,7 @@
                 </div>
             </div>
             <div class="container text-center mb-4">
+                <input type="button" class="btn btn-outline-secondary" value="DemoCreate" id="DemoCreate" />
                 <a class="btn btn-outline-dark" asp-action="Index">取消</a>
                 <input type="submit" value="確認新增" class="btn btn-dark" />
             </div>
@@ -104,6 +105,13 @@
                 const url = URL.createObjectURL(files[0])
                 $("#imgProductPhoto").attr("src", url)
             }
+        })
+        $('#DemoCreate').on('click',function(){
+            let Name = "日系復古短袖襯衫"
+            $('#inputName').val(Name)
+            $('#inputPrice').val("399")
+            let Description = "復古設計、乾淨俐落;工裝風格、個性時尚"
+            $('#inputDescription').val(Description)
         })
     </script>
 }

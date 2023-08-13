@@ -14,7 +14,7 @@
         <div class="p-3">
             <div class="circle-size-150 mx-auto">
                 @{
-                    if(Model.PhotoPath!=null)
+                    if (Model.PhotoPath != null)
                     {
                         <img src="@Url.Content("~/images/uploads/members/")@Model.PhotoPath" alt="" class="circle-size-150 cover rounded-circle">
 
@@ -92,11 +92,14 @@
 }
 @section Scripts{
     <script>
-        $(document).ready(function(){
+        let pagesize = Number($("#searchpageSize").val())
+        let pagenumber = Number($("#searchPagenumber").val())
+
+        $(document).ready(function () {
             const display = $("#display").val();
             loadPage(display)
         })
-        function loadPage(display){
+        function loadPage(display) {
             $('#divPartial').load(`@Url.Content("~/fmember/")${display}`)
         }
         $('#info').click(function () {
@@ -112,16 +115,16 @@
             $('#divPartial').load('@Url.Content("~/fmember/MemberPassword")')
         })
 
-        $("#divPartial").on("click", ".btnEdit",function(event){
+        $("#divPartial").on("click", ".btnEdit", function (event) {
             event.preventDefault()
             let id = $(this).data("id");
             $('#divPartial').load(`@Url.Content("~/fmember/MemberInfoEdit/")${id}`)
         })
-        $("#divPartial").on("click", ".btnEditCancel",function(event){
+        $("#divPartial").on("click", ".btnEditCancel", function (event) {
             event.preventDefault()
             $('#divPartial').load('@Url.Content("~/fmember/MemberInfo")')
         })
-        
-       
+
+
     </script>
 }
