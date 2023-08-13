@@ -43,13 +43,13 @@
             <div class="p-2 my-2">
                 <div class="d-flex ">
                     <div class="fw-bold" style="width: 95px;"><span>運送費用</span></div>
-                    <div class="text-end " style="width: 95px;"><span id="shippingfee" class="dollar">60</span></div>
+                    <div class="text-end " style="width: 95px;"><span id="shippingfee" class="dollar"></span></div>
                 </div>
             </div>
             <div class="p-2 my-2">
                 <div class="d-flex ">
                     <div class="fw-bold lh-lg" style="width: 95px;"><span>應付總額</span></div>
-                    <div class="text-end text-danger fw-bold" style="width: 95px;"><span id="total" class="dollar"></span></div>
+                    <div class="text-end text-danger fw-bold" style="width: 95px;"><span id="totalPrice" class="dollar"></span></div>
                 </div>
             </div>
         </div>
@@ -68,36 +68,46 @@
         const totalprice = document.querySelector("#total")
         
         let total = 0;
-    
+        let totalPrice = 0;
+
         async function loadOrderProductList() {
             const orderId = $("#orderId").val()
             const response = await fetch(`@Url.Content("~/OrderApi/orderProductDetail?orderId=")${orderId}`)
             const data = await response.json();
+
+            let productListTablecontent = "";
+            let displaytotalPrice = 0;
+            let displaymethodName = ""
             const productList = data.map(prod => {
-                const { productName, sizeName, colorName, orderQuantity, price, photoPath } = prod
+                const { productName, sizeName, colorName, orderQuantity, price, photoPath, totalPrice, methodName } = prod
                 let subtotal = orderQuantity * price;
+                displaytotalPrice = totalPrice;
+                displaymethodName = methodName;
                 total += subtotal
-                //photoPath = photoPath == null ? default : photoPath
-                //console.log(productName, sizeName, colorName, orderQuantity, price, photoPath)
-                return (`<tr>
-                                            <td>
-                                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="" class="w-120-h-120 rounded-3 shadow-sm">
-                                            </td>
-                                            <td>${productName}</td>
-                                                                    <td><span class="dollar">${price}</span></td>
-                                            <td>${orderQuantity}</td>
-                                            <td>${sizeName}</td>
-                                            <td>${colorName}</td>
-                                            <td>
-                                            <span class="dollar text-danger">${subtotal}</span>
-                                            </td>
-                                            </tr>
-                                            `
-                )
-            })
-            productListTable.innerHTML = productList.join("");
+                productListTablecontent +=
+                    `<tr>
+                                <td>
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="" class="w-120-h-120 rounded-3 shadow-sm">
+                                </td>
+                                <td>${productName}</td>
+                                <td><span class="dollar">${price}</span></td>
+                                <td>${orderQuantity}</td>
+                                <td>${sizeName}</td>
+                                <td>${colorName}</td>
+                                <td>
+                                <span class="dollar text-danger">${subtotal}</span>
+                                </td>
+                                </tr>
+                                `
+
+            });
+
+            $("#orderProductList").html(productListTablecontent)
             productPrice.innerHTML = total;
-            totalprice.innerHTML = total + 60;
+            $("#totalPrice").html(displaytotalPrice);
+            $("#shippingfee").html(displaytotalPrice - total);
+
+
         }
 
 

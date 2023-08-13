@@ -74,6 +74,10 @@ namespace prjOniqueWebsite.Models.Daos
                                 on psd.SizeId equals ps.SizeId
                                 join p in _context.Products
                                 on psd.ProductId equals p.ProductId
+                                join o in _context.Orders
+                                on od.OrderId equals o.OrderId
+                                join sm in _context.ShippingMethods
+                                on o.MethodId equals sm.MethodId
                                 where od.OrderId == orderId
                                 select new OrderProductsListDto
                                 {
@@ -82,7 +86,10 @@ namespace prjOniqueWebsite.Models.Daos
                                     ColorName = pc.ColorName,
                                     OrderQuantity = od.OrderQuantity,
                                     Price = od.Price,
-                                    PhotoPath = p.PhotoPath
+                                    PhotoPath = p.PhotoPath,
+                                    TotalPrice=o.TotalPrice,
+                                    MethodName=sm.MethodName
+                                    
                                 };
 
             return productDetail.ToList();
@@ -115,6 +122,7 @@ namespace prjOniqueWebsite.Models.Daos
                                      OrderDate = o.OrderDate,
                                      ShippingDate = o.ShippingDate,
                                      CompletionDate = o.CompletionDate,
+                                     TotalPrice= o.TotalPrice,
                                  };
             return shippingDetail.FirstOrDefault();
         }
