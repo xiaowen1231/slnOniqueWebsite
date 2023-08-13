@@ -44,10 +44,10 @@ namespace prjOniqueWebsite.Models.Services
             if(vm.AddedTime > vm.ShelfTime)
             {
                 throw new Exception("上架日期不可大於下架日期");
-            }
+            }            
             else
             {
-                new BgProductDao(_context,_environment).UpdataProducts(vm);
+                new BgProductDao(_context,_environment).UpdateProducts(vm);
             }
         }
     }

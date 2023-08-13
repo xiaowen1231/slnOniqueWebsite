@@ -10,6 +10,7 @@ namespace prjOniqueWebsite.Models.ViewModels
 
         [Display(Name = "商品名稱")]
         [Required(ErrorMessage = "商品名稱不可空白")]
+        [RegularExpression(@"^[^\s!@#$%^&*()_+{}\[\]:;<>,.?~\\/]+$", ErrorMessage = "請輸入不包含特殊符號的商品名稱")]
         public string ProductName { get; set; }
         public int ProductCategoryId { get; set; }
 

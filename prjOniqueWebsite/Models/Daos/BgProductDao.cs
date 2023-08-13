@@ -47,7 +47,7 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Products.Add(product);
             _context.SaveChanges();
         }
-        public void UpdataProducts(BgProductsVM vm)
+        public void UpdateProducts(BgProductsVM vm)
         {
             var products = _context.Products.FirstOrDefault(p => p.ProductId == vm.ProductId);
             products.ProductId = vm.ProductId;
@@ -66,6 +66,14 @@ namespace prjOniqueWebsite.Models.Daos
                 {
                     vm.Photo.CopyTo(fileStream);
                 }
+            }
+            else
+            {
+                string fileName = products.ProductName + ".jpg";
+                products.ProductName = fileName;
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
+                string photoEdit = Path.Combine(_environment.WebRootPath, "images", "uploads", "products", fileName);
+                System.IO.File.Copy(photoEdit, photoPath,true);
             }
             _context.SaveChanges();
         }
