@@ -33,6 +33,7 @@ namespace prjOniqueWebsite.Controllers
         public async Task<IActionResult> Index(string txtKeyword, int pageNumber = 1, int pageSize = 10)
         {
             IQueryable<Products> query = _context.Products.Include(p => p.Discount).Include(p => p.ProductCategory).Include(p => p.Supplier);
+            query = query.OrderByDescending(p => p.ProductId);
             if (!string.IsNullOrEmpty(txtKeyword))
             {
                 query = query.Where(p => p.ProductName.Contains(txtKeyword) ||
@@ -66,15 +67,11 @@ namespace prjOniqueWebsite.Controllers
         // GET: BgProductsManage/Create
         public IActionResult Create()
         {
-            ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description");
             ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName");
             return View();
         }
 
-        // POST: BgProductsManage/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         public IActionResult Create(BgProductsVM vm)
         {
@@ -90,7 +87,6 @@ namespace prjOniqueWebsite.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "新增商品失敗!" + ex.Message);
-                ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description");
                 ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
                 ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName");
                 return View(vm);
@@ -114,7 +110,6 @@ namespace prjOniqueWebsite.Controllers
                 SupplierId = d.SupplierId
             }).FirstOrDefault();
 
-            ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", products.DiscountId);
             ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.ProductCategoryId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", products.SupplierId);
             return View(products);
@@ -137,7 +132,6 @@ namespace prjOniqueWebsite.Controllers
             catch
             {
                 ModelState.AddModelError("", "修改失敗!請重新上傳商品照片!");
-                ViewData["DiscountId"] = new SelectList(_context.Discounts, "Id", "Description", vm.DiscountId);
                 ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", vm.ProductCategoryId);
                 ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", vm.SupplierId);
                 return View(vm);
@@ -186,9 +180,11 @@ namespace prjOniqueWebsite.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch
             {
-                return StatusCode(500, "該商品還存有庫存資料，故無法刪除!");
+                ViewBag.DeleteErrorMessage = "該商品還存有庫存資料，故無法刪除!";
+                var product = await _context.Products.FindAsync(id);
+                return View("Delete",product);
             }
         }
         public IActionResult BgCreateColor()

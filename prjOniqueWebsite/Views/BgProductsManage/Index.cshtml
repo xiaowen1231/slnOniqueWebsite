@@ -159,16 +159,16 @@
             selectCategory.innerHTML=category.join("")            
         }       
 
-        loadDiscount();
-        async function loadDiscount(){
-            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowDiscountList")`)
-            const datas = await response.json();
-            console.log(datas)
-            const discount = datas.map(discount=>{
-                const { id,title }=discount;
-                return `<option value="${id}">${title}</option>`
-            })
-            selectDiscount.innerHTML = discount.join("");
+        //loadDiscount();
+        //async function loadDiscount(){
+        //    const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowDiscountList")`)
+        //    const datas = await response.json();
+        //    console.log(datas)
+        //    const discount = datas.map(discount=>{
+        //        const { id,title }=discount;
+        //        return `<option value="${id}">${title}</option>`
+        //    })
+        //    selectDiscount.innerHTML = discount.join("");
         }
     </script>
 }
