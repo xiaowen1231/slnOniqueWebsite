@@ -57,5 +57,13 @@
             event.preventDefault();
             window.location.href = `@Url.Content("~/Product/List")`;
         })
+
+        $('#checkOrder').on('click',function(){
+            event.preventDefault();
+
+            let orderId = @Model.OrderId
+
+            window.location.href = `@Url.Content("~/Order/OrderEmailContent?orderId=")${orderId}`;
+        })
     </script>
 }
