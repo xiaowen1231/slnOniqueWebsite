@@ -18,7 +18,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         [Required(ErrorMessage = "商品價格不可空白")]
         [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessage = "{0}必須為正整數")]
         [Range(0,99999999999,ErrorMessage ="必須為正整數")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
         public string? Description { get; set; }
 
         [Display(Name = "上架時間")]

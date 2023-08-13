@@ -19,7 +19,7 @@ namespace prjOniqueWebsite.Models.Daos
             {
                 ProductName = vm.ProductName,
                 ProductCategoryId = vm.ProductCategoryId,
-                Price = vm.Price,
+                Price = (decimal)vm.Price,
                 AddedTime = (DateTime)vm.AddedTime,
                 ShelfTime = (DateTime)vm.ShelfTime,
                 Description = vm.Description,
@@ -52,7 +52,7 @@ namespace prjOniqueWebsite.Models.Daos
             var products = _context.Products.FirstOrDefault(p => p.ProductId == vm.ProductId);
             products.ProductId = vm.ProductId;
             products.ProductName = vm.ProductName;
-            products.Price = vm.Price;
+            products.Price = (decimal)vm.Price;
             products.AddedTime = (DateTime)vm.AddedTime;
             products.ShelfTime = (DateTime)vm.ShelfTime;
             products.Description = vm.Description;

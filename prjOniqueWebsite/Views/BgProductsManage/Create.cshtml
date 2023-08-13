@@ -37,13 +37,13 @@
                     <div class="text-end fw-bold">@Html.ValidationMessageFor(model=>model.Price,"",new{@class="text-danger"})</div>
                     <div class="d-flex align-items-center my-3">
                         <div class="width-120px">商品分類:</div>
-                        <select class="form-control" id="selectCategory">
+                        <select class="form-control" id="selectCategory" name="ProductCategoryId">
 
                         </select>
                     </div>
                     <div class="d-flex align-items-center my-3">
                         <div class="width-120px">供應商:</div>
-                        <select class="form-control" id="selectSupplier"></select>
+                        <select class="form-control" id="selectSupplier" name="SupplierId"></select>
                     </div>
                     <div class="d-flex align-items-center my-3">
                         <div class="width-120px">上架時間:</div>

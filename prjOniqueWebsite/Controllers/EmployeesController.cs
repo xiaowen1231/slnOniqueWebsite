@@ -10,7 +10,7 @@ using System.Net;
 
 namespace prjOniqueWebsite.Controllers
 {
-    //[Authorize(Roles = "經理")]
+    [Authorize(Roles = "經理")]
     public class EmployeesController : Controller
     {
         private readonly OniqueContext _context;
