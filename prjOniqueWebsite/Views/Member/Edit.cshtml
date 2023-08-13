@@ -29,13 +29,14 @@
                         <div class=" width-90px text-end fw-bold">姓名</div>
                         <div class="mx-2">
                             <input type="text" class="form-control " value="@Model.Name" name="Name" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            @Html.ValidationMessageFor(mem=>mem.Name,"",new{@class = "text-danger"})
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">生日</div>
                         <div class="mx-2">
                             <div class="mx-3" name="DateOfBirth" id="memberDateOfBirth">@Model.DateOfBirth</div>
+                            <input type="hidden" name="DateOfBirth" value="@Model.DateOfBirth" />
                         </div>
                     </div>
                 </div>
@@ -44,6 +45,7 @@
                         <div class=" width-90px text-end fw-bold">性別</div>
                         <div class="mx-3 d-flex">
                             <div class="mx-3" name="Gender" id="Gender">@Model.Gender</div>
+                            <input type="hidden" name="Gender" value="@Model.Gender" />
                             @* @{
                             if (Model.Gender=="男")
                             {
@@ -82,6 +84,7 @@
                         <div class=" width-90px text-end fw-bold">電話</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" value="@Model.Phone" name="Phone" />
+                            @Html.ValidationMessageFor(mem=>mem.Phone,"",new{@class = "text-danger"})
                         </div>
                     </div>
                 </div>
@@ -90,12 +93,14 @@
                         <div class=" width-90px text-end fw-bold">信箱</div>
                         <div class="mx-3">
                             <input type="text" class="form-control" value="@Model.Email" name="Email">
+                            @Html.ValidationMessageFor(mem=>mem.Email,"",new{@class = "text-danger"})
                         </div>
                     </div>
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">密碼</div>
                         <div class="mx-3">
                             <input type="password" class="form-control" value="@Model.Password" name="Password" />
+                            @Html.ValidationMessageFor(mem=>mem.Password,"",new{@class = "text-danger"})
                         </div>
                     </div>
                 </div>
@@ -111,6 +116,7 @@
                         <div class=" width-90px text-end fw-bold">註冊日期</div>
                         <div class="mx-3">
                             <div class="mx-3" name="RegisterDate" id="RegisterDate">@Model.RegisterDate</div>
+                            <input type="hidden" name="RegisterDate" value="@Model.RegisterDate" />
                         </div>
                     </div>
 
@@ -138,6 +144,7 @@
                             <input type="text" class="form-control" value="@Model.Address" name="Address" />
                         </div>
                     </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
 
                 <div class="row justify-content-around p-5">
