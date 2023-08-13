@@ -2,7 +2,7 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<form method="post" action="MemberInfoEdit">
+<form method="post" action="MemberInfoEdit"  name="EditForm">
     <div class="container ">
         <input type="hidden" class="form-control" name="MemberId" value="@Model.MemberId" />
         <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">修改個人資料</div>
@@ -65,15 +65,15 @@
                         </select>
                     </div>
                     <div class="mx-3 ">
-                        <input type="text" class="form-control" value="@Model.Address">
+                        <input type="text" class="form-control" name="Address" value="@Model.Address">
                     </div>
                 </div>
             </div>
         </div>
         <div class="row justify-content-around p-5">
             <div class="text-center">
-                <input type="submit" value="確定修改" class="btnEditConfirm btn btn-dark p-2 px-4">
-                <input type="button" value="取消" class="btnEditCancel btn btn-light p-2 px-4">
+                <input type="submit" value="確定修改" class="btnEditConfirm btn btn-dark p-2 px-4 btnSubmit">
+                <input type="button" value="取消" class="btnEditCancel btn btn-light p-2 px-4 ">
             </div>
         </div>
     </div>
@@ -142,4 +142,37 @@
 
         $("#area").append(selectOptions);
     }
+
+    $(".btnSubmit").on('click',async function(event){
+        event.preventDefault();
+
+        const formData = new FormData(document.EditForm);
+        
+        const response = await fetch('@Url.Content("~/FMember/MemberInfoEdit")', {
+            body: formData,
+            method: 'POST'
+        })
+
+        const data = await response.json();
+
+        if (data.statusCode==500){
+            Swal.fire({
+                title: data.statusMessage,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }else{
+            Swal.fire({
+                title: data.statusMessage,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+            })
+            setTimeout(() => {
+                $('#divPartial').load('@Url.Content("~/fmember/MemberInfo")')
+            }, 1500)
+        }
+    })
+
 </script>

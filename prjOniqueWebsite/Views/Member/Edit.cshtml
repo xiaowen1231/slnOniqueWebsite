@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "編輯會員資料";
     Layout = @Url.Content("~/Views/Shared/_Layout_Background.cshtml");
+    string photoPath = "default.jpg";
+    if(!string.IsNullOrEmpty(Model.PhotoPath))
+    {
+        photoPath = Model.PhotoPath;
+    }
 }
 
 <form class="container my-5 p-2 border border-secondary rounded-4 shadow" method="post" enctype="multipart/form-data">
@@ -10,10 +15,11 @@
     <div class=" p-2 my-3 justify-content-around row ">
         <div class=" col-3 ">
             <div class=" p-2 d-flex justify-content-center">
-                <img src="~/images/uploads/members/@Model.PhotoPath" id="imgMember" data-originalpath="@Model.PhotoPath" />
+                <img src="~/images/uploads/members/@photoPath" id="imgMember" data-originalpath="@Model.PhotoPath" />
             </div>
             <div>
                 <input type="file" name="Photo" id="Photo" class="form-control my-5" />
+                <input type="hidden" name="PhotoPath" value="@Model.PhotoPath" />
             </div>
         </div>
         <div class=" col-8 border mx-2">

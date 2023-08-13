@@ -83,11 +83,29 @@ namespace prjOniqueWebsite.Models.Services
             {
                 throw new Exception("已有此電話號碼!");
             }
-            if(vm.Phone.Length > 10 || vm.Phone.Length <0 )
+            if(vm.Phone.Length > 10 || vm.Phone.Length < 10 )
             {
                 throw new Exception("電話號碼為10碼!");
             }
             _dao.EditMember( vm);
+        }
+        public void FMemberEdit(FMemberEditVM vm)
+        {
+            var memInEmail = _dao.GetMemberByEmail(vm.Email);
+            if (memInEmail != null && memInEmail.MemberId != vm.MemberId)
+            {
+                throw new Exception("此信箱已被其他會員註冊，無法修改!");
+            }
+            var memInPhone = _dao.GetMemberByPhone(vm.Phone);
+            if (memInPhone != null && memInPhone.MemberId != vm.MemberId)
+            {
+                throw new Exception("已有此電話號碼!");
+            }
+            if (vm.Phone.Length > 10 || vm.Phone.Length < 10)
+            {
+                throw new Exception("電話號碼為10碼!");
+            }
+            _dao.EditFMember(vm);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using prjOniqueWebsite.Models.DTOs;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
@@ -184,28 +185,7 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Update(mem);
             _context.SaveChanges();
         }
-        public FMemberDto GetFMemberInfo()
-        {
-            //FMemberDto mem = (from m in _context.Members
-            //                  join c in _context.Citys
-            //                  on m.Citys equals c.CityId
-            //                  join a in _context.Areas
-            //                  on m.Areas equals a.AreaId
-            //                  where m.MemberId == member.MemberId
-            //                  select new FMemberDto
-            //                  {
-            //                      MemberId = member.MemberId,
-            //                      Name = m.Name,
-            //                      DateOfBirth = Convert.ToDateTime(m.DateOfBirth).ToString("yyyy-MM-dd"),
-            //                      Email = m.Email,
-            //                      Phone = m.Phone,
-            //                      Gender = m.Gender ? "女" : "男",
-            //                      Citys = c.CityName,
-            //                      Areas = a.AreaName,
-            //                      Address = m.Address
-            //                  }).FirstOrDefault();
-            return null;
-        }
+
         public FMemberEditDto GetFMemberById(int id)
         {
             FMemberEditDto mem = (from m in _context.Members
@@ -228,7 +208,17 @@ namespace prjOniqueWebsite.Models.Daos
                                   }).FirstOrDefault();
             return mem;
         }
+        public void EditFMember(FMemberEditVM vm)
+        {
+            var member = _context.Members.FirstOrDefault(m => m.MemberId == vm.MemberId);
 
+            member.Name = vm.Name;
+            member.Phone = vm.Phone;
+            member.Citys = Convert.ToInt32(vm.Citys);
+            member.Areas = Convert.ToInt32(vm.Areas);
+            member.Address = vm.Address;
+            _context.SaveChanges();
+        }
         public List<MemberOrderDto> GetMemberOrders(int MemberId)
         {
 
