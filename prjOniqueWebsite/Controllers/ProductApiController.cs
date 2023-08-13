@@ -95,9 +95,9 @@ namespace prjOniqueWebsite.Controllers
             return Json(cart);
         }
 
-        public IActionResult ProductList(string keyword, string categoryName, string rank, int pageNumber)
+        public IActionResult ProductList(string keyword, string categoryName, string rank, int pageNumber,int discountId)
         {
-            var dtos = dao.SearchProductList(keyword, categoryName, rank);
+            var dtos = dao.SearchProductList(keyword, categoryName, rank, discountId);
             var datas = ProductListIndex(dtos, pageNumber);
             return Json(datas);
         }

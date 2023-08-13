@@ -34,10 +34,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 gap-3">
                         <li class="nav-item">
-                            <a class="nav-text nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">新品到貨</a>
+                            <a class="nav-text nav-link text-white" href="@Url.Content("~/product/list?rank=newest")">新品到貨</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white nav-text" asp-area="" asp-controller="Home" asp-action="Privacy">熱銷商品</a>
+                            <a class="nav-link text-white nav-text" href="@Url.Content("~/product/list?rank=sales")">熱銷商品</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white nav-text" href="@Url.Content("~/product/list")">所有商品</a>
@@ -144,15 +144,7 @@
                     <div class="width-250px">
                         <div class="border rounded shadow-sm mb-4" data-aos="fade-right">
                             <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">精選分類</div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">New Arrvial</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">熱銷商品</a>
-                            </div>
-                            <div class="p-1 my-1 mx-3">
-                                <a asp-action="" asp-controller="" class="link-underline-light link-dark fw-bold fs-14px">活動專區</a>
-                            </div>
+                            <div id="divDiscountNav"></div>
                         </div>
                         <div class="border rounded shadow-sm" data-aos="fade-right">
                             <div class="fw-bold text-center bg-black text-white m-2 rounded py-1">商品分類</div>
@@ -346,6 +338,21 @@
 
         DisplayCategories()
 
+        DisplayDiscountOptions()
+
+        async function DisplayDiscountOptions(){
+            const response = await fetch(`@Url.Content("~/DiscountApi/GetDiscountList")`)
+            const datas = await response.json()
+
+            const discountOption = datas.map(item=>{
+                const { title, discountId } = item;
+
+                return `<div class="p-1 my-1 mx-3" ><div class="divDiscountOption fw-bold fs-14px cursor-pointer" data-discountid="${discountId}">${ title }</div></div >`
+            })
+
+            $('#divDiscountNav').html(discountOption.join(""))
+        }
+
         async function DisplayCategories() {
             const response = await fetch(`@Url.Content("~/productapi/GetCategories")`)
             const datas = await response.json();
@@ -356,6 +363,14 @@
 
             $('.divCategories').html(categories.join(""))
         }
+
+        $("#divDiscountNav").on('click', '.divDiscountOption', function (event) {
+            event.stopPropagation()
+
+            let discountId = $(this).data("discountid")
+
+            window.location.href = `@Url.Content("~/Product/List?discountId=")${discountId}`
+        })
 
         $('.divCategories').on('click', '.divSearchByCategory', function () {
             let categoryName = $(this).text();

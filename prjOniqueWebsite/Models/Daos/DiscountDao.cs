@@ -109,5 +109,21 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Discounts.Remove(discount);
             _context.SaveChanges();
         }
+
+        public List<DiscountDto> GetDiscountList()
+        {
+            var dto = _context.Discounts.Select(d => new DiscountDto
+            {
+                DiscountId = d.Id,
+                Title = d.Title,
+                Description = d.Description,
+                BeginDate = d.BeginDate.ToShortDateString(),
+                EndDate = d.EndDate.ToShortDateString(),
+                DiscountMethod = (d.DiscountMethod * 100).ToString("0") + " %OFF",
+                PhotoPath = d.PhotoPath,
+            }).ToList();
+
+            return dto;
+        }
     }
 }

@@ -15,11 +15,18 @@ namespace prjOniqueWebsite.Controllers
             _context = context;
         }
 
-        public IActionResult List(string keyword, string categoryName,string rank,int pageNumber)
+        public IActionResult List(string keyword, string categoryName, string rank, int pageNumber, int? discountId)
         {
-            ViewBag.CategoryName=categoryName;
+            ViewBag.CategoryName = categoryName;
             ViewBag.Keyword = keyword;
             ViewBag.PageNumber = pageNumber;
+            ViewBag.DiscountId = discountId == null ? 0 : discountId;
+            if (discountId != null)
+            {
+                ViewBag.DiscountName = _context.Discounts.Where(d => d.Id == discountId).Select(d => d.Title).FirstOrDefault();
+                ViewBag.PhotoPath = _context.Discounts.Where(d => d.Id == discountId).Select(d => d.PhotoPath).FirstOrDefault();
+            }
+            ViewBag.Rank = rank;
             return View();
         }
 
