@@ -53,10 +53,10 @@ namespace prjOniqueWebsite.Controllers
                         select c;
             return Json(query);
         }
-        public IActionResult ShowDiscountList()
+        public IActionResult ShowSupplierList()
         {
-            var query = from d in _context.Discounts
-                        select d;
+            var query = from s in _context.Supplier
+                        select s;
             return Json(query);
         }
         public IActionResult ShowSizeList()

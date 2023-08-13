@@ -122,7 +122,6 @@
             </li>*@
         </ul>
     </nav>
-
 </form>
 @section Styles{
     <style>
@@ -145,19 +144,19 @@
 }
 @section Scripts{
     <script>
-        const selectCategory = document.querySelector("#selectCategory")
-        const selectDiscount = document.querySelector("#selectDiscount")
-        loadcategory()
-        async function loadcategory() {
-            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowCategoryList")`)
-            const datas = await response.json();
-            console.log(datas)
-            const category = datas.map(category=>{
-                const { categoryId, categoryName }=category;
-                return `<option value="${categoryId}">${categoryName}</option>`
-            })
-            selectCategory.innerHTML=category.join("")            
-        }       
+        //const selectCategory = document.querySelector("#selectCategory")
+        //const selectDiscount = document.querySelector("#selectDiscount")
+        //loadcategory()
+        //async function loadcategory() {
+        //    const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowCategoryList")`)
+        //    const datas = await response.json();
+        //    console.log(datas)
+        //    const category = datas.map(category=>{
+        //        const { categoryId, categoryName }=category;
+        //        return `<option value="${categoryId}">${categoryName}</option>`
+        //    })
+        //    selectCategory.innerHTML=category.join("")            
+        //}       
 
         //loadDiscount();
         //async function loadDiscount(){

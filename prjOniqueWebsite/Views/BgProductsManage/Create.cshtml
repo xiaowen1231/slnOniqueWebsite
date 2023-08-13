@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <div class="d-flex container">
         <div class="col-2 p" style="margin-left: 8%;">
             <div class="text-center my-2 p">                
@@ -26,43 +26,46 @@
             <div class="container d-flex">
                 <div class="p-2 col-5">
                     <div class="d-flex align-items-center my-3">
-                        <label asp-for="ProductName" class="width-120px">商品名稱:</label>
-                        <input type="text" asp-for="@Model.ProductName" class="form-control" name="ProductName" id="inputName" />
+                        <div class="width-120px">商品名稱:</div>
+                        <input type="text" class="form-control" name="ProductName" id="inputName" />                       
                     </div>
-                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ProductName)</div>
+                    <div class="text-end fw-bold"> @Html.ValidationMessageFor(model=>model.ProductName,"",new{@class="text-danger"})</div>
                     <div class="d-flex align-items-center my-3">
-                        <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="@Model.Price" class="form-control" name="Price" id="inputPrice" />
+                        <div class="width-120px">商品價格:</div>
+                        <input type="text" class="form-control" name="Price" id="inputPrice" />
                     </div>
-                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.Price)</div>
+                    <div class="text-end fw-bold">@Html.ValidationMessageFor(model=>model.Price,"",new{@class="text-danger"})</div>
                     <div class="d-flex align-items-center my-3">
-                        <label asp-for="ProductCategoryId" class="width-120px">商品分類:</label>
-                        <select asp-for="ProductCategoryId" class="form-control" asp-items="ViewBag.ProductCategoryId"></select>
-                    </div>
-                    <div class="d-flex align-items-center my-3">
-                        <label asp-for="SupplierId" class="width-120px">供應商:</label>
-                        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                        <div class="width-120px">商品分類:</div>
+                        <select class="form-control" id="selectCategory">
+
+                        </select>
                     </div>
                     <div class="d-flex align-items-center my-3">
-                        <label asp-for="AddedTime" class="width-120px">上架時間:</label>
-                        <input asp-for="@Model.AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" />
+                        <div class="width-120px">供應商:</div>
+                        <select class="form-control" id="selectSupplier"></select>
                     </div>
-                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.AddedTime)</div>
                     <div class="d-flex align-items-center my-3">
-                        <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
-                        <input asp-for="@Model.ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" />
+                        <div class="width-120px">上架時間:</div>
+                        <input class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" />
+                        
                     </div>
-                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>
+                    <div class="text-end fw-bold">@Html.ValidationMessageFor(model=>model.AddedTime,"",new{@class="text-danger"})</div>
+                    <div class="d-flex align-items-center my-3">
+                        <div class="width-120px">下架時間:</div>
+                        <input class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" />
+                        
+                    </div>
+                    <div class="text-end fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime,"",new{@class="text-danger"})</div>
                     <div class="d-flex my-3">
-                        <label asp-for="Description" class="width-120px">商品描述:</label>
-                        <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;" id="inputDescription"></textarea>
+                        <div class="width-120px">商品描述:</div>
+                        <textarea class="form-control" style="width: 100%; height: 160px;" id="inputDescription"></textarea>
                     </div>
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-5 container">
                     <div class="my-3 d-flex">
-                        <img asp-for="PhotoPath" src="@Url.Content("~/images/uploads/products/default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto" />
-                        <span asp-validation-for="PhotoPath" class="text-danger"></span>
+                        <img src="@Url.Content("~/images/uploads/products/default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto" />
                     </div>
                     <input type="file" class="form-control" name="photo" id="inputPhoto"/>
                 </div>
@@ -81,19 +84,34 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        const selectCategory = document.querySelector("#selectCategory")
+        const selectSupplier = document.querySelector("#selectSupplier")
+        loadcategory()
+        async function loadcategory() {
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowCategoryList")`)
+            const datas = await response.json();
+            console.log(datas)
+            const category = datas.map(category => {
+                const { categoryId, categoryName } = category;
+                return `<option value="${categoryId}">${categoryName}</option>`
+            })
+            selectCategory.innerHTML=category.join("")
+        }
+        
+        async function loadSupplier() {
+            const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowSupplierList")`)
+            const datas = await response.json();
+            console.log(datas)
+            const supplier = datas.map(supplier => {
+                const { supplierId, supplierName } = supplier;
+                return `<option value="${supplierId}">${supplierName}</option>`
+            })
+            selectSupplier.innerHTML = supplier.join("")
+        }
+        loadSupplier()
        document.addEventListener('DOMContentLoaded', function() {          
         const priceInput = document.querySelector("#Price");
 
-        priceInput.addEventListener('input', function() {
-            const inputValue = priceInput.value.trim();
-            
-            if (!/^[1-9]\d*$/.test(inputValue)) {
-                priceInput.setCustomValidity("請輸入正整數價格值");
-            } else {
-                priceInput.setCustomValidity("");
-            }
-        });
-    });
         const photo = document.querySelector("#inputPhoto");
         photo.addEventListener('change',function(){
             const files = photo.files
@@ -112,6 +130,7 @@
             $('#inputPrice').val("399")
             let Description = "復古設計、乾淨俐落;工裝風格、個性時尚"
             $('#inputDescription').val(Description)
+        })
         })
     </script>
 }

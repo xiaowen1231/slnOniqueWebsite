@@ -20,8 +20,8 @@ namespace prjOniqueWebsite.Models.Daos
                 ProductName = vm.ProductName,
                 ProductCategoryId = vm.ProductCategoryId,
                 Price = vm.Price,
-                AddedTime = vm.AddedTime,
-                ShelfTime = vm.ShelfTime,
+                AddedTime = (DateTime)vm.AddedTime,
+                ShelfTime = (DateTime)vm.ShelfTime,
                 Description = vm.Description,
                 ProductId = vm.ProductId,
                 SupplierId = vm.SupplierId,
@@ -53,8 +53,8 @@ namespace prjOniqueWebsite.Models.Daos
             products.ProductId = vm.ProductId;
             products.ProductName = vm.ProductName;
             products.Price = vm.Price;
-            products.AddedTime = vm.AddedTime;
-            products.ShelfTime = vm.ShelfTime;
+            products.AddedTime = (DateTime)vm.AddedTime;
+            products.ShelfTime = (DateTime)vm.ShelfTime;
             products.Description = vm.Description;
             products.PhotoPath = vm.PhotoPath;
             if (vm.Photo != null)

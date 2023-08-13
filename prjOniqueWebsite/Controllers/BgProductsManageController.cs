@@ -66,9 +66,7 @@ namespace prjOniqueWebsite.Controllers
 
         // GET: BgProductsManage/Create
         public IActionResult Create()
-        {
-            ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName");
+        {           
             return View();
         }
 
@@ -87,11 +85,8 @@ namespace prjOniqueWebsite.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "新增商品失敗!" + ex.Message);
-                ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-                ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName");
-                return View(vm);
-            }
-
+                 return View(vm);
+            }           
         }
 
         // GET: BgProductsManage/Edit/5
