@@ -5,6 +5,7 @@
 
 .myCarousel {
     width: 60%;
+    height:750px;
     margin: 20px auto;
     overflow: hidden;
     position: relative;

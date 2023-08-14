@@ -21,35 +21,35 @@
             <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
                 <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">活動名稱</div>
                 <div class="width-300px">
-                    <input type="text" class="form-control" name="Title" />
+                    <input type="text" class="form-control" name="Title" id="inputTitle"/>
                     @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
                 <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">折扣方式</div>
                 <div class="width-300px">
-                    <input type="text" class="form-control" name="DiscountMethod" />
+                    <input type="text" class="form-control" name="DiscountMethod" id="inputDiscountMethod" />
                     @Html.ValidationMessageFor(model => model.DiscountMethod, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
                 <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">開始時間</div>
                 <div class="width-300px">
-                    <input type="datetime-local" class="form-control" name="BeginDate" />
+                    <input type="datetime-local" class="form-control" name="BeginDate" id="inputBeginDate" />
                     @Html.ValidationMessageFor(model => model.BeginDate, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="d-flex gap-3 justify-content-center my-2" style="height:62px;">
                 <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">結束時間</div>
                 <div class="width-300px">
-                    <input type="datetime-local" class="form-control" name="EndDate" />
+                    <input type="datetime-local" class="form-control" name="EndDate" id="inputEndDate" />
                     @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="d-flex gap-3 justify-content-center my-2">
                 <div class="fw-bold width-90px text-end" style="height:38px;line-height:38px;">活動內容</div>
                 <div class="width-300px">
-                    <textarea class="form-control" name="Description"></textarea>
+                    <textarea class="form-control" name="Description" id="inputDescription"></textarea>
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
@@ -57,6 +57,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-center gap-3 my-4">
+        <input type="button" class="btn btn-outline-secondary btnDemoCreate" value="Demo" />
         <a type="button" class="btn btn-outline-dark" href="@Url.Content("~/DiscountManage/Index")">取消</a>
         <input type="submit" value="新增" class="btn btn-dark" />
     </div>
@@ -80,6 +81,21 @@
                 const url = URL.createObjectURL(files[0])
                 $("#imgDiscountPhoto").attr("src", url)
             }
+        })
+
+        $('.btnDemoCreate').on('click',function(){
+            let title = '復古潮流趴';
+            let discountMethod = 0.8;
+            let beginDate = '2023-08-25T00:00';
+            let endDate = '2023-10-25T00:00';
+            let description = '我們誠摯地邀請您加入我們的"復古潮流趴"，一個追尋過去時光的獨特體驗。無論您是喜愛70年代、80年代還是90年代的風格，我們都將為您帶來最具代表性的復古服飾和配飾。一同穿越時光，感受復古風潮的魅力！';
+
+            $('#inputTitle').val(title);
+            $('#inputDiscountMethod').val(discountMethod);
+            $('#inputBeginDate').val(beginDate);
+            $('#inputEndDate').val(endDate);
+            $('#inputDescription').text(description);
+
         })
     </script>
 }
