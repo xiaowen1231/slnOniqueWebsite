@@ -28,15 +28,23 @@ namespace prjOniqueWebsite.Controllers
         /// orderList的展示頁面
         /// </summary>
         /// <returns></returns>
-        public IActionResult Index(string keyword, string sort, int pagenumber, int pagesize)
+        public IActionResult Index(string keyword, string sort, int pagenumber, int pagesize,string startDate ,string seletedValue)
         {
+            try
+            {
 
             ViewBag.Keyword = keyword;
             ViewBag.Sort = sort;
             ViewBag.Pagenumber = pagenumber;
             ViewBag.PageSize = pagesize;
-
+            ViewBag.StartDate = startDate;
+            ViewBag.SeletedValue = seletedValue;
             return View();
+            }catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Order");
+            }
+
         }
 
 
@@ -45,10 +53,17 @@ namespace prjOniqueWebsite.Controllers
         [Authorize(Roles = "一般員工,經理")]
         public IActionResult Details(int orderId)
         {
+            try
+            {
+
             ViewBag.OrderId = orderId;
             ViewBag.Email = dao.GetEmailByOrderId(orderId);
 
             return View();
+            }catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Order");
+            }
         }
         [HttpPost]
         public IActionResult Details(OrderStatusVM vm)
@@ -108,6 +123,9 @@ namespace prjOniqueWebsite.Controllers
         /// <returns></returns>
         public IActionResult OrderEmailContent(int orderId)
         {
+            try
+            {
+
             //要會員登入才能看，且只能看自己的訂單,
             ViewBag.OrderId = orderId;
             var Loginmember = _userInfoService.GetMemberInfo().Email;//目前登入者的資料
@@ -117,6 +135,12 @@ namespace prjOniqueWebsite.Controllers
                 return View();
             }
             return RedirectToAction("NoRole", "Home");
+            }
+            catch (Exception ex)
+            {
+            return RedirectToAction("NoRole", "Home");
+
+            }
         }
 
 
