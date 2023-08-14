@@ -301,7 +301,7 @@
             let statusSelection = "";
             console.log(data)
             if (data == null) {
-                statusSelection = `<option>沒有可選擇的選項</option>`;
+                statusSelection = `<option>此訂單已結單</option>`;
                 $("#editbtn").prop("disabled", true);
             }
             if (data != null) {

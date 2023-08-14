@@ -4,9 +4,10 @@
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
     string keyword = string.Empty;
     string sort = string.Empty;
-
+    string startDate = string.Empty;
     int pagesize = 0;
     int pagenumber = 0;
+    string seletedValue = "all";
 
     if (ViewBag.Pagenumber != 0)
     {
@@ -24,6 +25,14 @@
     {
         pagesize = ViewBag.PageSize;
     }
+    if (!string.IsNullOrEmpty(ViewBag.StartDate))
+    {
+        startDate = ViewBag.StartDate;
+    }
+    if (!string.IsNullOrEmpty(ViewBag.SeletedValue))
+    {
+        seletedValue = ViewBag.SeletedValue;
+    }
 }
 
 <div class="container">
@@ -35,6 +44,9 @@
             <input type="hidden" value="@sort" id="inputSort" />
             <input type="hidden" value="@pagenumber" id="searchPagenumber" />
             <input type="hidden" value="@pagesize" id="searchpageSize" />
+            <input type="hidden" value="@startDate" id="searchstartDate" />
+            <input type="hidden" value="@seletedValue" id="searchseletedValue" />
+
         </div>
 
 
@@ -141,14 +153,14 @@
         <div class="d-flex align-items-center gap-2">
             <div class="width-70px">每頁顯示</div>
             <div>
-                <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">                  
-                            <option value="10">10筆資料</option>
-                            <option value="20">20筆資料</option>
-                            <option value="30">30筆資料</option>                    
+                <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">
+                    <option value="10">10筆資料</option>
+                    <option value="20">20筆資料</option>
+                    <option value="30">30筆資料</option>
                 </select>
             </div>
 
-            <div class="width-70px ms-3">排序方式</div>
+            <div class="width-70px ms-3">排序</div>
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數" id="selectOrder">
                     @{
@@ -163,6 +175,17 @@
                             <option value="OrderDateAscending">舊訂單>>新訂單</option>
                         }
                     }
+                </select>
+            </div>
+            <div class="width-70px ms-3"></div>
+            <div>
+                <select class="form-select d-inline" aria-label="資料筆數" id="selectTime">
+
+                    <option value="all">全部訂單</option>
+                    <option value="1w">一個禮拜內訂單</option>
+                    <option value="1m">一個月內訂單</option>
+                    <option value="6m">六個月內訂單</option>
+                    <option value="12m">一年內訂單</option>
                 </select>
             </div>
         </div>
@@ -219,13 +242,15 @@
         let keyword = $("#searchKeyword").val()
         let pagenumber = Number($("#searchPagenumber").val())
         let pagesize = Number($("#searchpageSize").val())
+        let isoStartDate = $("#searchstartDate").val()
+        let seletedValue = $('#searchseletedValue').val()
 
 
-        DisplayOrders(keyword, sort, pagenumber, pagesize)
+        DisplayOrders(keyword, sort, pagenumber, pagesize, isoStartDate)
 
-        async function DisplayOrders(keyword, sort, pagenumber, pagesize) {
+        async function DisplayOrders(keyword, sort, pagenumber, pagesize, startDate) {
             //console.log("keyword:", keyword, "sort:", sort, "pagenumber:", pagenumber, "pagesize:", pagesize)
-            const response = await fetch(`@Url.Content("~/OrderApi/OrderList?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`);
+            const response = await fetch(`@Url.Content("~/OrderApi/OrderList?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}&startDate=${isoStartDate}`);
             const data = await response.json();
 
             const { orderPaginationInfo, criteria, orders } = data.value;
@@ -238,56 +263,56 @@
                 let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath;
                 let displayorderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19);
                 tableOrdersList += `
-                                <tr>
-                                    <td>
-                                        <div class="d-flex gap-2">`;
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex gap-2">`;
 
                 if (statusName == "待出貨") {
                     tableOrdersList += `
-                                    <div class="circle-size-25 color-95CACA border rounded-circle"></div>
-                                    <div>${statusName}</div>`;
+                                                            <div class="circle-size-25 color-95CACA border rounded-circle"></div>
+                                                            <div>${statusName}</div>`;
                 } else if (statusName == "已出貨") {
                     tableOrdersList += `
-                                    <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
-                                    <div>${statusName}</div>`;
+                                                            <div class="circle-size-25 color-D9B3B3 border rounded-circle"></div>
+                                                            <div>${statusName}</div>`;
                 } else if (statusName == "已完成") {
                     tableOrdersList += `
-                                    <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
-                                    <div>${statusName}</div>`;
+                                                            <div class="circle-size-25 color-66B3FF border rounded-circle"></div>
+                                                            <div>${statusName}</div>`;
                 } else if (statusName == "已取消") {
                     tableOrdersList += `
-                                    <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
-                                    <div>${statusName}</div>`;
+                                                            <div class="circle-size-25 color-FFE66F border rounded-circle"></div>
+                                                            <div>${statusName}</div>`;
                 } else if (statusName == "退款中") {
                     tableOrdersList += `
-                                    <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
-                                    <div>${statusName}</div>`;
+                                                            <div class="circle-size-25 color-CA8EC2 border rounded-circle"></div>
+                                                            <div>${statusName}</div>`;
                 } else if (statusName == "已退款") {
                     tableOrdersList += `
-                                    <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
-                                    <div>${statusName}</div>`;
+                                                            <div class="circle-size-25 color-FFAD86 border rounded-circle"></div>
+                                                            <div>${statusName}</div>`;
                 } else {
                     tableOrdersList += `
-                                    <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
-                                    <div>${statusName}</div>`;
+                                                            <div class="circle-size-25 color-FF7575 border rounded-circle"></div>
+                                                            <div>${statusName}</div>`;
                 }
 
                 tableOrdersList += `
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span>${orderId}</span>
-                                    </td>
-                                    <td>
-                                        <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
-                                        <span>${name}</span>
-                                    </td>
-                                    <td>${displayorderDate}</td>
-                                    <td>${paymentMethodName}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
-                                    </td>
-                                </tr>`;
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <span>${orderId}</span>
+                                                            </td>
+                                                            <td>
+                                                                <img src="@Url.Content("~/images/uploads/members/")${displayPhotoPath}" alt="" class="cover circle-size-40">
+                                                                <span>${name}</span>
+                                                            </td>
+                                                            <td>${displayorderDate}</td>
+                                                            <td>${paymentMethodName}</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                                            </td>
+                                                        </tr>`;
             });
 
             $("#orderTable").html(tableOrdersList);
@@ -296,10 +321,10 @@
 
             if (orderPaginationInfo.pageNumber >= 1) {
                 liPagination += `<li  class="page-item ">
-                                                    <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemPrevNumber}" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>`
+                                                                            <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemPrevNumber}" aria-label="Previous">
+                                                                        <span aria-hidden="true">&laquo;</span>
+                                                                    </a>
+                                                                </li>`
             }
             for (let i = 0; i < orderPaginationInfo.pageBarItemCount; i++) {
                 let active = orderPaginationInfo.pageBarStartNumber + i == orderPaginationInfo.pageNumber ? "active" : "";
@@ -309,13 +334,13 @@
 
             if (orderPaginationInfo.pageNumber < orderPaginationInfo.pages) {
                 liPagination += `<li class="page-item">
-                                                        <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemNextNumber}" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>`
+                                                                                <a class="page-link pageItemPrevNumber" data-pagenumber="${orderPaginationInfo.pageItemNextNumber}" aria-label="Next">
+                                                                            <span aria-hidden="true">&raquo;</span>
+                                                                        </a>
+                                                                    </li>`
             }
             $(".pagination").html(liPagination);
-
+            $("#selectTime").val(seletedValue)
         }
 
 
@@ -323,7 +348,7 @@
             if (e.key === "Enter") {
                 keyword = $(this).val();
 
-                DisplayOrders(keyword, sort, 1, pagesize)
+                DisplayOrders(keyword, sort, 1, pagesize, isoStartDate)
             }
         })
         $('#Search').on("click", function (event) {
@@ -331,7 +356,7 @@
 
             keyword = $('#txtKeyWord').val();
             //console.log("123")
-            DisplayOrders(keyword, sort, 1, pagesize)
+            DisplayOrders(keyword, sort, 1, pagesize, isoStartDate)
         })
 
         $(document).ready(() => {
@@ -362,33 +387,68 @@
 
             pagesize = Number($(this).val())
 
-            DisplayOrders(keyword, sort, 1, pagesize)
+            DisplayOrders(keyword, sort, 1, pagesize, isoStartDate)
         })
         //點選分頁籤
         $(".pagination").on("click", ".pageItemPrevNumber", function () {
             pagenumber = $(this).data("pagenumber")
 
-            DisplayOrders(keyword, sort, pagenumber, pagesize)
+            DisplayOrders(keyword, sort, pagenumber, pagesize, isoStartDate)
         })
-
+        //會影響query的回傳新畫面
         $(".statusName").on('click', function () {
             let changeStatusName = $(this).text()
-            console.log(changeStatusName, keyword)
+            //console.log(changeStatusName, keyword)
             if (keyword === changeStatusName) {
                 keyword = ""
             } else {
                 keyword = changeStatusName
             }
-            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=1&pagesize=${pagesize}`
+            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=1&pagesize=${pagesize}&startDate=${isoStartDate}&seletedValue=${seletedValue}`
         })
-
+        ///訂單排序方式,從controller傳回新畫面時，要把欲保留的參數一起傳過去，傳回新畫面參數才不會消失
         $("#selectOrder").on('change', function () {
             sort = $(this).val();
             keyword = $("#searchKeyword").val()
 
-            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}`
+            window.location.href = `@Url.Content("~/order/Index?keyword=")${keyword}&sort=${sort}&pagenumber=${pagenumber}&pagesize=${pagesize}&startDate=${isoStartDate}&seletedValue=${seletedValue}`
         })
 
+        ///訂單時間區間
+        $("#selectTime").on('change', function () {
+            seletedValue = $(this).val()
+            if (seletedValue == "1w") {
+                let startDate = new Date();
+                startDate.setDate(startDate.getDate()-7);//js設定時間的語法
+                isoStartDate = startDate.toISOString();//將js時間的格式，轉型為c#可接受的格式
+                DisplayOrders(keyword, sort, pagenumber, pagesize, isoStartDate)//
+            }
+            if (seletedValue == "1m") {
+                let startDate = new Date();
+                startDate.setMonth(startDate.getMonth() - 1);
+                isoStartDate = startDate.toISOString();
+                DisplayOrders(keyword, sort, pagenumber, pagesize, isoStartDate)
+                //startDate = startDate
+            }
+            if (seletedValue == "6m") {
+                let startDate = new Date();
+                startDate.setMonth(startDate.getMonth() - 6);
+                isoStartDate = startDate.toISOString();
+
+                DisplayOrders(keyword, sort, pagenumber, pagesize, isoStartDate)
+            }
+            if (seletedValue == "12m") {
+                let startDate = new Date();
+                startDate.setMonth(startDate.getMonth() - 12);
+                isoStartDate = startDate.toISOString();
+                DisplayOrders(keyword, sort, pagenumber, pagesize, isoStartDate)
+            }
+            if (seletedValue == "all") {
+                isoStartDate = "";
+                DisplayOrders(keyword, sort, pagenumber, pagesize, isoStartDate)
+            }
+
+        })
 
 
 
@@ -406,6 +466,7 @@
         .statusName.active {
             font-weight: bold;
             cursor: pointer;
+            color: crimson;
         }
     </style>
 }

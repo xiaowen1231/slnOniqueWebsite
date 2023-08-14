@@ -19,8 +19,9 @@ namespace prjOniqueWebsite.Models.Daos
         /// 依據搜尋的keyword回傳訂單資料(半成品)，再傳給下一個f()繼續篩選
         /// </summary>
         /// <returns></returns>
-        public List<OrderListDto> SearchOrderList(string keyword, string sort)
+        public List<OrderListDto> SearchOrderList(string keyword, string sort, DateTime? startDate)
         {
+
             var query = from o in _context.Orders
                         join os in _context.OrderStatus
                         on o.OrderStatusId equals os.StatusId
@@ -42,6 +43,11 @@ namespace prjOniqueWebsite.Models.Daos
             {
                 query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword));
             }
+            if(startDate != null)
+            {
+                query = query.Where(o => o.OrderDate > startDate);
+            }
+            
             List<OrderListDto> data = query.ToList();
             return SortOrderList(data, sort);
         }
@@ -181,14 +187,17 @@ namespace prjOniqueWebsite.Models.Daos
         }
         public string GetEmailByOrderId(int orderId)
         {
+            
             var query = from o in _context.Orders
                         join m in _context.Members
                         on o.MemberId equals m.MemberId
                         where o.OrderId == orderId
                         select m.Email;
-            string email = query.First().ToString();
 
+            string email = query.First().ToString();
             return email;
+
+            
         }
         /// <summary>
         /// 有foreign key的資料刪除要注意，
