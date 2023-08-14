@@ -42,7 +42,7 @@ namespace prjOniqueWebsite.Controllers
 
 
 
-        [Authorize(Roles = "一般員工")]
+        [Authorize(Roles = "一般員工,經理")]
         public IActionResult Details(int orderId)
         {
             ViewBag.OrderId = orderId;
