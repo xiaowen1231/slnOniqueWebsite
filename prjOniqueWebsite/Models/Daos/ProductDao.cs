@@ -65,7 +65,7 @@ namespace prjOniqueWebsite.Models.Repositories
                         };
             
 
-            return query.Take(4).ToList();
+            return query.OrderByDescending(x=>x.SubQuantity).Take(4).ToList();
         }
 
         public AddToCartDto ShowProductInfo(int id)
