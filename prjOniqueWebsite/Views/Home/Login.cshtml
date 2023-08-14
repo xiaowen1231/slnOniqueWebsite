@@ -28,6 +28,7 @@
                 @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
+            <input type="checkbox" id="showPassword"> 顯示密碼
             <div class="d-flex justify-content-between p-2">
                 <div class="p-2">
                     @*@Html.ActionLink("忘記密碼", "ForgetPwd","Home", "",new {@class="btn btn-outline-dark fw-bold" })*@
@@ -56,6 +57,16 @@
 }
 @section Scripts{
     <script>
+        $(document).ready(function () {
+            $('#showPassword').on('change', function () {
+                var passwordInput = $('#inputPassword');
+                if ($(this).is(':checked')) {
+                    passwordInput.attr('type', 'text');
+                } else {
+                    passwordInput.attr('type', 'password');
+                }
+            });
+        });
         $('#DemoMember').on('click', function () {
             let email = "Asa@gmail.com"
             $('#inputEmail').val(email)

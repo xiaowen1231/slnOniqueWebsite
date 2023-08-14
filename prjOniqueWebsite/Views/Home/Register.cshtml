@@ -50,7 +50,7 @@
                 <div class="pt-2 d-flex col-6 align-items-center">
                     <div class=" width-50px  fw-bold">密碼</div>
                     <div class="mx-2">
-                        <input type="text" class="form-control" placeholder="請輸入密碼" name="Password" id="inputPassword" />
+                        <input type="password" class="form-control" placeholder="請輸入密碼" name="Password" id="inputPassword" />
                         @Html.ValidationMessageFor(member=>member.Password,"",new{@class="text-danger"})
                     </div>
                 </div>
@@ -105,6 +105,7 @@
                     </div>
                 </div>
             </div>
+            <input type="checkbox" id="showPassword"> 顯示密碼
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="d-flex justify-content-between p-2">
                 <div class="p-2">
@@ -171,6 +172,19 @@
                 $('#imgMember').attr('src', url)
             }
         })
+        $(document).ready(function () {
+            $('#showPassword').on('change', function () {
+                var passwordInput = $('#inputPassword');
+                var confirmpasswordInput = $('#inputComfirmPassword');
+                if ($(this).is(':checked')) {
+                    passwordInput.attr('type', 'text');
+                    confirmpasswordInput.attr('type', 'text');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    confirmpasswordInput.attr('type', 'password');
+                }
+            });
+        });
         $('#Demo').on('click', function () {
             let name = "Betty"
             $('#inputName').val(name)
