@@ -12,7 +12,6 @@ namespace prjOniqueWebsite.Models.Services
         private readonly OniqueContext _context;
         private readonly IWebHostEnvironment _environment;
         MemberDao _dao;
-
         public MemberService(OniqueContext context, IWebHostEnvironment environment)
         {
             _context = context;
@@ -106,6 +105,16 @@ namespace prjOniqueWebsite.Models.Services
                 throw new Exception("電話號碼為10碼!");
             }
             _dao.EditFMember(vm);
+        }
+        public void FMemberPasswordReset(FMemberPasswordVM vm , int loginMemId)
+        {
+             
+            var originalPassword = _context.Members.Where(m=>m.MemberId== loginMemId).Select(m=>m.Password).FirstOrDefault();
+            if(originalPassword!=vm.OldPassword)
+            {
+                throw new Exception("舊密碼不符合!");
+            }
+            _dao.FMemberPassword(vm,loginMemId);
         }
     }
 }

@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
+    string photoPath = "default.jpg";
+    if (!string.IsNullOrEmpty(Model.PhotoPath))
+    {
+        photoPath = Model.PhotoPath;
+    }
 }
 
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
@@ -51,6 +56,11 @@
                         <span asp-validation-for="ProductCategoryId" class="text-danger"></span>
                     </div>
                     <div class="align-items-center my-3 d-flex">
+                        <label asp-for="SupplierId" class="width-120px">供應商:</label>
+                        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                        <span asp-validation-for="SupplierId" class="text-danger"></span>
+                    </div>
+                    <div class="align-items-center my-3 d-flex">
                         <label asp-for="AddedTime" class="width-120px">上架時間:</label>
                         <input asp-for="@Model.AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" />
                     </div>
@@ -59,12 +69,7 @@
                         <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
                         <input asp-for="@Model.ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" />
                     </div>
-                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>
-                    <div class="align-items-center my-3 d-flex">
-                        <label asp-for="SupplierId" class="width-120px">供應商:</label>
-                        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
-                        <span asp-validation-for="SupplierId" class="text-danger"></span>
-                    </div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>                   
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
                         <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;"></textarea>
@@ -73,10 +78,10 @@
                 </div>
                 <div class="container col-5">
                     <div class="my-3 d-flex">
-                        <img asp-for="PhotoPath" src="~/images/uploads/products/@Model.PhotoPath" class="rounded img-thumbnail" id="imgProductPhoto" />
-                        <span asp-validation-for="PhotoPath" class="text-danger"></span>
+                        <img src="~/images/uploads/products/@photoPath" class="rounded img-thumbnail" id="imgProductPhoto" data-originalpath="@Model.PhotoPath"/>
                     </div>
                     <input type="file" class="form-control" id="inputPhoto" name="photo" />
+                    <input type="hidden" name="PhotoPath" value="@Model.PhotoPath" />
                 </div>
             </div>
             <div class="container text-center mb-4">

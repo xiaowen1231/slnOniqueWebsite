@@ -25,6 +25,7 @@ namespace prjOniqueWebsite.Models.Daos
                 Description = vm.Description,
                 ProductId = vm.ProductId,
                 SupplierId = vm.SupplierId,
+                PhotoPath = vm.PhotoPath,
             };
             if (vm.Photo != null)
             {
@@ -44,7 +45,7 @@ namespace prjOniqueWebsite.Models.Daos
                 string photoDefault = Path.Combine(_environment.WebRootPath, "images", "uploads", "products", "default.jpg");
                 System.IO.File.Copy(photoDefault, photoPath, true);
             }
-            _context.Products.Add(product);
+            _context.Add(product);
             _context.SaveChanges();
         }
         public void UpdateProducts(BgProductsVM vm)
@@ -57,6 +58,8 @@ namespace prjOniqueWebsite.Models.Daos
             products.ShelfTime = (DateTime)vm.ShelfTime;
             products.Description = vm.Description;
             products.PhotoPath = vm.PhotoPath;
+            products.ProductCategoryId = vm.ProductCategoryId;
+            products.SupplierId = vm.SupplierId;
             if (vm.Photo != null)
             {
                 string fileName = products.ProductName + ".jpg";
@@ -66,15 +69,8 @@ namespace prjOniqueWebsite.Models.Daos
                 {
                     vm.Photo.CopyTo(fileStream);
                 }
-            }
-            else
-            {
-                string fileName = products.ProductName + ".jpg";
-                products.ProductName = fileName;
-                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
-                string photoEdit = Path.Combine(_environment.WebRootPath, "images", "uploads", "products", fileName);
-                System.IO.File.Copy(photoEdit, photoPath,true);
-            }
+            }            
+            _context.Update(products);
             _context.SaveChanges();
         }
     }

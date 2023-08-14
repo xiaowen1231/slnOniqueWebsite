@@ -59,15 +59,15 @@
                     <div class="text-end fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime,"",new{@class="text-danger"})</div>
                     <div class="d-flex my-3">
                         <div class="width-120px">商品描述:</div>
-                        <textarea class="form-control" style="width: 100%; height: 160px;" id="inputDescription"></textarea>
+                        <textarea class="form-control" style="width: 100%; height: 160px;" id="inputDescription" name="Description"></textarea>
                     </div>
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-5 container">
                     <div class="my-3 d-flex">
-                        <img src="@Url.Content("~/images/uploads/products/default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto" />
+                        <img src="@Url.Content("~/images/uploads/products/default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto"/>
                     </div>
-                    <input type="file" class="form-control" name="photo" id="inputPhoto"/>
+                    <input type="file" class="form-control" name="Photo" id="inputPhoto" />
                 </div>
             </div>
             <div class="container text-center mb-4">
