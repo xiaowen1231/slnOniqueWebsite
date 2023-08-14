@@ -15,7 +15,7 @@
     <div class="myContainer nav">
         <div class="nav">
             <div class="logoAndTitle">
-                <div class="logo cursor-pointer">
+                <div class="logo cursor-pointer" id="divLogo">
                     <img src="@Url.Content("~/images/footer/logoen.png")" />
                 </div>
                 <div class="title">後台管理系統</div>
@@ -150,6 +150,9 @@
             }
         }
 
+        $('#divLogo').on('click',function(){
+            window.location.href = `@Url.Content("~/Home/Index")`
+        })
     </script>
 
     @if (TempData["AlertLogin"] != null)

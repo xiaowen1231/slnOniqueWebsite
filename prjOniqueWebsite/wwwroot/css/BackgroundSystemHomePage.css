@@ -35,9 +35,9 @@ img{
     transition: all 1s;
 }
 .myContainer .nav .logoAndTitle .logo:hover{
-    width: 220px;
+    width: 210px;
     margin: 20px;
-    transform: rotate(720deg);
+    transform: rotate(2deg);
 }
 .myContainer .nav .logoAndTitle .title{
     color: white;

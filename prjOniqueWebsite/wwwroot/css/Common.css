@@ -221,3 +221,7 @@
 .cursor-pointer {
     cursor: pointer
 }
+
+.modalOrderQty {
+    border: 1px solid black;
+}
