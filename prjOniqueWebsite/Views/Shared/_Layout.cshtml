@@ -390,6 +390,18 @@
             })
         </script>
     }
+    @if (TempData["AlertRegister"] != null)
+    {
+        <script>
+            Swal.fire({
+                title: '註冊成功!',
+                text: '您好!@TempData["AlertRegister"]',
+                icon: 'success',
+                confirmButtonColor: '#3C3C3C',
+                confirmButtonText: '確認'
+            })
+        </script>
+    }
 
     @await RenderSectionAsync("Scripts", required: false)
 
