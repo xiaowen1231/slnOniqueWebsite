@@ -31,20 +31,11 @@ namespace prjOniqueWebsite.Models.Services
             }
             if (Convert.ToDateTime(vm.DateOfBirth) >= DateTime.Now)
             {
-                throw new Exception("輸入生日有誤");
+                throw new Exception("輸入的生日有誤");
             }
             if (vm.Phone.Length > 10 || vm.Phone.Length < 0)
             {
                 throw new Exception("電話號碼為10碼!");
-            }
-            if (vm.Gender != "男" && vm.Gender != "女")
-            {
-                throw new Exception("請選擇性別");
-            }
-
-            if (!int.TryParse(vm.Citys, out int parsedCitys))
-            {
-                throw new Exception("請選擇居住城市");
             }
             dao.CreateEmployee(vm);
         }
