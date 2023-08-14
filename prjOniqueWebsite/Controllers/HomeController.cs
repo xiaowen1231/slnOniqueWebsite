@@ -182,6 +182,7 @@ namespace prjOniqueWebsite.Controllers
             try
             {
                 _service.MemberRegister(vm);
+                TempData["AlertRegister"] = vm.Name;
             }
             catch (Exception ex)
             {

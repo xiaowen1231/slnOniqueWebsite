@@ -213,6 +213,7 @@ namespace prjOniqueWebsite.Models.Daos
 
             member.Name = vm.Name;
             member.Phone = vm.Phone;
+            member.Email = vm.Email;
             member.Citys = Convert.ToInt32(vm.Citys);
             member.Areas = Convert.ToInt32(vm.Areas);
             member.Address = vm.Address;

@@ -17,7 +17,7 @@ using prjOniqueWebsite.Models.ViewModels;
 
 namespace prjOniqueWebsite.Controllers
 {
-
+    [Authorize(Roles = "一般員工,經理")]
     public class BgProductsManageController : Controller
     {
         private readonly OniqueContext _context;

@@ -40,9 +40,14 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="sort"></param>
         /// <param name="pagenumber"></param>
         /// <returns></returns>
-        public IActionResult OrderList(string keyword, string sort, int pagenumber, int pagesize)
+        public IActionResult OrderList(string keyword, string sort, int pagenumber, int pagesize,string? startDate)
         {
-            var dto = dao.SearchOrderList(keyword, sort);
+            DateTime? parsedDateTime = null;
+            if (!string.IsNullOrEmpty(startDate)) { 
+            parsedDateTime = DateTime.Parse(startDate);
+            }
+
+            var dto = dao.SearchOrderList(keyword, sort, parsedDateTime);
             var index = OrderListIndex(dto, pagenumber, pagesize);
             return Json(index);
         }
