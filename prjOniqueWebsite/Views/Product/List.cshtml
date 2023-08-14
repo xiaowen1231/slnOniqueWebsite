@@ -47,7 +47,7 @@
         <input type="hidden" value="@discountId" id="searchDiscount" />
         <input type="hidden" value="@rank" id="searchRank" />
     </div>
-    @if(discountId != 0)
+    @if (ViewBag.HasProduct)
     {
         <div class="divDiscountImg">
             <img src="@Url.Content("~/images/DiscountPhoto/")@ViewBag.PhotoPath" />

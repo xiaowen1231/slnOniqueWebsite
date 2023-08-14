@@ -29,7 +29,7 @@
     text-align: center;
 }
 
-table tbody tr:nth-child(odd){  /*設定奇數列顏色*/
+table tbody tr:nth-child(odd){  設定奇數列顏色
     background-color: #eee
   }
 
@@ -57,7 +57,7 @@ table tbody tr:nth-child(odd){  /*設定奇數列顏色*/
   background-color:black;
   color:white;
   border-radius:10px;
-  cursor:pointer; /*改變滑鼠游標形狀 */
+  cursor:pointer; 改變滑鼠游標形狀 
   font-size: 17px;
   
 }
@@ -111,7 +111,7 @@ SearchButton {
     background-color: black;
     color: white;
     border-radius: 10px;
-    cursor: pointer; /*改變滑鼠游標形狀 */
+    cursor: pointer; 改變滑鼠游標形狀 
     font-size: 17px;
 }
 

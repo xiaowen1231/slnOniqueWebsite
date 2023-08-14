@@ -39,54 +39,6 @@ namespace prjOniqueWebsite.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                //    bool isPhoneUsed = _context.Employees.Any(e => e.Phone == vm.Phone);
-                //    bool isEmailUsed = _context.Employees.Any(e => e.Email == vm.Email);
-
-                //    if (isPhoneUsed)
-                //    {
-                //        ModelState.AddModelError("Phone", "手機號碼已被使用");
-                //        return View(vm);
-                //    }
-
-                //    if (isEmailUsed)
-                //    {
-                //        ModelState.AddModelError("Email", "信箱已被使用");
-                //        return View(vm);
-                //    }
-
-                //    if (vm.Phone.Length != 10)
-                //    {
-                //        ModelState.AddModelError("Phone", "電話號碼為10位數字!");
-                //        return View(vm);
-                //    }
-
-                //    if (vm.Gender != "男" && vm.Gender != "女")
-                //    {
-                //        ModelState.AddModelError("Gender", "請選擇性別");
-                //        return View(vm);
-                //    }
-
-                //    if (!int.TryParse(vm.Citys, out int parsedCitys))
-                //    {
-                //        ModelState.AddModelError("Citys", "請選擇居住城市");
-                //        return View(vm);
-                //    }
-
-                //    if (Convert.ToDateTime(vm.DateOfBirth) >= DateTime.Today)
-                //    {
-                //        ModelState.AddModelError("DateOfBirth", "日期輸入錯誤");
-                //        return View(vm);
-                //    }
-                //    if (Convert.ToDateTime(vm.DateOfBirth) >= SqlDateTime.MaxValue.Value || Convert.ToDateTime(vm.DateOfBirth) < SqlDateTime.MinValue.Value)
-                //    {
-                //        ModelState.AddModelError("DateOfBirth", "日期輸入錯誤");
-                //        return View(vm);
-                //    }
-
-                //    dao.CreateEmployee(vm);
-
-                //    return RedirectToAction("Index");
-                //}
                 return View(vm);
             }
             try
@@ -102,8 +54,6 @@ namespace prjOniqueWebsite.Controllers
 
 
         }
-
-
 
         public IActionResult Edit(int id)
         {

@@ -28,6 +28,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string? Address { get; set; }
         public string? EmployeeLevel { get; set; }
         public string? RegisterDate { get; set; }
+
         public string? DateOfBirth { get; set; }
     }
 }

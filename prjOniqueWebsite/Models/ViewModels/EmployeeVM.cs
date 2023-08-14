@@ -14,6 +14,8 @@ namespace prjOniqueWebsite.Models.ViewModels
         
         public string? PhotoPath { get; set; }
         public IFormFile? Photo { get; set; }
+        [Display(Name = "生日")]
+        [Required(ErrorMessage = "請輸入生日日期")]
         public string? DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "請選擇性別")]
@@ -46,7 +48,6 @@ namespace prjOniqueWebsite.Models.ViewModels
         [Required(ErrorMessage = "區域不可空白")]
         public string Areas { get; set; }
         
-
         public string? Address { get; set; }
     }
 }

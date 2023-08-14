@@ -24,57 +24,61 @@
             left: 9%;
             bottom: 20%;
         }
+
+        .divContext {
+            width: 800px;
+        }
     </style>
 }
 @section Scripts{
     <script>
 
-        async function DisplayDiscount(){
+        async function DisplayDiscount() {
             const response = await fetch(`@Url.Content("~/DiscountApi/GetDiscountList")`)
             const datas = await response.json()
 
             let htmlStr = ""
 
-            datas.map(item=>{
+            datas.map(item => {
                 const { beginDate, description, discountId, discountMethod, endDate, photoPath, title } = item;
 
                 htmlStr += `<div class="p-2 d-flex container">
-                <div class="w-400-h-400">
-                    <img src="@Url.Content("~/images/DiscountPhoto/")${photoPath}" class="rounded" />
-                </div>
-                <div class="p-2 flex-fill bg-secondary bg-opacity-10 position-relative">
-                    <div class="m-5">
-                        <div class="fw-bold fs-4 m-4">
-                            ${title}
+                        <div class="w-400-h-400">
+                            <img src="@Url.Content("~/images/DiscountPhoto/")${photoPath}" class="rounded" />
                         </div>
-                        <div class="fs-14px m-4">
-                            ${description}
-                        </div>
-                        <div class="d-flex gap-3 divDateRange">
-                            <div class=" fw-bold">
-                                活動期間
+                        <div class="p-2 flex-fill bg-secondary bg-opacity-10 position-relative divContext">
+                            <div class="m-5">
+                                <div class="fw-bold fs-4 m-4">
+                                    ${title}
+                                </div>
+                                <div class="fs-14px m-4">
+                                    ${description}
+                                </div>
+                                <div class="d-flex gap-3 divDateRange">
+                                    <div class=" fw-bold">
+                                        活動期間
+                                    </div>
+                                    <div>
+                                        <span class="text-danger">${beginDate}</span>
+                                        <span>-</span>
+                                        <span class="text-danger">${endDate}</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-3 divDiscountMethod">
+                                    <div class=" fw-bold">
+                                        商品折扣
+                                    </div>
+                                    <div>
+                                        <span class="text-danger">${discountMethod}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <span class="text-danger">${beginDate}</span>
-                                <span>-</span>
-                                <span class="text-danger">${endDate}</span>
-                            </div>
-                        </div>
-                        <div class="d-flex gap-3 divDiscountMethod">
-                            <div class=" fw-bold">
-                                商品折扣
-                            </div>
-                            <div>
-                                <span class="text-danger">${discountMethod}</span>
+                            <div class="m-4">
+                                <input type="button" class="btn btn-outline-dark btnSearchDiscout" value="查看優惠商品" data-discountid="${discountId}" />
                             </div>
                         </div>
                     </div>
-                    <div class="m-4">
-                        <input type="button" class="btn btn-outline-dark btnSearchDiscout" value="查看優惠商品" data-discountid="${discountId}" />
-                    </div>
-                </div>
-            </div>
-        `
+                `
             })
 
             $('.divDiscountContext').html(htmlStr);
