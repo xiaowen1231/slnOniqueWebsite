@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
+    string photoPath = "default.jpg";
+    if (!string.IsNullOrEmpty(Model.PhotoPath))
+    {
+        photoPath = Model.PhotoPath;
+    }
 }
 
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
@@ -73,10 +78,10 @@
                 </div>
                 <div class="container col-5">
                     <div class="my-3 d-flex">
-                        <img asp-for="PhotoPath" src="~/images/uploads/products/@Model.PhotoPath" class="rounded img-thumbnail" id="imgProductPhoto" />
-                        <span asp-validation-for="PhotoPath" class="text-danger"></span>
+                        <img src="~/images/uploads/products/@photoPath" class="rounded img-thumbnail" id="imgProductPhoto" data-originalpath="@Model.PhotoPath"/>
                     </div>
                     <input type="file" class="form-control" id="inputPhoto" name="photo" />
+                    <input type="hidden" name="PhotoPath" value="@Model.PhotoPath" />
                 </div>
             </div>
             <div class="container text-center mb-4">

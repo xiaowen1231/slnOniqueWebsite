@@ -127,8 +127,6 @@ namespace prjOniqueWebsite.Controllers
             catch
             {
                 ModelState.AddModelError("", "修改失敗!請重新上傳商品照片!");
-                ViewData["ProductCategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", vm.ProductCategoryId);
-                ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "SupplierName", vm.SupplierId);
                 return View(vm);
             }
             return RedirectToAction("index");
@@ -233,7 +231,7 @@ namespace prjOniqueWebsite.Controllers
             }
             catch (Exception ex)
             {
-                return Content(ex.Message);
+                return RedirectToAction("NotStock");
             }
         }
         [HttpPost]
@@ -339,6 +337,10 @@ namespace prjOniqueWebsite.Controllers
             }
             return View();
 
+        }
+        public IActionResult NotStock()
+        {
+            return View();
         }
         private bool ProductsExists(int id)
         {
