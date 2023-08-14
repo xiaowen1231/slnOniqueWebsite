@@ -229,7 +229,7 @@ namespace prjOniqueWebsite.Controllers
                 ProductDetailDto dto = new ProductDao(_context).GetProductDetail(id);
                 return View(dto);
             }
-            catch (Exception ex)
+            catch
             {
                 return RedirectToAction("NotStock");
             }

@@ -56,6 +56,11 @@
                         <span asp-validation-for="ProductCategoryId" class="text-danger"></span>
                     </div>
                     <div class="align-items-center my-3 d-flex">
+                        <label asp-for="SupplierId" class="width-120px">供應商:</label>
+                        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                        <span asp-validation-for="SupplierId" class="text-danger"></span>
+                    </div>
+                    <div class="align-items-center my-3 d-flex">
                         <label asp-for="AddedTime" class="width-120px">上架時間:</label>
                         <input asp-for="@Model.AddedTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" />
                     </div>
@@ -64,12 +69,7 @@
                         <label asp-for="ShelfTime" class="width-120px">下架時間:</label>
                         <input asp-for="@Model.ShelfTime" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" />
                     </div>
-                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>
-                    <div class="align-items-center my-3 d-flex">
-                        <label asp-for="SupplierId" class="width-120px">供應商:</label>
-                        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
-                        <span asp-validation-for="SupplierId" class="text-danger"></span>
-                    </div>
+                    <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime)</div>                   
                     <div class="d-flex my-3">
                         <label asp-for="Description" class="width-120px">商品描述:</label>
                         <textarea asp-for="Description" class="form-control" style="width: 100%; height: 160px;"></textarea>
