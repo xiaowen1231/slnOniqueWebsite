@@ -12,6 +12,7 @@
             <div class=" p-2 d-flex justify-content-center">
                 @if (string.IsNullOrEmpty(Model.PhotoPath))
                 {
+                    //@Guid.NewGuid()會產生隨機的唯一識別碼，用作URL的參數，確保圖片URL的唯一性和及時更新(防止讀取網頁快取照片)
                     <img src="~/images/uploads/Employee/defaults.jpg?cache=@Guid.NewGuid()" id="imageEmployee"
                          class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
                 }
