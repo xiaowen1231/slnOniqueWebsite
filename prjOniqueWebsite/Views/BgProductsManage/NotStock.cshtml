@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "此商品無庫存資料";
+    Layout = "~/Views/Shared/_Layout_Background.cshtml";
+}
+<div class="notReady-context mx-auto" style="width: 500px;">
+    <div class="text-center">
+        <div class="width-120px mx-auto m-3">
+            <img src="@Url.Content("~/images/icon/boxes.png")" alt="">
+        </div>
+        <div class="m-3">
+            <span class="fw-bold"> (ಥ_ಥ) 很抱歉 , 查無此商品庫存資料...<br />請先新增商品庫存!</span>
+        </div>
+    </div>
+    <div class="text-center m-3">
+        <a href="@Url.Content("~/BgProductsManage/Index")" class="btn btn-dark">回首頁</a>
+    </div>
+</div>
+
+@section Styles{
+    <style>
+        .notReady-context {
+            position: fixed;
+            top: 50%;
+            transform: translate(-12%,-59%);
+            left: 50%;
+        }
+    </style>
+}

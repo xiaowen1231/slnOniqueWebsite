@@ -20,9 +20,11 @@ namespace prjOniqueWebsite.Controllers
             ViewBag.CategoryName = categoryName;
             ViewBag.Keyword = keyword;
             ViewBag.PageNumber = pageNumber;
-            ViewBag.DiscountId = discountId == null ? 0 : discountId;
+            ViewBag.DiscountId = discountId == null ? 0:discountId ;
+            ViewBag.HasProduct = false;
             if (discountId != null)
             {
+                ViewBag.HasProduct = _context.Products.Any(p => p.DiscountId == discountId);
                 ViewBag.DiscountName = _context.Discounts.Where(d => d.Id == discountId).Select(d => d.Title).FirstOrDefault();
                 ViewBag.PhotoPath = _context.Discounts.Where(d => d.Id == discountId).Select(d => d.PhotoPath).FirstOrDefault();
             }

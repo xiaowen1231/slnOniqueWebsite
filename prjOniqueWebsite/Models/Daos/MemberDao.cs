@@ -185,7 +185,6 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Update(mem);
             _context.SaveChanges();
         }
-
         public FMemberEditDto GetFMemberById(int id)
         {
             FMemberEditDto mem = (from m in _context.Members
@@ -217,6 +216,12 @@ namespace prjOniqueWebsite.Models.Daos
             member.Citys = Convert.ToInt32(vm.Citys);
             member.Areas = Convert.ToInt32(vm.Areas);
             member.Address = vm.Address;
+            _context.SaveChanges();
+        }
+        public void FMemberPassword(FMemberPasswordVM vm, int loginMemId)
+        {
+            var memberInDb = _context.Members.FirstOrDefault(m => m.MemberId == loginMemId);
+            memberInDb.Password = vm.NewPassword;
             _context.SaveChanges();
         }
         public List<MemberOrderDto> GetMemberOrders(int MemberId)

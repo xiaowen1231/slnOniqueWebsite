@@ -124,7 +124,10 @@
             event.preventDefault()
             $('#divPartial').load('@Url.Content("~/fmember/MemberInfo")')
         })
-
+        $("#divPartial").on("click", ".btnPasswordCancel", function (event) {
+            event.preventDefault()
+            $('#divPartial').load('@Url.Content("~/fmember/MemberInfo")')
+        })
 
     </script>
 }

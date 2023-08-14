@@ -126,9 +126,31 @@ namespace prjOniqueWebsite.Controllers
         
         public IActionResult MemberPassword()
         {
-            Members member = _userInfoService.GetMemberInfo();
-
             return PartialView();
+        }
+        [HttpPost]
+        public IActionResult MemberPassword(FMemberPasswordVM vm)
+        {
+            var result = new ApiResult();
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
+                result = new ApiResult { StatusCode = 500, StatusMessage = errors.FirstOrDefault() };
+                return Json(result);
+            }
+            try
+            {
+                int loginMemId = _userInfoService.GetMemberInfo().MemberId;
+                _service.FMemberPasswordReset(vm, loginMemId);
+                result = new ApiResult { StatusCode = 200, StatusMessage = "編輯資料成功!" };
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                result = new ApiResult { StatusCode = 500, StatusMessage = ex.Message };
+                return Json(result);
+
+            }
         }
     }
 }
