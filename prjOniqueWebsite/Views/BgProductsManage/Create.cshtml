@@ -7,7 +7,7 @@
 <form method="post" enctype="multipart/form-data">
     <div class="d-flex container">
         <div class="col-2 p" style="margin-left: 8%;">
-            <div class="text-center my-2 p">                
+            <div class="text-center my-2 p">
                 <div class=" border p-3 rounded-4 my-3">
                     <div class="p-2 my-1 bg-dark text-white rounded">
                         細項新增
@@ -27,7 +27,7 @@
                 <div class="p-2 col-5">
                     <div class="d-flex align-items-center my-3">
                         <div class="width-120px">商品名稱:</div>
-                        <input type="text" class="form-control" name="ProductName" id="inputName" />                       
+                        <input type="text" class="form-control" name="ProductName" id="inputName" />
                     </div>
                     <div class="text-end fw-bold"> @Html.ValidationMessageFor(model=>model.ProductName,"",new{@class="text-danger"})</div>
                     <div class="d-flex align-items-center my-3">
@@ -38,7 +38,6 @@
                     <div class="d-flex align-items-center my-3">
                         <div class="width-120px">商品分類:</div>
                         <select class="form-control" id="selectCategory" name="ProductCategoryId">
-
                         </select>
                     </div>
                     <div class="d-flex align-items-center my-3">
@@ -47,14 +46,14 @@
                     </div>
                     <div class="d-flex align-items-center my-3">
                         <div class="width-120px">上架時間:</div>
-                        <input class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" />
-                        
+                        <input class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="AddedTime" id="inputAddedTime" />
+
                     </div>
                     <div class="text-end fw-bold">@Html.ValidationMessageFor(model=>model.AddedTime,"",new{@class="text-danger"})</div>
                     <div class="d-flex align-items-center my-3">
                         <div class="width-120px">下架時間:</div>
-                        <input class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" />
-                        
+                        <input class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" name="ShelfTime" id="inputShelfTime" />
+
                     </div>
                     <div class="text-end fw-bold">@Html.ValidationMessageFor(model=>model.ShelfTime,"",new{@class="text-danger"})</div>
                     <div class="d-flex my-3">
@@ -65,7 +64,7 @@
                 </div>
                 <div class="col-5 container">
                     <div class="my-3 d-flex">
-                        <img src="@Url.Content("~/images/uploads/products/default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto"/>
+                        <img src="@Url.Content("~/images/uploads/products/default.jpg")" class="rounded img-thumbnail" id="imgProductPhoto" />
                     </div>
                     <input type="file" class="form-control" name="Photo" id="inputPhoto" />
                 </div>
@@ -95,9 +94,9 @@
                 const { categoryId, categoryName } = category;
                 return `<option value="${categoryId}">${categoryName}</option>`
             })
-            selectCategory.innerHTML=category.join("")
+            selectCategory.innerHTML = category.join("")
         }
-        
+
         async function loadSupplier() {
             const response = await fetch(`@Url.Content("~/BgProductManageApi/ShowSupplierList")`)
             const datas = await response.json();
@@ -109,28 +108,32 @@
             selectSupplier.innerHTML = supplier.join("")
         }
         loadSupplier()
-       document.addEventListener('DOMContentLoaded', function() {          
-        const priceInput = document.querySelector("#Price");
+        document.addEventListener('DOMContentLoaded', function () {
+            const priceInput = document.querySelector("#Price");
 
-        const photo = document.querySelector("#inputPhoto");
-        photo.addEventListener('change',function(){
-            const files = photo.files
-            if(files.length==0){
-                const defaultPath = "@Url.Content("~/images/uploads/products/default.jpg")"
-                $("#imgProductPhoto").attr("src", defaultPath)
-            }
-            else{
-                const url = URL.createObjectURL(files[0])
-                $("#imgProductPhoto").attr("src", url)
-            }
-        })
-        $('#DemoCreate').on('click',function(){
-            let Name = "日系復古短袖襯衫"
-            $('#inputName').val(Name)
-            $('#inputPrice').val("399")
-            let Description = "復古設計、乾淨俐落;工裝風格、個性時尚"
-            $('#inputDescription').val(Description)
-        })
+            const photo = document.querySelector("#inputPhoto");
+            photo.addEventListener('change', function () {
+                const files = photo.files
+                if (files.length == 0) {
+                    const defaultPath = "@Url.Content("~/images/uploads/products/default.jpg")"
+                    $("#imgProductPhoto").attr("src", defaultPath)
+                }
+                else {
+                    const url = URL.createObjectURL(files[0])
+                    $("#imgProductPhoto").attr("src", url)
+                }
+            })
+            $('#DemoCreate').on('click', function () {
+                let Name = "日系復古短袖襯衫"
+                let Description = "復古設計、乾淨俐落;工裝風格、個性時尚"
+                let AddedTime = "2023-08-14";
+                let ShelfTime = "2023-08-31";
+                $('#inputName').val(Name);
+                $('#inputPrice').val("399");
+                $('#inputAddedTime').val(AddedTime);
+                $('#inputShelfTime').val(ShelfTime);
+                $('#inputDescription').val(Description);
+            })
         })
     </script>
 }

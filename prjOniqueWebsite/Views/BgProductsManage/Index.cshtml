@@ -16,14 +16,15 @@
             <div class="col-1" style="margin-left: 2%;">
                 <a class="btn btn-dark" asp-action="Create">新增商品</a>
             </div>
-            <div class="d-flex align-items-center" style="margin-left:37%">
+            <div class="d-flex align-items-center" style="margin-left:27%">
                 <div class="fw-bold mx-2">關鍵字搜尋:</div>
                 <div>
                     <input type="text" name="txtKeyword" id="txtKeyword" placeholder="可輸入名稱、價格、分類進行搜尋" class="form-control" style="width:300px">
                 </div> 
                 <div>
-                    <input type="submit" class="btn btn-dark mx-4 fw-bold" value="查詢" />
-                    <a class="btn btn-outline-dark fw-bold" asp-action="Index">取消查詢</a>
+                    <input type="button" class="btn btn-outline-secondary mx-4" value="Demo" id="DemoSearch"/>
+                    <input type="submit" class="btn btn-dark mx-2 fw-bold" value="查詢" />
+                    <a class="btn btn-outline-dark mx-4 fw-bold" asp-action="Index">取消查詢</a>
                 </div>
             </div>
             @*<div class="col-2 d-flex align-items-center">
@@ -144,6 +145,10 @@
 }
 @section Scripts{
     <script>
+        $('#DemoSearch').on('click',function(){
+            let txtKeyword = "日系";
+            $('#txtKeyword').val(txtKeyword);
+        })
         //const selectCategory = document.querySelector("#selectCategory")
         //const selectDiscount = document.querySelector("#selectDiscount")
         //loadcategory()
