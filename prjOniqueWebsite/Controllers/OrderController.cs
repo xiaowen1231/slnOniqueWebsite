@@ -23,7 +23,7 @@ namespace prjOniqueWebsite.Controllers
             _userInfoService = userInfoService;
         }
 
-        [Authorize(Roles = "一般員工")]
+        [Authorize(Roles = "一般員工,經理")]
         /// <summary>
         /// orderList的展示頁面
         /// </summary>
@@ -102,7 +102,7 @@ namespace prjOniqueWebsite.Controllers
         }
         [Authorize(Roles = "Member")]
         /// <summary>
-        /// 寄給會員的order頁面,太長了 要丟進service判斷才對
+        /// 寄給會員的order頁面
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>

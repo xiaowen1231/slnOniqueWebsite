@@ -209,7 +209,8 @@ namespace prjOniqueWebsite.Controllers
                                   OrderId = o.OrderId,
                                   StatusName = os.StatusName,
                                   PaymentMethodName = pm.PaymentMethodName,
-                                  StatusId = os.StatusId
+                                  StatusId = os.StatusId,
+                                  OrderDate = o.OrderDate,
                               };
             var query = _context.OrderStatus;
 
@@ -226,7 +227,7 @@ namespace prjOniqueWebsite.Controllers
             }
 
 
-            if (statusNow == "已完成")
+            if (statusNow == "已完成")//如果訂單完成小於7天才有這選項
             {
                 data = query.Where(c => c.StatusName == "退款中").ToList();
             }
