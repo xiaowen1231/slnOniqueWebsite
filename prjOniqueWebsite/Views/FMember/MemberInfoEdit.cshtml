@@ -2,7 +2,7 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<form method="post" action="MemberInfoEdit"  name="EditForm">
+<form method="post" action="MemberInfoEdit" name="EditForm">
     <div class="container ">
         <input type="hidden" class="form-control" name="MemberId" value="@Model.MemberId" />
         <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">修改個人資料</div>
@@ -143,11 +143,11 @@
         $("#area").append(selectOptions);
     }
 
-    $(".btnSubmit").on('click',async function(event){
+    $(".btnSubmit").on('click', async function (event) {
         event.preventDefault();
 
         const formData = new FormData(document.EditForm);
-        
+
         const response = await fetch('@Url.Content("~/FMember/MemberInfoEdit")', {
             body: formData,
             method: 'POST'
@@ -155,14 +155,14 @@
 
         const data = await response.json();
 
-        if (data.statusCode==500){
+        if (data.statusCode == 500) {
             Swal.fire({
                 title: data.statusMessage,
                 icon: 'error',
                 showConfirmButton: false,
                 timer: 1500
             })
-        }else{
+        } else {
             Swal.fire({
                 title: data.statusMessage,
                 icon: 'success',
