@@ -122,8 +122,8 @@
 
                 <div class="row justify-content-around p-5">
                     <div class="text-center ">
-                        <input type="submit" value="確定編輯" class="EditAddButton p-2 px-4">
-                        <a asp-action="Index"><input type="button" value="取消" class="AddButton p-2 px-4"></a>
+                        <input type="submit" value="確定編輯" class="btn btn-dark p-2 px-4">
+                        @Html.ActionLink("取消", "index","Employees", "",new {@class="btn btn-outline-dark p-2 px-4" })
                     </div>
                 </div>
             </div>
