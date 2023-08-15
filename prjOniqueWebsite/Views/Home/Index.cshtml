@@ -164,7 +164,7 @@
                                     <div class="w-25-h-25 divShopping" data-productid=${id} >
                                         <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                     </div>
-                                    <div class="w-25-h-25 divCollection">
+                                    <div class="w-25-h-25 divCollection" data-productid=${id}>
                                         <img src="@Url.Content("~/images/icon/love.png")" />
                                     </div>
                                 </div>
@@ -184,7 +184,7 @@
                                     <div class="w-25-h-25 divShopping" data-productid=${id}>
                                         <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                     </div>
-                                    <div class="w-25-h-25 divCollection">
+                                    <div class="w-25-h-25 divCollection" data-productid=${id}>
                                         <img src="@Url.Content("~/images/icon/love.png")" />
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@
                                     <div class="w-25-h-25 divShopping" data-productid=${id} >
                                         <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                     </div>
-                                    <div class="w-25-h-25 divCollection">
+                                            <div class="w-25-h-25 divCollection" data-productid=${id}>
                                         <img src="@Url.Content("~/images/icon/love.png")" />
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@
                                     <div class="w-25-h-25 divShopping" data-productid=${id}>
                                         <img src="@Url.Content("~/images/icon/shopping_black.png")" />
                                     </div>
-                                    <div class="w-25-h-25 divCollection">
+                                    <div class="w-25-h-25 divCollection" data-productid=${id}>
                                         <img src="@Url.Content("~/images/icon/love.png")" />
                                     </div>
                                 </div>
@@ -300,9 +300,34 @@
             }
         })
 
-        $('.ProductWall').on('click', '.divCollection', function (event) {
+        $('.ProductWall').on('click', '.divCollection',async function (event) {
             event.stopPropagation();
-            console.log('收藏')
+
+            const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
+            const isLogin = await response.json();
+
+            if (isLogin) {
+                let productId = $(this).data("productid");
+                console.log(productId)
+                //todo
+                }
+                
+            else {
+                Swal.fire({
+                    title: '尚未登入!',
+                    text: "如想使用購物車,請先登入!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3C3C3C',
+                    cancelButtonColor: '#D0D0D0',
+                    confirmButtonText: '進行登入',
+                    cancelButtonText: '稍後登入'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `@Url.Content("~/Home/Login")`
+                    }
+                })
+            }
         })
 
         async function loadColor(productId) {

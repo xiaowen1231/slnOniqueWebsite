@@ -133,7 +133,7 @@
                                 <td>${memberId}</td>
                                 <td>
                                     <div class="imgBox">
-                                         <img src="@Url.Content("~/images/uploads/members/")${photoPath}">
+                                       ${(photoPath === null || photoPath === "null") ? `<img src="@Url.Content("~/images/uploads/members/default.jpg")">` : `<img src="@Url.Content("~/images/uploads/members/")${photoPath}">`}
                                      </div>
                                 </td>
                                 <td>${name}</td>

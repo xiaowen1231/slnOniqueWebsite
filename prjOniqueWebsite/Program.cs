@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
 using System.Configuration;
@@ -27,6 +28,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 builder.Services.AddSession();
+
+var memoryCache = new MemoryCache(new MemoryCacheOptions());
+
+builder.Services.AddSingleton<IMemoryCache>(memoryCache);
 
 var app = builder.Build();
 
