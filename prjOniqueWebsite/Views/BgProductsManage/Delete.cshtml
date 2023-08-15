@@ -35,7 +35,14 @@
         </div>
         <div class="col-5 container">
             <div class="my-5 d-flex">
-                <img asp-for="PhotoPath" src="~/images/uploads/products/@Model.PhotoPath" class="rounded img-thumbnail" id="img" />
+                @if (string.IsNullOrEmpty(Model.PhotoPath))
+                {
+                    <img src="~/images/uploads/products/default.jpg" class="rounded img-thumbnail" id="img" />
+                }
+                else
+                {
+                    <img asp-for="PhotoPath" src="~/images/uploads/products/@Model.PhotoPath" class="rounded img-thumbnail" id="img" />
+                }
                 <span asp-validation-for="PhotoPath" class="text-danger"></span>
             </div>
         </div>

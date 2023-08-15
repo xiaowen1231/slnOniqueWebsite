@@ -99,6 +99,7 @@
     }
     <script>
         const photo = document.querySelector("#inputPhoto");
+        const imgProductPhoto = document.querySelector("#imgProductPhoto");
         photo.addEventListener('change', function () {
             const files = photo.files
             if (files.length == 0) {
@@ -109,7 +110,17 @@
                 const url = URL.createObjectURL(files[0])
                 $("#imgProductPhoto").attr("src", url)
             }
-        })
+        });
+        function showDefaultImage(){
+            const defaultPath = "@Url.Content("~/images/uploads/products/default.jpg")";
+            imgProductPhoto.src = defaultPath;
+        }
+
+        window.addEventListener('load',function(){
+            if(!imgProductPhoto.src || imgProductPhoto.src ==""){
+                showDefaultImage();
+            }
+        });
     </script>
 }
 @section Styles{

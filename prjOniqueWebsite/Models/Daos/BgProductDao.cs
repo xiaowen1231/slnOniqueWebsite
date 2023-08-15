@@ -37,14 +37,14 @@ namespace prjOniqueWebsite.Models.Daos
                     vm.Photo.CopyTo(fileStream);
                 }
             }
-            else
-            {
-                string fileName = product.ProductName + ".jpg";
-                product.PhotoPath = fileName;
-                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
-                string photoDefault = Path.Combine(_environment.WebRootPath, "images", "uploads", "products", "default.jpg");
-                System.IO.File.Copy(photoDefault, photoPath, true);
-            }
+            //else
+            //{
+            //    string fileName = product.ProductName + ".jpg";
+            //    product.PhotoPath = fileName;
+            //    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/products", fileName);
+            //    string photoDefault = Path.Combine(_environment.WebRootPath, "images", "uploads", "products", "default.jpg");
+            //    System.IO.File.Copy(photoDefault, photoPath, true);
+            //}
             _context.Add(product);
             _context.SaveChanges();
         }

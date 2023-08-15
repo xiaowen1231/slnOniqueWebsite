@@ -70,7 +70,7 @@
 
                 @foreach (var item in Model.Products)
                 {
-                    string path = Url.Content("~/images/uploads/products/") + item.PhotoPath;
+                    string path = Url.Content("~/images/uploads/products/") + (string.IsNullOrEmpty(item.PhotoPath) ? "default.jpg" : item.PhotoPath);
                     <tr>
                         <td>
                             <img src="@path" id="productImg" />
