@@ -38,9 +38,10 @@
                     <input type="submit" value="登入" id="Login" class="btn btn-dark fw-bold">
                 </div>
             </div>
-            <div class="mx-3 text-end position-sticky">
+            <div class="mx-3 text-end position-sticky ">
                 <input type="button" class="btn btn-outline-secondary" value="DemoMember" id="DemoMember" />
                 <input type="button" class="btn btn-outline-secondary" value="DemoEmployee" id="DemoEmployee" />
+                <input type="button" class="btn btn-outline-secondary" value="DemoManager" id="DemoManager" />
             </div>
         </div>
     </div>
@@ -74,6 +75,11 @@
         })
         $('#DemoEmployee').on('click', function () {
             let email = "Hank@gmail.com"
+            $('#inputEmail').val(email)
+            $('#inputPassword').val("123")
+        })
+        $('#DemoManager').on('click', function () {
+            let email = "Tom@gmail.com"
             $('#inputEmail').val(email)
             $('#inputPassword').val("123")
         })
