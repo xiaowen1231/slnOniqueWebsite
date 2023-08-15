@@ -8,6 +8,7 @@ using Humanizer.Localisation.TimeToClockNotation;
 using Microsoft.AspNetCore.Authorization;
 using prjOniqueWebsite.Models.Infra;
 
+
 namespace prjOniqueWebsite.Controllers
 {
     public class OrderController : Controller
@@ -15,12 +16,14 @@ namespace prjOniqueWebsite.Controllers
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
 
+
         OrderDao dao = null;
         public OrderController(OniqueContext context, UserInfoService userInfoService)
         {
             _context = context;
             dao = new OrderDao(_context);
             _userInfoService = userInfoService;
+            
         }
 
         [Authorize(Roles = "一般員工,經理")]
@@ -143,6 +146,6 @@ namespace prjOniqueWebsite.Controllers
             }
         }
 
-
+        
     }
 }

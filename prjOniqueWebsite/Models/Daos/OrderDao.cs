@@ -94,8 +94,8 @@ namespace prjOniqueWebsite.Models.Daos
                                     Price = od.Price,
                                     PhotoPath = p.PhotoPath,
                                     TotalPrice=o.TotalPrice,
-                                    MethodName=sm.MethodName
-                                    
+                                    MethodName=sm.MethodName,
+                                    ProductId=p.ProductId,
                                 };
 
             return productDetail.ToList();

@@ -79,15 +79,15 @@
             let displaytotalPrice = 0;
             let displaymethodName = ""
             const productList = data.map(prod => {
-                const { productName, sizeName, colorName, orderQuantity, price, photoPath, totalPrice, methodName } = prod
+                const { productName, sizeName, colorName, orderQuantity, price, photoPath, totalPrice, methodName, productId } = prod
                 let subtotal = orderQuantity * price;
                 displaytotalPrice = totalPrice;
                 displaymethodName = methodName;
                 total += subtotal
                 productListTablecontent +=
                     `<tr>
-                                <td>
-                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="" class="w-120-h-120 rounded-3 shadow-sm">
+                                <td id="prodphoto" data-productid="${productId}">
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${productName}" class="w-120-h-120 rounded-3 shadow-sm">
                                 </td>
                                 <td>${productName}</td>
                                 <td><span class="dollar">${price}</span></td>
@@ -101,14 +101,21 @@
                                 `
 
             });
-
             $("#orderProductList").html(productListTablecontent)
             productPrice.innerHTML = total;
             $("#totalPrice").html(displaytotalPrice);
             $("#shippingfee").html(displaytotalPrice - total);
-
-
         }
+
+        console.log($("#prodphoto").data('productId'))
+            
+        $("#orderProductList").on('click', "#prodphoto",function(event){
+            let productId = $(this).data("productid");
+
+            window.location.href = `@Url.Content("~/Product/Detail/")${productId}`;
+            
+        })
+
 
 
 

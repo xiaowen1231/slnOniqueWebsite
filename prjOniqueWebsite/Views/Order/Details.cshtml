@@ -13,9 +13,6 @@
     <div class="fs-3 fw-bold text-center border-bottom border-dark-subtle p-3">訂單明細</div>
 
     <div id="shippingDetail">
-
-
-
         <input type="text" id="orderId" value="@orderId" name="OrderId" />
         <input type="text" id="email" value="@email" name="Email" />
     </div>
@@ -85,16 +82,23 @@
                         <option value="">已退款</option>
                         <option value="">未取貨</option>*@
                     </select>
-                    <input type="submit" value="確認修改訂單" class="btn btn-outline-danger" id="editbtn">
+                    <input type="submit" value="確認修改訂單" class="btn btn-danger" id="editbtn" data-orderid="@orderId" data-email="@email">
 
                 </div>
             </div>
-            <div class="m-3 text-center">
-                @Html.ActionLink("返回訂單管理", "index","order", "",new {@class="btn btn-outline-dark" })
-                <input type="button" class="btn btn-primary" id="sendtest" value="訂單信件寄送" data-orderid="@orderId" data-email="@email" />
+            <div class="d-flex justify-content-between py-3">
+
+            <div class="m-3 ">
+                <input type="button" class="btn btn-outline-primary" id="sendtest" value="訂單信件寄送" data-orderid="@orderId" data-email="@email" />
             </div>
-            <div class="m-3 text-end">
-                <input type="button" class="btn btn-danger align-content-end" id="deleteorder" value="刪除訂單" data-orderid="@orderId" />
+            <div class="m-3">
+                @Html.ActionLink("返回訂單管理", "index","order", "",new {@class="btn btn-outline-dark" })
+
+            </div>
+            <div class="m-3 ">
+                <input type="button" class="btn btn-outline-danger align-content-end" id="deleteorder" value="刪除訂單" data-orderid="@orderId" />
+               
+            </div>
             </div>
         </div>
     </div>
@@ -108,10 +112,11 @@
         const productListTable = document.querySelector("#orderProductList")
         const shippingDetailTable = document.querySelector("#shippingDetail")
         const productPrice = document.querySelector("#productTotal")
-        
+       
         const orderStatusNow = document.querySelector("#orderStatusNow")
         const statusSel = document.querySelector("#statusSel")
-        const editbtn = document.querySelector("#editbtn")
+        let _statusnow="";
+        let _name="";
         let total = 0;
         let totalPrice = 0;
        
@@ -146,15 +151,15 @@
             let displaytotalPrice=0;
             let displaymethodName=""
             const productList = data.map(prod => {
-                const { productName, sizeName, colorName, orderQuantity, price, photoPath, totalPrice, methodName } = prod
+                const { productName, sizeName, colorName, orderQuantity, price, photoPath, totalPrice, methodName ,productId} = prod
                 let subtotal = orderQuantity * price;
                 displaytotalPrice = totalPrice;
                 displaymethodName = methodName;
                 total += subtotal
                 productListTablecontent +=
                     `<tr>
-                        <td>
-                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="" class="w-120-h-120 rounded-3 shadow-sm">
+                                <td id="prodphoto" data-productid="${productId}">
+                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${productName}" class="w-120-h-120 rounded-3 shadow-sm">
                         </td>
                         <td>${productName}</td>
                         <td><span class="dollar">${price}</span></td>
@@ -172,12 +177,17 @@
             $("#orderProductList").html(productListTablecontent)
             productPrice.innerHTML = total;         
             $("#totalPrice").html(displaytotalPrice);
-            console.log(displaymethodName)
+            //console.log(displaymethodName)
             $("#shippingfee").html(displaytotalPrice - total);
            
 
         }
+        $("#orderProductList").on('click', "#prodphoto",function(event){
+            let id = $(this).data("productid")
+            
+            window.location.href = `@Url.Content("~/Product/Detail/")${id}`;
 
+        })
 
 
         async function loadShippingDetail() {
@@ -187,7 +197,7 @@
             let { statusName, methodName, paymentMethodName, name, phone, photoPath, shippingAddress,
                 orderDate, shippingDate, completionDate, recipient, recipientPhone, remark, totalPrice } = data//要注意開頭不能大寫，不然會undefined，idoit
 
-
+            _name = name;
             let displayPhotoPath = photoPath == null ? "default.jpg" : photoPath
             orderDate = orderDate.substring(0, 10) + " " + orderDate.substring(11, 19)
             shippingDate = shippingDate == null ? "商品尚未出貨" : shippingDate
@@ -282,10 +292,12 @@
             const response = await fetch(`@Url.Content("~/OrderApi/OrderStatusNow?OrderId=")${orderId}`)
             const data = await response.json()
             let { statusName, statusId } = data
+            _statusnow = statusName;
             orderStatusNow.innerHTML = `${statusName}`;
-            //statusSel.innerHTML = `<option value="${statusId}">${statusName}</option>`
+            
+            //statusId = statusSel.options[statusSel.selectedIndex].value;
             //console.log(statusId)
-            //const statusId = statusSel.options[statusSel.selectedIndex].value;
+          
         }
         $(document).ready(() => {
             loadStatusNow();
@@ -299,7 +311,7 @@
             const response = await fetch(`@Url.Content("~/OrderApi/GetOrderStatusOptions?OrderId=")${OrderId}`)//todo
             const data = await response.json()
             let statusSelection = "";
-            console.log(data)
+            
             if (data == null) {
                 statusSelection = `<option>此訂單已結單</option>`;
                 $("#editbtn").prop("disabled", true);
@@ -307,18 +319,16 @@
             if (data != null) {
                 data.map(option => {
 
-                    const { orderId, statusId, statusName, paymentMethodName } = option
-                    console.log(statusName)
-
+                    const { orderId, statusId, statusName, paymentMethodName } = option                  
                     statusSelection += `<option value="${statusId}">${statusName}</option>`;
-                    console.log(statusSelection)
-
                 })
-
             }
             $("#statusSel").html(statusSelection);
+
+            
         }
-        //
+        
+
         $("#deleteorder").click(function () {
 
             Swal.fire({
@@ -345,14 +355,22 @@
 
         })
 
-        async function deleteOrder(orderid) {
 
-            const response = await fetch(`@Url.Content("~/OrderApi/DeleteOrder?OrderId=")${orderid}`)
-            const data = await response.json();
-            const { statusCode, statusMessage } = data
-
-        }
-
+       
+        $("#editbtn").click(async function(){
+            if (_statusnow=="待出貨")
+            console.log(_statusnow)
+            $.ajax({
+                method: "POST",
+                url: `@Url.Content("~/orderapi/SendMail")`,
+                data: {
+                    OrderId: OrderId,
+                    Email: $(this).data('email'),
+                    statusNow:"已出貨",
+                    Name: _name,
+                }
+            });
+        })
 
 
     </script>
