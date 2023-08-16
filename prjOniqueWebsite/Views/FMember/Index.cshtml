@@ -124,8 +124,6 @@
             $("#imgMemberPhoto").attr("src", photoPath)
         }
 
-        //const response = await fetch(`@Url.Content("~/MemberApi/GetfMemberPhoto")`)
-        //const memberImg = await response.json();
         $('.btnUpload').on('click', function () {
             $('#inputUpload').trigger('click');
         })
@@ -145,7 +143,11 @@
                 });
                 const datas = await response.json();
                 if (datas.statusCode == 200) {
-                    console.log("123")
+                    Swal.fire(
+                        '更新成功!',
+                        '您成功更新了照片!',
+                        'success'
+                    )
                     GetMemberFileName()
                 }
             }
