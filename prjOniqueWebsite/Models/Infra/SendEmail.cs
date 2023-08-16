@@ -6,11 +6,13 @@ using NuGet.Common;
 using System;
 using Microsoft.AspNetCore.Http.Extensions;
 using prjOniqueWebsite.Models.Dtos;
+using Microsoft.Extensions.Hosting;
 
 namespace prjOniqueWebsite.Models.Infra
 {
     public  class SendEmail
     {
+       
         public void SendMail(SendMailDto dto,IUrlHelperFactory _urlHelperFactory ,ControllerContext controllerContext,HttpContext httpContext)
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
