@@ -9,6 +9,7 @@ namespace prjOniqueWebsite.Models.EFModels
     {
         public Members()
         {
+            Collect = new HashSet<Collect>();
             Orders = new HashSet<Orders>();
         }
 
@@ -31,6 +32,7 @@ namespace prjOniqueWebsite.Models.EFModels
         public virtual Areas AreasNavigation { get; set; }
         public virtual Citys CitysNavigation { get; set; }
         public virtual MemberLevel MemberLevelNavigation { get; set; }
+        public virtual ICollection<Collect> Collect { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
     }
 }

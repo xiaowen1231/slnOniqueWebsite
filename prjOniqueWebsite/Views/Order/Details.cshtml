@@ -325,7 +325,8 @@
             }
             $("#statusSel").html(statusSelection);
 
-            
+            //let x=statusSel.options[statusSel.selectedIndex]
+            //console.log(x)
         }
         
 
@@ -355,22 +356,21 @@
 
         })
 
-
        
-        $("#editbtn").click(async function(){
-            if (_statusnow=="待出貨")
-            console.log(_statusnow)
-            $.ajax({
-                method: "POST",
-                url: `@Url.Content("~/orderapi/SendMail")`,
-                data: {
-                    OrderId: OrderId,
-                    Email: $(this).data('email'),
-                    statusNow:"已出貨",
-                    Name: _name,
-                }
-            });
-        })
+        //$("#editbtn").click(async function(){
+        //    if (_statusnow=="待出貨")
+           
+        //    $.ajax({
+        //        method: "POST",
+        //        url: `@Url.Content("~/orderapi/SendMail")`,
+        //        data: {
+        //            OrderId: OrderId,
+        //            Email: $(this).data('email'),
+        //            statusNow:"已出貨",
+        //            Name: _name,
+        //        }
+        //    });
+        //})
 
 
     </script>

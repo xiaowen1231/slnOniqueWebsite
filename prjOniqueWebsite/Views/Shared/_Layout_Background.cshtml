@@ -127,7 +127,11 @@
             const data = await response.json()
             notify.innerHTML = data;
         }
-
+        $(".backgroundHeadIcon").click(function () {
+            console.log("123")
+            window.location.href = '@Url.Content("~/Order/Index?keyword=")待出貨';
+                   
+        })
         CheckLogin()
 
         async function CheckLogin() {

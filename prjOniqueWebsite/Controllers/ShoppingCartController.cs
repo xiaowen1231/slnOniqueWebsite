@@ -35,7 +35,7 @@ namespace prjOniqueWebsite.Controllers
         }
 
 
-        public IActionResult OrderSettlement(int orderId)
+        public IActionResult OrderSettlement(string orderId)
         {
             var dto = new OrderSettlementDto();
             var orderDetails = _context.OrderDetails.Where(od => od.OrderId == orderId).ToList();
@@ -73,6 +73,11 @@ namespace prjOniqueWebsite.Controllers
             dto.Total = total;
 
             return View(dto);
+        }
+
+        public IActionResult ToEcpay(string orderIdInDb)
+        {
+            return View();
         }
     }
 }

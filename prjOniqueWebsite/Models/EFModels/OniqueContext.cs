@@ -21,6 +21,7 @@ namespace prjOniqueWebsite.Models.EFModels
         public virtual DbSet<Areas> Areas { get; set; }
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<Citys> Citys { get; set; }
+        public virtual DbSet<Collect> Collect { get; set; }
         public virtual DbSet<Discounts> Discounts { get; set; }
         public virtual DbSet<EmployeeLevel> EmployeeLevel { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
@@ -80,6 +81,21 @@ namespace prjOniqueWebsite.Models.EFModels
                 entity.Property(e => e.CityName)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Collect>(entity =>
+            {
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.Collect)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Collect_Members");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Collect)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Collect_Products");
             });
 
             modelBuilder.Entity<Discounts>(entity =>
@@ -220,6 +236,10 @@ namespace prjOniqueWebsite.Models.EFModels
             {
                 entity.HasKey(e => e.OrderDetailId);
 
+                entity.Property(e => e.OrderId)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.HasOne(d => d.Order)
@@ -248,6 +268,8 @@ namespace prjOniqueWebsite.Models.EFModels
             modelBuilder.Entity<Orders>(entity =>
             {
                 entity.HasKey(e => e.OrderId);
+
+                entity.Property(e => e.OrderId).HasMaxLength(50);
 
                 entity.Property(e => e.CompletionDate).HasColumnType("datetime");
 

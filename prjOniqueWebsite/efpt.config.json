@@ -28,6 +28,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Collect]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Discounts]",
          "ObjectType": 0
       },
