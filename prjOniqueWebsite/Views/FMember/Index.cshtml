@@ -13,18 +13,35 @@
     <div class="col-3  border rounded-3 p-2 color-FCFCFC">
         <div class="p-3">
             <div class="circle-size-150 mx-auto">
-                @{
-                    if (Model.PhotoPath != null)
-                    {
-                        <img src="@Url.Content("~/images/uploads/members/")@Model.PhotoPath" alt="" class="circle-size-150 cover rounded-circle">
-
+                <form name="formUploadPhoto">
+                    @{
+                        if (Model.PhotoPath != null)
+                        {
+                            //<img src="@Url.Content("~/images/uploads/members/")@Model.PhotoPath" alt="" class="circle-size-150 cover rounded-circle">
+                            <div>
+                                <div class="my-4 mx-auto btnUpload cursor-pointer" style="width:150px; height:150px">
+                                    <img src="@Url.Content("~/images/uploads/members/")@Model.PhotoPath" data-filename="@Model.PhotoPath" id="imgMemberPhoto" class="circle-size-150 cover rounded-circle" />
+                                </div>
+                                <div class="width-400 mx-auto">
+                                    <input type="file" class="form-control" style="visibility:hidden" id="inputUpload" name="Photo" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            //<img src="@Url.Content("~/images/uploads/members/default.jpg")" alt="" class="circle-size-150 cover rounded-circle">
+                            <div>
+                                <div class="my-4 mx-auto btnUpload cursor-pointer" style="width:150px; height:150px">
+                                    <img src="@Url.Content("~/images/uploads/members/default.jpg")" id="imgMemberPhoto" class="circle-size-150 cover rounded-circle" />
+                                </div>
+                                <div class="width-400 mx-auto">
+                                    <input type="file" class="form-control" style="visibility:hidden" id="inputUpload" name="Photo" />
+                                </div>
+                            </div>
+                        }
                     }
-                    else
-                    {
-                        <img src="@Url.Content("~/images/uploads/members/default.jpg")" alt="" class="circle-size-150 cover rounded-circle">
 
-                    }
-                }
+                </form>
             </div>
             <div class="mt-3">
                 <input type="hidden" name="MemberId" value="@Model.MemberId" />
@@ -92,6 +109,49 @@
 }
 @section Scripts{
     <script>
+        async function GetMemberFileName() {
+            const response = await fetch(`@Url.Content("~/MemberApi/GetfMemberPhoto")`)
+            const data = await response.json();
+
+            let displayFileName = data.photoPath == null ? 'default.jpg' :  data.photoPath ;
+
+            ReloadPhoto(displayFileName)
+        }
+        function ReloadPhoto(displayFileName) {
+
+            let photoPath = `@Url.Content("~/images/uploads/members/")${displayFileName}`
+
+            $("#imgMemberPhoto").attr("src", photoPath)
+        }
+
+        $('.btnUpload').on('click', function () {
+            $('#inputUpload').trigger('click');
+        })
+        const photo = document.querySelector("#inputUpload");
+        photo.addEventListener('change', async function () {
+            const files = photo.files
+            if (files.length == 0) {
+
+                GetMemberFileName()
+            }
+            else {
+                const formData = new FormData(document.formUploadPhoto);
+
+                const response = await fetch('@Url.Content("~/MemberApi/UploadPhoto")', {
+                    body: formData,
+                    method: 'POST'
+                });
+                const datas = await response.json();
+                if (datas.statusCode == 200) {
+                    Swal.fire(
+                        '更新成功!',
+                        '您成功更新了照片!',
+                        'success'
+                    )
+                    GetMemberFileName()
+                }
+            }
+        })
         let pagesize = Number($("#searchpageSize").val())
         let pagenumber = Number($("#searchPagenumber").val())
 

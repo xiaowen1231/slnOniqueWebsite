@@ -351,6 +351,15 @@ namespace prjOniqueWebsite.Models.Repositories
             }
         }
 
+        public OrderSettlementDto GetOrderInfo(string orderId)
+        {
+            var dto = _context.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderSettlementDto
+            {
+                OrderId = o.OrderId,
+                Total = o.TotalPrice
+            }).FirstOrDefault();
+            return dto;
+        }
 
     }
 }

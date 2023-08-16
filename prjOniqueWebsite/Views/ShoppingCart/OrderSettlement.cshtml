@@ -34,7 +34,7 @@
                 </div>
                 <div>
                     <span>訂單編號</span>
-                    <span>@Model.OrderId.ToString()</span>
+                    <span>@Model.OrderId</span>
                 </div>
             </div>
         </div>
@@ -61,7 +61,8 @@
         $('#checkOrder').on('click',function(){
             event.preventDefault();
 
-            let orderId = @Model.OrderId
+            let orderId =  $(this).data("orderid")
+            console.log(orderId)
 
             window.location.href = `@Url.Content("~/Order/OrderEmailContent?orderId=")${orderId}`;
         })

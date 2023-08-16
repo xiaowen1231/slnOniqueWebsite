@@ -2,6 +2,7 @@
 using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
 using System.Drawing.Printing;
@@ -14,13 +15,67 @@ namespace prjOniqueWebsite.Controllers
     {
         private readonly OniqueContext _context;
         private readonly IWebHostEnvironment _environment;
-        MemberDao _dao = null;
-        public MemberApiController(OniqueContext context, IWebHostEnvironment environment)
+        MemberDao _dao;
+        private readonly UserInfoService _userInfoService;
+        public MemberApiController(OniqueContext context, IWebHostEnvironment environment, UserInfoService userInfoService)
         {
             _context = context;
             _environment = environment;
             _dao = new MemberDao(_context, _environment);
+            _userInfoService = userInfoService;
         }
+        public IActionResult MemberCollect()
+        {
+            //Members members = _userInfoService.GetMemberInfo();
+            //var dto = _context.Product
+            return null;
+        }
+        public IActionResult GetfMemberPhoto()
+        {
+            Members member = _userInfoService.GetMemberInfo();
+            var dto = _context.Members.Where(m => m.MemberId == member.MemberId).Select(m => new { photoPath = m.PhotoPath }).FirstOrDefault();
+
+            return Json(dto);
+        }
+        public IActionResult UploadPhoto(IFormFile photo)
+        {
+            try
+            {
+                var mem = _userInfoService.GetMemberInfo();
+                var memInDb = _context.Members.FirstOrDefault(m => m.MemberId == mem.MemberId);
+
+                string fileName = $"MemberId_{mem.MemberId}.jpg";
+
+                memInDb.PhotoPath = fileName;
+                _context.SaveChanges();
+
+                string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+
+                using (var fileStream = new FileStream(photoPath, FileMode.Create))
+                {
+                    photo.CopyTo(fileStream);
+                }
+
+                var result = new ApiResult
+                {
+                    StatusCode = 200,
+                    StatusMessage = "更新大頭貼成功"
+                };
+
+                return Json(result);
+
+            }
+            catch (Exception ex)
+            {
+                var result = new ApiResult
+                {
+                    StatusCode = 500,
+                    StatusMessage = "更新大頭貼失敗"
+                };
+                return Json(result);
+            }
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -51,7 +106,7 @@ namespace prjOniqueWebsite.Controllers
                               select m;
             return Json(memberLevel);
         }
-        public IActionResult memberOrder(int MemberId,int pageNumber, int pageSize)
+        public IActionResult memberOrder(int MemberId, int pageNumber, int pageSize)
         {
             try
             {
@@ -66,16 +121,16 @@ namespace prjOniqueWebsite.Controllers
             }
 
         }
-        public IActionResult memberOrderIndex(List<MemberOrderDto>memberorder, int pageNumber, int pageSize)
+        public IActionResult memberOrderIndex(List<MemberOrderDto> memberorder, int pageNumber, int pageSize)
         {
             var data = new MemberOrderGUIdto();
             var criteria = prepareCriteria(pageNumber);
-            criteria.PageSize=pageSize;
+            criteria.PageSize = pageSize;
             data.Criteria = criteria;
 
             int totalOrderCount = memberorder.Count();
             data.MemberOrderPaginationInfo = new MemberOrderPaginationInfo(totalOrderCount, criteria.PageSize, criteria.PageNumber, $"/MemberApi/memberOrder?pagenumber={pageNumber}&pagesize={pageSize}");
-            data.MemberOrders= memberorder.Skip(criteria.recordStartIndex).Take(criteria.PageSize).ToList();
+            data.MemberOrders = memberorder.Skip(criteria.recordStartIndex).Take(criteria.PageSize).ToList();
             return Json(data);
         }
 
@@ -112,7 +167,7 @@ namespace prjOniqueWebsite.Controllers
         public class MemberOrderGUIdto
         {
             public MemberOrderCriteria Criteria { get; set; }
-            public  MemberOrderPaginationInfo MemberOrderPaginationInfo { get; set; }
+            public MemberOrderPaginationInfo MemberOrderPaginationInfo { get; set; }
             public List<MemberOrderDto> MemberOrders { get; set; }
 
         }

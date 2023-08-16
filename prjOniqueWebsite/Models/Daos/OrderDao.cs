@@ -41,7 +41,7 @@ namespace prjOniqueWebsite.Models.Daos
                         };
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword));
+                query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword)||o.OrderId.Equals(keyword));
             }
             if(startDate != null)
             {
@@ -69,7 +69,7 @@ namespace prjOniqueWebsite.Models.Daos
             }
             return data;
         }
-        public List<OrderProductsListDto> getProductDetail(int orderId)
+        public List<OrderProductsListDto> getProductDetail(string orderId)
         {
             var productDetail = from od in _context.OrderDetails
                                 join psd in _context.ProductStockDetails
@@ -94,13 +94,13 @@ namespace prjOniqueWebsite.Models.Daos
                                     Price = od.Price,
                                     PhotoPath = p.PhotoPath,
                                     TotalPrice=o.TotalPrice,
-                                    MethodName=sm.MethodName
-                                    
+                                    MethodName=sm.MethodName,
+                                    ProductId=p.ProductId,
                                 };
 
             return productDetail.ToList();
         }
-        public OrderShippingDetailDto getShippingDetail(int orderId)
+        public OrderShippingDetailDto getShippingDetail(string orderId)
         {
             var shippingDetail = from o in _context.Orders
                                  join os in _context.OrderStatus
@@ -133,7 +133,7 @@ namespace prjOniqueWebsite.Models.Daos
             return shippingDetail.FirstOrDefault();
         }
 
-        public OrderStatusDto GetOrderStatus(int orderId)
+        public OrderStatusDto GetOrderStatus(string orderId)
         {
             var query = from o in _context.Orders
                         join os in _context.OrderStatus
@@ -185,7 +185,7 @@ namespace prjOniqueWebsite.Models.Daos
                          select o).Count();
             return count;
         }
-        public string GetEmailByOrderId(int orderId)
+        public string GetEmailByOrderId(string orderId)
         {
             
             var query = from o in _context.Orders
@@ -203,7 +203,7 @@ namespace prjOniqueWebsite.Models.Daos
         /// 有foreign key的資料刪除要注意，
         /// </summary>
         /// <param name="orderId"></param>
-        public void DeleteOrder(int orderId)
+        public void DeleteOrder(string orderId)
         {
             var orderdetails = _context.OrderDetails.Where(o => o.OrderId == orderId);
             var order = _context.Orders.Where(o => o.OrderId == orderId).FirstOrDefault();

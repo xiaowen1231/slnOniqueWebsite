@@ -11,5 +11,6 @@
         public decimal TotalPrice { get; set; }
         public string MethodName { get; set; }
 
+        public int ProductId { get; set; }
     }
 }

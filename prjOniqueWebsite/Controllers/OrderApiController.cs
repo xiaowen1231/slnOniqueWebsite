@@ -21,12 +21,15 @@ namespace prjOniqueWebsite.Controllers
     {
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly OniqueContext _context;
+
+
         OrderDao dao = null;
         public OrderApiController(OniqueContext context, IUrlHelperFactory urlHelperFactory)
         {
             _context = context;
             dao = new OrderDao(_context);
             _urlHelperFactory = urlHelperFactory;
+
         }
         public IActionResult Index()
         {
@@ -40,11 +43,12 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="sort"></param>
         /// <param name="pagenumber"></param>
         /// <returns></returns>
-        public IActionResult OrderList(string keyword, string sort, int pagenumber, int pagesize,string? startDate)
+        public IActionResult OrderList(string keyword, string sort, int pagenumber, int pagesize, string? startDate)
         {
             DateTime? parsedDateTime = null;
-            if (!string.IsNullOrEmpty(startDate)) { 
-            parsedDateTime = DateTime.Parse(startDate);
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                parsedDateTime = DateTime.Parse(startDate);
             }
 
             var dto = dao.SearchOrderList(keyword, sort, parsedDateTime);
@@ -99,7 +103,7 @@ namespace prjOniqueWebsite.Controllers
         {
             var result = new OrderCriteria();
             result.PageNumber = pageNumber;
-            
+
             return result;
         }
         public class OrderGUIdto
@@ -109,7 +113,7 @@ namespace prjOniqueWebsite.Controllers
             public List<OrderListDto> Orders { get; set; }
 
         }
-        public class  OrderPaginationInfo
+        public class OrderPaginationInfo
         {
             public OrderPaginationInfo(int totalRecords, int pageSize, int pageNumber, string urlTemplate)
             {
@@ -150,16 +154,16 @@ namespace prjOniqueWebsite.Controllers
                 : PageItemCount;
             public int PageItemNextNumber => (PageBarStartNumber + PageItemCount >= Pages) ? Pages : PageBarStartNumber + PageItemCount;
         }
-        
 
 
-        public IActionResult orderProductDetail(int orderId)
+
+        public IActionResult orderProductDetail(string orderId)
         {
 
             List<OrderProductsListDto> dto = dao.getProductDetail(orderId);
             return Json(dto);
         }
-        public IActionResult orderShippingDetail(int orderId)
+        public IActionResult orderShippingDetail(string orderId)
         {
             OrderShippingDetailDto dto = dao.getShippingDetail(orderId);
             if (dto != null)
@@ -178,7 +182,7 @@ namespace prjOniqueWebsite.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public IActionResult OrderStatusNow(int orderId)
+        public IActionResult OrderStatusNow(string orderId)
         {
             OrderStatusDto dto = dao.GetOrderStatus(orderId);
             return Json(dto);
@@ -198,7 +202,7 @@ namespace prjOniqueWebsite.Controllers
         /// </summary>
         /// <param name="OrderId"></param>
         /// <returns></returns>
-        public IActionResult GetOrderStatusOptions(int OrderId)
+        public IActionResult GetOrderStatusOptions(string OrderId)
         {
 
             var statusNow = dao.GetOrderStatus(OrderId).StatusName;
@@ -265,8 +269,16 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(data);
         }
+
+        /// <summary>
+        /// 寄信
+        /// </summary>
+        /// <param name="OrderId"></param>
+        /// <param name="Email"></param>
+        /// <param name="statusNow"></param>
+        /// <returns></returns>
         [HttpPost]
-        public IActionResult SendMail(int OrderId ,string Email)
+        public IActionResult SendMail(int OrderId, string Email, string statusNow,string Name)
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -281,11 +293,20 @@ namespace prjOniqueWebsite.Controllers
 
             string orderDetailsUrl = urlHelper.Action("OrderEmailContent", "Order", new { OrderId }, HttpContext.Request.Scheme);
 
+            
+            string htmlStr =
+                $@"
+    <div style=""font-size:24px"">
+        <div>親愛的{Name}您好!</div>
+        <div>您的訂單 編號:{OrderId}</div>
+        <div>您的訂單狀態目前已更新為:{statusNow}</div>
+        <div><a href=""{orderDetailsUrl}"">點擊查看訂單狀態</a></div>
+    </div>";
             MailMessage mailMessage = new MailMessage
             {
                 From = new MailAddress("msit147onique@gmail.com"),
                 Subject = "訂單內容",
-                Body = $"您的訂單處理中：<br/>{orderDetailsUrl}",
+                Body = htmlStr,
                 IsBodyHtml = true
             };
 
@@ -295,7 +316,8 @@ namespace prjOniqueWebsite.Controllers
             return Content("");
         }
 
-        public IActionResult DeleteOrder(int OrderId)
+
+        public IActionResult DeleteOrder(string OrderId)
         {
             ApiResult result = new ApiResult();
             try

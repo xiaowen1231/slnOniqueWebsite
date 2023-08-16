@@ -18,8 +18,8 @@
                 <img src="~/images/uploads/members/@photoPath" id="imgMember" data-originalpath="@Model.PhotoPath" />
             </div>
             <div>
-                <input type="file" name="Photo" id="Photo" class="form-control my-5" />
-                <input type="hidden" name="PhotoPath" value="@Model.PhotoPath" />
+                <input type="file" name="Photo" id="Photo" class="form-control my-5" value="@Model.PhotoPath"/>
+                @*<input type="hidden" name="PhotoPath" value="@Model.PhotoPath" />*@
             </div>
         </div>
         <div class=" col-8 border mx-2">
