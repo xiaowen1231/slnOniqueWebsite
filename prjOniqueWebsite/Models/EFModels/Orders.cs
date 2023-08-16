@@ -12,7 +12,7 @@ namespace prjOniqueWebsite.Models.EFModels
             OrderDetails = new HashSet<OrderDetails>();
         }
 
-        public int OrderId { get; set; }
+        public string OrderId { get; set; }
         public int MemberId { get; set; }
         public int MethodId { get; set; }
         public string ShippingAddress { get; set; }

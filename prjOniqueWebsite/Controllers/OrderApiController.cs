@@ -157,13 +157,13 @@ namespace prjOniqueWebsite.Controllers
 
 
 
-        public IActionResult orderProductDetail(int orderId)
+        public IActionResult orderProductDetail(string orderId)
         {
 
             List<OrderProductsListDto> dto = dao.getProductDetail(orderId);
             return Json(dto);
         }
-        public IActionResult orderShippingDetail(int orderId)
+        public IActionResult orderShippingDetail(string orderId)
         {
             OrderShippingDetailDto dto = dao.getShippingDetail(orderId);
             if (dto != null)
@@ -182,7 +182,7 @@ namespace prjOniqueWebsite.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public IActionResult OrderStatusNow(int orderId)
+        public IActionResult OrderStatusNow(string orderId)
         {
             OrderStatusDto dto = dao.GetOrderStatus(orderId);
             return Json(dto);
@@ -202,7 +202,7 @@ namespace prjOniqueWebsite.Controllers
         /// </summary>
         /// <param name="OrderId"></param>
         /// <returns></returns>
-        public IActionResult GetOrderStatusOptions(int OrderId)
+        public IActionResult GetOrderStatusOptions(string OrderId)
         {
 
             var statusNow = dao.GetOrderStatus(OrderId).StatusName;
@@ -317,7 +317,7 @@ namespace prjOniqueWebsite.Controllers
         }
 
 
-        public IActionResult DeleteOrder(int OrderId)
+        public IActionResult DeleteOrder(string OrderId)
         {
             ApiResult result = new ApiResult();
             try

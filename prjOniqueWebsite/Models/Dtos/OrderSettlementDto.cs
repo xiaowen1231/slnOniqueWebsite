@@ -4,8 +4,8 @@ namespace prjOniqueWebsite.Models.Dtos
 {
     public class OrderSettlementDto
     {
-        public int OrderId { get; set; }
-        public ApiResult Result { get; set; }
+        public string? OrderId { get; set; }
+        public ApiResult? Result { get; set; }
         public decimal Total { get; set; }
     }
 }

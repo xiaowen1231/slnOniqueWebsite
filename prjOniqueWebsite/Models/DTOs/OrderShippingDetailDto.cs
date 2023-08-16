@@ -2,7 +2,7 @@
 {
     public class OrderShippingDetailDto
     {
-        public int OrderId { get; set; }
+        public string? OrderId { get; set; }
         public string Name { get; set; }
         public string PhotoPath { get; set; }
         public string MethodName { get; set; }

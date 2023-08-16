@@ -8,7 +8,7 @@
        
         public string PaymentMethodName { get; set; }
 
-        public int OrderId { get; set; }
+        public string? OrderId { get; set; }
         public DateTime OrderDate { get; set; }
 
 

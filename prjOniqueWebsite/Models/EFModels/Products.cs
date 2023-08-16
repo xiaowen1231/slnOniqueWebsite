@@ -9,6 +9,7 @@ namespace prjOniqueWebsite.Models.EFModels
     {
         public Products()
         {
+            Collect = new HashSet<Collect>();
             ProductStockDetails = new HashSet<ProductStockDetails>();
         }
 
@@ -26,6 +27,7 @@ namespace prjOniqueWebsite.Models.EFModels
         public virtual Discounts Discount { get; set; }
         public virtual Categories ProductCategory { get; set; }
         public virtual Supplier Supplier { get; set; }
+        public virtual ICollection<Collect> Collect { get; set; }
         public virtual ICollection<ProductStockDetails> ProductStockDetails { get; set; }
     }
 }
