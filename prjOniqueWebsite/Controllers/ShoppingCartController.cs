@@ -75,9 +75,12 @@ namespace prjOniqueWebsite.Controllers
             return View(dto);
         }
 
-        public IActionResult ToEcpay(string orderIdInDb)
+        public IActionResult ToEcpay(string orderId)
         {
-            return View();
+            var ecpay = new Ecpay();
+            var dto = _dao.GetOrderInfo(orderId);
+            var data = ecpay.SubmitToEcpay(dto);
+            return View(data);
         }
     }
 }
