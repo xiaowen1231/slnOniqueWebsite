@@ -1,6 +1,6 @@
 ﻿@model prjOniqueWebsite.Models.Dtos.ProductDetailDto
 @{
-    ViewData["Title"] = "BgColorSizeDetails";
+    ViewData["Title"] = "庫存量設定";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
    
@@ -60,7 +60,7 @@
                 <div class="d-flex p-2 align-items-center  mx-3">
                     <div class="text-center fw-bold">庫存數 :</div>
                     <div>
-                        <input type="text" class="form-control mx-2" name="Quantity">
+                        <input type="number" class="form-control mx-2" name="Quantity" min="0">
                     </div>
                 </div>                
                 <div class="text-center p-4">

@@ -1,7 +1,7 @@
 ﻿@model prjOniqueWebsite.Models.EFModels.Products
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "刪除商品";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
 <div class="border shadow rounded-4 container justify-content-center my-2 mx-4 col-10">
@@ -20,14 +20,14 @@
                 商品分類: @Html.DisplayFor(model => model.ProductCategory.CategoryName)
             </div>
             <div class="d-flex align-items-center my-4">
+                <div class="mx-3">供應商: @Html.DisplayFor(model => model.Supplier.SupplierName)</div>
+            </div>
+            <div class="d-flex align-items-center my-4">
                 上架時間: @Html.DisplayFor(model => model.AddedTime)
             </div>
             <div class="d-flex align-items-center my-4">
                 下架時間: @Html.DisplayFor(model => model.ShelfTime)
-            </div>
-            <div class="d-flex align-items-center my-4">
-                <div class="mx-3">供應商: @Html.DisplayFor(model => model.Supplier.SupplierName)</div>
-            </div>
+            </div>            
             <div class="d-flex my-4">
                 <lable class="width-120px">商品描述:</lable>
                 <textarea class="form-control" style="width: 100%; height: 160px;">@Html.DisplayFor(model => model.Description)</textarea>
@@ -35,7 +35,14 @@
         </div>
         <div class="col-5 container">
             <div class="my-5 d-flex">
-                <img asp-for="PhotoPath" src="~/images/uploads/products/@Model.PhotoPath" class="rounded img-thumbnail" id="img" />
+                @if (string.IsNullOrEmpty(Model.PhotoPath))
+                {
+                    <img src="~/images/uploads/products/default.jpg" class="rounded img-thumbnail" id="img" />
+                }
+                else
+                {
+                    <img asp-for="PhotoPath" src="~/images/uploads/products/@Model.PhotoPath" class="rounded img-thumbnail" id="img" />
+                }
                 <span asp-validation-for="PhotoPath" class="text-danger"></span>
             </div>
         </div>
