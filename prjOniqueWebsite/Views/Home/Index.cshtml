@@ -309,10 +309,18 @@
             if (isLogin) {
                 let productId = $(this).data("productid");
                 console.log(productId)
-                //todo
-                const resp = await fetch(`@Url.Content("~/MemberApi/MemberCollect")`);
+                const resp = await fetch(`@Url.Content("~/MemberApi/ToggleCollectProduct?productId=")${productId}`);
                 const data = await resp.json();
-
+                console.log(data)
+                //if(productId != data){
+                //    //console.log("123")
+                //    const resp = await fetch(`@Url.Content("~/MemberApi/AddCollect")`);
+                //    const add = await resp.json();
+                //    console.log(add)
+                //}else{
+                //    const resp = await fetch(`@Url.Content("~/MemberApi/RemoveCollect")`);
+                //    const remove = await resp.json();
+                //}
 
             }else {
                 Swal.fire({

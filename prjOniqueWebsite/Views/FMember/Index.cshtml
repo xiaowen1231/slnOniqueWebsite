@@ -110,7 +110,7 @@
 @section Scripts{
     <script>
         async function GetMemberFileName() {
-            const response = await fetch(`@Url.Content("~/MemberApi/GetfMemberPhoto")`)
+            const response = await fetch(`@Url.Content("~/MemberApi/GetFMemberPhoto")`)
             const data = await response.json();
 
             let displayFileName = data.photoPath == null ? 'default.jpg' :  data.photoPath ;
