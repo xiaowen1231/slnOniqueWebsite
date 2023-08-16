@@ -111,7 +111,7 @@
     <div class="text-danger fw-bold">$${totalPrice}</div>
     </td>
     <td>
-    <button type="button" class="btn btn-outline-dark" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+    <button type="button" class="btn btn-outline-dark btnViewOrderDetail" data-orderid="${orderId}">檢視訂單詳情</button>
     </td>
     </tr>
 
@@ -157,11 +157,14 @@
         loadorder(pagenumber, pagesize)
     })
 
-    //memberorderdetail_url
-    function openOrderDetails(orderId) {
-        console.log(orderId)
-        const url = '@Url.Action("OrderEmailContent", "Order")' + '?orderId=' + orderId; // 構造URL
-        window.location.href = url; // 導航到詳細頁面
-    }
+
+
+    $('#fmemberTable').on('click', '.btnViewOrderDetail',function(event){
+        event.stopPropagation();
+
+        let orderid = $(this).data("orderid");
+        
+        window.location.href = `@Url.Content("~/Order/OrderEmailContent?orderId=")${orderid}`
+    })
 
 </script>
