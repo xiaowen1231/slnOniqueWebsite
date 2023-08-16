@@ -7,7 +7,7 @@
 
         public string StatusName { get; set; }
         public string formerStatusName { get; set; }
-        public int OrderId { get; set; }
+        public string? OrderId { get; set; }
         
         public DateTime? ShippingDate { get; set; }
         public DateTime? CompletionDate { get; set; }

@@ -87,9 +87,9 @@ namespace prjOniqueWebsite.Controllers
         {
             var dto = new OrderSettlementDto();
             var result = new ApiResult();
-
             try
             {
+            var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
 
                 string city = _context.Citys.Where(c => c.CityId == vm.City).Select(c => c.CityName).FirstOrDefault();
                 string area = _context.Areas.Where(a => a.AreaId == vm.Area).Select(a => a.AreaName).FirstOrDefault();
@@ -99,6 +99,7 @@ namespace prjOniqueWebsite.Controllers
 
                 var order = new Orders
                 {
+                    OrderId = orderId,
                     MemberId = vm.MemberId,
                     MethodId = vm.MethodId,
                     ShippingAddress = shippingAddress,
@@ -133,7 +134,7 @@ namespace prjOniqueWebsite.Controllers
                 _context.Orders.Add(order);
                 _context.SaveChanges();
 
-                int orderId = order.OrderId;
+                
 
                 
 

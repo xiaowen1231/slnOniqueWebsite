@@ -1,0 +1,46 @@
+﻿@model System.Collections.Generic.Dictionary<string, string>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.css" rel="stylesheet">
+    <style>
+        html {
+            height: 100vh;
+            transition: all 0.2s
+        }
+    </style>
+</head>
+<body>
+    <form id="form" name="form" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="POST">
+        @foreach (var key in @Model.Keys.ToList())
+        {
+            @(key) <input type="text" name="@key" value="@Model[key]" />
+
+            <br />
+        }
+    </form>
+    <script src="~/js/all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/busy-load@0.1.2/dist/app.min.js"></script>
+    <script>
+
+        $.busyLoadSetup({ animation: "slide", background: "rgba(108, 108, 108, 1)" });
+
+
+        $("html").busyLoad("show", {
+            fontawesome: "fa fa-spinner fa-spin fa-3x fa-fw"
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById("form").submit();
+        }
+    </script>
+</body>
+</html>

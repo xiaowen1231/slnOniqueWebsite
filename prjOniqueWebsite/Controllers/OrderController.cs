@@ -54,7 +54,7 @@ namespace prjOniqueWebsite.Controllers
 
 
         [Authorize(Roles = "一般員工,經理")]
-        public IActionResult Details(int orderId)
+        public IActionResult Details(string orderId)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace prjOniqueWebsite.Controllers
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public IActionResult OrderEmailContent(int orderId)
+        public IActionResult OrderEmailContent(string orderId)
         {
             try
             {
