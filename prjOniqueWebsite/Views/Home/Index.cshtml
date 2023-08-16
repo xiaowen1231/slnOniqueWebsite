@@ -310,9 +310,11 @@
                 let productId = $(this).data("productid");
                 console.log(productId)
                 //todo
-                }
-                
-            else {
+                const resp = await fetch(`@Url.Content("~/MemberApi/MemberCollect")`);
+                const data = await resp.json();
+
+
+            }else {
                 Swal.fire({
                     title: '尚未登入!',
                     text: "如想使用購物車,請先登入!",

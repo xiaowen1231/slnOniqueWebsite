@@ -41,7 +41,7 @@ namespace prjOniqueWebsite.Models.Daos
                         };
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword));
+                query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword)||o.OrderId.Equals(keyword));
             }
             if(startDate != null)
             {
