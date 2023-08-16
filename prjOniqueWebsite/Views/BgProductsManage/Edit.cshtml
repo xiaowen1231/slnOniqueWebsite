@@ -1,6 +1,6 @@
 ﻿@model prjOniqueWebsite.Models.ViewModels.BgProductsVM
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "編輯商品";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
     string photoPath = "default.jpg";
     if (!string.IsNullOrEmpty(Model.PhotoPath))
@@ -47,7 +47,7 @@
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.ProductName)</div>
                     <div class="d-flex align-items-center my-3">
                         <label asp-for="Price" class="width-120px">商品價格:</label>
-                        <input asp-for="@Model.Price" class="form-control" name="Price" />
+                        <input asp-for="@Model.Price" class="form-control" name="Price" value="@string.Format("{0:0}", Model.Price)" />
                     </div>
                     <div class="text-end text-danger fw-bold">@Html.ValidationMessageFor(model=>model.Price)</div>
                     <div class="d-flex align-items-center my-3">
@@ -99,6 +99,7 @@
     }
     <script>
         const photo = document.querySelector("#inputPhoto");
+        const imgProductPhoto = document.querySelector("#imgProductPhoto");
         photo.addEventListener('change', function () {
             const files = photo.files
             if (files.length == 0) {
@@ -109,7 +110,17 @@
                 const url = URL.createObjectURL(files[0])
                 $("#imgProductPhoto").attr("src", url)
             }
-        })
+        });
+        function showDefaultImage(){
+            const defaultPath = "@Url.Content("~/images/uploads/products/default.jpg")";
+            imgProductPhoto.src = defaultPath;
+        }
+
+        window.addEventListener('load',function(){
+            if(!imgProductPhoto.src || imgProductPhoto.src ==""){
+                showDefaultImage();
+            }
+        });
     </script>
 }
 @section Styles{
