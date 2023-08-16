@@ -369,7 +369,7 @@
 
                     $.ajax({
                         method: "POST",
-                        url: `@Url.Content("~/orderapi/SendMail")`,
+                        url: `@Url.Content("~/orderapi/SendOrderHtml")`,
                         data: {
                             OrderId: id,
                             Email: email,
