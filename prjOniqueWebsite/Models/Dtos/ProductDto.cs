@@ -23,6 +23,7 @@
             }
             
         }
+        public bool? IsCollect { get; set; } = false;
 
     }
 }
