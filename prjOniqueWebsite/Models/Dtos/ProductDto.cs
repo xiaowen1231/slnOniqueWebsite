@@ -15,7 +15,7 @@
         {
             get
             {
-                if (DiscountMethod!.HasValue)
+                if (DiscountMethod.HasValue)
                 {
                     return Math.Round((decimal)(this.Price * this.DiscountMethod));
                 }
