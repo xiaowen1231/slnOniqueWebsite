@@ -1,6 +1,6 @@
 ﻿@model prjOniqueWebsite.Models.DTOs.FMemberDto
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "會員資料";
     Layout = @Url.Content("~/Views/Shared/_Layout.cshtml");
     string display = "MemberInfo";
     if (!string.IsNullOrEmpty(ViewBag.Display))
@@ -52,7 +52,7 @@
             <div class=" border-bottom align-items-center d-flex">
                 <div class="btnOptions d-flex p-2 gap-3" id="info">
                     <img class="d-flex w-25-h-25" src="@Url.Content("~/images/memberphoto/user.png")" alt="">
-                    會員資料
+                    個人資料
                 </div>
             </div>
             <div class=" border-bottom align-items-center d-flex">

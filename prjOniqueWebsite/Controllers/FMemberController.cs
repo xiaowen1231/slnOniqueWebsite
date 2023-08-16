@@ -121,7 +121,7 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult MemberMyKeep()
         {
             Members member = _userInfoService.GetMemberInfo();
-            return PartialView();
+            return PartialView(member);
         }
         
         public IActionResult MemberPassword()

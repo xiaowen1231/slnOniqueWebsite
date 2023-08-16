@@ -1,0 +1,56 @@
+﻿@model prjOniqueWebsite.Models.EFModels.Members
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="container ">
+    <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">商品收藏</div>
+    <div class="mx-auto d-flex flex-md-wrap " id="divCollectProduct">
+        @*<div data-id="2042" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail aos-init aos-animate" data-aos="fade-up">
+            <div class="w-240-h-240 m-2">
+                <img src="/images/uploads/products/Vintage復古條紋夏威夷襯衫.jpg" class="rounded">
+            </div>
+            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">Vintage復古條紋夏威夷襯衫 </div>
+            <div class="price text-center">580</div>
+            <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                <div class="w-25-h-25 divShopping" data-productid="2042">
+                    <img src="/images/icon/shopping_black.png">
+                </div>
+                <div class="w-25-h-25 divCollection">
+                    <img src="/images/icon/love.png">
+                </div>
+            </div>
+        </div>*@
+    </div>
+</div>
+<input type="hidden" value="@Model.MemberId" id="memberId" />
+<script>
+    const collectProduct = document.querySelector("#divCollectProduct")
+    loadCollect()
+
+    async function loadCollect(){
+        let MemberId = $("#memberId").val()
+        const response = await fetch(`@Url.Content("~/MemberApi/CollectProductList?memberId=")${MemberId}`)
+        const datas = await response.json()
+        console.log(datas)
+        const collectCard = datas.map(item=>{
+            const { productId, productName, price, photoPath } = item
+            console.log(productId, productName, price, photoPath)
+             return(`<div data-id="${productId}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                    <div class="w-240-h-240 m-2">
+                                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                    </div>
+                                    <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+                                            <div class="price text-center">${price}</div>
+                                    <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                            <div class="w-25-h-25 divShopping" data-productid=${productId} >
+                                            <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                        </div>
+                                        <div class="w-25-h-25 divCollection">
+                                        <img src="@Url.Content("~/images/icon/love.png")" data-productid=${productId}/>
+                                        </div>
+                                    </div>
+                                </div>`)
+        })
+        collectProduct.innerHTML = collectCard.join("");
+    }
+</script>
