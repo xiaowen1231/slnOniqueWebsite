@@ -220,6 +220,23 @@ namespace prjOniqueWebsite.Models.Daos
             member.Address = vm.Address;
             _context.SaveChanges();
         }
+        public List<CollectDto> GetCollects(int MemberId)
+        {
+            var query = (from c in _context.Collect
+                        join m in _context.Members
+                        on c.MemberId equals m.MemberId
+                        join p in _context.Products
+                        on c.ProductId equals p.ProductId
+                        where c.MemberId == MemberId
+                         select new CollectDto{
+                            MemberId=MemberId,
+                            ProductId=p.ProductId,
+                            ProductName=p.ProductName,
+                            Price = p.Price,
+                            PhotoPath=p.PhotoPath,
+                        });
+            return query.ToList();
+        }
         public void FMemberPassword(FMemberPasswordVM vm, int loginMemId)
         {
             var memberInDb = _context.Members.FirstOrDefault(m => m.MemberId == loginMemId);

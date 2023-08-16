@@ -26,13 +26,12 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult ToggleCollectProduct(int productId)
         {
-
             Members member = _userInfoService.GetMemberInfo();
             var collectInDb = _context.Collect.Where(c => c.MemberId == member.MemberId && c.ProductId == productId);
             var reult = new ApiResult();
             try
             {
-                if (collectInDb == null)
+                if (collectInDb.Count()<=0)
                 {
                     var collect = new Collect
                     {
@@ -58,7 +57,6 @@ namespace prjOniqueWebsite.Controllers
 
                     return Json(reult);
                 }
-                
             }
             catch (Exception ex)
             {
@@ -68,6 +66,11 @@ namespace prjOniqueWebsite.Controllers
                 return Json(reult);
             }
         }
+        public IActionResult CollectProductList(int MemberId)
+        {
+            var dto = _dao.GetCollects(MemberId);
+            return Json(dto);
+        } 
         public IActionResult GetFMemberPhoto()
         {
             Members member = _userInfoService.GetMemberInfo();
