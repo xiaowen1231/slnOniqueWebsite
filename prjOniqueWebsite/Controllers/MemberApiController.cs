@@ -24,13 +24,51 @@ namespace prjOniqueWebsite.Controllers
             _dao = new MemberDao(_context, _environment);
             _userInfoService = userInfoService;
         }
-        public IActionResult MemberCollect()
+        public IActionResult ToggleCollectProduct(int productId)
         {
-            //Members members = _userInfoService.GetMemberInfo();
-            //var dto = _context.Product
-            return null;
+
+            Members member = _userInfoService.GetMemberInfo();
+            var collectInDb = _context.Collect.Where(c => c.MemberId == member.MemberId && c.ProductId == productId);
+            var reult = new ApiResult();
+            try
+            {
+                if (collectInDb == null)
+                {
+                    var collect = new Collect
+                    {
+                        MemberId = member.MemberId,
+                        ProductId = productId,
+                    };
+
+                    _context.Collect.Add(collect);
+                    _context.SaveChanges();
+
+                    reult.StatusCode = 200;
+                    reult.StatusMessage = "已加入收藏商品";
+
+                    return Json(reult);
+                }
+                else
+                {
+                    _context.Collect.Remove(collectInDb.First());
+                    _context.SaveChanges();
+
+                    reult.StatusCode = 200;
+                    reult.StatusMessage = "已移除此收藏商品";
+
+                    return Json(reult);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                reult.StatusCode = 500;
+                reult.StatusMessage = "收藏失敗!";
+
+                return Json(reult);
+            }
         }
-        public IActionResult GetfMemberPhoto()
+        public IActionResult GetFMemberPhoto()
         {
             Members member = _userInfoService.GetMemberInfo();
             var dto = _context.Members.Where(m => m.MemberId == member.MemberId).Select(m => new { photoPath = m.PhotoPath }).FirstOrDefault();
