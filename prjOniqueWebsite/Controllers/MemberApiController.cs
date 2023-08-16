@@ -24,6 +24,12 @@ namespace prjOniqueWebsite.Controllers
             _dao = new MemberDao(_context, _environment);
             _userInfoService = userInfoService;
         }
+        public IActionResult MemberCollect()
+        {
+            //Members members = _userInfoService.GetMemberInfo();
+            //var dto = _context.Product
+            return null;
+        }
         public IActionResult GetfMemberPhoto()
         {
             Members member = _userInfoService.GetMemberInfo();
