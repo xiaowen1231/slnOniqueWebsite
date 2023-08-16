@@ -310,7 +310,7 @@
                                                             <td>${displayorderDate}</td>
                                                             <td>${paymentMethodName}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" onclick="openOrderDetails(${orderId})">檢視訂單詳情</button>
+                                                                <button type="button" class="btn btn-secondary btnViewOrderDetail" data-orderid="${orderId}">檢視訂單詳情</button>
                                                             </td>
                                                         </tr>`;
             });
@@ -375,13 +375,17 @@
         }
 
 
+        $('#orderTable').on('click', '.btnViewOrderDetail',function(){
+            let orderId = $(this).data("orderid");
 
-        function openOrderDetails(orderId) {
-            const url = '@Url.Action("Details", "Order")' + '?orderId=' + orderId; // 構造URL
-            window.location.href = url; // 導航到詳細頁面
+            window.location.href = `@Url.Content("~/Order/Details?orderId=")${orderId}`
+        })
+        //function openOrderDetails(orderId) {
+        //    const url = '@Url.Action("Details", "Order")' + '?orderId=' + orderId; // 構造URL
+        //    window.location.href = url; // 導航到詳細頁面
 
 
-        }
+        //}
         //改變pageSize
         $("#pageSize").on('change', function () {
 

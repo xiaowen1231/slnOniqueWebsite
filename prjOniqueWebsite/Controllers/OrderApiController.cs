@@ -278,7 +278,7 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="statusNow"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult SendMail(int OrderId, string Email, string statusNow,string Name)
+        public void SendMail(string OrderId, string Email, string statusNow,string Name)
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -313,7 +313,6 @@ namespace prjOniqueWebsite.Controllers
             mailMessage.To.Add(Email);
             smtpClient.Send(mailMessage);
 
-            return Content("");
         }
 
 

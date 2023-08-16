@@ -7,7 +7,9 @@ using System.Drawing.Printing;
 using Humanizer.Localisation.TimeToClockNotation;
 using Microsoft.AspNetCore.Authorization;
 using prjOniqueWebsite.Models.Infra;
-
+using System.Xml.Linq;
+using Microsoft.AspNetCore.Mvc.Routing;
+using prjOniqueWebsite.Models.Dtos;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -15,15 +17,15 @@ namespace prjOniqueWebsite.Controllers
     {
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
-
+        private readonly IUrlHelperFactory _urlHelperFactory;
 
         OrderDao dao = null;
-        public OrderController(OniqueContext context, UserInfoService userInfoService)
+        public OrderController(OniqueContext context, UserInfoService userInfoService,IUrlHelperFactory urlHelperFactory)
         {
             _context = context;
             dao = new OrderDao(_context);
             _userInfoService = userInfoService;
-            
+            _urlHelperFactory = urlHelperFactory;
         }
 
         [Authorize(Roles = "一般員工,經理")]
@@ -113,7 +115,20 @@ namespace prjOniqueWebsite.Controllers
                     }
                 }
                 _context.SaveChanges();
-               
+               var dto = from o in _context.Orders
+                         where o.OrderId==query.OrderId
+                         join m in _context.Members
+                         on o.MemberId equals m.MemberId
+                         join os in _context.OrderStatus
+                         on o.OrderStatusId equals os.StatusId
+                         select new SendMailDto
+                         {
+                             OrderId =  o.OrderId,
+                             Email = m.Email,
+                             StatusNow = os.StatusName,
+                             Name = m.Name,
+                         };
+                new SendEmail().SendMail(dto.FirstOrDefault(), _urlHelperFactory, ControllerContext,HttpContext);
             }
 
             return RedirectToAction("Index");
