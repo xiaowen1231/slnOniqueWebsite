@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Models\EFModels\" />
     <Folder Include="Models\Interfaces\" />
-    <Folder Include="wwwroot\staticpage\" />
   </ItemGroup>
 
   <ItemGroup>
