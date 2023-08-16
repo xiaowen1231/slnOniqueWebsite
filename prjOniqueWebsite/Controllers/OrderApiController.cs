@@ -14,22 +14,77 @@ using Microsoft.AspNetCore.Http;
 using System.Net.Mail;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Hosting;
 
 namespace prjOniqueWebsite.Controllers
 {
     public class OrderApiController : Controller
     {
+
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly OniqueContext _context;
-
+        private IWebHostEnvironment _enviroment;
 
         OrderDao dao = null;
-        public OrderApiController(OniqueContext context, IUrlHelperFactory urlHelperFactory)
+        public OrderApiController(OniqueContext context, IUrlHelperFactory urlHelperFactory, IWebHostEnvironment enviroment)
         {
             _context = context;
             dao = new OrderDao(_context);
             _urlHelperFactory = urlHelperFactory;
+            _enviroment = enviroment;
+        }
+        public IActionResult SendOrderHtml(string OrderId, string Email, string statusNow, string Name)
+        {
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential("msit147onique@gmail.com", "piukwngszjdyzmov"),
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network
+            };
 
+            string pathToFile = Path.Combine(_enviroment.WebRootPath, "Template", "email.html");
+
+            string TemplateContent = "";
+            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))//讀出html內容
+            {
+                TemplateContent = SourceReader.ReadToEnd();
+            }
+            TemplateContent = string.Format(TemplateContent,
+                
+                "fakedata1",
+                "fakedata2",
+                "fakedata3",
+                "fakedata4",
+                "fakedata5",
+                "fakedata6",
+                "fakedata7",
+                "fakedata8",
+                "fakedata9",
+                "fakedata10",
+                "fakedata11",
+                "fakedata12",
+                "fakedata13",
+                "fakedata14",
+                "fakedata15",
+                "fakedata16",
+                "fakedata17",
+                "fakedata18",
+                "fakedata19"
+
+
+                );
+            MailMessage mailMessage = new MailMessage
+            {
+                From = new MailAddress("msit147onique@gmail.com"),
+                Subject = "訂單內容",
+                Body = TemplateContent,
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(Email);
+            smtpClient.Send(mailMessage);
+
+            return Content("");
         }
         public IActionResult Index()
         {
@@ -278,7 +333,7 @@ namespace prjOniqueWebsite.Controllers
         /// <param name="statusNow"></param>
         /// <returns></returns>
         [HttpPost]
-        public void SendMail(string OrderId, string Email, string statusNow,string Name)
+        public IActionResult SendMail(string OrderId, string Email, string statusNow, string Name)
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -293,7 +348,7 @@ namespace prjOniqueWebsite.Controllers
 
             string orderDetailsUrl = urlHelper.Action("OrderEmailContent", "Order", new { OrderId }, HttpContext.Request.Scheme);
 
-            
+
             string htmlStr =
                 $@"
     <div style=""font-size:24px"">

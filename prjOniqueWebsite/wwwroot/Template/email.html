@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Onique</title>
+</head>
+<body>
+    <div style="max-width: 800px; margin: 0 auto; border-radius: 10px; border: 1px solid rgba(0, 0, 0, 0.125); padding: 10px;">
+
+        <div style="font-size: 1.5rem; font-weight: bold; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.125); padding: 10px;">訂單明細</div>
+        <div id="shippingDetail">
+            <div style="box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); padding: 10px; margin: 10px; border-radius: 5px; display: flex; justify-content: space-between; background-color: #f8f9fa; border: 1px solid rgba(0, 0, 0, 0.125);">
+                <div style="display: flex; gap: 10px; padding: 5px;">
+                    <div style="font-weight: bold;">訂單編號: </div>
+                    <div style="color:crimson;">{0}</div>
+                </div>
+                <div>
+                    <div style="display: flex; gap: 10px;padding: 5px;">
+                        <div style="font-weight: bold;">下單日期 :</div>
+                        <div>{1}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); padding: 10px; margin: 10px; border-radius: 5px; background-color: #f8f9fa; border: 1px solid rgba(0, 0, 0, 0.125);">
+                <div style="margin: 5px;">
+                    <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
+                        <div style="font-weight: bold; width: 90px; text-align: start;">訂單狀態 : </div>
+                        <div style="color: crimson;">{2}</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
+                        <div style="font-weight: bold; width: 90px; text-align: start;">運送方式 : </div>
+                        <div style="color: rgb(0, 0, 0);">{3}</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
+                        <div style="font-weight: bold; width: 90px; text-align: start;">付款方式 : </div>
+                        <div style="color: rgb(0, 0, 0);">{4}</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
+                        <div style="font-weight: bold; width: 90px; text-align: start;">收件人 : </div>
+                        <div style="color: rgb(0, 0, 0);">{5}</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
+                        <div style="font-weight: bold; width: 90px; text-align: start;">連絡電話 : </div>
+                        <div style="color: rgb(0, 0, 0);">{6}</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
+                        <div style="font-weight: bold; width: 90px; text-align: start;">運送地址 : </div>
+                        <div style="color: rgb(0, 0, 0);">{7}</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
+                        <div style="font-weight: bold; width: 90px; text-align: start;">訂單備註 : </div>
+                        <div style="color: rgb(0, 0, 0);">{8}</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div style="box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); padding: 10px; margin: 10px; border-radius: 5px; background-color: #f8f9fa; border: 1px solid rgba(0, 0, 0, 0.125);">
+            <span style="font-weight: bold; font-size: 1.25rem;">訂單商品明細</span>
+            <div style="margin: 10px;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 8px; text-align: start;">商品名稱</th>
+                            <th style="padding: 8px; text-align: start;">價格</th>
+                            <th style="padding: 8px; text-align: start;">數量</th>
+                            <th style="padding: 8px; text-align: start;">尺寸</th>
+                            <th style="padding: 8px; text-align: start;">顏色</th>
+                            <th style="padding: 8px; text-align: start;">小計</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderProductList">
+                        <tr>
+                            <td style="padding: 8px;">{9}</td>
+                            <td style="padding: 8px;">{10}</td>
+                            <td style="padding: 8px;">{11}</td>
+                            <td style="padding: 8px;">{12}</td>
+                            <td style="padding: 8px;">{13}</td>
+                            <td style="padding: 8px;">{14}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="border-radius: 5px; margin-top: 20px; border: 1px solid rgba(0, 0, 0, 0.125); padding: 10px;">
+                <div style="display: flex; align-items: center; margin: 10px;">
+                    <div style="font-weight: bold; width: 95px;">商品總額</div>
+                    <div style="text-align: end; width: 95px;">{15}</div>
+                </div>
+                <div style="display: flex; align-items: center; margin: 10px;">
+                    <div style="font-weight: bold; width: 95px;">運送費用</div>
+                    <div style="text-align: end; width: 95px;">{16}</div>
+                </div>
+                <div style="display: flex; align-items: center; margin: 10px;">
+                    <div style="font-weight: bold; width: 95px;">應付總額</div>
+                    <div style="text-align: end; width: 95px; color: crimson ;">{17}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
