@@ -53,24 +53,24 @@
                                 </div>`)
             }
             else {
-                return (`<div data-id="${productId}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
-                                    <div class="w-240-h-240 m-2">
-                                        <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-                                    </div>
-                                    <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-                                    <div class="text-center text-danger price">${discountPrice}</div>
-                                    <div class="d-flex gap-3 mx-2 mb-2  align-items-center">
-                                            <div class="w-25-h-25 divShopping mx-2 me-auto" data-productid=${productId}>
-                                            <img src="@Url.Content("~/images/icon/sale-tag.png")" />
-                                        </div>
-                                            <div class="w-25-h-25 divShopping" data-productid=${productId}>
-                                            <img src="@Url.Content("~/images/icon/shopping_black.png")" />
-                                        </div>
-                                            <div class="w-25-h-25 divCollection"data-productid=${productId}>
-                                            <img src="@Url.Content("~/images/icon/love.png")" />
-                                        </div>
-                                    </div>
-                                </div>`)
+                return (`<div data-id="${productId}" class="cursor-pointer position-relative border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                            <div class="w-240-h-240 m-2">
+                                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                            </div>
+                                            <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName}</div>
+                                            <div class="text-center text-danger price">${discountPrice}</div>
+                                            <div class="d-flex gap-3 mx-2 mb-2 align-items-center justify-content-end">
+                                                    <div class="w-25-h-25 divShopping" data-productid="${productId}">
+                                                    <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                                </div>
+                                                    <div class="w-25-h-25 divCollection" data-productid="${productId}">
+                                                    <img src="@Url.Content("~/images/icon/love.png")" />
+                                                </div>
+                                            </div>
+                                                <div class="divShopping position-absolute top-0 start-0" data-productid="${productId}" style="width:50px;height:50px">
+                                                <img src="@Url.Content("~/images/icon/sale-tag.png")" />
+                                            </div>
+                                        </div>`)
             }
 
 
@@ -78,3 +78,35 @@
         collectProduct.innerHTML = collectCard.join("");
     }
 </script>
+<style>
+    .price:before {
+        content: "$  "
+    }
+
+    .divNotFound {
+        position: fixed;
+        top: 50%;
+        transform: translate(-45%,-30%);
+        left: 50%;
+    }
+
+    .w-240-h-240:hover {
+        width: 245px;
+        height: 245px;
+        transition: all 0.4s;
+    }
+
+    .divDiscountImg {
+        height: 400px;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .modal-content {
+        width: 750px;
+        position: fixed;
+        top: 50%;
+        transform: translate(-50%,-55%);
+        left: 50%;
+    }
+</style>
