@@ -300,6 +300,24 @@
                 const resp = await fetch(`@Url.Content("~/MemberApi/ToggleCollectProduct?productId=")${productId}`);
                 const data = await resp.json();
                 console.log(data)
+                if (data.statusCode == 200) {
+                    Swal.fire({
+                        title: data.statusMessage,
+                        text: "",
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        title: data.statusMessage,
+                        text: "",
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+
             } else {
                 Swal.fire({
                     title: '尚未登入!',

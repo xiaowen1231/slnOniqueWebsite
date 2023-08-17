@@ -4,34 +4,38 @@
 *@
 <div class="container ">
     <div class="m-3 fs-3 fw-bold  border-bottom py-4 ">商品收藏</div>
-    <div class="mx-auto d-flex flex-md-wrap " id="divCollectProduct">
-        @*<div data-id="2042" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail aos-init aos-animate" data-aos="fade-up">
+    <div class="mx-5">
+        <div class="mx-auto d-flex flex-md-wrap " id="divCollectProduct">
+            @*<div data-id="2042" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail aos-init aos-animate" data-aos="fade-up">
             <div class="w-240-h-240 m-2">
-                <img src="/images/uploads/products/Vintage復古條紋夏威夷襯衫.jpg" class="rounded">
+            <img src="/images/uploads/products/Vintage復古條紋夏威夷襯衫.jpg" class="rounded">
             </div>
             <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">Vintage復古條紋夏威夷襯衫 </div>
             <div class="price text-center">580</div>
             <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                <div class="w-25-h-25 divShopping" data-productid="2042">
-                    <img src="/images/icon/shopping_black.png">
-                </div>
-                <div class="w-25-h-25 divCollection">
-                    <img src="/images/icon/love.png">
-                </div>
+            <div class="w-25-h-25 divShopping" data-productid="2042">
+            <img src="/images/icon/shopping_black.png">
             </div>
-        </div>*@
+            <div class="w-25-h-25 divCollection">
+            <img src="/images/icon/love.png">
+            </div>
+            </div>
+            </div>*@
+        </div>
     </div>
 </div>
 <input type="hidden" value="@Model.MemberId" id="memberId" />
 <script>
-    const collectProduct = document.querySelector("#divCollectProduct")
     loadCollect()
+    const collectProduct = document.querySelector("#divCollectProduct")
+    
 
     async function loadCollect(){
         let MemberId = $("#memberId").val()
         const response = await fetch(`@Url.Content("~/MemberApi/CollectProductList?memberId=")${MemberId}`)
         const datas = await response.json()
         console.log(datas)
+        let collectProduct = "";
         const collectCard = datas.map(item=>{
             const { productId, productName, price, photoPath, discountMethod, discountPrice } = item
             console.log(productId, productName, price, photoPath, discountMethod, discountPrice)
@@ -73,7 +77,7 @@
                                         </div>`)
             }
         })
-        collectProduct.innerHTML = collectCard.join("");
+        collectProduct.innerHTML += collectCard.join("");
     }
 
     $('#divCollectProduct').on('click', '.divProductDetail', function (event) {
@@ -146,6 +150,27 @@
             const resp = await fetch(`@Url.Content("~/MemberApi/ToggleCollectProduct?productId=")${productId}`);
             const data = await resp.json();
             console.log(data)
+            if (data.statusCode == 200) {
+                Swal.fire({
+                    title: data.statusMessage,
+                    text: "",
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500,
+                }).then(() => {
+                        window.location.href = `@Url.Content("~/fmember/index?display=MemberMyKeep")`
+                });
+                
+            }else{
+                Swal.fire({
+                    title: data.statusMessage,
+                    text: "",
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+
         } else {
             Swal.fire({
                 title: '尚未登入!',
@@ -162,6 +187,69 @@
                 }
             })
         }
+    })
+
+    async function loadColor(productId) {
+        const response = await fetch(`@Url.Content("~/productapi/GetStockColor/")${productId}`)
+        const datas = await response.json();
+
+        const colors = datas.map(color => {
+            const { colorId, colorName } = color;
+            return `<option value="${colorId}">${colorName}</option>`
+        })
+
+        $("#modalSelectColor").html(colors.join(""))
+
+        loadSize(productId);
+    }
+
+    async function loadSize(productId) {
+        const colorId = $("#modalSelectColor").val()
+        const response = await fetch(`@Url.Content("~/productapi/GetStockSize?")id=${productId}&colorId=${colorId}`)
+
+        const datas = await response.json();
+
+        const sizes = datas.map(size => {
+            const { sizeId, sizeName } = size
+            return `<option value="${sizeId}">${sizeName}</option>`
+        })
+
+        $("#modalSelectSize").html(sizes.join(""))
+
+        loadProductPhoto(productId)
+    }
+
+    $("#modalSelectColor").on('change', function () {
+        let productId = $(this).data("productid")
+
+        loadSize(productId)
+    })
+
+    $("#modalSelectSize").on('change', function () {
+        let productId = $(this).data("productid")
+
+        loadProductPhoto(productId)
+    })
+
+    async function loadProductPhoto(productId) {
+        const colorId = $("#modalSelectColor").val()
+        const sizeId = $("#modalSelectSize").val()
+
+        const response = await fetch(`@Url.Content("~/ProductApi/GetStockDetail?")productId=${productId}&colorId=${colorId}&sizeId=${sizeId}`)
+        const data = await response.json()
+
+        const { photoPath, stockId, quantity } = data
+
+        $("#modalPhoto").attr("src", `@Url.Content("~/images/uploads/products/")${photoPath}`)
+        $("#modalBtnAddToCart").data("stockid", stockId)
+    }
+
+    $('#modalBtnAddToCart').on('click', function () {
+
+        let stockId = $("#modalBtnAddToCart").data("stockid");
+        let qty = $("#modalOrderQty").val();
+
+        AddToCart(stockId, qty)
     })
 </script>
 
