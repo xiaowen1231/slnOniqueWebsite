@@ -368,6 +368,7 @@ namespace prjOniqueWebsite.Controllers
             mailMessage.To.Add(Email);
             smtpClient.Send(mailMessage);
 
+            return Content("寄送簡訊完成");
         }
 
 

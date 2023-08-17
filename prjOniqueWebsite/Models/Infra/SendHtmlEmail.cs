@@ -11,7 +11,7 @@ namespace prjOniqueWebsite.Models.Infra
     {
         
 
-        public IActionResult SendOrderHtml(IWebHostEnvironment _enviroment)
+        public void SendOrderHtml(IWebHostEnvironment _enviroment)
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -59,10 +59,9 @@ namespace prjOniqueWebsite.Models.Infra
                 IsBodyHtml = true
             };
 
-            mailMessage.To.Add(Email);
+            mailMessage.To.Add(/*Email*/"");
             smtpClient.Send(mailMessage);
 
-            return Content("");
         }
     }
 }
