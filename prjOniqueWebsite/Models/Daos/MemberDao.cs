@@ -223,17 +223,20 @@ namespace prjOniqueWebsite.Models.Daos
         public List<CollectDto> GetCollects(int MemberId)
         {
             var query = (from c in _context.Collect
-                        join m in _context.Members
-                        on c.MemberId equals m.MemberId
-                        join p in _context.Products
-                        on c.ProductId equals p.ProductId
-                        where c.MemberId == MemberId
+                         join m in _context.Members on c.MemberId equals m.MemberId into memberJoin
+                         from m in memberJoin.DefaultIfEmpty()
+                         join p in _context.Products on c.ProductId equals p.ProductId into productJoin
+                         from p in productJoin.DefaultIfEmpty()
+                         join d in _context.Discounts on p.DiscountId equals d.Id into discountJoin
+                         from d in discountJoin.DefaultIfEmpty()
+                         where c.MemberId == MemberId
                          select new CollectDto{
                             MemberId=MemberId,
                             ProductId=p.ProductId,
                             ProductName=p.ProductName,
                             Price = p.Price,
                             PhotoPath=p.PhotoPath,
+                            DiscountMethod = d.DiscountMethod,
                         });
             return query.ToList();
         }
