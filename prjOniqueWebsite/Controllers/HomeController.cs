@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using NuGet.Common;
@@ -21,6 +22,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Web;
+using static prjOniqueWebsite.Models.Infra.LineLogin;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -119,10 +121,24 @@ namespace prjOniqueWebsite.Controllers
                 TempData["LineUserName"] = lineDto.displayName;
                 TempData["LineUserPictureUrl"] = lineDto.pictureUrl;
 
-                return RedirectToAction("LineRegister","Home");
-            }
+                return RedirectToAction("LineRegister", "Home");
+            }else 
+            {
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim("MemberId",memberInDb.MemberId.ToString()),
+                    new Claim(ClaimTypes.Role,"Member"),
+                };
 
-            return View();
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                TempData["AlertLogin"] = memberInDb.Name;
+
+                return RedirectToAction("Index");
+            }
+;
         }
 
         public IActionResult LineRegister()
@@ -132,11 +148,52 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult LineRegister(LineRegisterVM vm)
         {
+            LineLogin.LineProfile lineProfile = new LineLogin.LineProfile();
+
+
+            lineProfile.userId = TempData["LineUserId"].ToString();
+            lineProfile.displayName = TempData["LineUserName"].ToString();
+            lineProfile.pictureUrl = TempData["LineUserPictureUrl"].ToString();
+
             if (ModelState.IsValid == false)
             {
+
+                TempData["LineUserId"] = lineProfile.userId;
+                TempData["LineUserName"] = lineProfile.displayName;
+                TempData["LineUserPictureUrl"] = lineProfile.pictureUrl;
+
                 return View(vm);
             }
-            return View();
+            try
+            {
+
+                var mem = _service.LineRegister(vm,lineProfile) ;
+
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim("MemberId",mem.MemberId.ToString()),
+                    new Claim(ClaimTypes.Role,"Member"),
+                };
+
+                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                TempData["AlertLogin"] = mem.Name;
+
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception ex)
+            {
+                TempData["LineUserId"] = lineProfile.userId;
+                TempData["LineUserName"] = lineProfile.displayName;
+                TempData["LineUserPictureUrl"] = lineProfile.pictureUrl;
+
+                ModelState.AddModelError("","註冊失敗," + ex.Message); 
+                return View(vm);
+            }
+            
         }
 
         public IActionResult Login()
@@ -281,7 +338,7 @@ namespace prjOniqueWebsite.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("","新增失敗，"+ex.Message);
+                ModelState.AddModelError("", "新增失敗，" + ex.Message);
                 return View(vm);
             }
 

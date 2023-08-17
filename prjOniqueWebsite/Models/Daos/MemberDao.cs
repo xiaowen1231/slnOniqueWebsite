@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
+using System.Net;
+using System.Xml.Linq;
+using static prjOniqueWebsite.Models.Infra.LineLogin;
 
 namespace prjOniqueWebsite.Models.Daos
 {
-    public class MemberDao
+    public class MemberDao : Controller
     {
         private readonly OniqueContext _context;
         private readonly IWebHostEnvironment _environment;
@@ -231,35 +235,36 @@ namespace prjOniqueWebsite.Models.Daos
                          join d in _context.Discounts on p.DiscountId equals d.Id into discountJoin
                          from d in discountJoin.DefaultIfEmpty()
                          where c.MemberId == MemberId
-                         select new CollectDto{
-                            MemberId=MemberId,
-                            ProductId=p.ProductId,
-                            ProductName=p.ProductName,
-                            Price = p.Price,
-                            PhotoPath=p.PhotoPath,
-                            DiscountMethod = d.DiscountMethod,
-                        });
-            return query.ToList();
-        }
-        public List<CollectDto> CollectItems(Members member)
-        {
-            var collect = (from c in _context.Collect
-                         join m in _context.Members on c.MemberId equals m.MemberId into memberJoin
-                         from m in memberJoin.DefaultIfEmpty()
-                         join p in _context.Products on c.ProductId equals p.ProductId into productJoin
-                         from p in productJoin.DefaultIfEmpty()
-                         join d in _context.Discounts on p.DiscountId equals d.Id into discountJoin
-                         from d in discountJoin.DefaultIfEmpty()
-                         where c.MemberId == member.MemberId
                          select new CollectDto
                          {
-                             MemberId = member.MemberId,
+                             MemberId = MemberId,
                              ProductId = p.ProductId,
                              ProductName = p.ProductName,
                              Price = p.Price,
                              PhotoPath = p.PhotoPath,
                              DiscountMethod = d.DiscountMethod,
                          });
+            return query.ToList();
+        }
+        public List<CollectDto> CollectItems(Members member)
+        {
+            var collect = (from c in _context.Collect
+                           join m in _context.Members on c.MemberId equals m.MemberId into memberJoin
+                           from m in memberJoin.DefaultIfEmpty()
+                           join p in _context.Products on c.ProductId equals p.ProductId into productJoin
+                           from p in productJoin.DefaultIfEmpty()
+                           join d in _context.Discounts on p.DiscountId equals d.Id into discountJoin
+                           from d in discountJoin.DefaultIfEmpty()
+                           where c.MemberId == member.MemberId
+                           select new CollectDto
+                           {
+                               MemberId = member.MemberId,
+                               ProductId = p.ProductId,
+                               ProductName = p.ProductName,
+                               Price = p.Price,
+                               PhotoPath = p.PhotoPath,
+                               DiscountMethod = d.DiscountMethod,
+                           });
             return collect.ToList();
         }
         public void FMemberPassword(FMemberPasswordVM vm, int loginMemId)
@@ -291,6 +296,80 @@ namespace prjOniqueWebsite.Models.Daos
 
         }
 
+        public Members BindLineLogin(LineRegisterVM vm, Infra.LineLogin.LineProfile lineProfile)
+        {
+            var member = _context.Members.FirstOrDefault(m => m.Email == vm.Email);
+
+            member.Name = lineProfile.displayName;
+            member.Password = vm.Password;
+            member.Phone = vm.Phone;
+            member.Email = vm.Email;
+            member.Gender = Convert.ToBoolean(vm.Gender);
+            member.Citys = Convert.ToInt32(vm.Citys);
+            member.Areas = Convert.ToInt32(vm.Areas);
+            member.Address = vm.Address;
+            member.MemberLevel = 1;
+            member.LineUserId = lineProfile.userId;
+            if (lineProfile.pictureUrl != null)
+            {
+                member.PhotoPath = $"MemberId_{member.MemberId}.jpg";
+                CopyImage(lineProfile.pictureUrl, member.PhotoPath);
+            }
+            _context.SaveChanges();
+            return member;
+        }
+        public async void CopyImage(string pictureUrl,string fileName)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    byte[] imgByte = await client.GetByteArrayAsync(pictureUrl);
+
+                    string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
+
+                    await System.IO.File.WriteAllBytesAsync(photoPath, imgByte);
+                }
+            }catch (Exception ex)
+            {
+                throw new Exception("儲存照片失敗");
+            }
+            
+        }
+
+        public Members LineRegister(LineRegisterVM vm, Infra.LineLogin.LineProfile lineProfile)
+        {
+
+            var member = new Members
+            {
+                Name = lineProfile.displayName,
+                Password = vm.Password,
+                Phone = vm.Phone,
+                Email = vm.Email,
+                Gender = Convert.ToBoolean(vm.Gender),
+                Citys = Convert.ToInt32(vm.Citys),
+                Areas = Convert.ToInt32(vm.Areas),
+                Address = vm.Address,
+                MemberLevel = 1,
+                RegisterDate = DateTime.Now,
+                LineUserId = lineProfile.userId
+            };
+
+            _context.Members.Add(member);
+            _context.SaveChanges();
+
+            if (lineProfile.pictureUrl != null)
+            {
+                string fileName = $"MemberId_{member.MemberId}.jpg";
+                CopyImage(lineProfile.pictureUrl, fileName);
+
+                member.PhotoPath = fileName;
+
+                _context.SaveChanges();
+            }
+
+            return member;
+        }
     }
 }
 

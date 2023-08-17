@@ -17,8 +17,9 @@ namespace prjOniqueWebsite.Models.ViewModels
         [Display(Name = "電子郵件")]
         [Required(ErrorMessage = "{0}不可為空白")]
         public string? Email { get; set; }
-        public int? City { get; set; }
-        public int? Area { get; set; }
+        public string? Gender { get; set; }
+        public int? Citys { get; set; }
+        public int? Areas { get; set; }
         public string? Address { get; set; }
     }
 }

@@ -87,8 +87,11 @@
                     <input type="text" class="form-control" placeholder="詳細地址,可選填" />
                 </div>
             </div>
+            <div class="text-center">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
             <div class="text-center my-4">
-                <input type="button" value="返回" class="btn btn-outline-dark" style="width: 100px;" id="btnBackToLogin"/>
+                <input type="button" value="返回" class="btn btn-outline-dark" style="width: 100px;" id="btnBackToLogin" />
                 <input type="submit" value="綁定" class="btn btn-dark " style="width: 100px;" />
             </div>
         </div>
@@ -135,7 +138,7 @@
             $("#area").html(selectOptions);
         }
 
-        $('#btnBackToLogin').on('click',function(){
+        $('#btnBackToLogin').on('click', function () {
 
             window.location.href = `@Url.Content("~/Home/Login")`
 

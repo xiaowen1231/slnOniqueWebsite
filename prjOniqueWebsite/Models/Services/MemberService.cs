@@ -116,5 +116,36 @@ namespace prjOniqueWebsite.Models.Services
             }
             _dao.FMemberPassword(vm,loginMemId);
         }
+
+        public Members LineRegister(LineRegisterVM vm, LineLogin.LineProfile lineProfile)
+        {
+            var memInEmail = _dao.GetMemberByEmail(vm.Email);
+            var memInPhone = _dao.GetMemberByPhone(vm.Phone);
+
+
+            if (memInEmail != null && vm.Password != memInEmail.Password)
+            {
+                throw new Exception("此信箱已被註冊!");
+            }
+            if (vm.Phone.Length > 10 || vm.Phone.Length < 0)
+            {
+                throw new Exception("電話號碼為10碼!");
+            }
+            if (memInPhone != null)
+            {
+                throw new Exception("已有此電話號碼!");
+            }
+            if (vm.Phone.Length > 10 || vm.Phone.Length < 0)
+            {
+                throw new Exception("電話號碼為10碼!");
+            }
+            if (memInEmail != null && vm.Password == memInEmail.Password)
+            {
+                var member = _dao.BindLineLogin(vm, lineProfile);
+                return member;
+            }
+            var newMember = _dao.LineRegister(vm, lineProfile);
+            return newMember;
+        }
     }
 }
