@@ -12,6 +12,7 @@ namespace prjOniqueWebsite.Models.EFModels
         public int StockId { get; set; }
         public int OrderQuantity { get; set; }
 
+        public virtual Members Member { get; set; }
         public virtual ProductStockDetails Stock { get; set; }
     }
 }

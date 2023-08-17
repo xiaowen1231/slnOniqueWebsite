@@ -1,0 +1,146 @@
+﻿@model prjOniqueWebsite.Models.ViewModels.LineRegisterVM
+@{
+    ViewData["Title"] = "綁定Line快速登入";
+}
+
+<div class="container">
+    <form method="post">
+        <div class="fw-bold fs-4 text-center border-bottom border-dark p-3">
+            綁定Line快速登入
+        </div>
+        <div class="border my-3 border-secondary rounded mx-auto m-3 p-4" style="width:800px">
+            <div class="mx-auto d-flex justify-content-center align-items-center gap-3">
+                <div class="width-120px text-end">
+                    輸入密碼
+                </div>
+                <div class="width-265px">
+                    <input type="password" class="form-control" name="Password" />
+                    @Html.ValidationMessageFor(Model=>Model.Password,"",new{@class="text-danger"})
+                </div>
+            </div>
+            <div class="mx-auto my-3 d-flex justify-content-center align-items-center gap-3">
+                <div class="width-120px text-end">
+                    確認密碼
+                </div>
+                <div class="width-265px">
+                    <input type="password" class="form-control" name="ConfirmPassword" />
+                    @Html.ValidationMessageFor(Model=>Model.ConfirmPassword,"",new{@class="text-danger"})
+
+                </div>
+            </div>
+            <div class="mx-auto my-3 d-flex justify-content-center align-items-center gap-3">
+                <div class="width-120px text-end">
+                    手機號碼
+                </div>
+                <div class="width-265px">
+                    <input type="text" class="form-control" name="Phone" />
+                    @Html.ValidationMessageFor(Model=>Model.Phone,"",new{@class="text-danger"})
+                </div>
+            </div>
+            <div class="mx-auto my-3 d-flex justify-content-center align-items-center gap-3">
+                <div class="width-120px text-end">
+                    電子郵件
+                </div>
+                <div class="width-265px">
+                    <input type="text" class="form-control" name="Email" />
+                    @Html.ValidationMessageFor(Model=>Model.Email,"",new{@class="text-danger"})
+                </div>
+            </div>
+            <div class="mx-auto my-3 d-flex justify-content-center align-items-center gap-3">
+                <div class="width-120px text-end">
+                    性別
+                </div>
+                <div class="width-265px">
+                    <div class="mx-3 d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Gender" id="genderFalse" value="False" checked>
+                            <label class="form-check-label" for="genderFalse">
+                                男
+                            </label>
+                        </div>
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="Gender" id="genderTrue" value="True">
+                            <label class="form-check-label" for="genderTrue">
+                                女
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mx-auto d-flex justify-content-center align-items-center gap-3">
+                <div class="mx-auto my-3 d-flex justify-content-center align-items-center gap-3">
+                    <div class="width-120px text-end">
+                        居住地址
+                    </div>
+                    <div class="width-265px d-flex gap-3">
+                        <select class="form-select" name="Citys" id="city">
+                        </select>
+                        <select class="form-select" name="Areas" id="area">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mx-auto mb-3 d-flex justify-content-center align-items-center gap-3">
+                <div class="width-120px text-end">
+                </div>
+                <div class="width-265px d-flex gap-3">
+                    <input type="text" class="form-control" placeholder="詳細地址,可選填" />
+                </div>
+            </div>
+            <div class="text-center my-4">
+                <input type="button" value="返回" class="btn btn-outline-dark" style="width: 100px;" id="btnBackToLogin"/>
+                <input type="submit" value="綁定" class="btn btn-dark " style="width: 100px;" />
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts{
+    <script>
+        loadCity();
+
+        async function loadCity() {
+            const response = await fetch(`@Url.Content("~/memberapi/LoadCity")`)
+            const datas = await response.json();
+            const memberCity = $("#memberCity").val()
+            let selectOptions = ""
+
+            datas.map(item => {
+                const { cityId, cityName } = item
+
+                selectOptions += ` <option value="${cityId}">${cityName}</option>`
+
+            })
+            $("#city").html(selectOptions)
+            loadArea();
+        }
+
+        $("#city").change(function () {
+            loadArea();
+        })
+
+        async function loadArea() {
+            const cityId = $("#city").val()
+            const response = await fetch(`@Url.Content("~/memberapi/loadarea?cityId=")${cityId}`)
+            const datas = await response.json();
+            const memberArea = $("#memberArea").val()
+            let selectOptions = ""
+
+            datas.map(item => {
+                const { areaId, areaName } = item
+
+                selectOptions += ` <option value="${areaId}">${areaName}</option>`
+            })
+            $("#area").html(selectOptions);
+        }
+
+        $('#btnBackToLogin').on('click',function(){
+
+            window.location.href = `@Url.Content("~/Home/Login")`
+
+        })
+
+
+    </script>
+}

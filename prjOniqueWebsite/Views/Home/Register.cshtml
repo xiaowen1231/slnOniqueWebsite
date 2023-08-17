@@ -9,7 +9,6 @@
             <img src="@Url.Content("~/images/uploads/members/default.jpg")" class="circle-size-300" id="imgMember" />
             <input type="file" name="Photo" id="Photo" class="form-control my-5" />
         </div>
-
         <div class="flex-fill p-2">
             <div class="fs-5 fw-bold border-bottom p-2">
                 註冊新會員
@@ -162,6 +161,7 @@
         }
 
         const photo = document.querySelector('#Photo')
+
         photo.addEventListener('change', () => {
             const file = photo.files
             if (file.length == 0) {
@@ -173,6 +173,7 @@
                 $('#imgMember').attr('src', url)
             }
         })
+
         $(document).ready(function () {
             $('#showPassword').on('change', function () {
                 var passwordInput = $('#inputPassword');

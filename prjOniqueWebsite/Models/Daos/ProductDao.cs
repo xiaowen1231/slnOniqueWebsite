@@ -279,7 +279,7 @@ namespace prjOniqueWebsite.Models.Repositories
                             AddedTime = grouped.Key.AddedTime,
                             catagoryName = grouped.Key.CategoryName,
                             SubQuantity = grouped.Sum(x => x != null ? x.OrderQuantity : 0),
-                            
+                            DiscountId = grouped.Key.DiscountId==null ? null : grouped.Key.DiscountId,
                             DiscountMethod = grouped.Key.DiscountMethod,
                         };
 
