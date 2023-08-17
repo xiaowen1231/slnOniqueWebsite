@@ -21,5 +21,9 @@ namespace prjOniqueWebsite.Models.ViewModels
         public int? Citys { get; set; }
         public int? Areas { get; set; }
         public string? Address { get; set; }
+        [Display(Name = "生日")]
+        [Required(ErrorMessage = "{0}是必填欄位!")]
+        [DataType(DataType.Date)]
+        public string? DateOfBirth { get; set; }
     }
 }
