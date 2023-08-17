@@ -14,7 +14,7 @@
                     輸入密碼
                 </div>
                 <div class="width-265px">
-                    <input type="password" class="form-control" name="Password" id="inputPassword"/>
+                    <input type="password" class="form-control" name="Password" id="inputPassword" />
                     @Html.ValidationMessageFor(Model=>Model.Password,"",new{@class="text-danger"})
                 </div>
             </div>
@@ -25,7 +25,6 @@
                 <div class="width-265px">
                     <input type="password" class="form-control" name="ConfirmPassword" id="inputConfirmPassword" />
                     @Html.ValidationMessageFor(Model=>Model.ConfirmPassword,"",new{@class="text-danger"})
-
                 </div>
             </div>
             <div class="mx-auto my-3 d-flex justify-content-center align-items-center gap-3">
@@ -84,14 +83,23 @@
                 <div class="width-120px text-end">
                 </div>
                 <div class="width-265px d-flex gap-3">
-                    <input type="text" class="form-control" placeholder="詳細地址,可選填" id="inputAddress" />
+                    <input type="text" class="form-control" placeholder="詳細地址,可選填" id="inputAddress" name="Address" />
+                </div>
+            </div>            
+            <div class="mx-auto mb-3 d-flex justify-content-center align-items-center gap-3">
+                <div class="width-120px text-end">
+                    生日
+                </div>
+                <div class="width-265px d-flex gap-3">
+                    <input type="date" class="form-control" value="" name="DateOfBirth" id="demoDateOfBirth" />
+                    @Html.ValidationMessageFor(Model=>Model.DateOfBirth,"",new{@class="text-danger"})
                 </div>
             </div>
             <div class="text-center">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
             <div class="text-center my-4">
-                <input type="button" value="Demo" class="btn btn btn-outline-secondary" id="btnLineRegister"/>
+                <input type="button" value="Demo" class="btn btn btn-outline-secondary" id="btnLineRegister" />
                 <input type="button" value="返回" class="btn btn-outline-dark" style="width: 100px;" id="btnBackToLogin" />
                 <input type="submit" value="綁定" class="btn btn-dark " style="width: 100px;" />
             </div>
@@ -145,12 +153,14 @@
 
         })
 
-        $('#btnLineRegister').on('click',function(){
+        $('#btnLineRegister').on('click', function () {
             let demoPassword = "password1234";
             let demoPhone = '0958376830';
-            let demoEmail = 'shiao1124@gmail.com';
+            let demoEmail = 'oniquedemo@gmail.com';
             let demoArea = 5;
             let demoAddress = '復興南路一段390號2樓'
+            let dateOfBirth = "1996-12-31"
+
 
             $('#inputPassword').val(demoPassword);
             $('#inputConfirmPassword').val(demoPassword);
@@ -158,7 +168,7 @@
             $('#inputEmail').val(demoEmail);
             $('#area').val(demoArea);
             $('#inputAddress').val(demoAddress)
-
+            $('#demoDateOfBirth').val(dateOfBirth)
         })
 
 
