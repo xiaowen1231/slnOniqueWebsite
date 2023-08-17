@@ -6,26 +6,31 @@
     int discountId = 0;
     int pageNumber = 1;
     string rank = "newest";
+
     if (ViewBag.PageNumber != 0)
     {
         pageNumber = ViewBag.PageNumber;
     }
+
     if (!string.IsNullOrEmpty(ViewBag.Keyword))
     {
         keyword = ViewBag.Keyword;
 
         pageTitle = title + " > 搜尋: " + keyword;
     }
+
     if (!string.IsNullOrEmpty(ViewBag.CategoryName))
     {
         categoryName = ViewBag.CategoryName;
         pageTitle += " > " + categoryName;
     }
+
     if (ViewBag.DiscountId != 0)
     {
         discountId = ViewBag.DiscountId;
         pageTitle += " > " + ViewBag.DiscountName;
     }
+
     if (!string.IsNullOrEmpty(ViewBag.Rank))
     {
         rank = ViewBag.Rank;
@@ -76,7 +81,7 @@
 @section Styles{
     <style>
         .price:before {
-            content: "$"
+            content: "$  "
         }
 
         .divNotFound {
@@ -128,42 +133,45 @@
                 const cards = products.map(theCard => {
 
                 const { id, productName, price, photoPath, discountMethod, discountPrice } = theCard
-                if (discountMethod == null) {
-                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
-                                <div class="w-240-h-240 m-2">
-                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-                                </div>
-                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
+
+                    if (discountMethod == null) {
+                        return (`<div data-id="${id}" class="cursor-pointer border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                        <div class="w-240-h-240 m-2">
+                                            <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                        </div>
+                                        <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName}</div>
                                         <div class="price text-center">${price}</div>
-                                <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
-                                    <div class="w-25-h-25 divShopping" data-productid=${id} >
-                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
-                                    </div>
-                                    <div class="w-25-h-25 divCollection">
-                                        <img src="@Url.Content("~/images/icon/love.png")" />
-                                    </div>
-                                </div>
-                            </div>`)
-                } 
-                else {
-                    return (`<div data-id="${id}" class="cursor-pointer link-dark link-underline-opacity-0 border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
-                                <div class="w-240-h-240 m-2">
-                                    <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
-                                </div>
-                                <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName} </div>
-                                <div class="text-center text-danger price">${discountPrice}</div>
-                                <div class="d-flex gap-3 mx-2 mb-2  align-items-center">
-                                    <div class="w-25-h-25 divShopping mx-2 me-auto" data-productid=${id}>
-                                        <img src="@Url.Content("~/images/icon/sale-tag.png")" />
-                                    </div>
-                                    <div class="w-25-h-25 divShopping" data-productid=${id}>
-                                        <img src="@Url.Content("~/images/icon/shopping_black.png")" />
-                                    </div>
-                                    <div class="w-25-h-25 divCollection">
-                                        <img src="@Url.Content("~/images/icon/love.png")" />
-                                    </div>
-                                </div>
-                            </div>`)}
+                                        <div class="d-flex gap-3 mx-2 mb-2 justify-content-end align-items-center">
+                                            <div class="w-25-h-25 divShopping" data-productid="${id}" >
+                                                <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                            </div>
+                                            <div class="w-25-h-25 divCollection" data-productid="${id}" >
+                                                <img src="@Url.Content("~/images/icon/love.png")" />
+                                            </div>
+                                        </div>
+                                    </div>`)
+                    }
+
+                    else {
+                        return (`<div data-id="${id}" class="cursor-pointer position-relative border rounded shadow-sm m-2 divProductDetail" data-aos="fade-up">
+                                        <div class="w-240-h-240 m-2">
+                                            <img src="@Url.Content("~/images/uploads/products/")${photoPath}" class="rounded" />
+                                        </div>
+                                        <div class="bg-dark rounded text-white m-2 text-center p-1 fw-bold">${productName}</div>
+                                        <div class="text-center text-danger price">${discountPrice}</div>
+                                        <div class="d-flex gap-3 mx-2 mb-2 align-items-center justify-content-end">
+                                            <div class="w-25-h-25 divShopping" data-productid="${id}">
+                                                <img src="@Url.Content("~/images/icon/shopping_black.png")" />
+                                            </div>
+                                            <div class="w-25-h-25 divCollection" data-productid="${id}">
+                                                <img src="@Url.Content("~/images/icon/love.png")" />
+                                            </div>
+                                        </div>
+                                        <div class="divShopping position-absolute top-0 start-0" data-productid="${id}" style="width:50px;height:50px">
+                                            <img src="@Url.Content("~/images/icon/sale-tag.png")" />
+                                        </div>
+                                    </div>`)
+                    }
 
 
                 })
@@ -287,7 +295,29 @@
             const isLogin = await response.json();
 
             if (isLogin) {
-                //todo add2Collection
+                let productId = $(this).data("productid");
+                console.log(productId)
+                const resp = await fetch(`@Url.Content("~/MemberApi/ToggleCollectProduct?productId=")${productId}`);
+                const data = await resp.json();
+                console.log(data)
+                if (data.statusCode == 200) {
+                    Swal.fire({
+                        title: data.statusMessage,
+                        text: "",
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        title: data.statusMessage,
+                        text: "",
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+
             } else {
                 Swal.fire({
                     title: '尚未登入!',

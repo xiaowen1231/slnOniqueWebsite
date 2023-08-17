@@ -11,6 +11,7 @@ namespace prjOniqueWebsite.Models.EFModels
         {
             Collect = new HashSet<Collect>();
             Orders = new HashSet<Orders>();
+            ShoppingCart = new HashSet<ShoppingCart>();
         }
 
         public int MemberId { get; set; }
@@ -28,11 +29,13 @@ namespace prjOniqueWebsite.Models.EFModels
         public int MemberLevel { get; set; }
         public string PhotoPath { get; set; }
         public DateTime RegisterDate { get; set; }
+        public string LineUserId { get; set; }
 
         public virtual Areas AreasNavigation { get; set; }
         public virtual Citys CitysNavigation { get; set; }
         public virtual MemberLevel MemberLevelNavigation { get; set; }
         public virtual ICollection<Collect> Collect { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<ShoppingCart> ShoppingCart { get; set; }
     }
 }

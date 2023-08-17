@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using NuGet.Common;
 using prjOniqueWebsite.Models;
 using prjOniqueWebsite.Models.Daos;
@@ -11,11 +12,15 @@ using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
 using System;
+using System.Collections.Specialized;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using System.Net;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
+using System.Web;
 
 namespace prjOniqueWebsite.Controllers
 {
@@ -41,6 +46,96 @@ namespace prjOniqueWebsite.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+
+        public ActionResult LineLoginDirect()
+        {
+            string response_type = "code";
+            string client_id = "2000432178";
+            string redirect_uri = HttpUtility.UrlEncode("https://localhost:7056/Home/callback");
+            string state = "123";
+            string LineLoginUrl = string.Format("https://access.line.me/oauth2/v2.1/authorize?response_type={0}&client_id={1}&redirect_uri={2}&state={3}&scope=openid%20profile&nonce=09876xyz",
+                response_type,
+                client_id,
+                redirect_uri,
+                state
+                );
+            return Redirect(LineLoginUrl);
+        }
+
+
+        public ActionResult callback(string code, string state)
+        {
+            if (state == "123")
+            {
+                #region Api變數宣告
+                WebClient wc = new WebClient();
+                wc.Encoding = Encoding.UTF8;
+                wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                string result = string.Empty;
+                NameValueCollection nvc = new NameValueCollection();
+                #endregion
+                try
+                {
+                    //取回Token
+                    string ApiUrl_Token = "https://api.line.me/oauth2/v2.1/token";
+                    nvc.Add("grant_type", "authorization_code");
+                    nvc.Add("code", code);
+                    nvc.Add("redirect_uri", "https://localhost:7056/Home/callback");
+                    nvc.Add("client_id", "2000432178");
+                    nvc.Add("client_secret", "f2ff2eb09067aa2a3893a3fca63dfeff");
+                    string JsonStr = Encoding.UTF8.GetString(wc.UploadValues(ApiUrl_Token, "POST", nvc));
+                    LineLogin.LineLoginToken ToKenObj = JsonConvert.DeserializeObject<LineLogin.LineLoginToken>(JsonStr);
+                    wc.Headers.Clear();
+
+                    //取回User Profile
+                    string ApiUrl_Profile = "https://api.line.me/v2/profile";
+                    wc.Headers.Add("Authorization", "Bearer " + ToKenObj.access_token);
+                    string UserProfile = wc.DownloadString(ApiUrl_Profile);
+                    LineLogin.LineProfile ProfileObj = JsonConvert.DeserializeObject<LineLogin.LineProfile>(UserProfile);
+
+                    return RedirectToAction("LineLogin", "Home", ProfileObj);
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    throw;
+                }
+            }
+            return View();
+        }
+
+
+        public IActionResult LineLogin(LineLogin.LineProfile lineDto)
+        {
+            var memberInDb = _context.Members.FirstOrDefault(m => m.LineUserId == lineDto.userId);
+
+            if (memberInDb == null)
+            {
+
+                TempData["LineUserId"] = lineDto.userId;
+                TempData["LineUserName"] = lineDto.displayName;
+                TempData["LineUserPictureUrl"] = lineDto.pictureUrl;
+
+                return RedirectToAction("LineRegister","Home");
+            }
+
+            return View();
+        }
+
+        public IActionResult LineRegister()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult LineRegister(LineRegisterVM vm)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return View(vm);
+            }
             return View();
         }
 

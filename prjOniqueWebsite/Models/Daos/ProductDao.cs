@@ -49,7 +49,7 @@ namespace prjOniqueWebsite.Models.Repositories
                         join od in _context.OrderDetails
                         on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
                         from od in odGroup.DefaultIfEmpty()
-                        group od by new { p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName, p.ShelfTime ,p.Discount.DiscountMethod} into grouped
+                        group od by new { p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName, p.ShelfTime, p.Discount.DiscountMethod } into grouped
                         where grouped.Key.AddedTime < DateTime.Now && DateTime.Now < grouped.Key.ShelfTime
                         select new ProductDto
                         {
@@ -63,9 +63,9 @@ namespace prjOniqueWebsite.Models.Repositories
                             DiscountId = grouped.Key.DiscountId == null ? null : grouped.Key.DiscountId,
                             DiscountMethod = grouped.Key.DiscountMethod,
                         };
-            
 
-            return query.OrderByDescending(x=>x.SubQuantity).Take(4).ToList();
+
+            return query.OrderByDescending(x => x.SubQuantity).Take(4).ToList();
         }
 
         public AddToCartDto ShowProductInfo(int id)
@@ -89,9 +89,9 @@ namespace prjOniqueWebsite.Models.Repositories
                     ProductName = p.ProductName,
                     Price = p.Price,
                     DiscountMethod = p.Discount.DiscountMethod,
-                    PhotoPath= p.PhotoPath
+                    PhotoPath = p.PhotoPath
                 });
-            
+
             return dto.FirstOrDefault();
         }
 
@@ -192,7 +192,7 @@ namespace prjOniqueWebsite.Models.Repositories
                        on psd.SizeId equals ps.SizeId
                        join d in _context.Discounts
                        on p.DiscountId equals d.Id into discountGroup
-                       from d in discountGroup.DefaultIfEmpty()  
+                       from d in discountGroup.DefaultIfEmpty()
                        where s.MemberId == member.MemberId
                        select new ShoppingCartDto
                        {
@@ -202,7 +202,7 @@ namespace prjOniqueWebsite.Models.Repositories
                            PhotoPath = psd.PhotoPath,
                            ProductColors = pc,
                            ProductSizes = ps,
-                           DiscountMethod = d != null ? d.DiscountMethod : null,  
+                           DiscountMethod = d != null ? d.DiscountMethod : null,
                        };
 
             return cart.ToList();
@@ -259,7 +259,7 @@ namespace prjOniqueWebsite.Models.Repositories
             return query.ToList();
         }
 
-        public List<ProductDto> SearchProductList(string keyword, string categoryName, string rank,int discountId)
+        public List<ProductDto> SearchProductList(string keyword, string categoryName, string rank, int discountId)
         {
             var query = from p in _context.Products
                         join psd in _context.ProductStockDetails
@@ -268,7 +268,7 @@ namespace prjOniqueWebsite.Models.Repositories
                         join od in _context.OrderDetails
                         on psd != null ? psd.StockId : 0 equals od.StockId into odGroup
                         from od in odGroup.DefaultIfEmpty()
-                        group od by new {p.Discount.DiscountMethod, p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName, p.ShelfTime } into grouped
+                        group od by new { p.Discount.DiscountMethod, p.ProductId, p.ProductName, p.Price, p.PhotoPath, p.DiscountId, p.AddedTime, p.ProductCategory.CategoryName, p.ShelfTime } into grouped
                         where grouped.Key.AddedTime < DateTime.Now && DateTime.Now < grouped.Key.ShelfTime
                         select new ProductDto
                         {
@@ -279,7 +279,7 @@ namespace prjOniqueWebsite.Models.Repositories
                             AddedTime = grouped.Key.AddedTime,
                             catagoryName = grouped.Key.CategoryName,
                             SubQuantity = grouped.Sum(x => x != null ? x.OrderQuantity : 0),
-                            DiscountId = grouped.Key.DiscountId == null ? null : grouped.Key.DiscountId,
+                            DiscountId = grouped.Key.DiscountId==null ? null : grouped.Key.DiscountId,
                             DiscountMethod = grouped.Key.DiscountMethod,
                         };
 
