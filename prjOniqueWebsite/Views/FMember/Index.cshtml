@@ -109,6 +109,7 @@
 }
 @section Scripts{
     <script>
+        let MemberId = 0;
         async function GetMemberFileName() {
             const response = await fetch(`@Url.Content("~/MemberApi/GetFMemberPhoto")`)
             const data = await response.json();
