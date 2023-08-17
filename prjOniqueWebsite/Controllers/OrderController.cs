@@ -18,14 +18,17 @@ namespace prjOniqueWebsite.Controllers
         private readonly OniqueContext _context;
         private readonly UserInfoService _userInfoService;
         private readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly IWebHostEnvironment _environment;
 
         OrderDao dao = null;
-        public OrderController(OniqueContext context, UserInfoService userInfoService,IUrlHelperFactory urlHelperFactory)
+        public OrderController(OniqueContext context, UserInfoService userInfoService,IUrlHelperFactory urlHelperFactory, IWebHostEnvironment environment)
         {
             _context = context;
             dao = new OrderDao(_context);
             _userInfoService = userInfoService;
             _urlHelperFactory = urlHelperFactory;
+            _environment = environment;
+            
         }
 
         [Authorize(Roles = "一般員工,經理")]
@@ -115,21 +118,24 @@ namespace prjOniqueWebsite.Controllers
                     }
                 }
                 _context.SaveChanges();
+                var dto = dao.getEmailTemplateContent(query.OrderId);
 
-               var dto = from o in _context.Orders
-                         where o.OrderId==query.OrderId
-                         join m in _context.Members
-                         on o.MemberId equals m.MemberId
-                         join os in _context.OrderStatus
-                         on o.OrderStatusId equals os.StatusId
-                         select new SendMailDto
-                         {
-                             OrderId =  o.OrderId,
-                             Email = m.Email,
-                             StatusNow = os.StatusName,
-                             Name = m.Name,
-                         };
-                new SendEmail().SendMail(dto.FirstOrDefault(), _urlHelperFactory, ControllerContext,HttpContext);
+                new SendHtmlEmail().SendOrderHtml(dto, _environment,_urlHelperFactory,ControllerContext,HttpContext);
+
+                //var dto = from o in _context.Orders
+                //          where o.OrderId == query.OrderId
+                //          join m in _context.Members
+                //          on o.MemberId equals m.MemberId
+                //          join os in _context.OrderStatus
+                //          on o.OrderStatusId equals os.StatusId
+                //          select new SendMailDto
+                //          {
+                //              OrderId = o.OrderId,
+                //              Email = m.Email,
+                //              StatusNow = os.StatusName,
+                //              Name = m.Name,
+                //          };
+                //new SendEmail().SendMail(dto.FirstOrDefault(), _urlHelperFactory, ControllerContext, HttpContext);
             }
 
             return RedirectToAction("Index");

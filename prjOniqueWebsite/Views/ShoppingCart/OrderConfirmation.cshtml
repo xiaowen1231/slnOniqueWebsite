@@ -367,18 +367,7 @@
 
                 if (datas.result.statusCode == 200) {
 
-                    $.ajax({
-                        method: "POST",
-                        url: `@Url.Content("~/orderapi/SendOrderHtml")`,
-                        data: {
-                            OrderId: id,
-                            Email: email,
-                            statusNow: '待出貨',
-                            Name: name,
-                        }
-                    });
-
-
+                    SendPerchaseEmail(id)
                     if (payment == "貨到付款") {
 
                         Swal.fire({
@@ -485,7 +474,10 @@
 
             window.location.href = `@Url.Content("~/ShoppingCart/Index")`
         })
-
+        async function SendPerchaseEmail(id){
+            const response = await fetch(`@Url.Content("~/OrderApi/SendHtmlEmail?OrderId")=${id}`)
+            const data=await reponse
+        }
     </script>
 }
 @section Styles{

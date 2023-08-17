@@ -9,10 +9,10 @@
 
         <div style="font-size: 1.5rem; font-weight: bold; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.125); padding: 10px;">訂單明細</div>
         <div id="shippingDetail">
-            <div style="box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); padding: 10px; margin: 10px; border-radius: 5px; display: flex; justify-content: space-between; background-color: #f8f9fa; border: 1px solid rgba(0, 0, 0, 0.125);">
+            <div style="box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); padding: 10px; margin: 10px; border-radius: 5px; background-color: #f8f9fa; border: 1px solid rgba(0, 0, 0, 0.125); ">
                 <div style="display: flex; gap: 10px; padding: 5px;">
                     <div style="font-weight: bold;">訂單編號: </div>
-                    <div style="color:crimson;">{0}</div>
+                    <div style="color:black;">{0}</div>
                 </div>
                 <div>
                     <div style="display: flex; gap: 10px;padding: 5px;">
@@ -26,7 +26,7 @@
                 <div style="margin: 5px;">
                     <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
                         <div style="font-weight: bold; width: 90px; text-align: start;">訂單狀態 : </div>
-                        <div style="color: crimson;">{2}</div>
+                        <div style="color: black;">{2}</div>
                     </div>
                     <div style="display: flex; gap: 10px; padding:10px 0 5px 0;">
                         <div style="font-weight: bold; width: 90px; text-align: start;">運送方式 : </div>
@@ -71,32 +71,38 @@
                         </tr>
                     </thead>
                     <tbody id="orderProductList">
-                        <tr>
+                        <!--<tr>
                             <td style="padding: 8px;">{9}</td>
                             <td style="padding: 8px;">{10}</td>
                             <td style="padding: 8px;">{11}</td>
                             <td style="padding: 8px;">{12}</td>
                             <td style="padding: 8px;">{13}</td>
                             <td style="padding: 8px;">{14}</td>
-                        </tr>
+                        </tr>-->
+                        {9}
                     </tbody>
                 </table>
             </div>
             <div style="border-radius: 5px; margin-top: 20px; border: 1px solid rgba(0, 0, 0, 0.125); padding: 10px;">
                 <div style="display: flex; align-items: center; margin: 10px;">
                     <div style="font-weight: bold; width: 95px;">商品總額</div>
-                    <div style="text-align: end; width: 95px;">{15}</div>
+                    <div style="text-align: end; width: 95px;">{10}</div>
                 </div>
                 <div style="display: flex; align-items: center; margin: 10px;">
                     <div style="font-weight: bold; width: 95px;">運送費用</div>
-                    <div style="text-align: end; width: 95px;">{16}</div>
+                    <div style="text-align: end; width: 95px;">{11}</div>
                 </div>
                 <div style="display: flex; align-items: center; margin: 10px;">
                     <div style="font-weight: bold; width: 95px;">應付總額</div>
-                    <div style="text-align: end; width: 95px; color: crimson ;">{17}</div>
+                    <div style="text-align: end; width: 95px; color: black ;">{12}</div>
+                </div>
+                <div style="display: flex; align-items: center; margin: 10px;">
+                    <div style="font-weight: bold; width: 120px; color:black;"><a href="{13}">詳細訂單連結</a></div>
+                    
                 </div>
             </div>
         </div>
+        
     </div>
 </body>
 </html>

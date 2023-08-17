@@ -121,26 +121,15 @@
         let totalPrice = 0;
        
 
-        $("#sendtest").on("click", async function () {
+        $("#sendtest").on("click",function () {
             let id = $(this).data("orderid")
-            let email = $(this).data("email")
-
-            $.ajax({
-                method: "POST",
-                url: `@Url.Content("~/orderapi/SendMail")`,
-                data: {
-                    OrderId: id,
-                    Email: email,
-
-                }
-            })
-                .done(function () {
-                    Swal.fire({
-                        title: '寄信成功',
-                    })
-                })
+            SendPerchaseEmail(id)
+          
         })
-
+        async function SendPerchaseEmail(id) {
+            const response = await fetch(`@Url.Content("~/OrderApi/SendHtmlEmail?OrderId")=${id}`)
+            const data = await reponse
+        }
 
         async function loadOrderProductList() {
             const orderId = $("#orderId").val()
@@ -157,20 +146,20 @@
                 displaymethodName = methodName;
                 total += subtotal
                 productListTablecontent +=
-                    `<tr>
-                                <td id="prodphoto" data-productid="${productId}">
-                                <img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${productName}" class="w-120-h-120 rounded-3 shadow-sm">
-                        </td>
-                        <td>${productName}</td>
-                        <td><span class="dollar">${price}</span></td>
-                        <td>${orderQuantity}</td>
-                        <td>${sizeName}</td>
-                        <td>${colorName}</td>
-                        <td>
-                        <span class="dollar text-danger">${subtotal}</span>
-                        </td>
-                        </tr>
-                        `
+`<tr>
+<td id="prodphoto" data-productid="${productId}">
+<img src="@Url.Content("~/images/uploads/products/")${photoPath}" alt="${productName}" class="w-120-h-120 rounded-3 shadow-sm">
+</td>
+<td>${productName}</td>
+<td><span class="dollar">${price}</span></td>
+<td>${orderQuantity}</td>
+<td>${sizeName}</td>
+<td>${colorName}</td>
+<td>
+<span class="dollar text-danger">${subtotal}</span>
+</td>
+</tr>
+`
 
             });
 

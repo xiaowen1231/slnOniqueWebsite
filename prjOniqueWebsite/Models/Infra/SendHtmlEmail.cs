@@ -3,15 +3,19 @@ using System.Net.Mail;
 using System.Net;
 using System;
 using Microsoft.AspNetCore.Hosting;
+using prjOniqueWebsite.Models.DTOs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace prjOniqueWebsite.Models.Infra
 {
-    
+
     public class SendHtmlEmail
     {
-        
 
-        public void SendOrderHtml(IWebHostEnvironment _enviroment)
+
+        public void SendOrderHtml(SendHtmlEmailContent dto, IWebHostEnvironment _enviroment, IUrlHelperFactory _urlHelperFactory,
+            ControllerContext controllerContext, HttpContext httpContext)
         {
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -20,36 +24,66 @@ namespace prjOniqueWebsite.Models.Infra
                 DeliveryMethod = SmtpDeliveryMethod.Network
             };
 
-            string pathToFile = Path.Combine(_enviroment.WebRootPath, "Template", "email.html");
 
+            var urlHelper = _urlHelperFactory.GetUrlHelper(controllerContext);
+            string orderDetailsUrl = urlHelper.Action("OrderEmailContent", "Order", new { dto.OrderId }, httpContext.Request.Scheme);
+
+
+            string pathToEmail = Path.Combine(_enviroment.WebRootPath, "Template", "email.html");
+            string pathToProducts = Path.Combine(_enviroment.WebRootPath, "Template", "products.html");
             string TemplateContent = "";
-            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))//讀出html內容
+            using (StreamReader SourceReader = File.OpenText(pathToEmail))//讀出html內容
             {
                 TemplateContent = SourceReader.ReadToEnd();
             }
+
+            string productTable = "";
+            string productTableContent = "";
+            decimal prodtotalprice = 0;
+            string remarkDisplay = "";
+            remarkDisplay = dto.Remark == null ? "顧客未留言" : dto.Remark;
+
+            using (StreamReader productsReader = File.OpenText(pathToProducts))//放入複數商品內容
+            {
+                productTable = productsReader.ReadToEnd();
+            }
+            foreach (var product in dto.Products)
+            {
+                prodtotalprice += product.SubTotal;
+                productTableContent += string.Format(productTable,
+                    product.ProductName,
+                    product.Price.ToString(),
+                    product.OrderQuantity.ToString(),
+                    product.SizeName,
+                    product.ColorName,
+                    product.SubTotal
+                    );
+            }
+            productTable = productTableContent;
+
+
+
+            decimal shippingfee = dto.TotalPrice - prodtotalprice;
+            string DisplayProdtotalPrice = prodtotalprice.ToString();
+
             TemplateContent = string.Format(TemplateContent,
 
-                "fakedata1",
-                "fakedata2",
-                "fakedata3",
-                "fakedata4",
-                "fakedata5",
-                "fakedata6",
-                "fakedata7",
-                "fakedata8",
-                "fakedata9",
-                "fakedata10",
-                "fakedata11",
-                "fakedata12",
-                "fakedata13",
-                "fakedata14",
-                "fakedata15",
-                "fakedata16",
-                "fakedata17",
-                "fakedata18",
-                "fakedata19"
+                dto.OrderId,
+                dto.OrderDate,
+                dto.StatusName,
+                dto.MethodName,
+                dto.PaymentMethodName,
+                dto.Recipient,
+                dto.RecipientPhone,
+                dto.ShippingAddress,
+                remarkDisplay,
 
-
+                productTable,
+                DisplayProdtotalPrice,
+                shippingfee,
+                dto.TotalPrice,
+                orderDetailsUrl,
+                   "dataEnd"
                 );
             MailMessage mailMessage = new MailMessage
             {
@@ -59,7 +93,7 @@ namespace prjOniqueWebsite.Models.Infra
                 IsBodyHtml = true
             };
 
-            mailMessage.To.Add(/*Email*/"");
+            mailMessage.To.Add(dto.Email);
             smtpClient.Send(mailMessage);
 
         }

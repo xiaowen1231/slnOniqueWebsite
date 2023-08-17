@@ -388,5 +388,12 @@ namespace prjOniqueWebsite.Controllers
             }
             return Json(result);
         }
+
+        public  void SendHtmlEmail(string OrderId)
+        {
+            var dto=dao.getEmailTemplateContent(OrderId);
+            new SendHtmlEmail().SendOrderHtml(dto, _enviroment,_urlHelperFactory,ControllerContext,HttpContext);
+
+        }
     }
 }

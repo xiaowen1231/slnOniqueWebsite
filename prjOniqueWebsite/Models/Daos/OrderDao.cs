@@ -41,13 +41,13 @@ namespace prjOniqueWebsite.Models.Daos
                         };
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword)||o.OrderId.Equals(keyword));
+                query = query.Where(o => o.Name.Contains(keyword) || o.StatusName.Contains(keyword) || o.OrderId.Equals(keyword));
             }
-            if(startDate != null)
+            if (startDate != null)
             {
                 query = query.Where(o => o.OrderDate > startDate);
             }
-            
+
             List<OrderListDto> data = query.ToList();
             return SortOrderList(data, sort);
         }
@@ -93,9 +93,9 @@ namespace prjOniqueWebsite.Models.Daos
                                     OrderQuantity = od.OrderQuantity,
                                     Price = od.Price,
                                     PhotoPath = p.PhotoPath,
-                                    TotalPrice=o.TotalPrice,
-                                    MethodName=sm.MethodName,
-                                    ProductId=p.ProductId,
+                                    TotalPrice = o.TotalPrice,
+                                    MethodName = sm.MethodName,
+                                    ProductId = p.ProductId,
                                 };
 
             return productDetail.ToList();
@@ -128,7 +128,7 @@ namespace prjOniqueWebsite.Models.Daos
                                      OrderDate = o.OrderDate,
                                      ShippingDate = o.ShippingDate,
                                      CompletionDate = o.CompletionDate,
-                                     TotalPrice= o.TotalPrice,
+                                     TotalPrice = o.TotalPrice,
                                  };
             return shippingDetail.FirstOrDefault();
         }
@@ -187,7 +187,7 @@ namespace prjOniqueWebsite.Models.Daos
         }
         public string GetEmailByOrderId(string orderId)
         {
-            
+
             var query = from o in _context.Orders
                         join m in _context.Members
                         on o.MemberId equals m.MemberId
@@ -197,7 +197,7 @@ namespace prjOniqueWebsite.Models.Daos
             string email = query.First().ToString();
             return email;
 
-            
+
         }
         /// <summary>
         /// 有foreign key的資料刪除要注意，
@@ -216,6 +216,88 @@ namespace prjOniqueWebsite.Models.Daos
             _context.Orders.Remove(order);
             _context.SaveChanges();
         }
+        public SendHtmlEmailContent getEmailTemplateContent(string OrderId)
+        {
+            var query = from o in _context.Orders
+                        where o.OrderId == OrderId
+                        join m in _context.Members
+                        on o.MemberId equals m.MemberId
+                        join od in _context.OrderDetails
+                        on o.OrderId equals od.OrderId
+                        join sm in _context.ShippingMethods
+                        on o.MethodId equals sm.MethodId
+                        join pm in _context.PaymentMethods
+                        on o.PaymentMethodId equals pm.PaymentMethodId
+                        join os in _context.OrderStatus
+                        on o.OrderStatusId equals os.StatusId
+                        join psd in _context.ProductStockDetails
+                        on od.StockId equals psd.StockId
+                        join p in _context.Products
+                        on psd.ProductId equals p.ProductId
 
+                        select new SendHtmlEmailContent
+                        {
+                            
+                            OrderId = OrderId,
+                            OrderDate = o.OrderDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                            StatusName = os.StatusName,
+                            MethodName = sm.MethodName,
+                            PaymentMethodName = pm.PaymentMethodName,
+                            Recipient = o.Recipient,
+                            RecipientPhone = o.RecipientPhone,
+                            ShippingAddress = o.ShippingAddress,
+                            Remark = o.Remark,
+                            TotalPrice = o.TotalPrice,
+                            Email=m.Email
+                        };
+            var productsquery = from o in _context.Orders
+                                where o.OrderId == OrderId
+                                join od in _context.OrderDetails
+                                on o.OrderId equals od.OrderId
+                                join psd in _context.ProductStockDetails
+                                on od.StockId equals psd.StockId
+                                join p in _context.Products
+                                on psd.ProductId equals p.ProductId
+                                join ps in _context.ProductSizes
+                                on psd.SizeId equals ps.SizeId
+                                join pc in _context.ProductColors
+                                on psd.ColorId equals pc.ColorId
+                                select new SendHtmlEmailProduct
+                                {
+                                    ProductName = p.ProductName,
+                                    Price = od.Price,
+                                    OrderQuantity = od.OrderQuantity,
+                                    SizeName = ps.SizeName,
+                                    ColorName = pc.ColorName,
+                                };
+            var content = query.FirstOrDefault();
+
+            content.Products = productsquery.ToList();
+            return content;
+        }
+        public IEnumerable<SendHtmlEmailProduct> getHtmlEmailProducts(string OrderId)
+        {
+            var query = from o in _context.Orders
+                        where o.OrderId == OrderId
+                        join od in _context.OrderDetails
+                        on o.OrderId equals od.OrderId
+                        join psd in _context.ProductStockDetails
+                        on od.StockId equals psd.StockId
+                        join p in _context.Products
+                        on psd.ProductId equals p.ProductId
+                        join ps in _context.ProductSizes
+                        on psd.SizeId equals ps.SizeId
+                        join pc in _context.ProductColors
+                        on psd.ColorId equals pc.ColorId
+                        select new SendHtmlEmailProduct
+                        {
+                            ProductName = p.ProductName,
+                            Price = od.Price,
+                            OrderQuantity = od.OrderQuantity,
+                            SizeName = ps.SizeName,
+                            ColorName = pc.ColorName,
+                        };
+            return query.ToList();
+        }
     }
 }
