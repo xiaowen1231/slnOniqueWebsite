@@ -5,6 +5,8 @@ using Microsoft.Extensions.Caching.Memory;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.Infra;
 using System.Configuration;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddSession();
 
+builder.Services.AddSingleton(HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.All }));
 var memoryCache = new MemoryCache(new MemoryCacheOptions());
 
 builder.Services.AddSingleton<IMemoryCache>(memoryCache);
@@ -56,6 +59,7 @@ app.UseAuthorization();
 app.UseSession();
 
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

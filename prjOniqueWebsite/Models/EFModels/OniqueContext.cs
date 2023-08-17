@@ -195,6 +195,8 @@ namespace prjOniqueWebsite.Models.EFModels
                     .IsRequired()
                     .HasMaxLength(250);
 
+                entity.Property(e => e.LineUserId).HasMaxLength(50);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -423,6 +425,12 @@ namespace prjOniqueWebsite.Models.EFModels
 
             modelBuilder.Entity<ShoppingCart>(entity =>
             {
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.ShoppingCart)
+                    .HasForeignKey(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ShoppingCart_Members");
+
                 entity.HasOne(d => d.Stock)
                     .WithMany(p => p.ShoppingCart)
                     .HasForeignKey(d => d.StockId)
