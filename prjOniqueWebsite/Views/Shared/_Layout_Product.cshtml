@@ -77,7 +77,11 @@
                             </ul>
                         </div>
                         <div class="nav-icon mx-3">
-                            <img src="~/images/header/like.png" />
+                            <div class="nav-icon mx-3">
+                                <a class="position-relative" id="collectItems" href="@Url.Content("~/fmember/index?display=MemberMyKeep")">
+                                    <img src="~/images/header/like.png" />
+                                </a>
+                            </div>
                         </div>
                         <a asp-action="index" asp-controller="ShoppingCart" class="nav-icon mx-3 position-relative" id="cartItems">
                             <img src="~/images/header/shopping-cart.png" />
@@ -274,7 +278,7 @@
                                                 </li>
                                                 <li class="d-flex align-items-center mx-2">
                                                     <img src="@Url.Content("~/images/header/like.png")" class="width-16px" />
-                                                    <a class="dropdown-item fs-12px" href="#">我的收藏</a>
+                                                    <a class="dropdown-item fs-12px" href="@Url.Content("~/fmember/index?display=MemberMyKeep")">我的收藏</a>
                                                 </li>
                                                 <li class="d-flex align-items-center mx-2">
                                                     <img src="@Url.Content("~/images/icon/logout.png")" class="width-16px" />
@@ -287,6 +291,7 @@
                     $("#memberIcon").html(str)
 
                     GetCartItems()
+                    GetCollectItems()
                 } else {
                     let str = "";
                     str += `<ul class="navbar-nav">
@@ -324,7 +329,7 @@
 
             const response = await fetch(`@Url.Content("~/ProductApi/CartItems")`)
             const data = await response.json()
-
+            console.log(data)
             let totalItems = data.toString()
 
             let str = `<img src="@Url.Content("~/images/header/shopping-cart.png")" />
@@ -334,6 +339,23 @@
                                                 </span>`;
 
             $("#cartItems").append(str);
+        }
+
+        async function GetCollectItems() {
+            $("#collectItems").empty();
+
+            const response = await fetch(`@Url.Content("~/MemberApi/CollectItems")`)
+            const data = await response.json()
+            console.log(data)
+            let totalItems = data.toString()
+
+            let str = `<img src="@Url.Content("~/images/header/like.png")" />
+                                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" >
+                                                            ${totalItems}
+                                                            <span class="visually-hidden">unread messages</span>
+                                                        </span>`;
+
+            $("#collectItems").append(str);
         }
 
         DisplayCategories()
