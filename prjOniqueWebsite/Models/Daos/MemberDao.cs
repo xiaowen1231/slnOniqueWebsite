@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using prjOniqueWebsite.Models.Dtos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
 using prjOniqueWebsite.Models.ViewModels;
@@ -239,6 +240,27 @@ namespace prjOniqueWebsite.Models.Daos
                             DiscountMethod = d.DiscountMethod,
                         });
             return query.ToList();
+        }
+        public List<CollectDto> CollectItems(Members member)
+        {
+            var collect = (from c in _context.Collect
+                         join m in _context.Members on c.MemberId equals m.MemberId into memberJoin
+                         from m in memberJoin.DefaultIfEmpty()
+                         join p in _context.Products on c.ProductId equals p.ProductId into productJoin
+                         from p in productJoin.DefaultIfEmpty()
+                         join d in _context.Discounts on p.DiscountId equals d.Id into discountJoin
+                         from d in discountJoin.DefaultIfEmpty()
+                         where c.MemberId == member.MemberId
+                         select new CollectDto
+                         {
+                             MemberId = member.MemberId,
+                             ProductId = p.ProductId,
+                             ProductName = p.ProductName,
+                             Price = p.Price,
+                             PhotoPath = p.PhotoPath,
+                             DiscountMethod = d.DiscountMethod,
+                         });
+            return collect.ToList();
         }
         public void FMemberPassword(FMemberPasswordVM vm, int loginMemId)
         {

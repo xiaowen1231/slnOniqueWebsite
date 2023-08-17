@@ -123,6 +123,7 @@
 @section Scripts{
     <script>
         loadCity();
+
         async function loadCity() {
             const response = await fetch(`@Url.Content("~/memberapi/LoadCity")`)
             const datas = await response.json();
@@ -185,6 +186,7 @@
                 }
             });
         });
+
         $('#Demo').on('click', function () {
             let name = "Betty"
             $('#inputName').val(name)

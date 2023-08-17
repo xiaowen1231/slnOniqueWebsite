@@ -70,7 +70,15 @@ namespace prjOniqueWebsite.Controllers
         {
             var dto = _dao.GetCollects(MemberId);
             return Json(dto);
-        } 
+        }
+        public IActionResult CollectItems()
+        {
+            Members member = _userInfoService.GetMemberInfo();
+
+            var cart = _dao.CollectItems(member);
+
+            return Json(cart.Count);
+        }
         public IActionResult GetFMemberPhoto()
         {
             Members member = _userInfoService.GetMemberInfo();
