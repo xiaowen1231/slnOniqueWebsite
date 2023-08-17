@@ -295,7 +295,11 @@
             const isLogin = await response.json();
 
             if (isLogin) {
-                //todo add2Collection
+                let productId = $(this).data("productid");
+                console.log(productId)
+                const resp = await fetch(`@Url.Content("~/MemberApi/ToggleCollectProduct?productId=")${productId}`);
+                const data = await resp.json();
+                console.log(data)
             } else {
                 Swal.fire({
                     title: '尚未登入!',

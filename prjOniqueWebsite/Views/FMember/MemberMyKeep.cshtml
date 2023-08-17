@@ -72,12 +72,99 @@
                                             </div>
                                         </div>`)
             }
-
-
         })
         collectProduct.innerHTML = collectCard.join("");
     }
+
+    $('#divCollectProduct').on('click', '.divProductDetail', function (event) {
+        let id = $(this).data("id")
+
+        window.location.href = `@Url.Content("~/Product/Detail/")${id}`;
+    })
+
+    $('#divCollectProduct').on('click', '.divShopping', async function (event) {
+        event.stopPropagation();
+
+        const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
+        const isLogin = await response.json();
+
+        if (isLogin) {
+            let productId = $(this).data("productid");
+
+            const resp = await fetch(`@Url.Content("~/ProductApi/ShowProductInfo/")${productId}`);
+            const data = await resp.json();
+
+            if (data.apiResult.statusCode == 200) {
+                const modalAddToCart = new bootstrap.Modal(document.getElementById('modalAddToCart'));
+
+                $('#modalProductName').text(`${data.productName}`);
+                $('#modalPrice').text(`${data.price}`);
+                $('#modalPhoto').prop("src", `@Url.Content("~/images/uploads/products/")${data.photoPath}`);
+                $('#modalSelectColor').data("productid", data.productId)
+                $('#modalSelectSize').data("productid", data.productId)
+
+                loadColor(productId)
+
+                modalAddToCart.show()
+
+            } else {
+                Swal.fire({
+                    title: data.apiResult.statusMessage,
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+
+        } else {
+            Swal.fire({
+                title: '尚未登入!',
+                text: "如想使用購物車,請先登入!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3C3C3C',
+                cancelButtonColor: '#D0D0D0',
+                confirmButtonText: '進行登入',
+                cancelButtonText: '稍後登入'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `@Url.Content("~/Home/Login")`
+                }
+            })
+        }
+    })
+
+    $('#divCollectProduct').on('click', '.divCollection', async function (event) {
+        event.stopPropagation();
+
+        const response = await fetch(`@Url.Content("~/HomeApi/IsLogin")`)
+        const isLogin = await response.json();
+
+        if (isLogin) {
+            let productId = $(this).data("productid");
+            console.log(productId)
+            const resp = await fetch(`@Url.Content("~/MemberApi/ToggleCollectProduct?productId=")${productId}`);
+            const data = await resp.json();
+            console.log(data)
+        } else {
+            Swal.fire({
+                title: '尚未登入!',
+                text: "如果想收藏商品,請先登入!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3C3C3C',
+                cancelButtonColor: '#D0D0D0',
+                confirmButtonText: '進行登入',
+                cancelButtonText: '稍後登入'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `@Url.Content("~/Home/Login")`
+                }
+            })
+        }
+    })
 </script>
+
 <style>
     .price:before {
         content: "$  "
