@@ -66,7 +66,7 @@ namespace prjOniqueWebsite.Controllers
 
         // GET: BgProductsManage/Create
         public IActionResult Create()
-        {           
+        {
             return View();
         }
 
@@ -85,8 +85,8 @@ namespace prjOniqueWebsite.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "新增商品失敗!" + ex.Message);
-                 return View(vm);
-            }           
+                return View(vm);
+            }
         }
 
         // GET: BgProductsManage/Edit/5
@@ -177,7 +177,7 @@ namespace prjOniqueWebsite.Controllers
             {
                 ViewBag.DeleteErrorMessage = "該商品還存有庫存資料，故無法刪除!";
                 var product = await _context.Products.FindAsync(id);
-                return View("Delete",product);
+                return View("Delete", product);
             }
         }
         public IActionResult BgCreateColor()
@@ -319,24 +319,40 @@ namespace prjOniqueWebsite.Controllers
         }
         public IActionResult DeleteSize(ProductSizes size)
         {
-            if (size != null)
+            try
             {
-                _context.Remove(size);
-                _context.SaveChanges();
-                return RedirectToAction("BgCreateSize");
+                if (size != null)
+                {
+                    _context.Remove(size);
+                    _context.SaveChanges();
+                    return RedirectToAction("BgCreateSize");
+                }
+                return View();
             }
-            return View();
+            catch
+            {
+                ViewBag.ErrorMessage = "該尺寸有對應庫存資料，故無法刪除!";
+                return View("BgCreateSize");
+            }
+
         }
         public IActionResult DeleteColor(ProductColors color)
         {
-            if (color != null)
+            try
             {
-                _context.Remove(color);
-                _context.SaveChanges();
-                return RedirectToAction("BgCreateColor");
+                if (color != null)
+                {
+                    _context.Remove(color);
+                    _context.SaveChanges();
+                    return RedirectToAction("BgCreateColor");
+                }
+                return View();
             }
-            return View();
-
+            catch
+            {
+                ViewBag.ErrorMessage = "該顏色有對應庫存資料，故無法刪除!";
+                return View("BgCreateColor");
+            }
         }
         public IActionResult NotStock()
         {

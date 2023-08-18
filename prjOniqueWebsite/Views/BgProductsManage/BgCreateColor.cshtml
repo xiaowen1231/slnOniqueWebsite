@@ -66,7 +66,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="text-danger text-center my-3">
+            @ViewBag.ErrorMessage
+        </div>
         <div style="margin-bottom: 20px;">
             <div class="text-center">
                 <a class="btn btn-outline-dark fw-bold mx-4" asp-action="Index">取消</a>
@@ -91,19 +93,19 @@
                  <td>${colorName}</td>
                  <td>
                     <div style="margin:auto">
-                         <a href="javascript:void(0);" onclick="openDelete(${colorId})"><img src="@Url.Content("~/images/BgProductManage/trash.png")" class="width-30px"></a>
+                         <a href="javascript:void(0);" onclick="openDelete(${colorId},'${colorName}')"><img src="@Url.Content("~/images/BgProductManage/trash.png")" class="width-30px"></a>
                     </div>
                  </td>                 
                  `)
             })
             BgColorTable.innerHTML = TableBgColorList.join("");
         }
-        function openDelete(colorId) {
+        function openDelete(colorId,colorName) {
             const confirmDialog = new bootstrap.Modal(document.getElementById("confirmDialog"));
             const confirmMessageElement = document.getElementById("confirmMessage");
             const confirmButton = document.getElementById("confirmButton");
 
-            confirmMessageElement.textContent = `確定要刪除嗎？`;
+            confirmMessageElement.textContent = `確定要刪除 顏色:${colorName} 嗎？`;
 
             confirmButton.onclick = function () {
                 const url = '@Url.Action("DeleteColor", "BgProductsManage")' + '?colorId=' + colorId;
