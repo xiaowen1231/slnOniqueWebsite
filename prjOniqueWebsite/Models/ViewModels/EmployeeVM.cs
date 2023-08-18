@@ -27,6 +27,7 @@ namespace prjOniqueWebsite.Models.ViewModels
 
         [Display(Name = "信箱")]
         [Required(ErrorMessage = "請輸入電子信箱")]
+        [RegularExpression(@"^[^\s!#$%^&*()_+{}\[\]:;<>,?~\\/]+$", ErrorMessage = "請輸入不包含特殊符號的商品名稱")]
         public string Email { get; set; }
 
         [Display(Name = "密碼")]
