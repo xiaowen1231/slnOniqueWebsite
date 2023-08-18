@@ -20,6 +20,7 @@ namespace prjOniqueWebsite.Models.ViewModels
 
         public string? Email { get; set; }
         [Display(Name = "電話")]
+        [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessage = "{0}必須為數字")]
         [Required(ErrorMessage = "{0}是必填欄位!")]
         [DataType(DataType.Text)]
         public string Phone { get; set; }
