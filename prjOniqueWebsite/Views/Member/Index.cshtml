@@ -162,6 +162,7 @@
             })
             memberTable.innerHTML = tableMemberList.join("");
         }
+
         function formatDate(dateString) {
             const date = new Date(dateString);
             const year = date.getFullYear();
@@ -169,5 +170,7 @@
             const day = String(date.getDate()).padStart(2, '0'); // 補零至兩位數
             return `${year}-${month}-${day}`;
         }
+
+
     </script>
 }

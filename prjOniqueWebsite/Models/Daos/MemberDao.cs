@@ -310,6 +310,7 @@ namespace prjOniqueWebsite.Models.Daos
             member.Address = vm.Address;
             member.MemberLevel = 1;
             member.LineUserId = lineProfile.userId;
+            member.DateOfBirth = Convert.ToDateTime(vm.DateOfBirth);
             if (lineProfile.pictureUrl != null)
             {
                 member.PhotoPath = $"MemberId_{member.MemberId}.jpg";
@@ -351,6 +352,7 @@ namespace prjOniqueWebsite.Models.Daos
                 Areas = Convert.ToInt32(vm.Areas),
                 Address = vm.Address,
                 MemberLevel = 1,
+                DateOfBirth = Convert.ToDateTime(vm.DateOfBirth),
                 RegisterDate = DateTime.Now,
                 LineUserId = lineProfile.userId
             };

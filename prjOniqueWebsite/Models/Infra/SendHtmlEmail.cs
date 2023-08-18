@@ -52,11 +52,11 @@ namespace prjOniqueWebsite.Models.Infra
                 prodtotalprice += product.SubTotal;
                 productTableContent += string.Format(productTable,
                     product.ProductName,
-                    product.Price.ToString(),
-                    product.OrderQuantity.ToString(),
+                    product.Price.ToString("###,###,##0"),
+                    product.OrderQuantity.ToString("###,###,##0"),
                     product.SizeName,
                     product.ColorName,
-                    product.SubTotal
+                    product.SubTotal.ToString("###,###,##0")
                     );
             }
             productTable = productTableContent;
@@ -64,7 +64,7 @@ namespace prjOniqueWebsite.Models.Infra
 
 
             decimal shippingfee = dto.TotalPrice - prodtotalprice;
-            string DisplayProdtotalPrice = prodtotalprice.ToString();
+            string DisplayProdtotalPrice = prodtotalprice.ToString("###,###,##0");
 
             TemplateContent = string.Format(TemplateContent,
 
@@ -80,8 +80,8 @@ namespace prjOniqueWebsite.Models.Infra
 
                 productTable,
                 DisplayProdtotalPrice,
-                shippingfee,
-                dto.TotalPrice,
+                shippingfee.ToString("###,###,##0"),
+                dto.TotalPrice.ToString("###,###,##0"),
                 orderDetailsUrl,
                    "dataEnd"
                 );

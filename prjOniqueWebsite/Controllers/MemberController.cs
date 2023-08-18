@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using prjOniqueWebsite.Models.Daos;
 using prjOniqueWebsite.Models.DTOs;
 using prjOniqueWebsite.Models.EFModels;
+using prjOniqueWebsite.Models.Infra;
 using prjOniqueWebsite.Models.Services;
 using prjOniqueWebsite.Models.ViewModels;
 using System.Diagnostics.Metrics;
@@ -16,7 +17,7 @@ namespace prjOniqueWebsite.Controllers
         private readonly IWebHostEnvironment _environment;
         MemberDao _dao;
         MemberService _service;
-        public MemberController(OniqueContext context,IWebHostEnvironment environment)
+        public MemberController(OniqueContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
@@ -53,7 +54,7 @@ namespace prjOniqueWebsite.Controllers
         public IActionResult Edit(int id)
         {
             var dto = _dao.GetMemberById(id);
-           
+
             MemberEditVM vm = new MemberEditVM
             {
                 MemberId = dto.MemberId,
@@ -76,7 +77,7 @@ namespace prjOniqueWebsite.Controllers
         [HttpPost]
         public IActionResult Edit(MemberEditVM vm)
         {
-            if(ModelState.IsValid == false)
+            if (ModelState.IsValid == false)
             {
                 return View(vm);
             }
@@ -94,12 +95,24 @@ namespace prjOniqueWebsite.Controllers
 
         public ActionResult Delete(int id)
         {
-            var member = _context.Members.FirstOrDefault(m=>m.MemberId == id);
-            if (member != null)
+            try
             {
-                _context.Members.Remove(member);
+                var member = _context.Members.FirstOrDefault(m => m.MemberId == id);
+                if (member != null)
+                {
+                    _context.Members.Remove(member);
+                }
+                _context.SaveChanges();
+                var result = new ApiResult { StatusCode = 200, StatusMessage = "刪除資料成功!" };
+                return Json(result);
             }
-            _context.SaveChanges();
+            catch (Exception ex)
+            {
+                var result = new ApiResult { StatusCode = 500, StatusMessage = ex.Message };
+                return Json(result);
+
+            }
+           
             return RedirectToAction("Index");
         }
 

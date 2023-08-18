@@ -329,20 +329,44 @@
                 cancelButtonColor: '#D0D0D0',
                 confirmButtonText: '刪除'
             }).then((result) => {
-                if (result.isConfirmed)
+                if (result.isConfirmed){
+
                     orderid = $(this).data("orderid")
-                deleteOrder(orderid)
+
+                    deleteOrder(orderid)
+                }
+            })
+        })
+
+        async function deleteOrder(orderid){
+            const response = await fetch(`@Url.Content("~/OrderApi/DeleteOrder?OrderId=")${orderid}`);
+            const data = await response.json();
+
+            const { statusCode, statusMessage } = data;
+
+            if (statusCode==200)
+            {
+
                 Swal.fire({
-                    title: '訂單刪除成功',
+                    title: statusMessage,
                     timer: 1000
                 })
+
                 setTimeout(() => {
                     window.location.href = `@Url.Content("~/Order/index")`
                 }, 1500)
 
-            })
+            }
+            else
+            {
+                Swal.fire({
+                    title: statusMessage,
+                    timer: 1000
+                })
+            }
 
-        })
+
+        }
 
     </script>
     }
