@@ -12,6 +12,7 @@ namespace prjOniqueWebsite.Models.ViewModels
         [Compare("Password",ErrorMessage = "{0}與密碼不符")]
         public string? ConfirmPassword { get; set; }
         [Display(Name = "手機號碼")]
+        [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessage = "{0}必須為數字")]
         [Required(ErrorMessage = "{0}不可為空白")]
         public string? Phone { get; set; }
         [Display(Name = "電子郵件")]
