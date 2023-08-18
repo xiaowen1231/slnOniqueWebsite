@@ -22,11 +22,14 @@ namespace prjOniqueWebsite.Models.ViewModels
         public string Gender { get; set; }
 
         [Display(Name = "電話")]
-        [Required(ErrorMessage = "請輸入電話號碼")]
+        [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessage = "{0}必須為數字")]
+        [Required(ErrorMessage = "{0}是必填欄位!")]
+        [DataType(DataType.Text)]
         public string Phone { get; set; }
 
         [Display(Name = "信箱")]
         [Required(ErrorMessage = "請輸入電子信箱")]
+        [RegularExpression(@"^[^\s!#$%^&*()_+{}\[\]:;<>,?~\\/]+$", ErrorMessage = "請輸入不包含特殊符號的商品名稱")]
         public string Email { get; set; }
 
         [Display(Name = "密碼")]
