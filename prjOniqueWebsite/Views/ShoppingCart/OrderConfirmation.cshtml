@@ -350,7 +350,7 @@
         $('#btnSubmit').click(async function (event) {
             event.preventDefault();
 
-            $(this).attr('disabled', 'disabled');
+            $(this).prop('disabled', true);
 
             let isValid = checkValue();
 
@@ -411,6 +411,9 @@
                     })
                 }
             }
+
+            $(this).prop('disabled', false);
+
         })
 
         let constraints = {
