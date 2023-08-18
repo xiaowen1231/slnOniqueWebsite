@@ -93,28 +93,7 @@ namespace prjOniqueWebsite.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Delete(int id)
-        {
-            try
-            {
-                var member = _context.Members.FirstOrDefault(m => m.MemberId == id);
-                if (member != null)
-                {
-                    _context.Members.Remove(member);
-                }
-                _context.SaveChanges();
-                var result = new ApiResult { StatusCode = 200, StatusMessage = "刪除資料成功!" };
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                var result = new ApiResult { StatusCode = 500, StatusMessage = ex.Message };
-                return Json(result);
-
-            }
-           
-            return RedirectToAction("Index");
-        }
+        
 
     }
 }

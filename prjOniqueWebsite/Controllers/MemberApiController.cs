@@ -134,7 +134,27 @@ namespace prjOniqueWebsite.Controllers
             List<MemberListDto> dto = _dao.GetMembers();
             return Json(dto);
         }
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var member = _context.Members.FirstOrDefault(m => m.MemberId == id);
+                if (member != null)
+                {
+                    _context.Members.Remove(member);
+                }
+                _context.SaveChanges();
+                var result = new ApiResult { StatusCode = 200, StatusMessage = "刪除資料成功!" };
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                var result = new ApiResult { StatusCode = 500, StatusMessage = "刪除資料失敗!" };
+                return Json(result);
 
+            }
+
+        }
         public IActionResult LoadCity()
         {
             var citys = from c in _context.Citys
