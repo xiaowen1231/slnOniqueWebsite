@@ -349,6 +349,9 @@
 
         $('#btnSubmit').click(async function (event) {
             event.preventDefault();
+
+            $(this).attr('disabled', 'disabled');
+
             let isValid = checkValue();
 
             if (isValid) {
