@@ -34,7 +34,7 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">姓名</div>
                         <div class="mx-2">
-                            <input type="text" class="form-control " value="@Model.EmployeeName" name="EmployeeName" />
+                            <input type="text" class="form-control " value="@Model.EmployeeName" required name="EmployeeName" />
                             @Html.ValidationMessageFor(model=>model.EmployeeName,"",new{@class = "text-danger"})
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                     <div class="pt-2 d-flex col-6 align-items-center">
                         <div class=" width-90px text-end fw-bold">密碼</div>
                         <div class="mx-3">
-                            <input type="password" class="form-control" value="@Model.Password" name="Password">
+                            <input type="password" class="form-control" value="@Model.Password" required name="Password">
                         </div>
                     </div>
                 </div>
