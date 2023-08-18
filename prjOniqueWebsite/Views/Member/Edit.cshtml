@@ -17,22 +17,16 @@
             <div class=" p-2 d-flex justify-content-center">
                 @if (string.IsNullOrEmpty(Model.PhotoPath))
                 {
-                    <img src="~/images/uploads/members/default.jpg" id="imgMember"
-                         class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
+                    <img src="~/images/uploads/members/default.jpg" id="imgMember"class="w-240-h-240" />
                 }
                 else
                 {
-                    <img src="~/images/uploads/members/@Model.PhotoPath" id="imgMember"
-                         class="rounded rounded-4 width-300px img-thumbnail img-fluid" />
-
+                    <img src="~/images/uploads/members/@Model.PhotoPath" id="imgMember"class="w-240-h-240" />
                 }
-                @*<img src="~/images/uploads/members/@photoPath" id="imgMember" data-originalpath="@Model.PhotoPath" />*@
             </div>
             <div>
                 <input type="file" name="Photo" id="Photo" class="form-control my-5">
                 <input type="hidden" name="PhotoPath" value="@Model.PhotoPath" />
-                @*<input type="file" name="Photo" id="Photo" class="form-control my-5" value="@Model.PhotoPath"/>*@
-                @*<input type="hidden" name="PhotoPath" value="@Model.PhotoPath" />*@
             </div>
         </div>
         <div class=" col-8 border mx-2">
