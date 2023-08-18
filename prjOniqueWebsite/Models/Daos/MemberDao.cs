@@ -132,6 +132,8 @@ namespace prjOniqueWebsite.Models.Daos
             if (vm.Photo != null)
             {
                 string fileName = $"MemberId_{member.MemberId}.jpg";
+                member.PhotoPath = fileName;
+                _context.SaveChanges();
                 string photoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", fileName);
                 using (var fileStream = new FileStream(photoPath, FileMode.Create))
                 {
@@ -139,7 +141,6 @@ namespace prjOniqueWebsite.Models.Daos
                 }
             }
             member.Name = vm.Name;
-            member.PhotoPath = vm.PhotoPath;
             member.Password = vm.Password;
             member.Phone = vm.Phone;
             member.Email = vm.Email;
@@ -177,17 +178,6 @@ namespace prjOniqueWebsite.Models.Daos
                     vm.Photo.CopyTo(fileStream);
                 }
             }
-            //else
-            //{
-            //    // 如果沒有上傳新照片，使用預設的照片路徑和檔名
-            //    string defaultFileName = $"MemberId_{mem.MemberId}.jpg";
-            //    mem.PhotoPath = defaultFileName;
-            //    // 取得預設照片的完整路徑
-            //    string defaultPhotoPath = Path.Combine(_environment.WebRootPath, "images/uploads/members", defaultFileName);
-            //    // 複製預設照片到指定路徑
-            //    string defaultPhotoSourcePath = Path.Combine(_environment.WebRootPath, "images", "uploads", "members", "default.jpg");
-            //    System.IO.File.Copy(defaultPhotoSourcePath, defaultPhotoPath, true);
-            //}
             _context.Update(mem);
             _context.SaveChanges();
         }

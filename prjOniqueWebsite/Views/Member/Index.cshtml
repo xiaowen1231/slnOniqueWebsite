@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout_Background.cshtml";
 }
@@ -10,7 +9,7 @@
             @Html.ActionLink("新增會員", "create","member", "",new {@class="btn btn-dark" })
         </div>
         <div class="d-flex align-items-center gap-2">
-            
+
             <div class="width-90px  ">每頁顯示 : </div>
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數">
@@ -49,30 +48,6 @@
                     </tr>
                 </thead>
                 <tbody id="memberTable">
-                   @* <tr>
-                        <td>1</td>
-                        <td><div class="imgBox"><img src="../Images/Memberphoto/MemberId_2_Allen.jpg"></div></td>
-                        <td>Allen</td>
-                        <td>0932458777</td>
-                        <td>Allen@gmail.com</td>
-                        <td>1998/5/7</td>
-                        <td>男</td>
-                        <td><img src="../Images/options/edit.png" class="square-32"></td>
-                        <td><img src="../Images/options/trash.png" class="square-32"></td>
-                        <td><img src="../Images/Button/mail.png"></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><div class="imgBox"><img src="../Images/MemberPhoto/MemberId_4_Wendy.jpg"></div></td>
-                        <td>Wendy</td>
-                        <td>0987854568</td>
-                        <td>Wendy@gmail.com</td>
-                        <td>2000/11/5</td>
-                        <td>女</td>
-                        <td><img src="~/images/MemberPhoto/edit.png" class="square-32" /></td>
-                        <td><img src="~/images/MemberPhoto/trash.png" class="square-32"></td>
-                        <td><img src="~/images/MemberPhoto/mail.png" class="square-32"></td>
-                    </tr>*@
                 </tbody>
             </table>
         </div>
@@ -99,19 +74,19 @@
 </div>
 @section Styles{
     <style>
-     .imgBox {
+        .imgBox {
             width: 100px;
             height: 100px;
             overflow: hidden;
             margin: auto;
-     }
+        }
 
-     .imgBox img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-     }
+            .imgBox img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
     </style>
 }
 @section Scripts{
@@ -119,47 +94,48 @@
         const memberTable = document.querySelector("#memberTable")
         load()
 
-        async function load(){
+        async function load() {
             const response = await fetch(`@Url.Content("~/MemberApi/showMemberList")`)
-            const data =await response.json();
+            const data = await response.json();
 
-            const tableMemberList = data.map(item=>{
-                const { memberId, photoPath, name, phone, email, dateOfBirth, gender, memberLevelName }=item
+            const tableMemberList = data.map(item => {
+                const { memberId, photoPath, name, phone, email, dateOfBirth, gender, memberLevelName } = item
                 const formattedDateOfBirth = formatDate(dateOfBirth); // 將日期格式化成 YYYY-MM-DD
                 console.log(memberId, photoPath, name, phone, email, formattedDateOfBirth, gender, memberLevelName)
 
-                return (`
-                         <tr>
-                                <td>${memberId}</td>
-                                <td>
-                                    <div class="imgBox">
-                                       ${(photoPath === null || photoPath === "null") ? `<img src="@Url.Content("~/images/uploads/members/default.jpg")">` : `<img src="@Url.Content("~/images/uploads/members/")${photoPath}">`}
-                                     </div>
-                                </td>
-                                <td>${name}</td>
-                                <td>${phone}</td>
-                                <td>${email}</td>
-                                <td>${formattedDateOfBirth}</td>
-                                <td>${gender}</td>
-                                <td>${memberLevelName}</td>
-                                <td>
-                                    <div class="circle-size-25" style="margin: auto;">
-                                                        <a href="@Url.Content("~/member/edit?id=")${memberId}"><img src="@Url.Content("~/images/memberPhoto/edit.png")" alt=""></a>
-                                    </div>
-                                </td>
-                                <td>
-                                                <div class="circle-size-25" style="margin: auto;">
-                                                        <a href="@Url.Content("~/member/delete?id=")${memberId}"><img src="@Url.Content("~/images/memberPhoto/trash.png")" alt=""></a>
+                return (`<tr>
+                                        <td>${memberId}</td>
+                                        <td>
+                                            <div class="imgBox">
+                                                ${(photoPath === null || photoPath === "null") ? `<img src="@Url.Content("~/images/uploads/members/default.jpg")">` : `<img src="@Url.Content("~/images/uploads/members/")${photoPath}">`}
                                             </div>
-                                </td>
-                                <td>
-                                               <div class="circle-size-25" style="margin: auto;">
-                                                        <a href=""><img src="@Url.Content("~/images/memberPhoto/mail.png")" alt=""></a>
-                                                    </div>
-                                </td>
-                            </tr>
-                `)
+                                        </td>
+                                        <td>${name}</td>
+                                        <td>${phone}</td>
+                                        <td>${email}</td>
+                                        <td>${formattedDateOfBirth}</td>
+                                        <td>${gender}</td>
+                                        <td>${memberLevelName}</td>
+                                        <td>
+                                            <div class="circle-size-25" style="margin: auto;">
+                                                <a href="@Url.Content("~/member/edit?id=")${memberId}"><img src="@Url.Content("~/images/memberPhoto/edit.png")" alt=""></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                             <div class="circle-size-25 divDeleteMember" style="margin: auto;" data-member-id="${memberId}" >
+                                             <a href="#">
+                                                <img src="@Url.Content("~/images/memberPhoto/trash.png")" alt="">
+                                            </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="circle-size-25" style="margin: auto;">
+                                                <a href=""><img src="@Url.Content("~/images/memberPhoto/mail.png")" alt=""></a>
+                                            </div>
+                                        </td>
+                                    </tr>`)
             })
+
             memberTable.innerHTML = tableMemberList.join("");
         }
 
@@ -171,6 +147,60 @@
             return `${year}-${month}-${day}`;
         }
 
+
+
+        $("#memberTable").on('click', '.divDeleteMember', function () {
+
+            Swal.fire({
+                text: "刪除會員?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#000000',
+                cancelButtonColor: '#9D9D9D	',
+                cancelButtonText: '取消刪除',
+                confirmButtonText: '確認刪除'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+
+                    let id = $(this).data("member-id");
+
+                    const response = await fetch(`@Url.Content("~/MemberApi/Delete/")${id}`)
+                    const data = await response.json();
+
+                    const { statusCode, statusMessage } = data;
+
+                    if (statusCode==200) {
+
+                        Swal.fire({
+                            title: data.statusMessage,
+                            text: "",
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        setTimeout(() => {
+                            window.location.href = `@Url.Content("~/Member/Index")`
+                        }, 1500)
+
+                    }
+                    else
+                    {
+
+                        Swal.fire({
+                            title: data.statusMessage,
+                            text: "",
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                    }
+
+                }
+            })
+
+        })
 
     </script>
 }
