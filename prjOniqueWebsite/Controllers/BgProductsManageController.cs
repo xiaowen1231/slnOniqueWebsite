@@ -123,13 +123,14 @@ namespace prjOniqueWebsite.Controllers
             try
             {
                 new BgProductService(_context, _environment).UpdataProducts(vm);
+                return RedirectToAction("index");
             }
-            catch
+            catch(Exception ex)
             {
-                ModelState.AddModelError("", "修改失敗!請重新上傳商品照片!");
+                ModelState.AddModelError("", "修改失敗!" + ex.Message);
                 return View(vm);
             }
-            return RedirectToAction("index");
+            
         }
 
         // GET: BgProductsManage/Delete/5
