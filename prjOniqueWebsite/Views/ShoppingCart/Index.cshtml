@@ -33,6 +33,7 @@
                             <th>商品名稱</th>
                             <th>顏色</th>
                             <th>尺寸</th>
+                            <th>單價</th>
                             <th>數量</th>
                             <th style="width:153px">小計</th>
                             <th>刪除</th>
@@ -75,6 +76,11 @@
                                             @item.ProductSizes.SizeName
                                         </div>
                                     </td>
+                                    <td>
+                                        <div class="price">
+                                            @item.Product.Price.ToString("###,###,###")
+                                        </div>
+                                    </td>
                                     <td class="mx-auto">
                                         <div class="d-flex justify-content-center">
                                             <div class="border border-dark-subtle text-center cursor-pointer btnReduce" style="width: 25px;">-</div>
@@ -90,8 +96,7 @@
                                             if (item.DiscountMethod != null)
                                             {
                                                 <div class="price text-danger" >
-                                                    @subtotal.ToString("0")
-
+                                                    @subtotal.ToString("###,###,###")
                                                 </div>
                                                 <div class="saleImg">
                                                     <img src="@Url.Content("~/images/icon/sale-tag.png")"/>
@@ -100,7 +105,7 @@
                                             else
                                             {
                                                 <div class="price">
-                                                    @subtotal.ToString("0")
+                                                    @subtotal.ToString("###,###,###")
                                                 </div>
                                             }
                                         }
@@ -122,7 +127,7 @@
             <div class="container text-center m-4">
                 <div class="py-4 d-flex gap-3 justify-content-center align-items-center">
                     <div>合計金額 : </div>
-                    <div class="price text-danger fw-bold fs-5">@total.ToString("0")</div>
+                    <div class="price text-danger fw-bold fs-5">@total.ToString("###,###,###")</div>
                 </div>
                 <div class="mt-5">
                     <input type="button" value="繼續購物" class="btn btn-outline-dark btnBackToProductList" style="width: 150px;">

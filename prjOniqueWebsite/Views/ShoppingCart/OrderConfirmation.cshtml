@@ -31,6 +31,7 @@
                         <th>商品名稱</th>
                         <th>尺寸</th>
                         <th>顏色</th>
+                        <th>單價</th>
                         <th>數量</th>
                         <th style="width:153px">小計</th>
                     </tr>
@@ -194,6 +195,7 @@
                                 </td>
                                 <td>${productSizes.sizeName}</td>
                                 <td>${productColors.colorName}</td>
+                                <td class="price">${product.price}</td>
                                 <td>${shoppingCart.orderQuantity}</td>
                                 <td class="position-relative">`;
                 if (discountMethod != null)

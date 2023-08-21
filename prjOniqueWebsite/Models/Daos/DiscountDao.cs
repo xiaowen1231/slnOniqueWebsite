@@ -119,7 +119,7 @@ namespace prjOniqueWebsite.Models.Daos
                 Description = d.Description,
                 BeginDate = d.BeginDate.ToShortDateString(),
                 EndDate = d.EndDate.ToShortDateString(),
-                DiscountMethod = (d.DiscountMethod * 100).ToString("0") + " %OFF",
+                DiscountMethod = (100-d.DiscountMethod * 100).ToString("0") + "% OFF",
                 PhotoPath = d.PhotoPath,
             }).ToList();
 
