@@ -106,5 +106,10 @@ namespace prjOniqueWebsite.Controllers
             }
             return View();
         }
+
+        public IActionResult powerbi()
+        {
+            return View();
+        }
     }
 }
