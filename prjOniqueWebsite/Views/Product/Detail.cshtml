@@ -5,10 +5,13 @@
 }
 
 <div class="d-flex" id="divContent">
-    <div class="w-500-h-500 overflow-hidden rounded ">
-        <img src="@Url.Content("~/images/uploads/products/")@Model.PhotoPath" id="productPhoto" />
+    <div class="w-500-h-500 rounded ">
+        <img src="@Url.Content("~/images/uploads/products/")@Model.PhotoPath" id="productPhoto" class="rounded"/>
         <input type="hidden" id="stockId" />
-    </div>
+        <div class="d-flex overflow-hidden my-2 divProductPhotoList" style="width:500px">
+        </div>
+    </div>        
+
     <div class="flex-fill">
         <input type="hidden" value="@Model.Id" id="productId" data-productid="@Model.Id" />
         <div class="fw-bold fs-4 border-bottom border-secondary p-2">@Model.ProductName</div>
@@ -78,6 +81,13 @@
     <style>
         #price::before {
             content: "$";
+        }
+
+        .divProductPhoto {
+            width: 100px;
+            height: 100px;
+            box-sizing:border-box;
+            padding:2px
         }
     </style>
 }
@@ -241,5 +251,32 @@
                 })
             }
         })
+
+        async function LoadProductPhotoList(productId){
+            const response = await fetch(`@Url.Content("~/ProductApi/GetProductPhotoList/")${productId}`)
+            const data = await response.json();
+
+            const photoList = data.map(item=>{
+                return `<div class="divProductPhoto flex-shrink-0" data-photo-src="${item}">
+                            <img src="@Url.Content("~/images/uploads/products/")${item}" />
+                        </div>`
+            })
+
+            $('.divProductPhotoList').html(photoList.join(""))
+
+            $(".divProductPhoto").mouseenter(function(){
+                
+                let togglePhoto = $(this).data("photo-src")
+
+                let newPath = `@Url.Content("~/images/uploads/products/")${togglePhoto}`
+
+                $('#productPhoto').attr("src", newPath)
+            })
+           
+        }
+
+        LoadProductPhotoList(productId)
+
+
     </script>
 }

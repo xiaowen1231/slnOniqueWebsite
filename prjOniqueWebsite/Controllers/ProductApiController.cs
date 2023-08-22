@@ -95,7 +95,7 @@ namespace prjOniqueWebsite.Controllers
             return Json(cart);
         }
 
-        public IActionResult ProductList(string keyword, string categoryName, string rank, int pageNumber,int discountId)
+        public IActionResult ProductList(string keyword, string categoryName, string rank, int pageNumber, int discountId)
         {
             var dtos = dao.SearchProductList(keyword, categoryName, rank, discountId);
             var datas = ProductListIndex(dtos, pageNumber);
@@ -214,5 +214,11 @@ namespace prjOniqueWebsite.Controllers
 
             return Json(dto);
         }
+
+        public IActionResult GetProductPhotoList(int id)
+        {
+            return Json(dao.GetProductPhotoList(id));
+        }
+
     }
 }

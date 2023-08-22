@@ -361,5 +361,18 @@ namespace prjOniqueWebsite.Models.Repositories
             return dto;
         }
 
+        public List<string> GetProductPhotoList(int id)
+        {
+            List<string> photoList = new List<string>();
+
+            var query = _context.Products.Where(p=>p.ProductId == id).Select(p=>p.PhotoPath).FirstOrDefault();
+            var queryList = _context.ProductStockDetails.Where(p=>p.ProductId==id).Select(p=>p.PhotoPath).ToList();
+
+            photoList.Add(query);
+            photoList.AddRange(queryList);
+
+            return photoList;
+        }
+
     }
 }
