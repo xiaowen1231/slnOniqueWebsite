@@ -154,9 +154,33 @@
             <div class="width-70px">每頁顯示</div>
             <div>
                 <select class="form-select d-inline" aria-label="資料筆數" id="pageSize">
-                    <option value="10">10筆資料</option>
-                    <option value="20">20筆資料</option>
-                    <option value="30">30筆資料</option>
+                    @{
+
+                        switch (pagesize)
+                        {
+                            case 10:
+                                <option value="10" selected>10筆資料</option>
+                                <option value="20">20筆資料</option>
+                                <option value="30">30筆資料</option>
+                                break;
+                            case 20:
+                                <option value="10" >10筆資料</option>
+                                <option value="20" selected>20筆資料</option>
+                                <option value="30">30筆資料</option>
+                                break;
+                            case 30:
+                                <option value="10">10筆資料</option>
+                                <option value="20" >20筆資料</option>
+                                <option value="30" selected>30筆資料</option>
+                                break;
+                                default:
+                                <option value="10" >10筆資料</option>
+                                <option value="20">20筆資料</option>
+                                <option value="30">30筆資料</option>
+                                break;
+                        }
+                    }
+                    
                 </select>
             </div>
 
